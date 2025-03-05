@@ -349,15 +349,15 @@ try {
                       </div>
                       
                       <div class="mb-3">
-                        <label for="username" class="form-label required-field">ชื่อผู้ใช้</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                        <div class="invalid-feedback">กรุณากรอกชื่อผู้ใช้</div>
+                        <label for="username" class="form-label">ชื่อผู้ใช้ (ไม่บังคับ)</label>
+                        <input type="text" class="form-control" id="username" name="username">
+                        <div class="form-text">หากไม่ระบุ จะใช้รหัสนักเรียนเป็นชื่อผู้ใช้</div>
                       </div>
                       
                       <div class="mb-3">
-                        <label for="password" class="form-label required-field">รหัสผ่าน</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                        <div class="invalid-feedback">กรุณากรอกรหัสผ่าน</div>
+                        <label for="password" class="form-label">รหัสผ่าน (ไม่บังคับ)</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                        <div class="form-text">หากไม่ระบุ จะใช้รหัสนักเรียนเป็นรหัสผ่าน</div>
                       </div>
                       
                       <div class="mb-3">
@@ -420,9 +420,9 @@ try {
                       </div>
                       
                       <div class="mb-3">
-                        <label for="edit_username" class="form-label required-field">ชื่อผู้ใช้</label>
-                        <input type="text" class="form-control" id="edit_username" name="username" required>
-                        <div class="invalid-feedback">กรุณากรอกชื่อผู้ใช้</div>
+                        <label for="edit_username" class="form-label">ชื่อผู้ใช้ (ไม่บังคับ)</label>
+                        <input type="text" class="form-control" id="edit_username" name="username">
+                        <div class="form-text">หากไม่ระบุ จะใช้รหัสนักเรียนเป็นชื่อผู้ใช้</div>
                       </div>
                       
                       <div class="mb-3">
@@ -467,7 +467,7 @@ try {
                         <div class="mb-3">
                           <label for="edit_password" class="form-label">รหัสผ่านใหม่</label>
                           <input type="password" class="form-control" id="edit_password" name="password">
-                          <div class="invalid-feedback">กรุณากรอกรหัสผ่าน</div>
+                          <div class="form-text">หากไม่ระบุ จะใช้รหัสนักเรียนเป็นรหัสผ่าน</div>
                         </div>
                       </div>
                     </form>
@@ -491,16 +491,19 @@ try {
                   <div class="modal-body">
                     <div class="import-info mb-3">
                       <h6 class="mb-2"><i class="ri-information-line me-1"></i> คำแนะนำ:</h6>
-                      <p class="mb-2">ไฟล์ CSV ต้องมีคอลัมน์ดังต่อไปนี้:</p>
+                      <p class="mb-2">ไฟล์ CSV ต้องมีคอลัมน์ที่จำเป็นดังต่อไปนี้:</p>
                       <div class="mb-2">
                         <span class="badge bg-primary me-1">student_code</span>
-                        <span class="badge bg-primary me-1">username</span>
-                        <span class="badge bg-primary me-1">password</span>
                         <span class="badge bg-primary me-1">firstname</span>
                         <span class="badge bg-primary me-1">lastname</span>
+                        <span class="badge bg-secondary me-1">username (ไม่บังคับ)</span>
+                        <span class="badge bg-secondary me-1">password (ไม่บังคับ)</span>
                         <span class="badge bg-secondary me-1">email (ไม่บังคับ)</span>
                         <span class="badge bg-secondary me-1">phone (ไม่บังคับ)</span>
                         <span class="badge bg-secondary me-1">status (ไม่บังคับ, ค่าเริ่มต้น = 1)</span>
+                      </div>
+                      <div class="alert alert-info mt-2">
+                        <i class="ri-information-line me-1"></i> หากไม่ระบุ username หรือ password ระบบจะใช้รหัสนักเรียน (student_code) แทน
                       </div>
                       <div class="d-flex justify-content-end">
                         <a href="api/student-api.php?action=download-template" class="btn btn-sm btn-outline-secondary">
@@ -752,10 +755,9 @@ try {
 	    $('#changePasswordCheck').on('change', function() {
 	        if ($(this).is(':checked')) {
 	            $('#passwordFields').slideDown();
-	            $('#edit_password').attr('required', true);
 	        } else {
 	            $('#passwordFields').slideUp();
-	            $('#edit_password').attr('required', false);
+	            $('#edit_password').val('');
 	        }
 	    });
 	    
@@ -764,12 +766,16 @@ try {
 	        const form = $(formId);
 	        let isValid = true;
 	        
-	        form.find('input[required], select[required]').each(function() {
-	            if ($(this).val() === '') {
+	        // ตรวจสอบเฉพาะฟิลด์ที่ต้องการ (student_code, firstname, lastname)
+	        const requiredFields = ['student_code', 'firstname', 'lastname'];
+	        
+	        requiredFields.forEach(field => {
+	            const input = form.find(`[name="${field}"]`);
+	            if (input.length && input.val() === '') {
+	                input.addClass('is-invalid');
 	                isValid = false;
-	                $(this).addClass('is-invalid');
-	            } else {
-	                $(this).removeClass('is-invalid');
+	            } else if (input.length) {
+	                input.removeClass('is-invalid');
 	            }
 	        });
 	        
@@ -1130,7 +1136,8 @@ try {
 	                    // ตรวจสอบว่ามีข้อมูลหรือไม่
 	                    if (results.data && results.data.length > 0) {
 	                        const headers = results.meta.fields;
-	                        const requiredFields = ['student_code', 'username', 'password', 'firstname', 'lastname'];
+	                        // ปรับ requiredFields ให้เหลือเพียง student_code, firstname, lastname
+	                        const requiredFields = ['student_code', 'firstname', 'lastname'];
 	                        
 	                        // ตรวจสอบ header ที่จำเป็น
 	                        const missingFields = requiredFields.filter(field => !headers.includes(field));
@@ -1159,7 +1166,7 @@ try {
 	                            let rowIsValid = true;
 	                            let rowErrors = [];
 	                            
-	                            // ตรวจสอบฟิลด์ที่จำเป็น
+	                            // ตรวจสอบเฉพาะฟิลด์ที่จำเป็น (student_code, firstname, lastname)
 	                            requiredFields.forEach(field => {
 	                                if (!row[field] || row[field].trim() === '') {
 	                                    rowIsValid = false;
@@ -1297,6 +1304,8 @@ try {
 	    // Reset edit student form when modal is closed
 	    $('#editStudentModal').on('hidden.bs.modal', function() {
 	        $('#editStudentForm .is-invalid').removeClass('is-invalid');
+	        $('#changePasswordCheck').prop('checked', false);
+	        $('#passwordFields').hide();
 	    });
 	    
 	    // Reset import CSV form when modal is closed

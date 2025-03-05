@@ -1,5 +1,5 @@
 <?php
-// student-api.php - /api/student-api.php111
+// student-api.php - /api/student-api.php
 header('Content-Type: application/json');
 
 // เริ่มต้น session
@@ -276,13 +276,22 @@ switch ($action) {
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
             $semester_id = isset($_POST['semester_id']) ? intval($_POST['semester_id']) : 0;
             
-            // ตรวจสอบข้อมูลที่จำเป็น
-            if (empty($student_code) || empty($username) || empty($password) || empty($firstname) || empty($lastname) || $semester_id <= 0) {
+            // ตรวจสอบข้อมูลที่จำเป็น (เฉพาะ student_code, firstname, lastname)
+            if (empty($student_code) || empty($firstname) || empty($lastname) || $semester_id <= 0) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน'
+                    'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน (รหัสนักเรียน, ชื่อจริง, นามสกุล)'
                 ]);
                 exit;
+            }
+            
+            // กำหนดค่าเริ่มต้นสำหรับ username และ password ถ้าไม่ได้กรอก
+            if (empty($username)) {
+                $username = $student_code; // ใช้รหัสนักเรียนเป็น username
+            }
+            
+            if (empty($password)) {
+                $password = $student_code; // ใช้รหัสนักเรียนเป็น password
             }
             
             // ตรวจสอบรูปแบบอีเมล
@@ -383,11 +392,11 @@ switch ($action) {
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
             $change_password = isset($_POST['change_password']) && $_POST['change_password'] === '1';
             
-            // ตรวจสอบข้อมูลที่จำเป็น
-            if ($student_id <= 0 || empty($student_code) || empty($username) || empty($firstname) || empty($lastname)) {
+            // ตรวจสอบข้อมูลที่จำเป็น (เฉพาะ student_code, firstname, lastname)
+            if ($student_id <= 0 || empty($student_code) || empty($firstname) || empty($lastname)) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน'
+                    'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน (รหัสนักเรียน, ชื่อจริง, นามสกุล)'
                 ]);
                 exit;
             }
@@ -412,6 +421,11 @@ switch ($action) {
                     'message' => 'ไม่พบข้อมูลนักเรียน'
                 ]);
                 exit;
+            }
+            
+            // ถ้า username ว่างเปล่า ให้ใช้รหัสนักเรียนแทน
+            if (empty($username)) {
+                $username = $student_code;
             }
             
             // ตรวจสอบ student_code ซ้ำ (เฉพาะกรณีที่เปลี่ยน)
@@ -450,12 +464,9 @@ switch ($action) {
             if ($change_password) {
                 $password = $_POST['password'] ?? '';
                 
+                // ถ้ารหัสผ่านว่างเปล่า ให้ใช้รหัสนักเรียนแทน
                 if (empty($password)) {
-                    echo json_encode([
-                        'success' => false,
-                        'message' => 'กรุณากรอกรหัสผ่านใหม่'
-                    ]);
-                    exit;
+                    $password = $student_code;
                 }
                 
                 // เข้ารหัสรหัสผ่านใหม่
@@ -741,12 +752,23 @@ switch ($action) {
             // อ่านบรรทัดแรก (header)
             $headers = fgetcsv($handle);
             
-            // ตรวจสอบ headers ที่จำเป็น
-            $requiredHeaders = ['student_code', 'username', 'password', 'firstname', 'lastname'];
+            // ปรับปรุงการอ่าน headers โดยตัด whitespace และแปลงเป็นตัวพิมพ์เล็ก
+            $normalizedHeaders = [];
+            foreach ($headers as $header) {
+                // ตัด BOM ที่อาจมีในไฟล์ UTF-8
+                $header = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $header);
+                $normalizedHeaders[] = strtolower(trim($header));
+            }
+            
+            // บันทึกข้อมูล headers เพื่อดีบัก
+            error_log("CSV Headers found: " . implode(", ", $normalizedHeaders));
+            
+            // ตรวจสอบ headers ที่จำเป็น (เฉพาะ student_code, firstname, lastname)
+            $requiredHeaders = ['student_code', 'firstname', 'lastname'];
             $missingHeaders = [];
             
             foreach ($requiredHeaders as $requiredHeader) {
-                if (!in_array($requiredHeader, $headers)) {
+                if (!in_array(strtolower($requiredHeader), $normalizedHeaders)) {
                     $missingHeaders[] = $requiredHeader;
                 }
             }
@@ -754,7 +776,8 @@ switch ($action) {
             if (!empty($missingHeaders)) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไฟล์ CSV ไม่มีคอลัมน์ที่จำเป็น: ' . implode(', ', $missingHeaders)
+                    'message' => 'ไฟล์ CSV ไม่มีคอลัมน์ที่จำเป็น: ' . implode(', ', $missingHeaders) . 
+                                 ' (พบคอลัมน์: ' . implode(', ', $normalizedHeaders) . ')'
                 ]);
                 exit;
             }
@@ -787,13 +810,18 @@ switch ($action) {
             
             // อ่านข้อมูลจาก CSV และนำเข้า
             while (($data = fgetcsv($handle)) !== false) {
-                // แปลงข้อมูลเป็น associative array
+                // แปลงข้อมูลเป็น associative array โดยใช้ normalized headers
                 $rowData = [];
                 foreach ($headers as $index => $header) {
+                    // ตัด BOM และ normalize
+                    $header = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $header);
+                    $normalizedHeader = strtolower(trim($header));
+                    $rowData[$normalizedHeader] = isset($data[$index]) ? trim($data[$index]) : '';
+                    // เก็บข้อมูลในรูปแบบเดิมเพื่อความเข้ากันได้
                     $rowData[$header] = isset($data[$index]) ? trim($data[$index]) : '';
                 }
                 
-                // ตรวจสอบข้อมูลที่จำเป็น
+                // ตรวจสอบข้อมูลที่จำเป็น (เฉพาะ student_code, firstname, lastname)
                 $isValid = true;
                 foreach ($requiredHeaders as $requiredHeader) {
                     if (empty($rowData[$requiredHeader])) {
@@ -808,10 +836,25 @@ switch ($action) {
                 }
                 
                 // ตรวจสอบข้อมูลซ้ำ
-                if (in_array(strtolower($rowData['student_code']), $existingStudentCodes) || 
-                    in_array(strtolower($rowData['username']), $existingUsernames)) {
+                if (in_array(strtolower($rowData['student_code']), $existingStudentCodes)) {
                     $duplicates++;
                     continue;
+                }
+                
+                // กำหนดค่า username ถ้าไม่มี
+                if (empty($rowData['username'])) {
+                    $rowData['username'] = $rowData['student_code'];
+                }
+                
+                // ตรวจสอบ username ซ้ำ
+                if (in_array(strtolower($rowData['username']), $existingUsernames)) {
+                    // ใช้ student_code เป็น username แทน
+                    $rowData['username'] = $rowData['student_code'] . '_' . rand(100, 999);
+                }
+                
+                // กำหนดค่า password ถ้าไม่มี
+                if (empty($rowData['password'])) {
+                    $rowData['password'] = $rowData['student_code'];
                 }
                 
                 // เข้ารหัสรหัสผ่าน
@@ -893,12 +936,12 @@ switch ($action) {
             // เพิ่ม BOM (Byte Order Mark) สำหรับรองรับภาษาไทยใน Excel
             fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
             
-            // เพิ่ม header ของไฟล์ CSV
-            fputcsv($output, ['student_code', 'username', 'password', 'firstname', 'lastname', 'email', 'phone', 'status']);
+            // เพิ่ม header ของไฟล์ CSV โดยจัดให้ student_code, firstname, lastname อยู่หน้า
+            fputcsv($output, ['student_code', 'firstname', 'lastname', 'username', 'password', 'email', 'phone', 'status']);
             
             // เพิ่มข้อมูลตัวอย่าง
-            fputcsv($output, ['6201234567', 'student1', 'password123', 'สมชาย', 'ใจดี', 'somchai@example.com', '0891234567', '1']);
-            fputcsv($output, ['6201234568', 'student2', 'password123', 'สมหญิง', 'รักเรียน', 'somying@example.com', '0891234568', '1']);
+            fputcsv($output, ['6201234567', 'สมชาย', 'ใจดี', 'student1', 'password123', 'somchai@example.com', '0891234567', '1']);
+            fputcsv($output, ['6201234568', 'สมหญิง', 'รักเรียน', 'student2', 'password123', 'somying@example.com', '0891234568', '1']);
             
             // ปิดไฟล์
             fclose($output);
@@ -963,11 +1006,11 @@ switch ($action) {
                 // เพิ่ม BOM (Byte Order Mark) สำหรับรองรับภาษาไทยใน Excel
                 fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
                 
-                // เพิ่ม header ของไฟล์ CSV
-                fputcsv($output, ['รหัสนักศึกษา', 'ชื่อผู้ใช้', 'ชื่อจริง', 'นามสกุล', 'อีเมล', 'เบอร์โทรศัพท์', 'สถานะ']);
+                // เพิ่ม header ของไฟล์ CSV - เรียงตามความสำคัญ student_code, firstname, lastname ก่อน
+                fputcsv($output, ['รหัสนักศึกษา', 'ชื่อจริง', 'นามสกุล', 'ชื่อผู้ใช้', 'อีเมล', 'เบอร์โทรศัพท์', 'สถานะ']);
                 
                 // ดึงข้อมูลนักเรียนในเทอมนั้น
-                $stmt = $conn->prepare("SELECT student_code, username, firstname, lastname, email, phone, status FROM student WHERE semester_id = ? ORDER BY student_code ASC");
+                $stmt = $conn->prepare("SELECT student_code, firstname, lastname, username, email, phone, status FROM student WHERE semester_id = ? ORDER BY student_code ASC");
                 $stmt->execute([$semesterId]);
                 
                 // บันทึกประวัติการทำงาน
@@ -986,9 +1029,9 @@ switch ($action) {
                     // เขียนข้อมูลลงไฟล์ CSV
                     fputcsv($output, [
                         $row['student_code'],
-                        $row['username'],
                         $row['firstname'],
                         $row['lastname'],
+                        $row['username'],
                         $row['email'] ?? '',
                         $row['phone'] ?? '',
                         $statusText
