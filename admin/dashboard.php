@@ -1,7 +1,13 @@
+<?php 
+session_start();
+require_once __DIR__ . '/../dbcon.php';
+ 
+
+?>
 <!doctype html>
 
 <html
-  lang="en"
+  lang="th"
   class="light-style layout-menu-fixed layout-compact"
   dir="ltr"
   data-theme="theme-default"

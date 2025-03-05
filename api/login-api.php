@@ -90,25 +90,25 @@ try {
         }
     } else if ($user_type === 'admin') {
         // ทดสอบเข้าสู่ระบบด้วย admin username และ password ที่กำหนด
-        if ($username === 'admin' && $password === 'admin123') {
-            // สร้าง session
-            $_SESSION['user_id'] = 1; // สมมติว่า ID = 1
-            $_SESSION['user_type'] = 'admin';
-            $_SESSION['username'] = 'admin';
-            $_SESSION['name'] = 'ผู้ดูแลระบบ';
+        // if ($username === 'admin' && $password === 'admin123') {
+        //     // สร้าง session
+        //     $_SESSION['user_id'] = 1; // สมมติว่า ID = 1
+        //     $_SESSION['user_type'] = 'admin';
+        //     $_SESSION['username'] = 'admin';
+        //     $_SESSION['name'] = 'ผู้ดูแลระบบ';
             
-            // สร้าง CSRF token ใหม่
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        //     // สร้าง CSRF token ใหม่
+        //     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             
-            // ตอบกลับเป็น JSON ที่ถูกต้อง
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => true,
-                'message' => 'เข้าสู่ระบบสำเร็จ',
-                'redirect' => '/admin/dashboard.php'
-            ]);
-            exit;
-        }
+        //     // ตอบกลับเป็น JSON ที่ถูกต้อง
+        //     header('Content-Type: application/json');
+        //     echo json_encode([
+        //         'success' => true,
+        //         'message' => 'เข้าสู่ระบบสำเร็จ',
+        //         'redirect' => '/admin/dashboard.php'
+        //     ]);
+        //     exit;
+        // }
         
         // ตรวจสอบข้อมูลผู้ดูแลระบบ
         $stmt = $conn->prepare("SELECT * FROM admin WHERE username = ?");

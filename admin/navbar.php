@@ -1,3 +1,39 @@
+<?php
+// เริ่มเซสชันถ้ายังไม่ได้เริ่ม
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// ตรวจสอบการเข้าสู่ระบบ
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
+    header('Location: ../login.php');
+    exit;
+}
+
+// เรียกใช้ไฟล์เชื่อมต่อฐานข้อมูล
+require_once(__DIR__ . '/../dbcon.php');
+
+// ดึงข้อมูลผู้ดูแลระบบจากฐานข้อมูล
+$admin_id = $_SESSION['user_id'];
+$admin_name = "ผู้ดูแลระบบ"; // ค่าเริ่มต้นในกรณีที่ไม่สามารถดึงข้อมูลได้
+$admin_email = ""; // ค่าเริ่มต้น
+
+try {
+    $conn = getDBConnection();
+    $stmt = $conn->prepare("SELECT admin_id, username, name, email FROM admin WHERE admin_id = :admin_id");
+    $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $admin_name = $row['name'];
+        $admin_email = $row['email'];
+    }
+} catch (PDOException $e) {
+    // บันทึกข้อผิดพลาดลงใน log แต่ไม่แสดงข้อผิดพลาดกับผู้ใช้
+    error_log("Database Error in navbar.php: " . $e->getMessage());
+}
+?>
+
 <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
           <div class="container-xxl">
             <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-6">
@@ -50,7 +86,7 @@
                     </svg>
                   </span>
                 </span>
-                <span class="app-brand-text demo menu-text fw-semibold">Materialize</span>
+                <span class="app-brand-text demo menu-text fw-semibold">ระบบสอบออนไลน์</span>
               </a>
 
               <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
@@ -83,8 +119,8 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-medium d-block">John Doe</span>
-                            <small class="text-muted">Admin</small>
+                            <span class="fw-medium d-block"><?php echo htmlspecialchars($admin_name); ?></span>
+                            <small class="text-muted">ผู้ดูแลระบบ</small>
                           </div>
                         </div>
                       </a>
@@ -93,31 +129,34 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="ri-user-3-line me-3"></i><span class="align-middle">My Profile</span>
+                      <a class="dropdown-item" href="admin-profile.php">
+                        <i class="ri-user-3-line me-3"></i><span class="align-middle">โปรไฟล์ของฉัน</span>
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="ri-settings-4-line me-3"></i><span class="align-middle">Settings</span>
+                      <a class="dropdown-item" href="admin-management.php">
+                        <i class="ri-user-settings-line me-3"></i><span class="align-middle">จัดการผู้ดูแลระบบ</span>
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 ri-file-text-line me-3"></i>
-                          <span class="flex-grow-1 align-middle">Billing</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger">4</span>
-                        </span>
+                      <a class="dropdown-item" href="admin-settings.php">
+                        <i class="ri-settings-4-line me-3"></i><span class="align-middle">ตั้งค่า</span>
                       </a>
                     </li>
+                    <?php if (!empty($admin_email)): ?>
+                    <li>
+                      <a class="dropdown-item" href="mailto:<?php echo htmlspecialchars($admin_email); ?>">
+                        <i class="ri-mail-line me-3"></i><span class="align-middle">อีเมล</span>
+                      </a>
+                    </li>
+                    <?php endif; ?>
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
                       <a class="dropdown-item" href="../logout.php">
                         <i class="ri-shut-down-line me-3"></i>
-                        <span class="align-middle">Log Out</span>
+                        <span class="align-middle">ออกจากระบบ</span>
                       </a>
                     </li>
                   </ul>
