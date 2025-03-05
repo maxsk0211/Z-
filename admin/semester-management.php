@@ -1,5 +1,5 @@
 <?php
-// เริ่มต้น session
+// เริ่มต้น session1
 session_start();
 
 // ตรวจสอบการเข้าสู่ระบบ

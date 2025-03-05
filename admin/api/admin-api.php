@@ -1,5 +1,5 @@
 <?php
-// admin-api.php - /api/admin-api.php
+// admin-api.php - /api/admin-api.php1 
 header('Content-Type: application/json');
 
 // เริ่มต้น session

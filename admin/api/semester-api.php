@@ -1,5 +1,5 @@
 <?php
-// semester-api.php - /api/semester-api.php
+// semester-api.php - /api/semester-api.php1
 header('Content-Type: application/json');
 
 // เริ่มต้น session

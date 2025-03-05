@@ -1,5 +1,5 @@
 <?php
-// เริ่มเซสชันถ้ายังไม่ได้เริ่ม
+// เริ่มเซสชันถ้ายังไม่ได้เริ่ม11
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
