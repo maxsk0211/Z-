@@ -1847,7 +1847,7 @@ function saveQuestion() {
             // Check if question has image
             let imageCell = 'ไม่มีรูปภาพ';
             if (question.image) {
-                imageCell = `<img src="uploads/questions/${question.image}" alt="รูปภาพประกอบ" height="50" class="cursor-pointer" onclick="showImagePreview('uploads/questions/${question.image}')">`;
+                imageCell = `<img src="/../../img/question/${question.image}" alt="รูปภาพประกอบ" height="50" class="cursor-pointer" onclick="showImagePreview('/../../img/question//${question.image}')">`;
             }
             
             return `
