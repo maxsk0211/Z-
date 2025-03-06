@@ -260,7 +260,7 @@ switch ($action) {
                 $content = $_POST['question_content'] ?? '';
                 $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
                 // ลบการรับค่า imageDescription
-                $imageDescription = $_POST['question_image_description'] ?? null;
+                //$imageDescription = $_POST['question_image_description'] ?? null;
                 
                 // ตรวจสอบข้อมูล
                 if ($topicId <= 0 || empty($content)) {
@@ -419,7 +419,7 @@ switch ($action) {
             $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
             $existingImage = $_POST['existing_image'] ?? '';
             $removeImage = isset($_POST['remove_image']) && $_POST['remove_image'] == '1';
-            $imageDescription = $_POST['question_image_description'] ?? null;
+            //$imageDescription = $_POST['question_image_description'] ?? null;
             
             // ตรวจสอบข้อมูล
             if ($questionId <= 0 || $topicId <= 0 || empty($content)) {
