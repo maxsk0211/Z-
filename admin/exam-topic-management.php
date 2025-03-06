@@ -1942,7 +1942,7 @@ function saveQuestion() {
             
             let choiceImagePreview = '<span class="image-preview-placeholder"><i class="ri-add-line"></i></span>';
             if (image) {
-                choiceImagePreview = `<img src="uploads/choices/${image}" alt="${imageDescription || 'รูปภาพประกอบตัวเลือก'}">`;
+                choiceImagePreview = `<img src="/../../img/question/${image}" alt="${imageDescription || 'รูปภาพประกอบตัวเลือก'}">`;
             }
             
             const choiceHtml = `
@@ -1978,7 +1978,7 @@ function saveQuestion() {
             
             // If image exists, show the image
             if (image) {
-                $(`#choice_image_${choiceId}`).attr('src', `uploads/choices/${image}`);
+                $(`#choice_image_${choiceId}`).attr('src', `/../../img/question/${image}`);
             }
         }
         
