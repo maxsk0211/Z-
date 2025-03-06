@@ -1058,59 +1058,119 @@ try {
             $('#question_image').click();
         });
         
-        // Add topic button click
-        $('#saveTopicBtn').on('click', function() {
-            if (validateForm('#addTopicForm')) {
-                const formData = new FormData($('#addTopicForm')[0]);
-                formData.append('action', 'create');
-                
-                showLoading();
-                
-                $.ajax({
-                    url: 'api/exam-topic-api.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    success: function(response) {
-                        hideLoading();
-                        
-                        if (response.success) {
-                            // Close modal and reset form
-                            $('#addTopicModal').modal('hide');
-                            $('#addTopicForm')[0].reset();
-                            $('#addTopicForm input[name="exam_set_id"]').val(<?= $examSetId ?>);
-                            
-                            // Reload topics
-                            loadTopics();
-                            
-                            // Show success message
-                            swalCustom.fire({
-                                icon: 'success',
-                                title: 'สำเร็จ!',
-                                text: 'เพิ่มหัวข้อการสอบเรียบร้อยแล้ว'
-                            });
-                        } else {
-                            swalCustom.fire({
-                                icon: 'error',
-                                title: 'เกิดข้อผิดพลาด',
-                                text: response.message || 'ไม่สามารถเพิ่มหัวข้อการสอบได้'
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        hideLoading();
-                        
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                        });
-                    }
-                });
-            }
+        // แก้ไขฟังก์ชัน saveQuestion()
+function saveQuestion() {
+    // ตรวจสอบเนื้อหาของคำถามจาก Quill editor
+    if (quillEditor.getText().trim().length === 0) {
+        swalCustom.fire({
+            icon: 'error',
+            title: 'กรุณากรอกเนื้อหาคำถาม',
+            text: 'เนื้อหาคำถามไม่สามารถเป็นค่าว่างได้'
         });
+        return;
+    }
+    
+    // Prepare form data
+    const formData = new FormData();
+    
+    // เพิ่มข้อมูลหลักจากฟอร์มทีละตัว แทนการใช้ $('#question-form')[0]
+    formData.append('csrf_token', $('#question-form input[name="csrf_token"]').val());
+    formData.append('question_id', $('#question_id').val());
+    formData.append('topic_id', $('#topic_id').val());
+    formData.append('question_content', quillEditor.root.innerHTML);
+    formData.append('question_score', $('#question_score').val());
+    formData.append('existing_image', $('#existing_image').val());
+    formData.append('remove_image', $('#remove_image').val());
+    
+    // เพิ่มรูปภาพคำถาม (ถ้ามี)
+    if ($('#question_image')[0].files.length > 0) {
+        formData.append('question_image', $('#question_image')[0].files[0]);
+    }
+    
+    // เพิ่มข้อมูลตัวเลือก
+    $('.choice-item').each(function(index) {
+        const choiceId = $(this).find('.choice-content-input').attr('name').match(/choice_content\[(.*?)\]/)[1];
+        const choiceContent = $(this).find('.choice-content-input').val();
+        const isCorrect = $(this).find('.choice-radio').is(':checked');
+        const existingChoiceId = $(this).find('input[name^="choice_id"]').val();
+        const removeChoiceImage = $(this).find('.remove-choice-image').val();
+        
+        formData.append(`choice_content[${choiceId}]`, choiceContent);
+        if (isCorrect) {
+            formData.append('correct_choice', choiceId);
+        }
+        if (existingChoiceId) {
+            formData.append(`choice_id[${choiceId}]`, existingChoiceId);
+        }
+        formData.append(`remove_choice_image[${choiceId}]`, removeChoiceImage);
+        
+        // เพิ่มรูปภาพตัวเลือก (ถ้ามี)
+        const choiceImageInput = $(this).find('.choice-image-input')[0];
+        if (choiceImageInput.files.length > 0) {
+            formData.append(`choice_image[${choiceId}]`, choiceImageInput.files[0]);
+        }
+    });
+    
+    // เพิ่ม action ตามสถานะการแก้ไข
+    formData.append('action', editingQuestion ? 'update' : 'create');
+    
+    showLoading();
+    
+    // Debug output - check formData
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+    }
+    
+    // ใช้ fetch API แทน jQuery AJAX
+    fetch('../admin/api/question-api.php', {  // ตรวจสอบ path อีกครั้ง
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin'  // ส่ง cookies ไปด้วย
+    })
+    .then(response => {
+        // ตรวจสอบว่าการตอบกลับเป็น JSON หรือไม่
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        }
+        throw new Error('Server response is not JSON');
+    })
+    .then(data => {
+        hideLoading();
+        
+        if (data.success) {
+            // Show success message
+            swalCustom.fire({
+                icon: 'success',
+                title: 'สำเร็จ!',
+                text: editingQuestion ? 'อัปเดตคำถามเรียบร้อยแล้ว' : 'เพิ่มคำถามเรียบร้อยแล้ว'
+            });
+            
+            // Reset form for new question
+            resetQuestionForm();
+            setupNewQuestion();
+            
+            // Reload questions
+            loadQuestions();
+        } else {
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: data.message || 'ไม่สามารถบันทึกคำถามได้'
+            });
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        console.error('Error saving question:', error);
+        
+        swalCustom.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาดในการเชื่อมต่อ',
+            text: 'ไม่สามารถติดต่อกับเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่อหรือลองใหม่อีกครั้ง'
+        });
+    });
+}
         
         // Edit topic button click (event delegation)
         $(document).on('click', '.edit-topic-btn', function() {
