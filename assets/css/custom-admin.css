@@ -489,3 +489,265 @@
     max-width: 150px;
     display: inline-block;
   }
+  /* Main CSS สำหรับหน้าจัดการชุดข้อสอบ */
+
+body {
+  font-family: 'Kanit', sans-serif;
+}
+
+/* Stats Cards */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.stat-details h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.stat-details p {
+  margin-bottom: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Datatable Card */
+.datatable-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+}
+
+.datatable-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.datatable-header h4 {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+/* Filter Section */
+.filter-section {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-inactive {
+  background-color: #FFEBEE;
+  color: #C62828;
+}
+
+/* Topic Count Badges */
+.topic-count-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.topic-count-badge.high {
+  background-color: #E3F2FD;
+  color: #1565C0;
+}
+
+.topic-count-badge.medium {
+  background-color: #EDE7F6;
+  color: #5E35B1;
+}
+
+.topic-count-badge.low {
+  background-color: #F1F8E9;
+  color: #558B2F;
+}
+
+/* View Toggle Buttons */
+.view-toggle {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.view-toggle-btn {
+  background: none;
+  border: none;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s;
+}
+
+.view-toggle-btn.active {
+  background-color: #5D87FF;
+  color: white;
+}
+
+/* Card View */
+.data-card-view .card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+
+.data-card-view .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.data-card-view .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.data-card-view .card-text {
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.data-card-view .card-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Action Buttons */
+.action-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.loading-overlay.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(93, 135, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: #5D87FF;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* SweetAlert Styling */
+.custom-swal-popup {
+  border-radius: 15px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+
+.custom-swal-title {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.custom-swal-content {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .filter-section .row > div {
+    margin-bottom: 0.5rem;
+  }
+  
+  .view-toggle {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .datatable-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .datatable-header button {
+    margin-top: 1rem;
+    align-self: flex-start;
+  }
+}
