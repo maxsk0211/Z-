@@ -489,7 +489,7 @@ switch ($action) {
                 WHERE question_id = ?
             ");
             $currentDateTime = getCurrentDateTime();
-            $stmt->execute([$topicId, $content, $questionImage, $imageDescription, $score, $currentDateTime, $questionId]);
+            $stmt->execute([$topicId, $content, $questionImage, $score, $currentDateTime, $questionId]);
             
             // ตรวจสอบตัวเลือก
             $choiceContents = $_POST['choice_content'] ?? [];
