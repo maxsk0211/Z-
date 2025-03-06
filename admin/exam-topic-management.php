@@ -1936,7 +1936,7 @@ function saveQuestion() {
         }
         
         // Add new choice to the form
-        function addChoice(content = '', isCorrect = false, image = null, imageDescription = '') {
+        function addChoice(content = '', isCorrect = false, image = null) {
             const choiceIndex = $('.choice-item').length;
             const choiceId = `choice_${Date.now()}_${choiceIndex}`;
             
