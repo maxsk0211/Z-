@@ -588,7 +588,7 @@ switch ($action) {
                         SET content = ?, image = ?, is_correct = ?, updated_at = ?
                         WHERE choice_id = ?
                     ");
-                    $stmtUpdateChoice->execute([$choiceContent, $choiceImage, $choiceImageDescription, $isCorrect, $currentDateTime, $existingChoiceId]);
+                    $stmtUpdateChoice->execute([$choiceContent, $choiceImage, $isCorrect, $currentDateTime, $existingChoiceId]);
                     
                     $processedChoiceIds[] = $existingChoiceId;
                 } else {
@@ -597,7 +597,7 @@ switch ($action) {
                         INSERT INTO choice (question_id, content, image, is_correct, created_at, updated_at)
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                     ");
-                    $stmtInsertChoice->execute([$questionId, $choiceContent, $choiceImage, $choiceImageDescription, $isCorrect, $currentDateTime, $currentDateTime]);
+                    $stmtInsertChoice->execute([$questionId, $choiceContent, $choiceImage, $isCorrect, $currentDateTime, $currentDateTime]);
                     
                     $processedChoiceIds[] = $conn->lastInsertId();
                 }
