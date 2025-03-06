@@ -260,7 +260,7 @@ switch ($action) {
                 $content = $_POST['question_content'] ?? '';
                 $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
                 // ลบการรับค่า imageDescription
-                //$imageDescription = $_POST['question_image_description'] ?? null;
+                // $imageDescription = $_POST['question_image_description'] ?? null;
                 
                 // ตรวจสอบข้อมูล
                 if ($topicId <= 0 || empty($content)) {
@@ -342,7 +342,7 @@ switch ($action) {
                     // ตรวจสอบและอัปโหลดรูปภาพตัวเลือก (ถ้ามี)
                     $choiceImage = null;
                     // ลบการรับค่า choiceImageDescription 
-                    //$choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
+                    // $choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
                     
                     if (isset($_FILES['choice_image']['name'][$choiceId]) && $_FILES['choice_image']['error'][$choiceId] == 0) {
                         $targetDir = __DIR__ . '/../../img/question';
@@ -419,7 +419,7 @@ switch ($action) {
             $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
             $existingImage = $_POST['existing_image'] ?? '';
             $removeImage = isset($_POST['remove_image']) && $_POST['remove_image'] == '1';
-            //$imageDescription = $_POST['question_image_description'] ?? null;
+            // $imageDescription = $_POST['question_image_description'] ?? null;
             
             // ตรวจสอบข้อมูล
             if ($questionId <= 0 || $topicId <= 0 || empty($content)) {
@@ -597,7 +597,7 @@ switch ($action) {
                         INSERT INTO choice (question_id, content, image, is_correct, created_at, updated_at)
                         VALUES (?, ?, ?, ?, ?, ?)
                     ");
-                    $stmtInsertChoice->execute([$questionId, $choiceContent, $choiceImage, $isCorrect, $currentDateTime, $currentDateTime]);
+                    $stmtInsertChoice->execute([$questionId, $choiceContent, $choiceImage, $choiceImageDescription, $isCorrect, $currentDateTime, $currentDateTime]);
                     
                     $processedChoiceIds[] = $conn->lastInsertId();
                 }
