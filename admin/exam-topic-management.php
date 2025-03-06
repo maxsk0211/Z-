@@ -87,7 +87,7 @@ try {
     <link rel="stylesheet" href="../assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
     <link rel="stylesheet" href="../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
-    <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css" />
+    <link rel="stylesheet" href="../assets/vendor/lib/sweetalert2/sweetalert2.css" />
 
     <!-- Page CSS -->
     <style>
