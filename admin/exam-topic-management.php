@@ -1797,7 +1797,7 @@ function saveQuestion() {
                 if (choice.image) {
                     choiceImageHtml = `
                     <div class="choice-image">
-                        <img src="uploads/choices/${choice.image}" alt="${choice.image_description || 'รูปภาพประกอบตัวเลือก'}" />
+                        <img src="/../../img/question/${choice.image}" alt="${choice.image_description || 'รูปภาพประกอบตัวเลือก'}" />
                     </div>`;
                 }
                 
