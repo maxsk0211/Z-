@@ -1782,7 +1782,7 @@ function saveQuestion() {
             if (question.image) {
                 imageHtml = `
                 <div class="question-image">
-                    <img src="uploads/questions/${question.image}" alt="${question.image_description || 'รูปภาพประกอบคำถาม'}" />
+                    <img src="/../../img/question/${question.image}" alt="${question.image_description || 'รูปภาพประกอบคำถาม'}" />
                 </div>`;
             }
             
