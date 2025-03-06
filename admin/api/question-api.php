@@ -342,7 +342,7 @@ switch ($action) {
                     // ตรวจสอบและอัปโหลดรูปภาพตัวเลือก (ถ้ามี)
                     $choiceImage = null;
                     // ลบการรับค่า choiceImageDescription 
-                    // $choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
+                    $choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
                     
                     if (isset($_FILES['choice_image']['name'][$choiceId]) && $_FILES['choice_image']['error'][$choiceId] == 0) {
                         $targetDir = __DIR__ . '/../../img/question';
