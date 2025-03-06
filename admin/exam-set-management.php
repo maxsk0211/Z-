@@ -979,7 +979,7 @@ try {
             showLoading();
             
             $.ajax({
-                url: "../api/exam-set-api.php?action=list",
+                url: "/../api/exam-set-api.php?action=list",
                 type: "GET",
                 data: {
                     status: statusFilter,
