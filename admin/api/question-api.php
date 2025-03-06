@@ -108,7 +108,7 @@ switch ($action) {
             
             // ดึงข้อมูลคำถาม
             $stmt = $conn->prepare("
-                SELECT q.question_id, q.topic_id, q.content, q.image, q.image_description, q.score, q.status, q.created_at, q.updated_at
+                SELECT q.question_id, q.topic_id, q.content, q.image,  q.score, q.status, q.created_at, q.updated_at
                 FROM question q
                 WHERE q.topic_id = ?
                 ORDER BY q.question_id ASC
@@ -119,7 +119,7 @@ switch ($action) {
             // ดึงข้อมูลตัวเลือกของแต่ละคำถาม
             foreach ($questions as &$question) {
                 $stmtChoices = $conn->prepare("
-                    SELECT choice_id, question_id, content, image, image_description, is_correct
+                    SELECT choice_id, question_id, content, image, is_correct
                     FROM choice
                     WHERE question_id = ?
                     ORDER BY choice_id ASC
@@ -155,7 +155,7 @@ switch ($action) {
             
             // ดึงข้อมูลคำถาม
             $stmt = $conn->prepare("
-                SELECT q.question_id, q.topic_id, q.content, q.image, q.image_description, q.score, q.status, q.created_at, q.updated_at,
+                SELECT q.question_id, q.topic_id, q.content, q.image, q.score, q.status, q.created_at, q.updated_at,
                        t.name as topic_name
                 FROM question q
                 JOIN exam_topic t ON q.topic_id = t.topic_id
@@ -168,7 +168,7 @@ switch ($action) {
             // ดึงข้อมูลตัวเลือกของแต่ละคำถาม
             foreach ($questions as &$question) {
                 $stmtChoices = $conn->prepare("
-                    SELECT choice_id, question_id, content, image, image_description, is_correct
+                    SELECT choice_id, question_id, content, image, is_correct
                     FROM choice
                     WHERE question_id = ?
                     ORDER BY choice_id ASC
@@ -204,7 +204,7 @@ switch ($action) {
             
             // ดึงข้อมูลคำถาม
             $stmt = $conn->prepare("
-                SELECT question_id, topic_id, content, image, image_description, score, status, created_at, updated_at
+                SELECT question_id, topic_id, content, image, score, status, created_at, updated_at
                 FROM question
                 WHERE question_id = ?
             ");
@@ -214,7 +214,7 @@ switch ($action) {
             if ($question) {
                 // ดึงข้อมูลตัวเลือก
                 $stmtChoices = $conn->prepare("
-                    SELECT choice_id, question_id, content, image, image_description, is_correct
+                    SELECT choice_id, question_id, content, image, is_correct
                     FROM choice
                     WHERE question_id = ?
                     ORDER BY choice_id ASC
@@ -419,7 +419,7 @@ switch ($action) {
             $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
             $existingImage = $_POST['existing_image'] ?? '';
             $removeImage = isset($_POST['remove_image']) && $_POST['remove_image'] == '1';
-            $imageDescription = $_POST['question_image_description'] ?? null;
+            // $imageDescription = $_POST['question_image_description'] ?? null;
             
             // ตรวจสอบข้อมูล
             if ($questionId <= 0 || $topicId <= 0 || empty($content)) {
@@ -485,7 +485,7 @@ switch ($action) {
             // อัปเดตข้อมูลคำถาม
             $stmt = $conn->prepare("
                 UPDATE question
-                SET topic_id = ?, content = ?, image = ?, image_description = ?, score = ?, updated_at = ?
+                SET topic_id = ?, content = ?, image = ?, score = ?, updated_at = ?
                 WHERE question_id = ?
             ");
             $currentDateTime = getCurrentDateTime();
@@ -532,7 +532,7 @@ switch ($action) {
                 // ตัวเลือกเดิมหรือใหม่
                 $existingChoiceId = $choiceIds[$tempChoiceId] ?? null;
                 $removeChoiceImage = isset($_POST['remove_choice_image'][$tempChoiceId]) && $_POST['remove_choice_image'][$tempChoiceId] == '1';
-                $choiceImageDescription = $_POST['choice_image_description'][$tempChoiceId] ?? null;
+                // $choiceImageDescription = $_POST['choice_image_description'][$tempChoiceId] ?? null;
                 
                 // ตรวจสอบและอัปโหลดรูปภาพตัวเลือก (ถ้ามี)
                 $choiceImage = isset($existingChoices[$existingChoiceId]) ? $existingChoices[$existingChoiceId] : null;
@@ -585,7 +585,7 @@ switch ($action) {
                     // อัปเดตตัวเลือกเดิม
                     $stmtUpdateChoice = $conn->prepare("
                         UPDATE choice
-                        SET content = ?, image = ?, image_description = ?, is_correct = ?, updated_at = ?
+                        SET content = ?, image = ?, is_correct = ?, updated_at = ?
                         WHERE choice_id = ?
                     ");
                     $stmtUpdateChoice->execute([$choiceContent, $choiceImage, $choiceImageDescription, $isCorrect, $currentDateTime, $existingChoiceId]);
@@ -594,7 +594,7 @@ switch ($action) {
                 } else {
                     // เพิ่มตัวเลือกใหม่
                     $stmtInsertChoice = $conn->prepare("
-                        INSERT INTO choice (question_id, content, image, image_description, is_correct, created_at, updated_at)
+                        INSERT INTO choice (question_id, content, image, is_correct, created_at, updated_at)
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                     ");
                     $stmtInsertChoice->execute([$questionId, $choiceContent, $choiceImage, $choiceImageDescription, $isCorrect, $currentDateTime, $currentDateTime]);
