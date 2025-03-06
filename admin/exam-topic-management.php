@@ -649,10 +649,7 @@ try {
                           <input type="hidden" id="remove_image" name="remove_image" value="0">
                         </div>
                         
-                        <div class="mb-3">
-                          <label for="question_image_description" class="form-label">คำอธิบายรูปภาพ (สำหรับผู้พิการทางสายตา)</label>
-                          <input type="text" class="form-control" id="question_image_description" name="question_image_description">
-                        </div>
+                        
                         
                         <div class="mb-3">
                           <label for="question_score" class="form-label">คะแนน <span class="text-danger">*</span></label>
