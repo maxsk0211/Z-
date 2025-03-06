@@ -1942,7 +1942,7 @@ function saveQuestion() {
             
             let choiceImagePreview = '<span class="image-preview-placeholder"><i class="ri-add-line"></i></span>';
             if (image) {
-                choiceImagePreview = `<img src="/../../img/question/${image}">`;
+                choiceImagePreview = `<img src="/../../img/question/${image}" alt="${imageDescription || 'รูปภาพประกอบตัวเลือก'}">`;
             }
             
             const choiceHtml = `
