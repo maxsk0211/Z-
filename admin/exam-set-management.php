@@ -450,301 +450,487 @@ try {
     
     <!-- Page JS -->
     <script>
-    $(document).ready(function() {
-        // Custom SweetAlert2 config
-        const swalCustom = Swal.mixin({
-            customClass: {
-                popup: 'custom-swal-popup',
-                title: 'custom-swal-title',
-                content: 'custom-swal-content'
-            },
-            buttonsStyling: true,
-            confirmButtonText: '<i class="ri-check-line me-1"></i> ตกลง',
-            cancelButtonText: '<i class="ri-close-line me-1"></i> ยกเลิก',
-            showClass: {
-                popup: 'animate__animated animate__fadeInUp animate__faster'
-            },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutDown animate__faster'
-            }
-        });
-        
-        // ตั้งค่า moment.js ให้ใช้ภาษาไทย
-        moment.locale('th');
-        
-        // Function to show loading overlay
-        function showLoading() {
-            $('#loadingOverlay').addClass('show');
-        }
-        
-        // Function to hide loading overlay
-        function hideLoading() {
-            $('#loadingOverlay').removeClass('show');
-        }
-        
-        // สร้างฟังก์ชันสำหรับกำหนดสีของ badge จำนวนหัวข้อ
-        function getCountBadgeClass(count) {
-            if (count > 5) return 'high';
-            if (count > 0) return 'medium';
-            return 'low';
-        }
-        
-        // สร้างฟังก์ชันสำหรับแสดงไอคอนของ badge จำนวนหัวข้อ
-        function getCountBadgeIcon(count) {
-            if (count > 5) return '<i class="ri-bookmark-3-fill"></i>';
-            if (count > 0) return '<i class="ri-bookmark-2-line"></i>';
-            return '<i class="ri-bookmark-line"></i>';
-        }
-        
-        // สร้างฟังก์ชันสำหรับเปลี่ยนรูปแบบการแสดงผลวันที่
-        function formatDate(dateString) {
-            if (!dateString) return '-';
-            const date = moment(dateString);
-            return date.format('D MMM YYYY');
-        }
-        
-        // สร้างฟังก์ชันสำหรับแสดงวันที่แบบ relative time (เช่น 3 วันที่แล้ว)
-        function formatRelativeTime(dateString) {
-            if (!dateString) return '';
-            const date = moment(dateString);
-            return date.fromNow();
-        }
-        
-        // Initialize DataTable
-        const examSetTable = $('#examSetTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "api/exam-set-api.php?action=list",
-                type: "GET",
-                dataSrc: function(json) {
-                    hideLoading();
-                    updateCardView(json.data);
-                    return json.data;
+            $(document).ready(function() {
+            // Custom SweetAlert2 config
+            const swalCustom = Swal.mixin({
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    content: 'custom-swal-content'
                 },
-                error: function(xhr, error, thrown) {
-                    hideLoading();
-                    swalCustom.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                    });
+                buttonsStyling: true,
+                confirmButtonText: '<i class="ri-check-line me-1"></i> ตกลง',
+                cancelButtonText: '<i class="ri-close-line me-1"></i> ยกเลิก',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInUp animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutDown animate__faster'
                 }
             });
-        });
-        
-        // Edit Exam Set - fetch data and open modal
-        $(document).on('click', '.edit-btn', function() {
-            const examSetId = $(this).data('id');
             
+            // ตั้งค่า moment.js ให้ใช้ภาษาไทย
+            moment.locale('th');
+            
+            // Function to show loading overlay
+            function showLoading() {
+                $('#loadingOverlay').addClass('show');
+            }
+            
+            // Function to hide loading overlay
+            function hideLoading() {
+                $('#loadingOverlay').removeClass('show');
+            }
+            
+            // สร้างฟังก์ชันสำหรับกำหนดสีของ badge จำนวนหัวข้อ
+            function getCountBadgeClass(count) {
+                if (count > 5) return 'high';
+                if (count > 0) return 'medium';
+                return 'low';
+            }
+            
+            // สร้างฟังก์ชันสำหรับแสดงไอคอนของ badge จำนวนหัวข้อ
+            function getCountBadgeIcon(count) {
+                if (count > 5) return '<i class="ri-bookmark-3-fill"></i>';
+                if (count > 0) return '<i class="ri-bookmark-2-line"></i>';
+                return '<i class="ri-bookmark-line"></i>';
+            }
+            
+            // สร้างฟังก์ชันสำหรับเปลี่ยนรูปแบบการแสดงผลวันที่
+            function formatDate(dateString) {
+                if (!dateString) return '-';
+                const date = moment(dateString);
+                return date.format('D MMM YYYY');
+            }
+            
+            // สร้างฟังก์ชันสำหรับแสดงวันที่แบบ relative time (เช่น 3 วันที่แล้ว)
+            function formatRelativeTime(dateString) {
+                if (!dateString) return '';
+                const date = moment(dateString);
+                return date.fromNow();
+            }
+            
+            // ฟังก์ชันสำหรับอัปเดตมุมมองการ์ด
+            function updateCardView(data) {
+                const cardView = $('#cardView');
+                cardView.empty();
+                
+                if (data.length === 0) {
+                    cardView.html('<div class="text-center my-5"><p class="text-muted">ไม่พบข้อมูลชุดข้อสอบ</p></div>');
+                    return;
+                }
+                
+                let html = '<div class="row">';
+                
+                data.forEach(function(item) {
+                    const statusClass = item.status == 1 ? 'status-active' : 'status-inactive';
+                    const statusText = item.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
+                    const countBadgeClass = getCountBadgeClass(item.topic_count);
+                    const countBadgeIcon = getCountBadgeIcon(item.topic_count);
+                    
+                    html += `
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title mb-0 text-truncate">${item.name}</h5>
+                                    <span class="badge bg-label-primary">${countBadgeIcon} ${item.topic_count}</span>
+                                </div>
+                                <p class="card-text text-truncate">${item.description || '-'}</p>
+                                <div class="mt-3">
+                                    <span class="status-badge ${statusClass}">${statusText}</span>
+                                    <small class="text-muted d-block mt-2">สร้างเมื่อ: ${formatDate(item.created_at)}</small>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-sm btn-outline-primary view-btn" data-id="${item.exam_set_id}">
+                                        <i class="ri-eye-line me-1"></i> ดู
+                                    </button>
+                                    <div>
+                                        <button type="button" class="btn btn-sm btn-primary edit-btn me-1" data-id="${item.exam_set_id}">
+                                            <i class="ri-pencil-line"></i>
+                                        </button>
+                                        <a href="exam-topic-management.php?exam_set_id=${item.exam_set_id}" class="btn btn-sm btn-secondary me-1">
+                                            <i class="ri-list-check-2"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="${item.exam_set_id}" data-name="${item.name}">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                
+                html += '</div>';
+                cardView.html(html);
+            }
+            
+            // Initialize DataTable
+            const examSetTable = $('#examSetTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "api/exam-set-api.php?action=list",
+                    type: "GET",
+                    dataSrc: function(json) {
+                        hideLoading();
+                        updateCardView(json.data);
+                        return json.data;
+                    },
+                    error: function(xhr, error, thrown) {
+                        hideLoading();
+                        swalCustom.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                        });
+                    }
+                },
+                columns: [
+                    { data: null, render: function(data, type, row, meta) {
+                        return meta.row + 1;
+                    }},
+                    { data: "name" },
+                    { data: "description", render: function(data) {
+                        return data || '-';
+                    }},
+                    { data: "topic_count", render: function(data) {
+                        const badgeClass = getCountBadgeClass(data);
+                        return `<span class="badge topic-count-badge ${badgeClass}">${getCountBadgeIcon(data)} ${data}</span>`;
+                    }},
+                    { data: "status", render: function(data) {
+                        if (data == 1) {
+                            return '<span class="status-badge status-active">ใช้งาน</span>';
+                        } else {
+                            return '<span class="status-badge status-inactive">ไม่ใช้งาน</span>';
+                        }
+                    }},
+                    { data: "created_at", render: function(data) {
+                        return formatDate(data);
+                    }},
+                    { data: "created_by_name" },
+                    { data: null, render: function(data, type, row) {
+                        return `<div class="d-flex">
+                            <button type="button" class="btn btn-sm btn-info action-btn view-btn me-1" data-id="${row.exam_set_id}" title="ดูรายละเอียด">
+                                <i class="ri-eye-line"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-primary action-btn edit-btn me-1" data-id="${row.exam_set_id}" title="แก้ไข">
+                                <i class="ri-pencil-line"></i>
+                            </button>
+                            <a href="exam-topic-management.php?exam_set_id=${row.exam_set_id}" class="btn btn-sm btn-secondary action-btn me-1" title="จัดการหัวข้อ">
+                                <i class="ri-list-check-2"></i>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-danger action-btn delete-btn" data-id="${row.exam_set_id}" data-name="${row.name}" title="ลบ">
+                                <i class="ri-delete-bin-line"></i>
+                            </button>
+                        </div>`;
+                    }, orderable: false }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/th.json',
+                },
+                responsive: true,
+                dom: '<"row mb-3"<"col-md-6"B><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="ri-file-excel-2-line"></i> Excel',
+                        className: 'btn btn-success me-2',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="ri-printer-line"></i> พิมพ์',
+                        className: 'btn btn-info me-2',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    }
+                ],
+                order: [[5, 'desc']] // Sort by created_at column by default
+            });
+            
+            // Show loading on initial data load
             showLoading();
             
-            $.ajax({
-                url: `api/exam-set-api.php?action=get&id=${examSetId}`,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    hideLoading();
-                    
-                    if (response.success) {
-                        const data = response.data;
-                        
-                        // Fill form with data
-                        $('#edit_exam_set_id').val(data.exam_set_id);
-                        $('#edit_name').val(data.name);
-                        $('#edit_description').val(data.description || '');
-                        $('#edit_status').val(data.status);
-                        
-                        // Show modal
-                        $('#editExamSetModal').modal('show');
-                    } else {
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: response.message || 'ไม่สามารถดึงข้อมูลชุดข้อสอบได้'
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    hideLoading();
-                    
-                    swalCustom.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                    });
-                }
-            });
-        });
-
-        // Form validation function
-        function validateForm(formId) {
-            const form = $(formId);
-            let isValid = true;
-            
-            form.find('input[required], select[required]').each(function() {
-                if ($(this).val() === '') {
-                    isValid = false;
-                    $(this).addClass('is-invalid');
+            // สลับการแสดงผลระหว่าง Table และ Card View
+            $('#tableViewBtn, #cardViewBtn').on('click', function() {
+                const view = $(this).data('view');
+                
+                $('.view-toggle-btn').removeClass('active');
+                $(this).addClass('active');
+                
+                if (view === 'table') {
+                    $('#tableView').show();
+                    $('#cardView').hide();
                 } else {
-                    $(this).removeClass('is-invalid');
+                    $('#tableView').hide();
+                    $('#cardView').show();
                 }
             });
             
-            return isValid;
-        }
-        
-        // Remove validation styling on input
-        $('input, select, textarea').on('focus', function() {
-            $(this).removeClass('is-invalid');
-        });
-        
-        // Save new exam set
-        $('#saveExamSetBtn').on('click', function() {
-            if (validateForm('#addExamSetForm')) {
-                const formData = new FormData($('#addExamSetForm')[0]);
-                formData.append('action', 'create');
+            // การกรองข้อมูล
+            $('#applyFilter').on('click', function() {
+                const statusFilter = $('#statusFilter').val();
+                const topicFilter = $('#topicFilter').val();
                 
+                // สร้าง custom filter function สำหรับ DataTables
+                $.fn.dataTable.ext.search.pop(); // ลบ filter เดิม (ถ้ามี)
+                
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex, rowData) {
+                        // ถ้าไม่มีการกรอง ให้แสดงทั้งหมด
+                        if (statusFilter === '' && topicFilter === '') {
+                            return true;
+                        }
+                        
+                        // กรองตามสถานะ
+                        if (statusFilter !== '' && rowData.status != statusFilter) {
+                            return false;
+                        }
+                        
+                        // กรองตามจำนวนหัวข้อ
+                        if (topicFilter !== '') {
+                            const count = parseInt(rowData.topic_count);
+                            
+                            if (topicFilter === '0' && count !== 0) {
+                                return false;
+                            } else if (topicFilter === '1-5' && (count < 1 || count > 5)) {
+                                return false;
+                            } else if (topicFilter === '5+' && count <= 5) {
+                                return false;
+                            }
+                        }
+                        
+                        return true;
+                    }
+                );
+                
+                // นำไปใช้กับทั้ง DataTable และ Card View
+                examSetTable.draw();
+                
+                // กรองข้อมูลใน Card View (ผ่านการเรียกใช้ API ใหม่)
                 showLoading();
                 
                 $.ajax({
-                    url: 'api/exam-set-api.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
+                    url: "api/exam-set-api.php?action=list",
+                    type: "GET",
+                    data: {
+                        status: statusFilter,
+                        topic_filter: topicFilter
+                    },
+                    dataType: "json",
                     success: function(response) {
                         hideLoading();
-                        
-                        if (response.success) {
-                            // Close modal and reset form
-                            $('#addExamSetModal').modal('hide');
-                            $('#addExamSetForm')[0].reset();
-                            
-                            // Reload exam set table
-                            examSetTable.ajax.reload();
-                            
-                            // Show success message
-                            swalCustom.fire({
-                                icon: 'success',
-                                title: 'สำเร็จ!',
-                                text: 'เพิ่มชุดข้อสอบเรียบร้อยแล้ว',
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-                            
-                            // อัปเดตจำนวนสถิติ
-                            refreshStats();
-                        } else {
-                            swalCustom.fire({
-                                icon: 'error',
-                                title: 'เกิดข้อผิดพลาด',
-                                text: response.message || 'ไม่สามารถเพิ่มชุดข้อสอบได้'
-                            });
-                        }
+                        updateCardView(response.data);
                     },
-                    error: function(xhr, status, error) {
+                    error: function() {
                         hideLoading();
-                        
                         swalCustom.fire({
                             icon: 'error',
                             title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                            text: 'ไม่สามารถกรองข้อมูลได้'
                         });
                     }
                 });
-            }
-        });
-        
-        // Update exam set
-        $('#updateExamSetBtn').on('click', function() {
-            if (validateForm('#editExamSetForm')) {
-                const formData = new FormData($('#editExamSetForm')[0]);
-                formData.append('action', 'update');
-                
-                showLoading();
-                
-                $.ajax({
-                    url: 'api/exam-set-api.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    success: function(response) {
-                        hideLoading();
-                        
-                        if (response.success) {
-                            // Close modal
-                            $('#editExamSetModal').modal('hide');
-                            
-                            // Reload exam set table
-                            examSetTable.ajax.reload();
-                            
-                            // Show success message
-                            swalCustom.fire({
-                                icon: 'success',
-                                title: 'สำเร็จ!',
-                                text: 'อัปเดตข้อมูลชุดข้อสอบเรียบร้อยแล้ว',
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-                            
-                            // อัปเดตจำนวนสถิติ
-                            refreshStats();
-                        } else {
-                            swalCustom.fire({
-                                icon: 'error',
-                                title: 'เกิดข้อผิดพลาด',
-                                text: response.message || 'ไม่สามารถอัปเดตข้อมูลชุดข้อสอบได้'
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        hideLoading();
-                        
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                        });
-                    }
-                });
-            }
-        });
-        
-        // Delete exam set
-        $(document).on('click', '.delete-btn', function() {
-            const examSetId = $(this).data('id');
-            const examSetName = $(this).data('name');
+            });
             
-            swalCustom.fire({
-                icon: 'warning',
-                title: 'ยืนยันการลบ',
-                html: `คุณต้องการลบชุดข้อสอบ <span class="fw-bold">"${examSetName}"</span> ใช่หรือไม่?<br><small class="text-danger">*หากลบแล้วจะไม่สามารถกู้คืนได้</small>`,
-                showCancelButton: true,
-                confirmButtonText: '<i class="ri-delete-bin-line me-1"></i> ลบ',
-                confirmButtonColor: '#dc3545',
-                cancelButtonText: 'ยกเลิก',
-                cancelButtonColor: '#6c757d'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            // รีเซ็ตการกรองข้อมูล
+            $('#resetFilter').on('click', function() {
+                $('#statusFilter').val('');
+                $('#topicFilter').val('');
+                
+                // ลบ filter ทั้งหมด
+                $.fn.dataTable.ext.search.pop();
+                examSetTable.draw();
+                
+                // โหลดข้อมูลใหม่ทั้งหมด
+                showLoading();
+                examSetTable.ajax.reload();
+            });
+            
+            // ดูรายละเอียดชุดข้อสอบ
+            $(document).on('click', '.view-btn', function() {
+                const examSetId = $(this).data('id');
+                
+                showLoading();
+                
+                // เรียกข้อมูลชุดข้อสอบ
+                $.ajax({
+                    url: `api/exam-set-api.php?action=get&id=${examSetId}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            const examSet = response.data;
+                            
+                            // เรียกข้อมูลสถิติที่เกี่ยวข้อง
+                            $.ajax({
+                                url: `api/stats-api.php?action=topic_stats&exam_set_id=${examSetId}`,
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(statsResponse) {
+                                    hideLoading();
+                                    
+                                    const stats = statsResponse.success ? statsResponse.data : { 
+                                        total_topics: 0, 
+                                        total_questions: 0 
+                                    };
+                                    
+                                    // แสดงข้อมูลในโมดัล
+                                    $('#view_name').text(examSet.name);
+                                    $('#view_description').text(examSet.description || '-');
+                                    $('#view_topic_count').text(stats.total_topics || 0);
+                                    $('#view_question_count').text(stats.total_questions || 0);
+                                    $('#view_status').html(examSet.status == 1 ? 
+                                        '<span class="status-badge status-active">ใช้งาน</span>' : 
+                                        '<span class="status-badge status-inactive">ไม่ใช้งาน</span>');
+                                    $('#view_created_at').text(formatDate(examSet.created_at));
+                                    $('#view_updated_at').text(formatDate(examSet.updated_at));
+                                    $('#view_created_by').text(examSet.created_by_name || '-');
+                                    
+                                    // กำหนด URL สำหรับปุ่มจัดการหัวข้อ
+                                    $('#view_topics_btn').attr('href', `exam-topic-management.php?exam_set_id=${examSetId}`);
+                                    
+                                    // แสดงโมดัล
+                                    $('#viewExamSetModal').modal('show');
+                                },
+                                error: function() {
+                                    hideLoading();
+                                    
+                                    // แสดงข้อมูลในโมดัลโดยไม่มีสถิติ
+                                    $('#view_name').text(examSet.name);
+                                    $('#view_description').text(examSet.description || '-');
+                                    $('#view_topic_count').text('0');
+                                    $('#view_question_count').text('0');
+                                    $('#view_status').html(examSet.status == 1 ? 
+                                        '<span class="status-badge status-active">ใช้งาน</span>' : 
+                                        '<span class="status-badge status-inactive">ไม่ใช้งาน</span>');
+                                    $('#view_created_at').text(formatDate(examSet.created_at));
+                                    $('#view_updated_at').text(formatDate(examSet.updated_at));
+                                    $('#view_created_by').text(examSet.created_by_name || '-');
+                                    
+                                    // กำหนด URL สำหรับปุ่มจัดการหัวข้อ
+                                    $('#view_topics_btn').attr('href', `exam-topic-management.php?exam_set_id=${examSetId}`);
+                                    
+                                    // แสดงโมดัล
+                                    $('#viewExamSetModal').modal('show');
+                                }
+                            });
+                        } else {
+                            hideLoading();
+                            swalCustom.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: response.message || 'ไม่สามารถโหลดข้อมูลชุดข้อสอบได้'
+                            });
+                        }
+                    },
+                    error: function() {
+                        hideLoading();
+                        swalCustom.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                        });
+                    }
+                });
+            });
+            
+            // Edit Exam Set - fetch data and open modal
+            $(document).on('click', '.edit-btn', function() {
+                const examSetId = $(this).data('id');
+                
+                showLoading();
+                
+                $.ajax({
+                    url: `api/exam-set-api.php?action=get&id=${examSetId}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        hideLoading();
+                        
+                        if (response.success) {
+                            const data = response.data;
+                            
+                            // Fill form with data
+                            $('#edit_exam_set_id').val(data.exam_set_id);
+                            $('#edit_name').val(data.name);
+                            $('#edit_description').val(data.description || '');
+                            $('#edit_status').val(data.status);
+                            
+                            // Show modal
+                            $('#editExamSetModal').modal('show');
+                        } else {
+                            swalCustom.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: response.message || 'ไม่สามารถดึงข้อมูลชุดข้อสอบได้'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        hideLoading();
+                        
+                        swalCustom.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                        });
+                    }
+                });
+            });
+
+            // Form validation function
+            function validateForm(formId) {
+                const form = $(formId);
+                let isValid = true;
+                
+                form.find('input[required], select[required]').each(function() {
+                    if ($(this).val() === '') {
+                        isValid = false;
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            // Remove validation styling on input
+            $('input, select, textarea').on('focus', function() {
+                $(this).removeClass('is-invalid');
+            });
+            
+            // Save new exam set
+            $('#saveExamSetBtn').on('click', function() {
+                if (validateForm('#addExamSetForm')) {
+                    const formData = new FormData($('#addExamSetForm')[0]);
+                    formData.append('action', 'create');
+                    
                     showLoading();
                     
                     $.ajax({
                         url: 'api/exam-set-api.php',
                         type: 'POST',
-                        data: {
-                            action: 'delete',
-                            exam_set_id: examSetId,
-                            csrf_token: '<?= $csrf_token ?>'
-                        },
+                        data: formData,
+                        processData: false,
+                        contentType: false,
                         dataType: 'json',
                         success: function(response) {
                             hideLoading();
                             
                             if (response.success) {
+                                // Close modal and reset form
+                                $('#addExamSetModal').modal('hide');
+                                $('#addExamSetForm')[0].reset();
+                                
                                 // Reload exam set table
                                 examSetTable.ajax.reload();
                                 
@@ -752,7 +938,7 @@ try {
                                 swalCustom.fire({
                                     icon: 'success',
                                     title: 'สำเร็จ!',
-                                    text: 'ลบชุดข้อสอบเรียบร้อยแล้ว',
+                                    text: 'เพิ่มชุดข้อสอบเรียบร้อยแล้ว',
                                     timer: 2000,
                                     showConfirmButton: false
                                 });
@@ -763,7 +949,7 @@ try {
                                 swalCustom.fire({
                                     icon: 'error',
                                     title: 'เกิดข้อผิดพลาด',
-                                    text: response.message || 'ไม่สามารถลบชุดข้อสอบได้'
+                                    text: response.message || 'ไม่สามารถเพิ่มชุดข้อสอบได้'
                                 });
                             }
                         },
@@ -779,130 +965,167 @@ try {
                     });
                 }
             });
-        });
-        
-        // ฟังก์ชันรีเฟรชข้อมูลสถิติ
-        function refreshStats() {
-            $.ajax({
-                url: 'api/stats-api.php?action=exam_stats',
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        // อัปเดตตัวเลขใน stats cards
-                        const stats = response.data;
-                        $('.stats-cards h5').each(function(index) {
-                            let value = 0;
-                            switch(index) {
-                                case 0: value = stats.total_exam_sets; break;
-                                case 1: value = stats.active_exam_sets; break;
-                                case 2: value = stats.inactive_exam_sets; break;
-                                case 3: value = stats.total_topics; break;
+            
+            // Update exam set
+            $('#updateExamSetBtn').on('click', function() {
+                if (validateForm('#editExamSetForm')) {
+                    const formData = new FormData($('#editExamSetForm')[0]);
+                    formData.append('action', 'update');
+                    
+                    showLoading();
+                    
+                    $.ajax({
+                        url: 'api/exam-set-api.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(response) {
+                            hideLoading();
+                            
+                            if (response.success) {
+                                // Close modal
+                                $('#editExamSetModal').modal('hide');
+                                
+                                // Reload exam set table
+                                examSetTable.ajax.reload();
+                                
+                                // Show success message
+                                swalCustom.fire({
+                                    icon: 'success',
+                                    title: 'สำเร็จ!',
+                                    text: 'อัปเดตข้อมูลชุดข้อสอบเรียบร้อยแล้ว',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                                
+                                // อัปเดตจำนวนสถิติ
+                                refreshStats();
+                            } else {
+                                swalCustom.fire({
+                                    icon: 'error',
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: response.message || 'ไม่สามารถอัปเดตข้อมูลชุดข้อสอบได้'
+                                });
                             }
-                            $(this).text(value.toLocaleString());
-                        });
-                    }
+                        },
+                        error: function(xhr, status, error) {
+                            hideLoading();
+                            
+                            swalCustom.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                            });
+                        }
+                    });
                 }
             });
-        }
-        
-        // Reset add form when modal is closed
-        $('#addExamSetModal').on('hidden.bs.modal', function() {
-            $('#addExamSetForm')[0].reset();
-            $('#addExamSetForm .is-invalid').removeClass('is-invalid');
-        });
-        
-        // Reset edit form when modal is closed
-        $('#editExamSetModal').on('hidden.bs.modal', function() {
-            $('#editExamSetForm .is-invalid').removeClass('is-invalid');
-        });
-        
-        // ข้อมูลตัวอย่างที่จะแสดง
-        function loadSampleData() {
-            // สร้างข้อมูลตัวอย่างสำหรับทดสอบ UI
-            const sampleData = [
-                {
-                    exam_set_id: 1,
-                    name: "ชุดข้อสอบวิชาคณิตศาสตร์",
-                    description: "ชุดข้อสอบวิชาคณิตศาสตร์สำหรับนักเรียนระดับมัธยมศึกษาตอนปลาย ครอบคลุมเนื้อหาเรื่องพีชคณิต เรขาคณิต และแคลคูลัส",
-                    topic_count: 8,
-                    status: 1,
-                    created_at: "2025-03-01 10:30:00",
-                    updated_at: "2025-03-02 15:45:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 2,
-                    name: "ชุดข้อสอบวิชาวิทยาศาสตร์",
-                    description: "ชุดข้อสอบวิชาวิทยาศาสตร์ ครอบคลุมเนื้อหาฟิสิกส์ เคมี และชีววิทยา",
-                    topic_count: 5,
-                    status: 1,
-                    created_at: "2025-03-01 14:20:00",
-                    updated_at: "2025-03-01 14:20:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 3,
-                    name: "ชุดข้อสอบวิชาภาษาอังกฤษ",
-                    description: "ชุดข้อสอบวิชาภาษาอังกฤษ ทดสอบความรู้ด้านไวยากรณ์ คำศัพท์ การอ่าน และการเขียน",
-                    topic_count: 4,
-                    status: 1,
-                    created_at: "2025-03-02 09:15:00",
-                    updated_at: "2025-03-02 09:15:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 4,
-                    name: "ชุดข้อสอบวิชาสังคมศึกษา",
-                    description: "ชุดข้อสอบวิชาสังคมศึกษา ครอบคลุมเนื้อหาประวัติศาสตร์ ภูมิศาสตร์ และหน้าที่พลเมือง",
-                    topic_count: 3,
-                    status: 0,
-                    created_at: "2025-03-02 16:40:00",
-                    updated_at: "2025-03-03 10:20:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 5,
-                    name: "ชุดข้อสอบทักษะการคิดวิเคราะห์",
-                    description: "ชุดข้อสอบทักษะการคิดวิเคราะห์ สำหรับประเมินความสามารถในการแก้ปัญหาและการคิดเชิงวิพากษ์",
-                    topic_count: 0,
-                    status: 1,
-                    created_at: "2025-03-03 13:10:00",
-                    updated_at: "2025-03-03 13:10:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                }
-            ];
             
-            // สร้าง mock API response
-            const mockResponse = {
-                draw: 1,
-                recordsTotal: sampleData.length,
-                recordsFiltered: sampleData.length,
-                data: sampleData
-            };
-            
-            // อัปเดตทั้ง Table View และ Card View
-            updateCardView(sampleData);
-            
-            // แสดงข้อมูลตัวอย่างใน DataTable (เป็นเพียงเดโม ไม่ใช่คำสั่งที่ใช้ได้จริงใน DataTables)
-            // ในการใช้งานจริงไม่ต้องใส่ส่วนนี้ เพราะ DataTables ดึงข้อมูลจาก AJAX
-            try {
-                examSetTable.clear().draw();
-                sampleData.forEach(function(data, index) {
-                    examSetTable.row.add({
-                        "DT_RowIndex": index + 1,
-                        ...data
-                    }).draw();
+            // Delete exam set
+            $(document).on('click', '.delete-btn', function() {
+                const examSetId = $(this).data('id');
+                const examSetName = $(this).data('name');
+                
+                swalCustom.fire({
+                    icon: 'warning',
+                    title: 'ยืนยันการลบ',
+                    html: `คุณต้องการลบชุดข้อสอบ <span class="fw-bold">"${examSetName}"</span> ใช่หรือไม่?<br><small class="text-danger">*หากลบแล้วจะไม่สามารถกู้คืนได้</small>`,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="ri-delete-bin-line me-1"></i> ลบ',
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonText: 'ยกเลิก',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showLoading();
+                        
+                        $.ajax({
+                            url: 'api/exam-set-api.php',
+                            type: 'POST',
+                            data: {
+                                action: 'delete',
+                                exam_set_id: examSetId,
+                                csrf_token: $('#addExamSetForm input[name="csrf_token"]').val()
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                hideLoading();
+                                
+                                if (response.success) {
+                                    // Reload exam set table
+                                    examSetTable.ajax.reload();
+                                    
+                                    // Show success message
+                                    swalCustom.fire({
+                                        icon: 'success',
+                                        title: 'สำเร็จ!',
+                                        text: 'ลบชุดข้อสอบเรียบร้อยแล้ว',
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
+                                    
+                                    // อัปเดตจำนวนสถิติ
+                                    refreshStats();
+                                } else {
+                                    swalCustom.fire({
+                                        icon: 'error',
+                                        title: 'เกิดข้อผิดพลาด',
+                                        text: response.message || 'ไม่สามารถลบชุดข้อสอบได้'
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                hideLoading();
+                                
+                                swalCustom.fire({
+                                    icon: 'error',
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                                });
+                            }
+                        });
+                    }
                 });
-            } catch(e) {
-                console.log('สามารถดูตัวอย่างได้ในมุมมองการ์ด');
+            });
+            
+            // ฟังก์ชันรีเฟรชข้อมูลสถิติ
+            function refreshStats() {
+                $.ajax({
+                    url: 'api/stats-api.php?action=exam_stats',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            // อัปเดตตัวเลขใน stats cards
+                            const stats = response.data;
+                            $('.stats-cards h5').each(function(index) {
+                                let value = 0;
+                                switch(index) {
+                                    case 0: value = stats.total_exam_sets; break;
+                                    case 1: value = stats.active_exam_sets; break;
+                                    case 2: value = stats.inactive_exam_sets; break;
+                                    case 3: value = stats.total_topics; break;
+                                }
+                                $(this).text(value.toLocaleString());
+                            });
+                        }
+                    }
+                });
             }
-        }
-        
-        // เรียกใช้ฟังก์ชันโหลดข้อมูลตัวอย่าง (ในกรณีที่ยังไม่มี API จริง)
-        // ในการใช้งานจริงให้คอมเมนต์บรรทัดนี้ไว้
-        // loadSampleData();
-    });
+            
+            // Reset add form when modal is closed
+            $('#addExamSetModal').on('hidden.bs.modal', function() {
+                $('#addExamSetForm')[0].reset();
+                $('#addExamSetForm .is-invalid').removeClass('is-invalid');
+            });
+            
+            // Reset edit form when modal is closed
+            $('#editExamSetModal').on('hidden.bs.modal', function() {
+                $('#editExamSetForm .is-invalid').removeClass('is-invalid');
+            });
+        }); 
     </script>
   </body>
 </html>
