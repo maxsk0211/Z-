@@ -36,12 +36,10 @@ function getCurrentDateTime() {
 // ฟังก์ชันบันทึกประวัติการทำงาน (Audit Log)
 function logActivity($conn, $action, $details, $admin_id) {
     try {
-        // บันทึกประวัติการทำงาน
         $stmt = $conn->prepare("INSERT INTO admin_log (admin_id, action, details, ip_address) VALUES (?, ?, ?, ?)");
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
         $stmt->execute([$admin_id, $action, $details, $ip]);
     } catch (PDOException $e) {
-        // บันทึกข้อผิดพลาดลงใน log
         error_log("Error logging activity: " . $e->getMessage());
     }
 }
@@ -59,43 +57,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? 
 
 // ตรวจสอบค่า action และประมวลผลตามค่าที่รับมา
 switch ($action) {
-    // ดึงข้อมูลชุดข้อสอบ
-    case 'get_exam_set':
-        try {
-            $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-            
-            if ($id <= 0) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ไม่พบรหัสชุดข้อสอบ'
-                ]);
-                exit;
-            }
-            
-            $stmt = $conn->prepare("SELECT * FROM exam_set WHERE exam_set_id = ?");
-            $stmt->execute([$id]);
-            $examSet = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($examSet) {
-                echo json_encode([
-                    'success' => true,
-                    'data' => $examSet
-                ]);
-            } else {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ไม่พบข้อมูลชุดข้อสอบ'
-                ]);
-            }
-        } catch (PDOException $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูล: ' . $e->getMessage()
-            ]);
-        }
-        break;
-        
-    // ดึงข้อมูลหัวข้อทั้งหมดในชุดข้อสอบ (สำหรับ DataTables)
+    // ดึงข้อมูลหัวข้อการสอบทั้งหมดตามชุดข้อสอบ
     case 'list':
         try {
             $examSetId = isset($_GET['exam_set_id']) ? intval($_GET['exam_set_id']) : 0;
@@ -108,81 +70,32 @@ switch ($action) {
                 exit;
             }
             
-            // ตัวแปรสำหรับ DataTables
-            $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
-            $length = isset($_GET['length']) ? intval($_GET['length']) : 10;
-            $search = isset($_GET['search']['value']) ? $_GET['search']['value'] : '';
-            
-            // สร้าง SQL สำหรับการนับจำนวนทั้งหมด
-            $countSql = "SELECT COUNT(*) AS total FROM exam_topic WHERE exam_set_id = ?";
-            
-            // สร้าง SQL สำหรับการค้นหา
-            $searchSql = "";
-            $searchParams = [$examSetId];
-            
-            if (!empty($search)) {
-                $searchSql = " AND (name LIKE ? OR description LIKE ?)";
-                $searchValue = "%{$search}%";
-                $searchParams = array_merge($searchParams, [$searchValue, $searchValue]);
-                
-                $countSql .= $searchSql;
-            }
-            
-            // นับจำนวนทั้งหมด
-            $stmtCount = $conn->prepare($countSql);
-            $stmtCount->execute($searchParams);
-            $totalRecords = $stmtCount->fetch(PDO::FETCH_ASSOC)['total'];
-            $filteredRecords = $totalRecords;
-            
-            // สร้าง SQL สำหรับการดึงข้อมูล
-            $sql = "SELECT et.topic_id, et.name, et.description, et.status, et.created_at, et.updated_at,
-                   (SELECT COUNT(*) FROM question WHERE topic_id = et.topic_id) as question_count
-                  FROM exam_topic et
-                  WHERE et.exam_set_id = ?";
-            
-            if (!empty($searchSql)) {
-                $sql .= $searchSql;
-            }
-            
-            // เพิ่มการเรียงลำดับและการแบ่งหน้า
-            $orderColumn = isset($_GET['order'][0]['column']) ? intval($_GET['order'][0]['column']) : 0;
-            $orderDir = isset($_GET['order'][0]['dir']) && strtolower($_GET['order'][0]['dir']) === 'desc' ? 'DESC' : 'ASC';
-            
-            // แปลงลำดับคอลัมน์เป็นชื่อคอลัมน์
-            $columns = ['topic_id', 'name', 'description', 'question_count', 'status', 'created_at'];
-            $orderColumnName = isset($columns[$orderColumn]) ? $columns[$orderColumn] : 'created_at';
-            
-            // ปรับปรุงการเรียงลำดับสำหรับคอลัมน์พิเศษ
-            if ($orderColumnName === 'question_count') {
-                $sql .= " ORDER BY question_count " . $orderDir;
-            } else {
-                $sql .= " ORDER BY et." . $orderColumnName . " " . $orderDir;
-            }
-            
-            $sql .= " LIMIT " . $start . ", " . $length;
-            
-            // ดึงข้อมูล
-            $stmt = $conn->prepare($sql);
-            $stmt->execute($searchParams);
+            // ดึงข้อมูลหัวข้อและจำนวนคำถาม
+            $stmt = $conn->prepare("
+                SELECT t.topic_id, t.name, t.description, t.status, t.created_at, t.updated_at,
+                       COUNT(q.question_id) AS question_count
+                FROM exam_topic t
+                LEFT JOIN question q ON t.topic_id = q.topic_id
+                WHERE t.exam_set_id = ?
+                GROUP BY t.topic_id
+                ORDER BY t.name ASC
+            ");
+            $stmt->execute([$examSetId]);
             $topics = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            // รูปแบบการตอบกลับสำหรับ DataTables
             echo json_encode([
-                'draw' => isset($_GET['draw']) ? intval($_GET['draw']) : 0,
-                'recordsTotal' => $totalRecords,
-                'recordsFiltered' => $filteredRecords,
+                'success' => true,
                 'data' => $topics
             ]);
         } catch (PDOException $e) {
             echo json_encode([
                 'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูล: ' . $e->getMessage(),
-                'data' => []
+                'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูล: ' . $e->getMessage()
             ]);
         }
         break;
         
-    // ดึงข้อมูลหัวข้อรายการเดียว
+    // ดึงข้อมูลหัวข้อการสอบรายการเดียว
     case 'get':
         try {
             $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -195,7 +108,13 @@ switch ($action) {
                 exit;
             }
             
-            $stmt = $conn->prepare("SELECT * FROM exam_topic WHERE topic_id = ?");
+            $stmt = $conn->prepare("
+                SELECT t.*, e.name as exam_set_name,
+                       (SELECT COUNT(*) FROM question q WHERE q.topic_id = t.topic_id) AS question_count
+                FROM exam_topic t
+                JOIN exam_set e ON t.exam_set_id = e.exam_set_id
+                WHERE t.topic_id = ?
+            ");
             $stmt->execute([$id]);
             $topic = $stmt->fetch(PDO::FETCH_ASSOC);
             
@@ -207,7 +126,7 @@ switch ($action) {
             } else {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไม่พบข้อมูลหัวข้อ'
+                    'message' => 'ไม่พบข้อมูลหัวข้อการสอบ'
                 ]);
             }
         } catch (PDOException $e) {
@@ -218,7 +137,7 @@ switch ($action) {
         }
         break;
         
-    // สร้างหัวข้อใหม่
+    // สร้างหัวข้อการสอบใหม่
     case 'create':
         // ตรวจสอบ CSRF token
         if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
@@ -231,7 +150,7 @@ switch ($action) {
         
         try {
             // รับค่าจากฟอร์ม
-            $examSetId = intval($_POST['exam_set_id'] ?? 0);
+            $examSetId = isset($_POST['exam_set_id']) ? intval($_POST['exam_set_id']) : 0;
             $name = trim($_POST['name'] ?? '');
             $description = trim($_POST['description'] ?? '');
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
@@ -245,15 +164,13 @@ switch ($action) {
                 exit;
             }
             
-            // ตรวจสอบว่ามีชุดข้อสอบนี้อยู่หรือไม่
-            $stmt = $conn->prepare("SELECT name FROM exam_set WHERE exam_set_id = ?");
-            $stmt->execute([$examSetId]);
-            $examSet = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$examSet) {
+            // ตรวจสอบว่ามีชุดข้อสอบนี้อยู่จริงหรือไม่
+            $stmtCheck = $conn->prepare("SELECT exam_set_id FROM exam_set WHERE exam_set_id = ?");
+            $stmtCheck->execute([$examSetId]);
+            if (!$stmtCheck->fetch()) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไม่พบข้อมูลชุดข้อสอบ'
+                    'message' => 'ไม่พบชุดข้อสอบที่ระบุ'
                 ]);
                 exit;
             }
@@ -266,22 +183,22 @@ switch ($action) {
             $newTopicId = $conn->lastInsertId();
             
             // บันทึกประวัติการทำงาน
-            logActivity($conn, 'create_exam_topic', "สร้างหัวข้อใหม่: {$name} (ชุดข้อสอบ: {$examSet['name']})", $_SESSION['user_id']);
+            logActivity($conn, 'create_topic', "สร้างหัวข้อการสอบใหม่: {$name}", $_SESSION['user_id']);
             
             echo json_encode([
                 'success' => true,
-                'message' => 'เพิ่มหัวข้อใหม่เรียบร้อยแล้ว',
+                'message' => 'เพิ่มหัวข้อการสอบใหม่เรียบร้อยแล้ว',
                 'topic_id' => $newTopicId
             ]);
         } catch (PDOException $e) {
             echo json_encode([
                 'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการเพิ่มหัวข้อ: ' . $e->getMessage()
+                'message' => 'เกิดข้อผิดพลาดในการเพิ่มหัวข้อการสอบ: ' . $e->getMessage()
             ]);
         }
         break;
         
-    // อัปเดตหัวข้อ
+    // อัปเดตข้อมูลหัวข้อการสอบ
     case 'update':
         // ตรวจสอบ CSRF token
         if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
@@ -294,7 +211,7 @@ switch ($action) {
         
         try {
             // รับค่าจากฟอร์ม
-            $topicId = intval($_POST['topic_id'] ?? 0);
+            $topicId = isset($_POST['topic_id']) ? intval($_POST['topic_id']) : 0;
             $name = trim($_POST['name'] ?? '');
             $description = trim($_POST['description'] ?? '');
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
@@ -308,23 +225,20 @@ switch ($action) {
                 exit;
             }
             
-            // ตรวจสอบว่ามีหัวข้อนี้อยู่หรือไม่
-            $stmt = $conn->prepare("SELECT t.name, s.name as exam_set_name 
-                                   FROM exam_topic t 
-                                   JOIN exam_set s ON t.exam_set_id = s.exam_set_id 
-                                   WHERE t.topic_id = ?");
+            // ตรวจสอบว่ามีหัวข้อนี้อยู่จริงหรือไม่
+            $stmt = $conn->prepare("SELECT name, exam_set_id FROM exam_topic WHERE topic_id = ?");
             $stmt->execute([$topicId]);
             $topic = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (!$topic) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไม่พบข้อมูลหัวข้อ'
+                    'message' => 'ไม่พบข้อมูลหัวข้อการสอบ'
                 ]);
                 exit;
             }
             
-            // อัปเดตข้อมูลหัวข้อ
+            // อัปเดตข้อมูลหัวข้อการสอบ
             $stmt = $conn->prepare("UPDATE exam_topic SET name = ?, description = ?, status = ?, updated_at = ? WHERE topic_id = ?");
             $currentDateTime = getCurrentDateTime();
             $stmt->execute([$name, $description, $status, $currentDateTime, $topicId]);
@@ -332,14 +246,14 @@ switch ($action) {
             // บันทึกประวัติการทำงาน
             logActivity(
                 $conn, 
-                'update_exam_topic', 
-                "อัปเดตหัวข้อ: {$topic['name']} เป็น {$name} (ชุดข้อสอบ: {$topic['exam_set_name']})", 
+                'update_topic', 
+                "อัปเดตหัวข้อการสอบ: {$topic['name']} เป็น {$name}", 
                 $_SESSION['user_id']
             );
             
             echo json_encode([
                 'success' => true,
-                'message' => 'อัปเดตข้อมูลหัวข้อเรียบร้อยแล้ว'
+                'message' => 'อัปเดตข้อมูลหัวข้อการสอบเรียบร้อยแล้ว'
             ]);
         } catch (PDOException $e) {
             echo json_encode([
@@ -349,7 +263,7 @@ switch ($action) {
         }
         break;
         
-    // ลบหัวข้อ
+    // ลบหัวข้อการสอบ
     case 'delete':
         // ตรวจสอบ CSRF token
         if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
@@ -361,7 +275,7 @@ switch ($action) {
         }
         
         try {
-            $topicId = intval($_POST['topic_id'] ?? 0);
+            $topicId = isset($_POST['topic_id']) ? intval($_POST['topic_id']) : 0;
             
             if ($topicId <= 0) {
                 echo json_encode([
@@ -371,18 +285,15 @@ switch ($action) {
                 exit;
             }
             
-            // ตรวจสอบว่ามีหัวข้อนี้อยู่หรือไม่
-            $stmt = $conn->prepare("SELECT t.name, s.name as exam_set_name 
-                                   FROM exam_topic t 
-                                   JOIN exam_set s ON t.exam_set_id = s.exam_set_id 
-                                   WHERE t.topic_id = ?");
+            // ตรวจสอบว่ามีหัวข้อนี้อยู่จริงหรือไม่
+            $stmt = $conn->prepare("SELECT name FROM exam_topic WHERE topic_id = ?");
             $stmt->execute([$topicId]);
             $topic = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (!$topic) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไม่พบข้อมูลหัวข้อ'
+                    'message' => 'ไม่พบข้อมูลหัวข้อการสอบ'
                 ]);
                 exit;
             }
@@ -395,26 +306,26 @@ switch ($action) {
             if ($questionCount > 0) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไม่สามารถลบหัวข้อนี้ได้ เนื่องจากมีคำถามอยู่ในหัวข้อนี้'
+                    'message' => 'ไม่สามารถลบหัวข้อการสอบได้ เนื่องจากมีคำถามอยู่ในหัวข้อนี้'
                 ]);
                 exit;
             }
             
-            // ลบหัวข้อ
+            // ลบหัวข้อการสอบ
             $stmt = $conn->prepare("DELETE FROM exam_topic WHERE topic_id = ?");
             $stmt->execute([$topicId]);
             
             // บันทึกประวัติการทำงาน
             logActivity(
                 $conn, 
-                'delete_exam_topic', 
-                "ลบหัวข้อ: {$topic['name']} (ชุดข้อสอบ: {$topic['exam_set_name']})", 
+                'delete_topic', 
+                "ลบหัวข้อการสอบ: {$topic['name']} (ID: {$topicId})", 
                 $_SESSION['user_id']
             );
             
             echo json_encode([
                 'success' => true,
-                'message' => 'ลบหัวข้อเรียบร้อยแล้ว'
+                'message' => 'ลบหัวข้อการสอบเรียบร้อยแล้ว'
             ]);
         } catch (PDOException $e) {
             echo json_encode([
