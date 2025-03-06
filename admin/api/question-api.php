@@ -240,160 +240,165 @@ switch ($action) {
         }
         break;
         
-    // สร้างคำถามใหม่
-    case 'create':
-        // ตรวจสอบ CSRF token
-        if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Invalid security token'
-            ]);
-            exit;
-        }
+        <?php
+        // question-api.php - แก้ไขส่วนที่เกี่ยวข้องกับคำอธิบายรูปภาพ
         
-        try {
-            // รับค่าจากฟอร์ม
-            $topicId = isset($_POST['topic_id']) ? intval($_POST['topic_id']) : 0;
-            $content = $_POST['question_content'] ?? '';
-            $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
-            $imageDescription = $_POST['question_image_description'] ?? null;
-            
-            // ตรวจสอบข้อมูล
-            if ($topicId <= 0 || empty($content)) {
+        // สร้างคำถามใหม่
+        case 'create':
+            // ตรวจสอบ CSRF token
+            if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน'
+                    'message' => 'Invalid security token'
                 ]);
                 exit;
             }
             
-            // ตรวจสอบว่ามีหัวข้อนี้อยู่จริงหรือไม่
-            $stmtCheck = $conn->prepare("SELECT topic_id FROM exam_topic WHERE topic_id = ?");
-            $stmtCheck->execute([$topicId]);
-            if (!$stmtCheck->fetch()) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ไม่พบหัวข้อที่ระบุ'
-                ]);
-                exit;
-            }
-            
-            // ตรวจสอบและอัปโหลดรูปภาพคำถาม (ถ้ามี)
-            $questionImage = null;
-            if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] == 0) {
-                $targetDir = __DIR__ . '/../../uploads/questions';
-                try {
-                    $questionImage = uploadImage($_FILES['question_image'], $targetDir);
-                } catch (Exception $e) {
+            try {
+                // รับค่าจากฟอร์ม
+                $topicId = isset($_POST['topic_id']) ? intval($_POST['topic_id']) : 0;
+                $content = $_POST['question_content'] ?? '';
+                $score = isset($_POST['question_score']) ? floatval($_POST['question_score']) : 1;
+                // ลบการรับค่า imageDescription
+                // $imageDescription = $_POST['question_image_description'] ?? null;
+                
+                // ตรวจสอบข้อมูล
+                if ($topicId <= 0 || empty($content)) {
                     echo json_encode([
                         'success' => false,
-                        'message' => 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพคำถาม: ' . $e->getMessage()
+                        'message' => 'กรุณากรอกข้อมูลให้ครบถ้วน'
                     ]);
                     exit;
                 }
-            }
-            
-            // เริ่มต้น transaction
-            $conn->beginTransaction();
-            
-            // สร้างคำถามใหม่
-            $stmt = $conn->prepare("
-                INSERT INTO question (topic_id, content, image, image_description, score, status, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, 1, ?, ?)
-            ");
-            $currentDateTime = getCurrentDateTime();
-            $stmt->execute([$topicId, $content, $questionImage, $imageDescription, $score, $currentDateTime, $currentDateTime]);
-            
-            $questionId = $conn->lastInsertId();
-            
-            // ตรวจสอบตัวเลือก
-            $choiceContents = $_POST['choice_content'] ?? [];
-            $correctChoice = $_POST['correct_choice'] ?? '';
-            
-            if (empty($choiceContents) || count($choiceContents) < 2) {
-                $conn->rollBack();
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'กรุณาเพิ่มตัวเลือกอย่างน้อย 2 ตัวเลือก'
-                ]);
-                exit;
-            }
-            
-            if (empty($correctChoice)) {
-                $conn->rollBack();
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'กรุณาเลือกคำตอบที่ถูกต้อง'
-                ]);
-                exit;
-            }
-            
-            // เพิ่มตัวเลือก
-            foreach ($choiceContents as $choiceId => $choiceContent) {
-                if (empty($choiceContent)) continue;
                 
-                // ตรวจสอบว่าเป็นคำตอบที่ถูกต้องหรือไม่
-                $isCorrect = ($choiceId === $correctChoice) ? 1 : 0;
+                // ตรวจสอบว่ามีหัวข้อนี้อยู่จริงหรือไม่
+                $stmtCheck = $conn->prepare("SELECT topic_id FROM exam_topic WHERE topic_id = ?");
+                $stmtCheck->execute([$topicId]);
+                if (!$stmtCheck->fetch()) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'ไม่พบหัวข้อที่ระบุ'
+                    ]);
+                    exit;
+                }
                 
-                // ตรวจสอบและอัปโหลดรูปภาพตัวเลือก (ถ้ามี)
-                $choiceImage = null;
-                $choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
-                
-                if (isset($_FILES['choice_image']['name'][$choiceId]) && $_FILES['choice_image']['error'][$choiceId] == 0) {
-                    $targetDir = __DIR__ . '/../../uploads/choices';
-                    
-                    // สร้าง $_FILES array สำหรับรูปภาพตัวเลือกปัจจุบัน
-                    $tempFile = [
-                        'name' => $_FILES['choice_image']['name'][$choiceId],
-                        'type' => $_FILES['choice_image']['type'][$choiceId],
-                        'tmp_name' => $_FILES['choice_image']['tmp_name'][$choiceId],
-                        'error' => $_FILES['choice_image']['error'][$choiceId],
-                        'size' => $_FILES['choice_image']['size'][$choiceId]
-                    ];
-                    
+                // ตรวจสอบและอัปโหลดรูปภาพคำถาม (ถ้ามี)
+                $questionImage = null;
+                if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] == 0) {
+                    $targetDir = __DIR__ . '/../../uploads/questions';
                     try {
-                        $choiceImage = uploadImage($tempFile, $targetDir);
+                        $questionImage = uploadImage($_FILES['question_image'], $targetDir);
                     } catch (Exception $e) {
-                        $conn->rollBack();
                         echo json_encode([
                             'success' => false,
-                            'message' => 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพตัวเลือก: ' . $e->getMessage()
+                            'message' => 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพคำถาม: ' . $e->getMessage()
                         ]);
                         exit;
                     }
                 }
                 
-                // เพิ่มตัวเลือก
-                $stmtChoice = $conn->prepare("
-                    INSERT INTO choice (question_id, content, image, image_description, is_correct, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                // เริ่มต้น transaction
+                $conn->beginTransaction();
+                
+                // สร้างคำถามใหม่ - แก้ไข SQL ให้ไม่มี image_description
+                $stmt = $conn->prepare("
+                    INSERT INTO question (topic_id, content, image, score, status, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, 1, ?, ?)
                 ");
-                $stmtChoice->execute([$questionId, $choiceContent, $choiceImage, $choiceImageDescription, $isCorrect, $currentDateTime, $currentDateTime]);
+                $currentDateTime = getCurrentDateTime();
+                $stmt->execute([$topicId, $content, $questionImage, $score, $currentDateTime, $currentDateTime]);
+                
+                $questionId = $conn->lastInsertId();
+                
+                // ตรวจสอบตัวเลือก
+                $choiceContents = $_POST['choice_content'] ?? [];
+                $correctChoice = $_POST['correct_choice'] ?? '';
+                
+                if (empty($choiceContents) || count($choiceContents) < 2) {
+                    $conn->rollBack();
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'กรุณาเพิ่มตัวเลือกอย่างน้อย 2 ตัวเลือก'
+                    ]);
+                    exit;
+                }
+                
+                if (empty($correctChoice)) {
+                    $conn->rollBack();
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'กรุณาเลือกคำตอบที่ถูกต้อง'
+                    ]);
+                    exit;
+                }
+                
+                // เพิ่มตัวเลือก
+                foreach ($choiceContents as $choiceId => $choiceContent) {
+                    if (empty($choiceContent)) continue;
+                    
+                    // ตรวจสอบว่าเป็นคำตอบที่ถูกต้องหรือไม่
+                    $isCorrect = ($choiceId === $correctChoice) ? 1 : 0;
+                    
+                    // ตรวจสอบและอัปโหลดรูปภาพตัวเลือก (ถ้ามี)
+                    $choiceImage = null;
+                    // ลบการรับค่า choiceImageDescription 
+                    // $choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
+                    
+                    if (isset($_FILES['choice_image']['name'][$choiceId]) && $_FILES['choice_image']['error'][$choiceId] == 0) {
+                        $targetDir = __DIR__ . '/../../uploads/choices';
+                        
+                        // สร้าง $_FILES array สำหรับรูปภาพตัวเลือกปัจจุบัน
+                        $tempFile = [
+                            'name' => $_FILES['choice_image']['name'][$choiceId],
+                            'type' => $_FILES['choice_image']['type'][$choiceId],
+                            'tmp_name' => $_FILES['choice_image']['tmp_name'][$choiceId],
+                            'error' => $_FILES['choice_image']['error'][$choiceId],
+                            'size' => $_FILES['choice_image']['size'][$choiceId]
+                        ];
+                        
+                        try {
+                            $choiceImage = uploadImage($tempFile, $targetDir);
+                        } catch (Exception $e) {
+                            $conn->rollBack();
+                            echo json_encode([
+                                'success' => false,
+                                'message' => 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพตัวเลือก: ' . $e->getMessage()
+                            ]);
+                            exit;
+                        }
+                    }
+                    
+                    // เพิ่มตัวเลือก - แก้ไข SQL ให้ไม่มี image_description
+                    $stmtChoice = $conn->prepare("
+                        INSERT INTO choice (question_id, content, image, is_correct, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ");
+                    $stmtChoice->execute([$questionId, $choiceContent, $choiceImage, $isCorrect, $currentDateTime, $currentDateTime]);
+                }
+                
+                // บันทึก transaction
+                $conn->commit();
+                
+                // บันทึกประวัติการทำงาน
+                logActivity($conn, 'create_question', "สร้างคำถามใหม่: {$content}", $_SESSION['user_id']);
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'เพิ่มคำถามเรียบร้อยแล้ว',
+                    'question_id' => $questionId
+                ]);
+            } catch (PDOException $e) {
+                // ยกเลิก transaction ในกรณีเกิดข้อผิดพลาด
+                if ($conn->inTransaction()) {
+                    $conn->rollBack();
+                }
+                
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'เกิดข้อผิดพลาดในการเพิ่มคำถาม: ' . $e->getMessage()
+                ]);
             }
-            
-            // บันทึก transaction
-            $conn->commit();
-            
-            // บันทึกประวัติการทำงาน
-            logActivity($conn, 'create_question', "สร้างคำถามใหม่: {$content}", $_SESSION['user_id']);
-            
-            echo json_encode([
-                'success' => true,
-                'message' => 'เพิ่มคำถามเรียบร้อยแล้ว',
-                'question_id' => $questionId
-            ]);
-        } catch (PDOException $e) {
-            // ยกเลิก transaction ในกรณีเกิดข้อผิดพลาด
-            if ($conn->inTransaction()) {
-                $conn->rollBack();
-            }
-            
-            echo json_encode([
-                'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการเพิ่มคำถาม: ' . $e->getMessage()
-            ]);
-        }
-        break;
+            break;
         
     // อัปเดตข้อมูลคำถาม
     case 'update':
