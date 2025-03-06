@@ -1847,7 +1847,7 @@ function saveQuestion() {
             // Check if question has image
             let imageCell = 'ไม่มีรูปภาพ';
             if (question.image) {
-                imageCell = `<img src="/../img/question/${question.image}" alt="รูปภาพประกอบ" height="50" class="cursor-pointer" onclick="showImagePreview('/../img/question//${question.image}')">`;
+                imageCell = `<img src="uploads/questions/${question.image}" alt="รูปภาพประกอบ" height="50" class="cursor-pointer" onclick="showImagePreview('uploads/questions/${question.image}')">`;
             }
             
             return `
@@ -2078,7 +2078,7 @@ function saveQuestion() {
                         // Handle question image
                         if (question.image) {
                             $('#existing_image').val(question.image);
-                            $('#question-image-preview').html(`<img src="uploads/questions/${question.image}" alt="${question.image_description || 'รูปภาพประกอบคำถาม'}">`);
+                            $('#question-image-preview').html(`<img src="/../../img/question/${question.image}" alt="${question.image_description || 'รูปภาพประกอบคำถาม'}">`);
                             $('#question_image_description').val(question.image_description || '');
                         } else {
                             $('#question-image-preview').html('<span class="image-preview-placeholder"><i class="ri-add-line"></i></span>');
