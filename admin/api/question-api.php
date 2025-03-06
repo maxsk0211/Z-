@@ -285,7 +285,7 @@ switch ($action) {
                 // ตรวจสอบและอัปโหลดรูปภาพคำถาม (ถ้ามี)
                 $questionImage = null;
                 if (isset($_FILES['question_image']) && $_FILES['question_image']['error'] == 0) {
-                    $targetDir = __DIR__ . '/../../uploads/questions';
+                    $targetDir = __DIR__ . '/../../question';
                     try {
                         $questionImage = uploadImage($_FILES['question_image'], $targetDir);
                     } catch (Exception $e) {
