@@ -345,7 +345,7 @@ switch ($action) {
                     // $choiceImageDescription = $_POST['choice_image_description'][$choiceId] ?? null;
                     
                     if (isset($_FILES['choice_image']['name'][$choiceId]) && $_FILES['choice_image']['error'][$choiceId] == 0) {
-                        $targetDir = __DIR__ . '../../img/question';
+                        $targetDir = __DIR__ . '/../../img/question';
                         
                         // สร้าง $_FILES array สำหรับรูปภาพตัวเลือกปัจจุบัน
                         $tempFile = [
@@ -452,20 +452,20 @@ switch ($action) {
                 
                 // ลบไฟล์รูปภาพ (ถ้ามี)
                 if (!empty($existingQuestion['image'])) {
-                    $imagePath = __DIR__ . '../../img/question' . $existingQuestion['image'];
+                    $imagePath = __DIR__ . '/../../img/question' . $existingQuestion['image'];
                     if (file_exists($imagePath)) {
                         unlink($imagePath);
                     }
                 }
             } elseif (isset($_FILES['question_image']) && $_FILES['question_image']['error'] == 0) {
                 // อัปโหลดรูปภาพใหม่
-                $targetDir = __DIR__ . '../../img/question';
+                $targetDir = __DIR__ . '/../../img/question';
                 try {
                     $questionImage = uploadImage($_FILES['question_image'], $targetDir);
                     
                     // ลบรูปภาพเดิม (ถ้ามี)
                     if (!empty($existingQuestion['image'])) {
-                        $imagePath = __DIR__ . '../../img/question' . $existingQuestion['image'];
+                        $imagePath = __DIR__ . '/../../img/question' . $existingQuestion['image'];
                         if (file_exists($imagePath)) {
                             unlink($imagePath);
                         }
@@ -543,7 +543,7 @@ switch ($action) {
                     
                     // ลบไฟล์รูปภาพ (ถ้ามี)
                     if (!empty($existingChoices[$existingChoiceId])) {
-                        $imagePath = __DIR__ . '../../img/question' . $existingChoices[$existingChoiceId];
+                        $imagePath = __DIR__ . '/../../img/question' . $existingChoices[$existingChoiceId];
                         if (file_exists($imagePath)) {
                             unlink($imagePath);
                         }
@@ -566,7 +566,7 @@ switch ($action) {
                         
                         // ลบรูปภาพเดิม (ถ้ามี)
                         if (!empty($existingChoices[$existingChoiceId])) {
-                            $imagePath = __DIR__ . '../../img/question' . $existingChoices[$existingChoiceId];
+                            $imagePath = __DIR__ . '/../../img/question' . $existingChoices[$existingChoiceId];
                             if (file_exists($imagePath)) {
                                 unlink($imagePath);
                             }
@@ -694,7 +694,7 @@ switch ($action) {
             
             // ลบไฟล์รูปภาพคำถาม (ถ้ามี)
             if (!empty($question['image'])) {
-                $imagePath = __DIR__ . '../../img/question' . $question['image'];
+                $imagePath = __DIR__ . '/../../img/question' . $question['image'];
                 if (file_exists($imagePath)) {
                     unlink($imagePath);
                 }
@@ -703,7 +703,7 @@ switch ($action) {
             // ลบไฟล์รูปภาพตัวเลือก (ถ้ามี)
             foreach ($choices as $choice) {
                 if (!empty($choice['image'])) {
-                    $imagePath = __DIR__ . '../../img/question' . $choice['image'];
+                    $imagePath = __DIR__ . '/../../img/question' . $choice['image'];
                     if (file_exists($imagePath)) {
                         unlink($imagePath);
                     }
