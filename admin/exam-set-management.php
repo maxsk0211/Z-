@@ -96,7 +96,268 @@ try {
     <link rel="stylesheet" href="../assets/vendor/libs/animate/animate.min.css" />
 
     <!-- Page CSS -->
-    <link rel="stylesheet" href="../assets/css/custom-admin.css" />
+    <style>
+      body {
+        font-family: 'Kanit', sans-serif;
+      }
+      
+      /* Stats Cards */
+      .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      
+      .stat-card {
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        padding: 1.25rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+      }
+      
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+      }
+      
+      .stat-details h5 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+      
+      .stat-details p {
+        margin-bottom: 0;
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+      
+      /* Datatable Card */
+      .datatable-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+      }
+      
+      .datatable-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      
+      .datatable-header h4 {
+        margin-bottom: 0;
+        font-weight: 600;
+      }
+      
+      /* Filter Section */
+      .filter-section {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+      }
+      
+      /* Status Badges */
+      .status-badge {
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+      
+      .status-active {
+        background-color: #E8F5E9;
+        color: #2E7D32;
+      }
+      
+      .status-inactive {
+        background-color: #FFEBEE;
+        color: #C62828;
+      }
+      
+      /* Topic Count Badges */
+      .topic-count-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+      
+      .topic-count-badge.high {
+        background-color: #E3F2FD;
+        color: #1565C0;
+      }
+      
+      .topic-count-badge.medium {
+        background-color: #EDE7F6;
+        color: #5E35B1;
+      }
+      
+      .topic-count-badge.low {
+        background-color: #F1F8E9;
+        color: #558B2F;
+      }
+      
+      /* View Toggle Buttons */
+      .view-toggle {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      
+      .view-toggle-btn {
+        background: none;
+        border: none;
+        padding: 0.6rem 1rem;
+        cursor: pointer;
+        color: #6c757d;
+        transition: all 0.2s;
+      }
+      
+      .view-toggle-btn.active {
+        background-color: #5D87FF;
+        color: white;
+      }
+      
+      /* Card View */
+      .data-card-view .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        height: 100%;
+      }
+      
+      .data-card-view .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .data-card-view .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      
+      .data-card-view .card-text {
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+      }
+      
+      .data-card-view .card-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+      
+      /* Action Buttons */
+      .action-btn {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Loading Overlay */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+      
+      .loading-overlay.show {
+        visibility: visible;
+        opacity: 1;
+      }
+      
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(93, 135, 255, 0.2);
+        border-radius: 50%;
+        border-top-color: #5D87FF;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* SweetAlert Styling */
+      .custom-swal-popup {
+        border-radius: 15px !important;
+        padding: 1.5rem !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+      }
+      
+      .custom-swal-title {
+        font-family: 'Kanit', sans-serif !important;
+        font-size: 1.75rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.75rem !important;
+      }
+      
+      .custom-swal-content {
+        font-family: 'Kanit', sans-serif !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 1rem !important;
+      }
+      
+      /* Responsive Adjustments */
+      @media (max-width: 767.98px) {
+        .stats-cards {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .filter-section .row > div {
+          margin-bottom: 0.5rem;
+        }
+        
+        .view-toggle {
+          margin-top: 1rem;
+        }
+      }
+      
+      @media (max-width: 575.98px) {
+        .stats-cards {
+          grid-template-columns: 1fr;
+        }
+        
+        .datatable-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .datatable-header button {
+          margin-top: 1rem;
+          align-self: flex-start;
+        }
+      }
+    </style>
 
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
@@ -510,6 +771,64 @@ try {
             return date.fromNow();
         }
         
+        // ฟังก์ชันสำหรับอัปเดตมุมมองการ์ด
+        function updateCardView(data) {
+            const cardView = $('#cardView');
+            cardView.empty();
+            
+            if (data.length === 0) {
+                cardView.html('<div class="text-center my-5"><p class="text-muted">ไม่พบข้อมูลชุดข้อสอบ</p></div>');
+                return;
+            }
+            
+            let html = '<div class="row">';
+            
+            data.forEach(function(item) {
+                const statusClass = item.status == 1 ? 'status-active' : 'status-inactive';
+                const statusText = item.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
+                const countBadgeClass = getCountBadgeClass(item.topic_count);
+                const countBadgeIcon = getCountBadgeIcon(item.topic_count);
+                
+                html += `
+                <div class="col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title mb-0 text-truncate">${item.name}</h5>
+                                <span class="badge bg-label-primary">${countBadgeIcon} ${item.topic_count}</span>
+                            </div>
+                            <p class="card-text text-truncate">${item.description || '-'}</p>
+                            <div class="mt-3">
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                                <small class="text-muted d-block mt-2">สร้างเมื่อ: ${formatDate(item.created_at)}</small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-sm btn-outline-primary view-btn" data-id="${item.exam_set_id}">
+                                    <i class="ri-eye-line me-1"></i> ดู
+                                </button>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-primary edit-btn me-1" data-id="${item.exam_set_id}">
+                                        <i class="ri-pencil-line"></i>
+                                    </button>
+                                    <a href="exam-topic-management.php?exam_set_id=${item.exam_set_id}" class="btn btn-sm btn-secondary me-1">
+                                        <i class="ri-list-check-2"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="${item.exam_set_id}" data-name="${item.name}">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            html += '</div>';
+            cardView.html(html);
+        }
+        
         // Initialize DataTable
         const examSetTable = $('#examSetTable').DataTable({
             processing: true,
@@ -523,6 +842,257 @@ try {
                     return json.data;
                 },
                 error: function(xhr, error, thrown) {
+                    hideLoading();
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                    });
+                }
+            },
+            columns: [
+                { data: null, render: function(data, type, row, meta) {
+                    return meta.row + 1;
+                }},
+                { data: "name" },
+                { data: "description", render: function(data) {
+                    return data || '-';
+                }},
+                { data: "topic_count", render: function(data) {
+                    const badgeClass = getCountBadgeClass(data);
+                    return `<span class="badge topic-count-badge ${badgeClass}">${getCountBadgeIcon(data)} ${data}</span>`;
+                }},
+                { data: "status", render: function(data) {
+                    if (data == 1) {
+                        return '<span class="status-badge status-active">ใช้งาน</span>';
+                    } else {
+                        return '<span class="status-badge status-inactive">ไม่ใช้งาน</span>';
+                    }
+                }},
+                { data: "created_at", render: function(data) {
+                    return formatDate(data);
+                }},
+                { data: "created_by_name" },
+                { data: null, render: function(data, type, row) {
+                    return `<div class="d-flex">
+                        <button type="button" class="btn btn-sm btn-info action-btn view-btn me-1" data-id="${row.exam_set_id}" title="ดูรายละเอียด">
+                            <i class="ri-eye-line"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary action-btn edit-btn me-1" data-id="${row.exam_set_id}" title="แก้ไข">
+                            <i class="ri-pencil-line"></i>
+                        </button>
+                        <a href="exam-topic-management.php?exam_set_id=${row.exam_set_id}" class="btn btn-sm btn-secondary action-btn me-1" title="จัดการหัวข้อ">
+                            <i class="ri-list-check-2"></i>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-danger action-btn delete-btn" data-id="${row.exam_set_id}" data-name="${row.name}" title="ลบ">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>`;
+                }, orderable: false }
+            ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/th.json',
+            },
+            responsive: true,
+            dom: '<"row mb-3"<"col-md-6"B><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: '<i class="ri-file-excel-2-line"></i> Excel',
+                    className: 'btn btn-success me-2',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="ri-printer-line"></i> พิมพ์',
+                    className: 'btn btn-info me-2',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                }
+            ],
+            order: [[5, 'desc']] // Sort by created_at column by default
+        });
+        
+        // Show loading on initial data load
+        showLoading();
+        
+        // สลับการแสดงผลระหว่าง Table และ Card View
+        $('#tableViewBtn, #cardViewBtn').on('click', function() {
+            const view = $(this).data('view');
+            
+            $('.view-toggle-btn').removeClass('active');
+            $(this).addClass('active');
+            
+            if (view === 'table') {
+                $('#tableView').show();
+                $('#cardView').hide();
+            } else {
+                $('#tableView').hide();
+                $('#cardView').show();
+            }
+        });
+        
+        // การกรองข้อมูล
+        $('#applyFilter').on('click', function() {
+            const statusFilter = $('#statusFilter').val();
+            const topicFilter = $('#topicFilter').val();
+            
+            // สร้าง custom filter function สำหรับ DataTables
+            $.fn.dataTable.ext.search.pop(); // ลบ filter เดิม (ถ้ามี)
+            
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex, rowData) {
+                    // ถ้าไม่มีการกรอง ให้แสดงทั้งหมด
+                    if (statusFilter === '' && topicFilter === '') {
+                        return true;
+                    }
+                    
+                    // กรองตามสถานะ
+                    if (statusFilter !== '' && rowData.status != statusFilter) {
+                        return false;
+                    }
+                    
+                    // กรองตามจำนวนหัวข้อ
+                    if (topicFilter !== '') {
+                        const count = parseInt(rowData.topic_count);
+                        
+                        if (topicFilter === '0' && count !== 0) {
+                            return false;
+                        } else if (topicFilter === '1-5' && (count < 1 || count > 5)) {
+                            return false;
+                        } else if (topicFilter === '5+' && count <= 5) {
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                }
+            );
+            
+            // นำไปใช้กับทั้ง DataTable และ Card View
+            examSetTable.draw();
+            
+            // กรองข้อมูลใน Card View (ผ่านการเรียกใช้ API ใหม่)
+            showLoading();
+            
+            $.ajax({
+                url: "api/exam-set-api.php?action=list",
+                type: "GET",
+                data: {
+                    status: statusFilter,
+                    topic_filter: topicFilter
+                },
+                dataType: "json",
+                success: function(response) {
+                    hideLoading();
+                    updateCardView(response.data);
+                },
+                error: function() {
+                    hideLoading();
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถกรองข้อมูลได้'
+                    });
+                }
+            });
+        });
+        
+        // รีเซ็ตการกรองข้อมูล
+        $('#resetFilter').on('click', function() {
+            $('#statusFilter').val('');
+            $('#topicFilter').val('');
+            
+            // ลบ filter ทั้งหมด
+            $.fn.dataTable.ext.search.pop();
+            examSetTable.draw();
+            
+            // โหลดข้อมูลใหม่ทั้งหมด
+            showLoading();
+            examSetTable.ajax.reload();
+        });
+        
+        // ดูรายละเอียดชุดข้อสอบ
+        $(document).on('click', '.view-btn', function() {
+            const examSetId = $(this).data('id');
+            
+            showLoading();
+            
+            // เรียกข้อมูลชุดข้อสอบ
+            $.ajax({
+                url: `api/exam-set-api.php?action=get&id=${examSetId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        const examSet = response.data;
+                        
+                        // เรียกข้อมูลสถิติที่เกี่ยวข้อง
+                        $.ajax({
+                            url: `api/stats-api.php?action=topic_stats&exam_set_id=${examSetId}`,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(statsResponse) {
+                                hideLoading();
+                                
+                                const stats = statsResponse.success ? statsResponse.data : { 
+                                    total_topics: 0, 
+                                    total_questions: 0 
+                                };
+                                
+                                // แสดงข้อมูลในโมดัล
+                                $('#view_name').text(examSet.name);
+                                $('#view_description').text(examSet.description || '-');
+                                $('#view_topic_count').text(stats.total_topics || 0);
+                                $('#view_question_count').text(stats.total_questions || 0);
+                                $('#view_status').html(examSet.status == 1 ? 
+                                    '<span class="status-badge status-active">ใช้งาน</span>' : 
+                                    '<span class="status-badge status-inactive">ไม่ใช้งาน</span>');
+                                $('#view_created_at').text(formatDate(examSet.created_at));
+                                $('#view_updated_at').text(formatDate(examSet.updated_at));
+                                $('#view_created_by').text(examSet.created_by_name || '-');
+                                
+                                // กำหนด URL สำหรับปุ่มจัดการหัวข้อ
+                                $('#view_topics_btn').attr('href', `exam-topic-management.php?exam_set_id=${examSetId}`);
+                                
+                                // แสดงโมดัล
+                                $('#viewExamSetModal').modal('show');
+                            },
+                            error: function() {
+                                hideLoading();
+                                
+                                // แสดงข้อมูลในโมดัลโดยไม่มีสถิติ
+                                $('#view_name').text(examSet.name);
+                                $('#view_description').text(examSet.description || '-');
+                                $('#view_topic_count').text('0');
+                                $('#view_question_count').text('0');
+                                $('#view_status').html(examSet.status == 1 ? 
+                                    '<span class="status-badge status-active">ใช้งาน</span>' : 
+                                    '<span class="status-badge status-inactive">ไม่ใช้งาน</span>');
+                                $('#view_created_at').text(formatDate(examSet.created_at));
+                                $('#view_updated_at').text(formatDate(examSet.updated_at));
+                                $('#view_created_by').text(examSet.created_by_name || '-');
+                                
+                                // กำหนด URL สำหรับปุ่มจัดการหัวข้อ
+                                $('#view_topics_btn').attr('href', `exam-topic-management.php?exam_set_id=${examSetId}`);
+                                
+                                // แสดงโมดัล
+                                $('#viewExamSetModal').modal('show');
+                            }
+                        });
+                    } else {
+                        hideLoading();
+                        swalCustom.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: response.message || 'ไม่สามารถโหลดข้อมูลชุดข้อสอบได้'
+                        });
+                    }
+                },
+                error: function() {
                     hideLoading();
                     swalCustom.fire({
                         icon: 'error',
@@ -738,7 +1308,7 @@ try {
                         data: {
                             action: 'delete',
                             exam_set_id: examSetId,
-                            csrf_token: '<?= $csrf_token ?>'
+                            csrf_token: $('#addExamSetForm input[name="csrf_token"]').val()
                         },
                         dataType: 'json',
                         success: function(response) {
@@ -816,92 +1386,6 @@ try {
         $('#editExamSetModal').on('hidden.bs.modal', function() {
             $('#editExamSetForm .is-invalid').removeClass('is-invalid');
         });
-        
-        // ข้อมูลตัวอย่างที่จะแสดง
-        function loadSampleData() {
-            // สร้างข้อมูลตัวอย่างสำหรับทดสอบ UI
-            const sampleData = [
-                {
-                    exam_set_id: 1,
-                    name: "ชุดข้อสอบวิชาคณิตศาสตร์",
-                    description: "ชุดข้อสอบวิชาคณิตศาสตร์สำหรับนักเรียนระดับมัธยมศึกษาตอนปลาย ครอบคลุมเนื้อหาเรื่องพีชคณิต เรขาคณิต และแคลคูลัส",
-                    topic_count: 8,
-                    status: 1,
-                    created_at: "2025-03-01 10:30:00",
-                    updated_at: "2025-03-02 15:45:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 2,
-                    name: "ชุดข้อสอบวิชาวิทยาศาสตร์",
-                    description: "ชุดข้อสอบวิชาวิทยาศาสตร์ ครอบคลุมเนื้อหาฟิสิกส์ เคมี และชีววิทยา",
-                    topic_count: 5,
-                    status: 1,
-                    created_at: "2025-03-01 14:20:00",
-                    updated_at: "2025-03-01 14:20:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 3,
-                    name: "ชุดข้อสอบวิชาภาษาอังกฤษ",
-                    description: "ชุดข้อสอบวิชาภาษาอังกฤษ ทดสอบความรู้ด้านไวยากรณ์ คำศัพท์ การอ่าน และการเขียน",
-                    topic_count: 4,
-                    status: 1,
-                    created_at: "2025-03-02 09:15:00",
-                    updated_at: "2025-03-02 09:15:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 4,
-                    name: "ชุดข้อสอบวิชาสังคมศึกษา",
-                    description: "ชุดข้อสอบวิชาสังคมศึกษา ครอบคลุมเนื้อหาประวัติศาสตร์ ภูมิศาสตร์ และหน้าที่พลเมือง",
-                    topic_count: 3,
-                    status: 0,
-                    created_at: "2025-03-02 16:40:00",
-                    updated_at: "2025-03-03 10:20:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                },
-                {
-                    exam_set_id: 5,
-                    name: "ชุดข้อสอบทักษะการคิดวิเคราะห์",
-                    description: "ชุดข้อสอบทักษะการคิดวิเคราะห์ สำหรับประเมินความสามารถในการแก้ปัญหาและการคิดเชิงวิพากษ์",
-                    topic_count: 0,
-                    status: 1,
-                    created_at: "2025-03-03 13:10:00",
-                    updated_at: "2025-03-03 13:10:00",
-                    created_by_name: "ผู้ดูแลระบบ"
-                }
-            ];
-            
-            // สร้าง mock API response
-            const mockResponse = {
-                draw: 1,
-                recordsTotal: sampleData.length,
-                recordsFiltered: sampleData.length,
-                data: sampleData
-            };
-            
-            // อัปเดตทั้ง Table View และ Card View
-            updateCardView(sampleData);
-            
-            // แสดงข้อมูลตัวอย่างใน DataTable (เป็นเพียงเดโม ไม่ใช่คำสั่งที่ใช้ได้จริงใน DataTables)
-            // ในการใช้งานจริงไม่ต้องใส่ส่วนนี้ เพราะ DataTables ดึงข้อมูลจาก AJAX
-            try {
-                examSetTable.clear().draw();
-                sampleData.forEach(function(data, index) {
-                    examSetTable.row.add({
-                        "DT_RowIndex": index + 1,
-                        ...data
-                    }).draw();
-                });
-            } catch(e) {
-                console.log('สามารถดูตัวอย่างได้ในมุมมองการ์ด');
-            }
-        }
-        
-        // เรียกใช้ฟังก์ชันโหลดข้อมูลตัวอย่าง (ในกรณีที่ยังไม่มี API จริง)
-        // ในการใช้งานจริงให้คอมเมนต์บรรทัดนี้ไว้
-        // loadSampleData();
     });
     </script>
   </body>
