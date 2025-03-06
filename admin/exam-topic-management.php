@@ -2078,7 +2078,7 @@ function saveQuestion() {
                         // Handle question image
                         if (question.image) {
                             $('#existing_image').val(question.image);
-                            $('#question-image-preview').html(`<img src="/../../img/question/${question.image}" alt="${question.image_description || 'รูปภาพประกอบคำถาม'}">`);
+                            $('#question-image-preview').html(`<img src="/../img/question/${question.image}" alt="${question.image_description || 'รูปภาพประกอบคำถาม'}">`);
                             $('#question_image_description').val(question.image_description || '');
                         } else {
                             $('#question-image-preview').html('<span class="image-preview-placeholder"><i class="ri-add-line"></i></span>');
