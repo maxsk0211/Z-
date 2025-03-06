@@ -388,7 +388,7 @@ try {
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
               <!-- Breadcrumb -->
-              <nav aria-label="breadcrumb">
+              <!-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item">
                     <a href="dashboard.php"><i class="ri-home-line me-1"></i> หน้าหลัก</a>
@@ -398,7 +398,7 @@ try {
                   </li>
                   <li class="breadcrumb-item active">จัดการชุดข้อสอบ</li>
                 </ol>
-              </nav>
+              </nav> -->
               
               <!-- Stats Cards Section -->
               <div class="stats-cards animate__animated animate__fadeIn">
