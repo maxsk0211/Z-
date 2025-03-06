@@ -595,7 +595,7 @@ switch ($action) {
                     // เพิ่มตัวเลือกใหม่
                     $stmtInsertChoice = $conn->prepare("
                         INSERT INTO choice (question_id, content, image, is_correct, created_at, updated_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?)
                     ");
                     $stmtInsertChoice->execute([$questionId, $choiceContent, $choiceImage, $isCorrect, $currentDateTime, $currentDateTime]);
                     
