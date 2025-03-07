@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>เพิ่มเครื่องมือใหม่ | ระบบคลังสินค้าขนาดย่อม</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/tagify/tagify.css">
+
+  <!-- Page CSS -->
+
+  <!-- Helpers -->
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#696cff" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#696cff" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">คลังสินค้า</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุสิ้นเปลือง">วัสดุสิ้นเปลือง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="consumable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิกวัสดุ">เบิกวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุคงทน">วัสดุคงทน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="durable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือ">เครื่องมือ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนเครื่องมือ">เบิก-คืนเครื่องมือ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการรถ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-monthly-tools.html" class="menu-link">
+                  <div data-i18n="รายงานเครื่องมือประจำเดือน">รายงานเครื่องมือประจำเดือน</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน (เฉพาะผู้บริหาร) -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">สมชาย มีสุข</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4">
+              <span class="text-muted fw-light">เครื่องมือ /</span> เพิ่มเครื่องมือใหม่
+            </h4>
+
+            <!-- Basic Layout -->
+            <div class="row">
+              <div class="col-xl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">เพิ่มเครื่องมือใหม่</h5>
+                    <small class="text-muted float-end">* หมายถึงข้อมูลที่จำเป็นต้องกรอก</small>
+                  </div>
+                  <div class="card-body">
+                    <form id="toolForm">
+                      <div class="mb-4">
+                        <h6 class="fw-semibold">ข้อมูลทั่วไป</h6>
+                        <hr class="my-2">
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-id">รหัสเครื่องมือ *</label>
+                        <div class="col-sm-4">
+                          <div class="input-group">
+                            <span class="input-group-text">T</span>
+                            <input type="text" class="form-control" id="tool-id" placeholder="001" required>
+                          </div>
+                          <div class="form-text">รหัสจะถูกกำหนดเป็น T + ตัวเลข เช่น T001</div>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="tool-status">สถานะ *</label>
+                        <div class="col-sm-4">
+                          <select id="tool-status" class="form-select" required>
+                            <option value="available" selected>พร้อมใช้งาน</option>
+                            <option value="inuse">กำลังใช้งาน</option>
+                            <option value="repair">ส่งซ่อม</option>
+                            <option value="writeoff">จำหน่ายออก</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-name">ชื่อเครื่องมือ *</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="tool-name" placeholder="ระบุชื่อเครื่องมือ" required>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-type">ประเภทเครื่องมือ *</label>
+                        <div class="col-sm-4">
+                          <select id="tool-type" class="select2 form-select" data-allow-clear="true" required>
+                            <option value="">--- เลือกประเภทเครื่องมือ ---</option>
+                            <option value="electric">เครื่องมือไฟฟ้า</option>
+                            <option value="manual">เครื่องมือช่าง</option>
+                            <option value="construction">เครื่องมือก่อสร้าง</option>
+                            <option value="welding">เครื่องมือเชื่อม</option>
+                            <option value="measurement">เครื่องมือวัด</option>
+                            <option value="other">อื่นๆ</option>
+                          </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="tool-brand">ยี่ห้อ</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="tool-brand" placeholder="ยี่ห้อเครื่องมือ">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-model">รุ่น</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="tool-model" placeholder="รุ่นเครื่องมือ">
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="tool-serial">หมายเลขซีเรียล</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="tool-serial" placeholder="หมายเลขซีเรียล">
+                        </div>
+                      </div>
+                      
+                      <div class="mb-4 mt-4">
+                        <h6 class="fw-semibold">ข้อมูลการจัดซื้อและราคา</h6>
+                        <hr class="my-2">
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="purchase-date">วันที่ซื้อ</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control flatpickr-date" id="purchase-date" placeholder="DD/MM/YYYY">
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="tool-price">ราคา *</label>
+                        <div class="col-sm-4">
+                          <div class="input-group">
+                            <input type="number" class="form-control" id="tool-price" placeholder="0.00" min="0" step="0.01" required>
+                            <span class="input-group-text">บาท</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="warranty-period">ระยะเวลารับประกัน</label>
+                        <div class="col-sm-4">
+                          <div class="input-group">
+                            <input type="number" class="form-control" id="warranty-period" placeholder="0" min="0">
+                            <select class="form-select" id="warranty-unit" style="max-width: 120px;">
+                              <option value="days">วัน</option>
+                              <option value="months" selected>เดือน</option>
+                              <option value="years">ปี</option>
+                            </select>
+                          </div>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="warranty-expire">วันหมดประกัน</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control flatpickr-date" id="warranty-expire" placeholder="DD/MM/YYYY">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="purchase-from">ซื้อจาก</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="purchase-from" placeholder="ชื่อร้านค้า/บริษัท">
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="invoice-number">เลขที่ใบเสร็จ</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="invoice-number" placeholder="เลขที่ใบเสร็จ/ใบกำกับภาษี">
+                        </div>
+                      </div>
+                      
+                      <div class="mb-4 mt-4">
+                        <h6 class="fw-semibold">ข้อมูลการใช้งานและการบำรุงรักษา</h6>
+                        <hr class="my-2">
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="maintenance-cycle">รอบการบำรุงรักษา</label>
+                        <div class="col-sm-4">
+                          <div class="input-group">
+                            <input type="number" class="form-control" id="maintenance-cycle" placeholder="0" min="0">
+                            <select class="form-select" id="maintenance-unit" style="max-width: 120px;">
+                              <option value="days">วัน</option>
+                              <option value="months" selected>เดือน</option>
+                              <option value="years">ปี</option>
+                            </select>
+                          </div>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="next-maintenance">วันที่บำรุงรักษาครั้งถัดไป</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control flatpickr-date" id="next-maintenance" placeholder="DD/MM/YYYY">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="specification">ข้อมูลจำเพาะ</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="specification" placeholder="เช่น กำลังไฟ, แรงดัน, ขนาด">
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="location">สถานที่จัดเก็บ</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" id="location" placeholder="เช่น ตู้เก็บเครื่องมือ A, ห้องเก็บของชั้น 2">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="responsible-person">ผู้รับผิดชอบ</label>
+                        <div class="col-sm-4">
+                          <select id="responsible-person" class="select2 form-select">
+                            <option value="">--- เลือกผู้รับผิดชอบ ---</option>
+                            <option value="1">สมชาย มีสุข</option>
+                            <option value="2">สมหญิง รักดี</option>
+                            <option value="3">ชาติชาย ใจเย็น</option>
+                            <option value="4">ณัฐพงษ์ รุ่งเรือง</option>
+                            <option value="5">มานะ สมบัติ</option>
+                          </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="department">แผนก/ฝ่าย</label>
+                        <div class="col-sm-4">
+                          <select id="department" class="form-select">
+                            <option value="">--- เลือกแผนก/ฝ่าย ---</option>
+                            <option value="maintenance">ซ่อมบำรุง</option>
+                            <option value="engineering">วิศวกรรม</option>
+                            <option value="facility">อาคารสถานที่</option>
+                            <option value="production">การผลิต</option>
+                            <option value="admin">ธุรการ</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="mb-4 mt-4">
+                        <h6 class="fw-semibold">ข้อมูลเพิ่มเติมและไฟล์แนบ</h6>
+                        <hr class="my-2">
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-notes">หมายเหตุ</label>
+                        <div class="col-sm-10">
+                          <textarea id="tool-notes" class="form-control" placeholder="รายละเอียดเพิ่มเติมของเครื่องมือ" rows="3"></textarea>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-tags">แท็ก</label>
+                        <div class="col-sm-10">
+                          <input id="tool-tags" class="form-control" name="tool-tags" value="">
+                          <div class="form-text">ใส่แท็กและกด Enter เพื่อเพิ่ม</div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="tool-images">รูปภาพ</label>
+                        <div class="col-sm-10">
+                          <div action="/upload" class="dropzone needsclick" id="dropzone-image">
+                            <div class="dz-message needsclick">
+                              ลากไฟล์มาที่นี่หรือคลิกเพื่ออัพโหลด
+                              <span class="note needsclick">(อัพโหลดได้สูงสุด 5 รูป ขนาดไม่เกิน 2MB ต่อรูป)</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="attachments">เอกสารแนบ</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" type="file" id="attachments" multiple>
+                          <div class="form-text">เอกสารแนบเช่น คู่มือการใช้งาน, ใบรับประกัน (รองรับไฟล์ PDF, DOC, DOCX, JPG, PNG)</div>
+                        </div>
+                      </div>
+                      <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                          <button type="button" class="btn btn-outline-secondary me-2" onclick="window.location.href='tools-list.html'">ยกเลิก</button>
+                          <button type="submit" class="btn btn-primary">บันทึก</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบคลังสินค้าขนาดย่อม v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="../assets/vendor/libs/select2/select2.js"></script>
+  <script src="../assets/vendor/libs/dropzone/dropzone.js"></script>
+  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="../assets/vendor/libs/tagify/tagify.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="../assets/js/forms-selects.js"></script>
+  <script src="../assets/js/forms-tagify.js"></script>
+  <script src="../assets/js/forms-file-upload.js"></script>
+  <script src="../assets/js/form-layouts.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Select2
+      $('.select2').select2();
+      
+      // Initialize Flatpickr (Date picker)
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        allowInput: true,
+        locale: 'th'
+      });
+      
+      // Initialize Tagify
+      const toolTagsInput = document.getElementById('tool-tags');
+      if (toolTagsInput) {
+        new Tagify(toolTagsInput, {
+          maxTags: 10,
+          dropdown: {
+            enabled: 0,
+            maxItems: 5
+          },
+          whitelist: ["ทดแทนได้", "ไม่ทดแทน", "ใช้คู่กับT002", "ความเสี่ยงสูง", "ต้องมีใบอนุญาต"]
+        });
+      }
+      
+      // Initialize Dropzone
+      const dropzoneImage = new Dropzone("#dropzone-image", {
+        url: "/upload", // Change this to your upload endpoint
+        maxFiles: 5,
+        maxFilesize: 2, // MB
+        addRemoveLinks: true,
+        acceptedFiles: 'image/*',
+        autoProcessQueue: false
+      });
+      
+      // Form submission
+      const toolForm = document.getElementById('toolForm');
+      if (toolForm) {
+        toolForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Basic validation
+          if (!toolForm.checkValidity()) {
+            e.stopPropagation();
+            alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
+            return;
+          }
+          
+          // Success - Here you would normally send the data to your server
+          alert('บันทึกข้อมูลเครื่องมือใหม่เรียบร้อยแล้ว');
+          window.location.href = 'tools-list.html';
+        });
+      }
+      
+      // Calculate warranty expiration date based on purchase date and warranty period
+      const purchaseDateInput = document.getElementById('purchase-date');
+      const warrantyPeriodInput = document.getElementById('warranty-period');
+      const warrantyUnitSelect = document.getElementById('warranty-unit');
+      const warrantyExpireInput = document.getElementById('warranty-expire');
+      
+      function calculateWarrantyExpire() {
+        const purchaseDate = purchaseDateInput.value;
+        const warrantyPeriod = warrantyPeriodInput.value;
+        const warrantyUnit = warrantyUnitSelect.value;
+        
+        if (purchaseDate && warrantyPeriod) {
+          const date = new Date(purchaseDate.split('/').reverse().join('-'));
+          
+          if (warrantyUnit === 'days') {
+            date.setDate(date.getDate() + parseInt(warrantyPeriod));
+          } else if (warrantyUnit === 'months') {
+            date.setMonth(date.getMonth() + parseInt(warrantyPeriod));
+          } else if (warrantyUnit === 'years') {
+            date.setFullYear(date.getFullYear() + parseInt(warrantyPeriod));
+          }
+          
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = (date.getMonth() + 1).toString().padStart(2, '0');
+          const year = date.getFullYear();
+          
+          warrantyExpireInput.value = `${day}/${month}/${year}`;
+        }
+      }
+      
+      if (purchaseDateInput && warrantyPeriodInput && warrantyUnitSelect) {
+        purchaseDateInput.addEventListener('change', calculateWarrantyExpire);
+        warrantyPeriodInput.addEventListener('input', calculateWarrantyExpire);
+        warrantyUnitSelect.addEventListener('change', calculateWarrantyExpire);
+      }
+      
+      // Similar logic for maintenance cycle
+      const maintenanceCycleInput = document.getElementById('maintenance-cycle');
+      const maintenanceUnitSelect = document.getElementById('maintenance-unit');
+      const nextMaintenanceInput = document.getElementById('next-maintenance');
+      
+      function calculateNextMaintenance() {
+        const purchaseDate = purchaseDateInput.value;
+        const maintenanceCycle = maintenanceCycleInput.value;
+        const maintenanceUnit = maintenanceUnitSelect.value;
+        
+        if (purchaseDate && maintenanceCycle) {
+          const date = new Date(purchaseDate.split('/').reverse().join('-'));
+          
+          if (maintenanceUnit === 'days') {
+            date.setDate(date.getDate() + parseInt(maintenanceCycle));
+          } else if (maintenanceUnit === 'months') {
+            date.setMonth(date.getMonth() + parseInt(maintenanceCycle));
+          } else if (maintenanceUnit === 'years') {
+            date.setFullYear(date.getFullYear() + parseInt(maintenanceCycle));
+          }
+          
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = (date.getMonth() + 1).toString().padStart(2, '0');
+          const year = date.getFullYear();
+          
+          nextMaintenanceInput.value = `${day}/${month}/${year}`;
+        }
+      }
+      
+      if (purchaseDateInput && maintenanceCycleInput && maintenanceUnitSelect) {
+        purchaseDateInput.addEventListener('change', calculateNextMaintenance);
+        maintenanceCycleInput.addEventListener('input', calculateNextMaintenance);
+        maintenanceUnitSelect.addEventListener('change', calculateNextMaintenance);
+      }
+    });
+  </script>
+</body>
+</html>

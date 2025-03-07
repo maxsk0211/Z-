@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>รายงานค่าใช้จ่ายรถ | ระบบคลังสินค้าขนาดย่อม</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
+
+  <!-- Page CSS -->
+
+  <!-- Helpers -->
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#696cff" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#696cff" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">คลังสินค้า</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุสิ้นเปลือง">วัสดุสิ้นเปลือง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="consumable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิกวัสดุ">เบิกวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุคงทน">วัสดุคงทน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="durable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือ">เครื่องมือ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนเครื่องมือ">เบิก-คืนเครื่องมือ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการรถ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-monthly-tools.html" class="menu-link">
+                  <div data-i18n="รายงานเครื่องมือประจำเดือน">รายงานเครื่องมือประจำเดือน</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน (เฉพาะผู้บริหาร) -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">สมชาย มีสุข</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4">
+              <span class="text-muted fw-light">รายงาน /</span> รายงานค่าใช้จ่ายรถ
+            </h4>
+
+            <!-- Filter Controls -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title">ตัวกรองรายงาน</h5>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="row mb-3">
+                    <div class="col-md-3">
+                      <label for="vehicle-select" class="form-label">เลือกรถ</label>
+                      <select id="vehicle-select" class="select2 form-select">
+                        <option value="all" selected>ทุกคัน</option>
+                        <option value="1">กข-1234 กรุงเทพ (Toyota Hilux)</option>
+                        <option value="2">ฮต-7890 กรุงเทพ (Honda Civic)</option>
+                        <option value="3">ศข-4567 กรุงเทพ (Toyota Commuter)</option>
+                        <option value="4">บพ-9876 กรุงเทพ (Isuzu NQR)</option>
+                        <option value="5">มน-5432 กรุงเทพ (Nissan Navara)</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="date-range" class="form-label">ช่วงเวลา</label>
+                      <select id="date-range" class="form-select">
+                        <option value="current-month">เดือนปัจจุบัน</option>
+                        <option value="last-month">เดือนที่แล้ว</option>
+                        <option value="last-3-months">3 เดือนที่ผ่านมา</option>
+                        <option value="last-6-months" selected>6 เดือนที่ผ่านมา</option>
+                        <option value="current-year">ปีปัจจุบัน</option>
+                        <option value="custom">ระบุช่วงเวลาเอง</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label for="custom-date-range" class="form-label">ช่วงวันที่</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control flatpickr-date" id="start-date" placeholder="วันที่เริ่มต้น" value="01/01/2567">
+                        <span class="input-group-text">ถึง</span>
+                        <input type="text" class="form-control flatpickr-date" id="end-date" placeholder="วันที่สิ้นสุด" value="30/06/2567">
+                      </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                      <button type="button" id="filter-report" class="btn btn-primary w-100">
+                        <i class="bx bx-filter-alt me-1"></i> กรอง
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <label for="repair-type" class="form-label">ประเภทการซ่อมบำรุง</label>
+                      <div class="d-flex flex-wrap gap-3">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-all" checked>
+                          <label class="form-check-label" for="check-all">ทั้งหมด</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-engine" checked>
+                          <label class="form-check-label" for="check-engine">เครื่องยนต์</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-electric" checked>
+                          <label class="form-check-label" for="check-electric">ระบบไฟฟ้า</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-brake" checked>
+                          <label class="form-check-label" for="check-brake">ระบบเบรก</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-suspension" checked>
+                          <label class="form-check-label" for="check-suspension">ระบบช่วงล่าง</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-tire" checked>
+                          <label class="form-check-label" for="check-tire">ยาง</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-maintenance" checked>
+                          <label class="form-check-label" for="check-maintenance">บำรุงรักษาตามระยะ</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="check-other" checked>
+                          <label class="form-check-label" for="check-other">อื่นๆ</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end justify-content-end">
+                      <button type="button" id="export-pdf" class="btn btn-outline-primary me-2">
+                        <i class="bx bxs-file-pdf me-1"></i> PDF
+                      </button>
+                      <button type="button" id="export-excel" class="btn btn-outline-success">
+                        <i class="bx bxs-file-excel me-1"></i> Excel
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="card-info">
+                        <p class="card-text">ค่าใช้จ่ายรวม</p>
+                        <div class="d-flex align-items-end mb-2">
+                          <h4 class="card-title mb-0 me-2">85,750</h4>
+                          <small class="text-danger">บาท</small>
+                        </div>
+                        <small>จากทั้งหมด <span class="fw-medium">21 ครั้ง</span></small>
+                      </div>
+                      <div class="card-icon">
+                        <span class="badge bg-label-primary rounded p-2">
+                          <i class="bx bx-money bx-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="card-info">
+                        <p class="card-text">ค่าใช้จ่ายเฉลี่ย/ครั้ง</p>
+                        <div class="d-flex align-items-end mb-2">
+                          <h4 class="card-title mb-0 me-2">4,083</h4>
+                          <small class="text-danger">บาท</small>
+                        </div>
+                        <small>จากการซ่อม <span class="fw-medium">21 ครั้ง</span></small>
+                      </div>
+                      <div class="card-icon">
+                        <span class="badge bg-label-warning rounded p-2">
+                          <i class="bx bx-calculator bx-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="card-info">
+                        <p class="card-text">ค่าใช้จ่ายเฉลี่ย/คัน</p>
+                        <div class="d-flex align-items-end mb-2">
+                          <h4 class="card-title mb-0 me-2">17,150</h4>
+                          <small class="text-danger">บาท</small>
+                        </div>
+                        <small>จากรถทั้งหมด <span class="fw-medium">5 คัน</span></small>
+                      </div>
+                      <div class="card-icon">
+                        <span class="badge bg-label-info rounded p-2">
+                          <i class="bx bx-car bx-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="card-info">
+                        <p class="card-text">รายการที่แพงที่สุด</p>
+                        <div class="d-flex align-items-end mb-2">
+                          <h4 class="card-title mb-0 me-2">16,500</h4>
+                          <small class="text-danger">บาท</small>
+                        </div>
+                        <small>รถกระบะ Toyota <span class="fw-medium">(ซ่อมเครื่องยนต์)</span></small>
+                      </div>
+                      <div class="card-icon">
+                        <span class="badge bg-label-danger rounded p-2">
+                          <i class="bx bx-trending-up bx-sm"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monthly Cost Chart -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">ค่าใช้จ่ายรายเดือน (บาท)</h5>
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="vehicleSelector" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    แสดงทุกคัน
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="vehicleSelector">
+                    <a class="dropdown-item active" href="javascript:void(0);">แสดงทุกคัน</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Toyota Hilux</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Honda Civic</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Toyota Commuter</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Isuzu NQR</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Nissan Navara</a>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="monthlyVehicleCostChart" style="height: 350px;"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Cost By Repair Type -->
+              <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">ค่าใช้จ่ายตามประเภทการซ่อม</h5>
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="repairTypeView" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        มุมมอง: กราฟวงกลม
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="repairTypeView">
+                        <a class="dropdown-item active" href="javascript:void(0);">กราฟวงกลม</a>
+                        <a class="dropdown-item" href="javascript:void(0);">กราฟแท่ง</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="repairTypeChart" style="height: 300px;"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Vehicle Cost Comparison -->
+              <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">เปรียบเทียบค่าใช้จ่ายตามรถ</h5>
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="costComparisonView" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        มุมมอง: กราฟแท่ง
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="costComparisonView">
+                        <a class="dropdown-item active" href="javascript:void(0);">กราฟแท่ง</a>
+                        <a class="dropdown-item" href="javascript:void(0);">กราฟเส้น</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="vehicleCostComparisonChart" style="height: 300px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Repair History Table -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">ประวัติการซ่อมบำรุง</h5>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>เลขที่ซ่อม</th>
+                      <th>วันที่ซ่อม</th>
+                      <th>รถ</th>
+                      <th>ระยะ (กม.)</th>
+                      <th>ประเภทการซ่อม</th>
+                      <th>รายละเอียด</th>
+                      <th>สถานที่ซ่อม</th>
+                      <th>ค่าใช้จ่าย</th>
+                      <th>จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>RP021</strong></td>
+                      <td>28/06/2567</td>
+                      <td>กข-1234 กรุงเทพ</td>
+                      <td>35,450</td>
+                      <td><span class="badge bg-label-warning">เครื่องยนต์</span></td>
+                      <td>เปลี่ยนปั๊มน้ำมันเชื้อเพลิง</td>
+                      <td>อู่มิตรยนต์</td>
+                      <td class="text-end">16,500.00</td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="vehicle-repair-detail.html?id=RP021">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>RP020</strong></td>
+                      <td>15/06/2567</td>
+                      <td>ฮต-7890 กรุงเทพ</td>
+                      <td>62,300</td>
+                      <td><span class="badge bg-label-primary">บำรุงรักษาตามระยะ</span></td>
+                      <td>เปลี่ยนถ่ายน้ำมันเครื่องและไส้กรอง</td>
+                      <td>ศูนย์บริการ Honda</td>
+                      <td class="text-end">2,800.00</td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="vehicle-repair-detail.html?id=RP020">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>RP019</strong></td>
+                      <td>02/06/2567</td>
+                      <td>ศข-4567 กรุงเทพ</td>
+                      <td>85,600</td>
+                      <td><span class="badge bg-label-info">ระบบเบรก</span></td>
+                      <td>เปลี่ยนผ้าเบรกหน้า-หลัง</td>
+                      <td>ศูนย์บริการ Toyota</td>
+                      <td class="text-end">7,500.00</td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="vehicle-repair-detail.html?id=RP019">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>RP018</strong></td>
+                      <td>22/05/2567</td>
+                      <td>บพ-9876 กรุงเทพ</td>
+                      <td>28,450</td>
+                      <td><span class="badge bg-label-success">ยาง</span></td>
+                      <td>เปลี่ยนยางล้อหน้า 2 เส้น</td>
+                      <td>ร้านยางดี</td>
+                      <td class="text-end">8,200.00</td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="vehicle-repair-detail.html?id=RP018">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>RP017</strong></td>
+                      <td>15/05/2567</td>
+                      <td>มน-5432 กรุงเทพ</td>
+                      <td>52,800</td>
+                      <td><span class="badge bg-label-danger">ระบบไฟฟ้า</span></td>
+                      <td>ซ่อมระบบไฟหน้า</td>
+                      <td>อู่ช่างไฟ</td>
+                      <td class="text-end">3,500.00</td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="vehicle-repair-detail.html?id=RP017">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Pagination -->
+              <div class="d-flex justify-content-between align-items-center px-3 py-3">
+                <div class="d-flex align-items-center">
+                  <label for="rowPerPage" class="me-2">แสดง</label>
+                  <select class="form-select form-select-sm" id="rowPerPage" style="width: 70px;">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                  </select>
+                  <span class="ms-2">รายการ</span>
+                </div>
+                <nav aria-label="Page navigation">
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item prev">
+                      <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                    </li>
+                    <li class="page-item active">
+                      <a class="page-link" href="javascript:void(0);">1</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0);">2</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0);">3</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0);">4</a>
+                    </li>
+                    <li class="page-item next">
+                      <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบคลังสินค้าขนาดย่อม v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="../assets/vendor/libs/select2/select2.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize flatpickr
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        locale: 'th'
+      });
+
+      // Initialize Select2
+      $('.select2').select2();
+      
+      // Monthly Vehicle Cost Chart
+      const monthlyVehicleCostChart = new ApexCharts(document.querySelector("#monthlyVehicleCostChart"), {
+        series: [
+          {
+            name: 'Toyota Hilux',
+            data: [3500, 1200, 4200, 2000, 16500, 0]
+          },
+          {
+            name: 'Honda Civic',
+            data: [1800, 2800, 0, 0, 2800, 0]
+          },
+          {
+            name: 'Toyota Commuter',
+            data: [0, 4500, 0, 7500, 0, 0]
+          },
+          {
+            name: 'Isuzu NQR',
+            data: [5200, 0, 0, 0, 8200, 0]
+          },
+          {
+            name: 'Nissan Navara',
+            data: [0, 0, 4350, 3500, 0, 0]
+          }
+        ],
+        chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true,
+            tools: {
+              download: true,
+              selection: false,
+              zoom: false,
+              zoomin: false,
+              zoomout: false,
+              pan: false,
+              reset: false
+            }
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            borderRadius: 2
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน'],
+        },
+        yaxis: {
+          title: {
+            text: 'บาท'
+          },
+          labels: {
+            formatter: function (val) {
+              return val.toFixed(0);
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val.toLocaleString() + " บาท";
+            }
+          }
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left'
+        },
+        colors: ['#696cff', '#ff6b6b', '#ffab00', '#00bfa4', '#1e88e5']
+      });
+      monthlyVehicleCostChart.render();
+      
+      // Repair Type Chart
+      const repairTypeChart = new ApexCharts(document.querySelector("#repairTypeChart"), {
+        series: [26500, 12800, 12500, 8900, 15200, 9850],
+        chart: {
+          type: 'pie',
+          height: 300,
+          toolbar: {
+            show: true,
+            tools: {
+              download: true
+            }
+          }
+        },
+        labels: ['เครื่องยนต์', 'ระบบไฟฟ้า', 'ระบบเบรก', 'ระบบช่วงล่าง', 'ยาง', 'บำรุงรักษาตามระยะ'],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }],
+        colors: ['#ff6b6b', '#fd7e14', '#00bfa4', '#1e88e5', '#696cff', '#9775fa'],
+        legend: {
+          position: 'bottom'
+        }
+      });
+      repairTypeChart.render();
+      
+      // Vehicle Cost Comparison Chart
+      const vehicleCostComparisonChart = new ApexCharts(document.querySelector("#vehicleCostComparisonChart"), {
+        series: [{
+          name: 'ค่าใช้จ่าย',
+          data: [27400, 7400, 12000, 13400, 7850]
+        }],
+        chart: {
+          type: 'bar',
+          height: 300,
+          toolbar: {
+            show: true,
+            tools: {
+              download: true
+            }
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            barHeight: '50%',
+            borderRadius: 4,
+            distributed: true,
+            dataLabels: {
+              position: 'bottom'
+            },
+          }
+        },
+        colors: ['#696cff', '#ff6b6b', '#ffab00', '#00bfa4', '#1e88e5'],
+        dataLabels: {
+          enabled: true,
+          textAnchor: 'start',
+          style: {
+            colors: ['#fff']
+          },
+          formatter: function (val, opt) {
+            return val.toLocaleString() + " บาท";
+          },
+          offsetX: 0
+        },
+        xaxis: {
+          categories: ['Toyota Hilux', 'Honda Civic', 'Toyota Commuter', 'Isuzu NQR', 'Nissan Navara'],
+          labels: {
+            formatter: function (val) {
+              return val.toLocaleString();
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'บาท'
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val.toLocaleString() + " บาท";
+            }
+          }
+        },
+        legend: {
+          show: false
+        }
+      });
+      vehicleCostComparisonChart.render();
+      
+      // Check All Checkboxes Logic
+      const checkAll = document.getElementById('check-all');
+      const typeCheckboxes = document.querySelectorAll('.form-check-input:not(#check-all)');
+      
+      checkAll.addEventListener('change', function() {
+        const isChecked = this.checked;
+        typeCheckboxes.forEach(checkbox => {
+          checkbox.checked = isChecked;
+        });
+      });
+      
+      typeCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          const allChecked = [...typeCheckboxes].every(c => c.checked);
+          const anyChecked = [...typeCheckboxes].some(c => c.checked);
+          
+          checkAll.checked = allChecked;
+          checkAll.indeterminate = anyChecked && !allChecked;
+        });
+      });
+      
+      // Date Range Logic
+      const dateRangeSelect = document.getElementById('date-range');
+      const startDateInput = document.getElementById('start-date');
+      const endDateInput = document.getElementById('end-date');
+      
+      dateRangeSelect.addEventListener('change', function() {
+        const value = this.value;
+        const today = new Date();
+        let startDate, endDate;
+        
+        switch(value) {
+          case 'current-month':
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            break;
+          case 'last-month':
+            startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+            endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+            break;
+          case 'last-3-months':
+            startDate = new Date(today.getFullYear(), today.getMonth() - 3, 1);
+            endDate = today;
+            break;
+          case 'last-6-months':
+            startDate = new Date(today.getFullYear(), today.getMonth() - 6, 1);
+            endDate = today;
+            break;
+          case 'current-year':
+            startDate = new Date(today.getFullYear(), 0, 1);
+            endDate = today;
+            break;
+          case 'custom':
+            // Do nothing, let user select custom dates
+            return;
+        }
+        
+        if (startDate && endDate) {
+          startDateInput.value = formatDate(startDate);
+          endDateInput.value = formatDate(endDate);
+        }
+      });
+      
+      function formatDate(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+      
+      // Export buttons
+      document.getElementById('export-pdf').addEventListener('click', function() {
+        alert('กำลังส่งออกเป็นไฟล์ PDF...');
+      });
+      
+      document.getElementById('export-excel').addEventListener('click', function() {
+        alert('กำลังส่งออกเป็นไฟล์ Excel...');
+      });
+    });
+  </script>
+</body>
+</html>

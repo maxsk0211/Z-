@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style customizer-hide">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>ระบบคลังสินค้าขนาดย่อม | เข้าสู่ระบบ</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/animate-css/animate.css">
+
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css">
+
+  <!-- Helpers -->
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+  
+  <!-- Custom CSS -->
+  <style>
+    :root {
+      --bs-primary: #696cff;
+      --bs-primary-rgb: 105, 108, 255;
+    }
+    
+    body {
+      background-color: #f5f5f9;
+    }
+    
+    .authentication-wrapper {
+      min-height: 100vh;
+    }
+    
+    .authentication-cover {
+      position: relative;
+    }
+    
+    .authentication-cover::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+      opacity: 0.1;
+      z-index: -1;
+    }
+    
+    .auth-cover-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.2;
+      background: url('https://api.dicebear.com/7.x/dots/svg?seed=warehouse&backgroundColor=edf2ff,e7f5ff,dbe4ff&backgroundType=gradientLinear') repeat;
+    }
+    
+    .auth-left-side {
+      background: linear-gradient(135deg, rgba(105, 108, 255, 0.95), rgba(76, 79, 223, 0.95));
+      padding: 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .auth-left-side::after {
+      content: '';
+      position: absolute;
+      bottom: -5rem;
+      right: -5rem;
+      width: 20rem;
+      height: 20rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .auth-left-side::before {
+      content: '';
+      position: absolute;
+      top: -3rem;
+      left: -3rem;
+      width: 10rem;
+      height: 10rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .auth-left-content {
+      color: white;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .auth-left-content h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .auth-left-content p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-item i {
+      margin-right: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .auth-form-container {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.08);
+      padding: 2.5rem;
+      transition: all 0.3s ease;
+      max-width: 450px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    .auth-form-container:hover {
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
+      transform: translateY(-5px);
+    }
+    
+    .app-brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .app-brand-logo svg {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .app-brand-text {
+      font-size: 1.5rem;
+    }
+    
+    .form-label {
+      font-weight: 500;
+      color: #566a7f;
+    }
+    
+    .form-control {
+      padding: 0.75rem 1.125rem;
+      border-radius: 0.5rem;
+      border-color: #d9dee3;
+      transition: all 0.2s ease;
+    }
+    
+    .form-control:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+    
+    .btn-primary {
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+    }
+    
+    .input-group-text {
+      background-color: transparent;
+      border-right: none;
+    }
+    
+    .form-password-toggle .input-group-text {
+      border-left: none;
+    }
+    
+    .form-password-toggle .form-control {
+      border-right: none;
+    }
+    
+    .divider {
+      position: relative;
+      margin: 1.5rem 0;
+    }
+    
+    .divider-text {
+      padding: 0 1rem;
+      background-color: white;
+    }
+    
+    .social-btn {
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.25rem 0.5rem rgba(var(--bs-primary-rgb), 0.1);
+    }
+    
+    .form-floating > .form-control {
+      padding-top: 1.625rem;
+      padding-bottom: 0.625rem;
+    }
+    
+    .form-floating > label {
+      padding: 1rem 1.125rem;
+    }
+    
+    .auth-decoration {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+    
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(105, 108, 255, 0.08);
+      filter: blur(4px);
+      z-index: -1;
+    }
+    
+    .shape-1 {
+      width: 10rem;
+      height: 10rem;
+      bottom: -5rem;
+      right: -5rem;
+    }
+    
+    .shape-2 {
+      width: 8rem;
+      height: 8rem;
+      top: 10%;
+      right: 10%;
+    }
+    
+    .shape-3 {
+      width: 5rem;
+      height: 5rem;
+      bottom: 20%;
+      left: -2rem;
+    }
+    
+    /* ดาวระยิบระยับ */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+    }
+    
+    .star {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background-color: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--duration) linear infinite;
+      opacity: var(--opacity);
+    }
+    
+    @keyframes twinkle {
+      0% {
+        opacity: var(--opacity);
+      }
+      50% {
+        opacity: 0.2;
+      }
+      100% {
+        opacity: var(--opacity);
+      }
+    }
+    
+    /* เพิ่มพลิกเทส */
+    .anim-up {
+      animation: floatUp 1s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    @keyframes floatUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    
+    .warehouse-illustration {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 2rem;
+    }
+    
+    .tag-line {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.2rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+    
+    .form-select {
+      padding: 0.75rem 1.125rem;
+      border-radius: 0.5rem;
+      border-color: #d9dee3;
+      transition: all 0.2s ease;
+    }
+    
+    .form-select:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+    
+    .btn {
+      transition: all 0.2s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .input-group {
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    
+    .warehouse-icon {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ดาวระยิบระยับ -->
+  <div class="stars" id="stars"></div>
+  <div class="auth-cover-bg"></div>
+
+  <!-- Content -->
+  <div class="authentication-wrapper authentication-cover">
+    <div class="authentication-inner row m-0">
+      <!-- Left Side (Banner) -->
+      <div class="d-none d-lg-flex col-lg-5 align-items-center p-0">
+        <div class="auth-left-side h-100">
+          <div class="auth-left-content">
+            <div class="warehouse-icon anim-up">
+              <i class="bx bx-package"></i>
+            </div>
+            <h1 class="anim-up">ระบบคลังสินค้าขนาดย่อม</h1>
+            <p class="tag-line anim-up delay-1">จัดการวัสดุ เครื่องมือ และยานพาหนะของคุณอย่างมีประสิทธิภาพ</p>
+            
+            <div class="my-4 anim-up delay-2">
+              <div class="feature-item">
+                <i class="bx bx-check-circle"></i>
+                <span>ควบคุมสต็อกวัสดุสิ้นเปลืองและวัสดุคงทนได้อย่างแม่นยำ</span>
+              </div>
+              <div class="feature-item">
+                <i class="bx bx-check-circle"></i>
+                <span>ติดตามเครื่องมือและอุปกรณ์อย่างเป็นระบบ</span>
+              </div>
+              <div class="feature-item">
+                <i class="bx bx-check-circle"></i>
+                <span>บันทึกประวัติการซ่อมและค่าใช้จ่ายของยานพาหนะ</span>
+              </div>
+              <div class="feature-item">
+                <i class="bx bx-check-circle"></i>
+                <span>รายงานวิเคราะห์ทางการเงินสำหรับผู้บริหาร</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="floating-shape shape-1"></div>
+          <div class="floating-shape shape-2"></div>
+          <div class="floating-shape shape-3"></div>
+        </div>
+      </div>
+
+      <!-- Login -->
+      <div class="d-flex col-12 col-lg-7 align-items-center justify-content-center p-sm-5 p-4">
+        <div class="auth-form-container anim-up">
+          <!-- Logo -->
+          <div class="app-brand mb-4">
+            <a href="index.html" class="app-brand-link gap-2 mb-2">
+              <span class="app-brand-logo demo">
+                <svg width="40px" height="40px" viewBox="0 0 26 26" version="1.1">
+                  <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#696cff" />
+                  <polygon points="13 15 10 12 13 9 16 12" fill="#696cff" opacity="0.7" />
+                </svg>
+              </span>
+              <span class="app-brand-text demo text-body fw-bold">คลังสินค้าขนาดย่อม</span>
+            </a>
+          </div>
+          <!-- /Logo -->
+          <h4 class="mb-2 fw-bold">ยินดีต้อนรับสู่ระบบคลังสินค้า 👋</h4>
+          <p class="mb-4 text-muted">กรุณาเข้าสู่ระบบเพื่อจัดการคลังสินค้าของคุณ</p>
+
+          <form id="formAuthentication" class="mb-3 anim-up delay-1" action="dashboard.html" method="GET">
+            <div class="mb-3 form-floating">
+              <input type="text" class="form-control" id="email" name="email-username" placeholder="กรอกชื่อผู้ใช้หรืออีเมล" autofocus>
+              <label for="email">ชื่อผู้ใช้ หรือ อีเมล</label>
+            </div>
+            <div class="mb-3 form-password-toggle">
+              <div class="d-flex justify-content-between mb-2">
+                <label class="form-label" for="password">รหัสผ่าน</label>
+                <a href="#" class="text-primary small">
+                  ลืมรหัสผ่าน?
+                </a>
+              </div>
+              <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control" name="password" placeholder="············" aria-describedby="password">
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remember-me">
+                <label class="form-check-label" for="remember-me">จดจำการเข้าสู่ระบบ</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="user-type" class="form-label">ประเภทผู้ใช้งาน</label>
+              <select id="user-type" class="form-select">
+                <option value="user">ผู้ใช้งานทั่วไป</option>
+                <option value="admin">ผู้บริหาร</option>
+              </select>
+            </div>
+            <button class="btn btn-primary d-grid w-100 py-2" type="submit">
+              <span class="d-flex align-items-center justify-content-center">
+                <i class="bx bx-log-in-circle me-2"></i>
+                <span>เข้าสู่ระบบ</span>
+              </span>
+            </button>
+          </form>
+
+          <p class="text-center anim-up delay-2">
+            <span class="text-muted">ยังไม่มีบัญชีผู้ใช้?</span>
+            <a href="#" class="text-primary fw-semibold ms-1">
+              สร้างบัญชี
+            </a>
+          </p>
+
+          <div class="divider my-4 anim-up delay-3">
+            <div class="divider-text">หรือเข้าสู่ระบบด้วย</div>
+          </div>
+
+          <div class="d-flex justify-content-center gap-2 anim-up delay-4">
+            <a href="javascript:;" class="social-btn btn btn-icon rounded-pill btn-outline-facebook">
+              <i class="tf-icons bx bxl-facebook"></i>
+            </a>
+            <a href="javascript:;" class="social-btn btn btn-icon rounded-pill btn-outline-google-plus">
+              <i class="tf-icons bx bxl-google-plus"></i>
+            </a>
+            <a href="javascript:;" class="social-btn btn btn-icon rounded-pill btn-outline-twitter">
+              <i class="tf-icons bx bxl-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    // สร้างดาวระยิบระยับ
+    document.addEventListener('DOMContentLoaded', function() {
+      const starsContainer = document.getElementById('stars');
+      const starsCount = 100;
+      
+      for (let i = 0; i < starsCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // สุ่มตำแหน่ง
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        // สุ่มความเข้มและความเร็วในการกระพริบ
+        const opacity = Math.random() * 0.7 + 0.3;
+        const duration = Math.random() * 3 + 2;
+        
+        star.style.left = `${x}%`;
+        star.style.top = `${y}%`;
+        star.style.setProperty('--opacity', opacity);
+        star.style.setProperty('--duration', `${duration}s`);
+        
+        starsContainer.appendChild(star);
+      }
+      
+      // ปรับ form password toggle
+      const passwordToggle = document.querySelector('.input-group-text');
+      const passwordInput = document.querySelector('#password');
+      
+      if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          
+          // สลับไอคอน
+          const icon = this.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('bx-hide');
+            icon.classList.toggle('bx-show');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
