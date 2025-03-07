@@ -50,11 +50,32 @@ try {
     if ($user_type === 'student') {
         // ตรวจสอบข้อมูลนักเรียน
         $stmt = $conn->prepare("SELECT student_id, student_code, username, password, firstname, lastname, status 
-                              FROM student WHERE username = ? AND status = 1");
+                              FROM student WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
         
-        if ($user && password_verify($password, $user['password'])) {
+        if (!$user) {
+            // ไม่พบข้อมูลผู้ใช้
+            echo json_encode([
+                'success' => false,
+                'error_code' => 'user_not_found',
+                'message' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'
+            ]);
+            exit;
+        }
+        
+        // ตรวจสอบสถานะบัญชี
+        if ($user['status'] != 1) {
+            echo json_encode([
+                'success' => false,
+                'error_code' => 'account_disabled',
+                'message' => 'บัญชีผู้ใช้นี้ถูกปิดการใช้งาน กรุณาติดต่อผู้ดูแลระบบ'
+            ]);
+            exit;
+        }
+        
+        // ตรวจสอบรหัสผ่าน
+        if (password_verify($password, $user['password'])) {
             // สร้าง session
             $_SESSION['user_id'] = $user['student_id'];
             $_SESSION['user_type'] = 'student';
@@ -80,42 +101,42 @@ try {
             ]);
             exit;
         } else {
-            // ตอบกลับเป็น JSON ที่ถูกต้อง
-            header('Content-Type: application/json');
+            // รหัสผ่านไม่ถูกต้อง
             echo json_encode([
                 'success' => false,
+                'error_code' => 'invalid_password',
                 'message' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'
             ]);
             exit;
         }
     } else if ($user_type === 'admin') {
-        // ทดสอบเข้าสู่ระบบด้วย admin username และ password ที่กำหนด
-        // if ($username === 'admin' && $password === 'admin123') {
-        //     // สร้าง session
-        //     $_SESSION['user_id'] = 1; // สมมติว่า ID = 1
-        //     $_SESSION['user_type'] = 'admin';
-        //     $_SESSION['username'] = 'admin';
-        //     $_SESSION['name'] = 'ผู้ดูแลระบบ';
-            
-        //     // สร้าง CSRF token ใหม่
-        //     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-            
-        //     // ตอบกลับเป็น JSON ที่ถูกต้อง
-        //     header('Content-Type: application/json');
-        //     echo json_encode([
-        //         'success' => true,
-        //         'message' => 'เข้าสู่ระบบสำเร็จ',
-        //         'redirect' => '/admin/dashboard.php'
-        //     ]);
-        //     exit;
-        // }
-        
         // ตรวจสอบข้อมูลผู้ดูแลระบบ
         $stmt = $conn->prepare("SELECT * FROM admin WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
         
-        if ($user && password_verify($password, $user['password'])) {
+        if (!$user) {
+            // ไม่พบข้อมูลผู้ใช้
+            echo json_encode([
+                'success' => false,
+                'error_code' => 'user_not_found',
+                'message' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'
+            ]);
+            exit;
+        }
+        
+        // ตรวจสอบสถานะบัญชี
+        if ($user['status'] != 1) {
+            echo json_encode([
+                'success' => false,
+                'error_code' => 'account_disabled',
+                'message' => 'บัญชีผู้ดูแลระบบนี้ถูกปิดการใช้งาน กรุณาติดต่อผู้ดูแลระบบหลัก'
+            ]);
+            exit;
+        }
+        
+        // ตรวจสอบรหัสผ่าน
+        if (password_verify($password, $user['password'])) {
             // สร้าง session
             $_SESSION['user_id'] = $user['admin_id'];
             $_SESSION['user_type'] = 'admin';
@@ -140,19 +161,19 @@ try {
             ]);
             exit;
         } else {
-            // ตอบกลับเป็น JSON ที่ถูกต้อง
-            header('Content-Type: application/json');
+            // รหัสผ่านไม่ถูกต้อง
             echo json_encode([
                 'success' => false,
+                'error_code' => 'invalid_password',
                 'message' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'
             ]);
             exit;
         }
     } else {
-        // ตอบกลับเป็น JSON ที่ถูกต้อง
-        header('Content-Type: application/json');
+        // ประเภทผู้ใช้ไม่ถูกต้อง
         echo json_encode([
             'success' => false,
+            'error_code' => 'invalid_user_type',
             'message' => 'ประเภทผู้ใช้งานไม่ถูกต้อง'
         ]);
         exit;
@@ -165,6 +186,7 @@ try {
     header('Content-Type: application/json');
     echo json_encode([
         'success' => false,
+        'error_code' => 'database_error',
         'message' => 'เกิดข้อผิดพลาดในการเชื่อมต่อกับฐานข้อมูล: ' . $e->getMessage()
     ]);
     exit;
