@@ -98,7 +98,7 @@ function uploadImage($file, $oldImage = null) {
         unlink(__DIR__ . '/../../' . $oldImage);
     }
     
-    return 'img/question/' . $newFilename;
+    return $newFilename;
 }
 
 // รับ action จาก request
