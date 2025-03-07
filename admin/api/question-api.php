@@ -41,7 +41,7 @@ function uploadImage($file, $oldImage = null) {
     }
     
     // กำหนดโฟลเดอร์
-    $uploadDir = __DIR__ . '/../../uploads/questions/';
+    $uploadDir = __DIR__ . '/../../img/question/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
@@ -72,7 +72,7 @@ function uploadImage($file, $oldImage = null) {
         unlink(__DIR__ . '/../../' . $oldImage);
     }
     
-    return 'uploads/questions/' . $newFilename;
+    return 'img/question/' . $newFilename;
 }
 
 // รับ action จาก request
