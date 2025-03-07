@@ -2076,11 +2076,473 @@ try {
             return true;
         }
         
-        // Validate choices part
-        function validateChoicesPart() {
-            // Check if there are at least 2 choices
-            const choiceCount = $('#choices-container .choice-item').length;
-            if (choiceCount < 2) {
+// Validate choices part
+function validateChoicesPart() {
+    // Check if there are at least 2 choices
+    const choiceCount = $('#choices-container .choice-item').length;
+    if (choiceCount < 2) {
+        swalCustom.fire({
+            icon: 'error',
+            title: 'ต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือก',
+            text: 'กรุณาเพิ่มตัวเลือกให้ครบถ้วน'
+        });
+        return false;
+    }
+
+    // Check if there is at least one correct answer
+    if (!$('input[name="correct_choice"]:checked').length) {
+        swalCustom.fire({
+            icon: 'error',
+            title: 'กรุณาเลือกคำตอบที่ถูกต้อง',
+            text: 'ต้องมีคำตอบที่ถูกต้อง 1 ข้อ'
+        });
+        return false;
+    }
+
+    // Check if all choice content fields are filled
+    let allFilled = true;
+    $('.choice-content-input').each(function() {
+        if ($(this).val().trim() === '') {
+            allFilled = false;
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
+
+    if (!allFilled) {
+        swalCustom.fire({
+            icon: 'error',
+            title: 'กรุณากรอกเนื้อหาตัวเลือกให้ครบถ้วน',
+            text: 'เนื้อหาตัวเลือกไม่สามารถเป็นค่าว่างได้'
+        });
+        return false;
+    }
+
+    return true;
+}
+
+// Sort topics based on selected sort criteria
+function sortTopics(sortBy) {
+    const topics = $('#topics-container .topic-card').toArray();
+    
+    topics.sort(function(a, b) {
+        const $a = $(a);
+        const $b = $(b);
+        
+        switch(sortBy) {
+            case 'name-asc':
+                return $a.find('.topic-title').text().localeCompare($b.find('.topic-title').text());
+            case 'name-desc':
+                return $b.find('.topic-title').text().localeCompare($a.find('.topic-title').text());
+            case 'questions-asc':
+                return parseInt($a.find('.topic-info span:first-child').text()) - 
+                       parseInt($b.find('.topic-info span:first-child').text());
+            case 'questions-desc':
+                return parseInt($b.find('.topic-info span:first-child').text()) - 
+                       parseInt($a.find('.topic-info span:first-child').text());
+            default:
+                return 0;
+        }
+    });
+    
+    // Reappend sorted topics
+    const $container = $('#topics-container');
+    $.each(topics, function(i, topic) {
+        $container.append(topic);
+    });
+}
+
+// Validate form inputs
+function validateForm(formSelector) {
+    let isValid = true;
+    
+    $(formSelector + ' [required]').each(function() {
+        if ($(this).val().trim() === '') {
+            $(this).addClass('is-invalid');
+            isValid = false;
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        swalCustom.fire({
+            icon: 'error',
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: 'กรุณากรอกข้อมูลในช่องที่มีเครื่องหมาย * กำกับ'
+        });
+    }
+    
+    return isValid;
+}
+
+// Save topic function
+function saveTopic() {
+    showLoading();
+    
+    const formData = new FormData($('#addTopicForm')[0]);
+    formData.append('action', 'create');
+    
+    $.ajax({
+        url: 'api/exam-topic-api.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            hideLoading();
+            
+            if (response.success) {
+                $('#addTopicModal').modal('hide');
+                
+                swalCustom.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: response.message
+                }).then(() => {
+                    // Clear form
+                    $('#addTopicForm')[0].reset();
+                    
+                    // Reload topics
+                    loadTopics();
+                });
+            } else {
                 swalCustom.fire({
                     icon: 'error',
-                    title: 'ต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือ
+                    title: 'เกิดข้อผิดพลาด',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            hideLoading();
+            
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+            });
+        }
+    });
+}
+
+// Update topic function
+function updateTopic() {
+    showLoading();
+    
+    const formData = new FormData($('#editTopicForm')[0]);
+    formData.append('action', 'update');
+    
+    $.ajax({
+        url: 'api/exam-topic-api.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            hideLoading();
+            
+            if (response.success) {
+                $('#editTopicModal').modal('hide');
+                
+                swalCustom.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: response.message
+                }).then(() => {
+                    // Reload topics
+                    loadTopics();
+                });
+            } else {
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            hideLoading();
+            
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+            });
+        }
+    });
+}
+
+// Delete topic function
+function deleteTopic(topicId) {
+    showLoading();
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('topic_id', topicId);
+    formData.append('csrf_token', '<?= $csrf_token ?>');
+    
+    $.ajax({
+        url: 'api/exam-topic-api.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            hideLoading();
+            
+            if (response.success) {
+                swalCustom.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: response.message
+                }).then(() => {
+                    // Reload topics
+                    loadTopics();
+                });
+            } else {
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            hideLoading();
+            
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+            });
+        }
+    });
+}
+
+// Select topic function
+function selectTopic(topicId) {
+    // Update current topic ID
+    currentTopicId = topicId;
+    
+    // Update UI
+    $('.topic-card').removeClass('active');
+    $(`.topic-card[data-id="${topicId}"]`).addClass('active');
+    
+    // Update filter
+    $('#filter-topic').val(topicId);
+    
+    // Apply filter
+    applyFilters();
+    
+    // Scroll to questions section on mobile
+    if (window.innerWidth < 992) {
+        $('html, body').animate({
+            scrollTop: $(".content-right").offset().top - 70
+        }, 500);
+    }
+}
+
+// Edit question function
+function editQuestion(questionId) {
+    showLoading();
+    
+    // Reset form
+    resetQuestionForm();
+    
+    // Set editing state
+    editingQuestion = true;
+    currentQuestionId = questionId;
+    
+    // Update modal title
+    $('#questionModalLabel').html('<i class="ri-edit-box-line me-1"></i> แก้ไขข้อสอบ');
+    
+    // Fetch question data
+    $.ajax({
+        url: `api/question-api.php?action=get&id=${questionId}`,
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            hideLoading();
+            
+            if (response.success) {
+                const question = response.data;
+                
+                // Fill form with question data
+                $('#question_id').val(question.question_id);
+                $('#topic_id').val(question.topic_id);
+                $('#topic_selector').val(question.topic_id);
+                quillEditor.root.innerHTML = question.content;
+                $('#question_content').val(question.content);
+                $('#question_score').val(question.score);
+                
+                // Handle image
+                if (question.image) {
+                    $('#existing_image').val(question.image);
+                    $('#question-image-preview').html(`<img src="../../img/question/${question.image}" alt="Preview">`);
+                    $('#remove-image-btn').show();
+                } else {
+                    $('#existing_image').val('');
+                    $('#question-image-preview').html('<span class="image-preview-placeholder"><i class="ri-image-add-line"></i></span>');
+                    $('#remove-image-btn').hide();
+                }
+                
+                // Clear existing choices
+                $('#choices-container').empty();
+                
+                // Add choices
+                question.choices.forEach(function(choice) {
+                    addChoice(
+                        choice.content,
+                        choice.is_correct == 1,
+                        choice.choice_id,
+                        choice.image
+                    );
+                });
+                
+                // Show modal
+                $('#questionModal').modal('show');
+            } else {
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: response.message || 'ไม่สามารถดึงข้อมูลคำถามได้'
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            hideLoading();
+            
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+            });
+        }
+    });
+}
+
+// Delete question function
+function deleteQuestion(questionId) {
+    showLoading();
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('question_id', questionId);
+    formData.append('csrf_token', '<?= $csrf_token ?>');
+    
+    $.ajax({
+        url: 'api/question-api.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            hideLoading();
+            
+            if (response.success) {
+                swalCustom.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: response.message
+                }).then(() => {
+                    // Reload questions
+                    loadQuestions();
+                    
+                    // Reload topics (to update question count)
+                    loadTopics();
+                });
+            } else {
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            hideLoading();
+            
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+            });
+        }
+    });
+}
+
+// Save question function
+function saveQuestion() {
+    showLoading();
+    
+    // Create form data from the form
+    const formData = new FormData($('#question-form')[0]);
+    
+    // Add question content from Quill editor
+    formData.set('question_content', quillEditor.root.innerHTML);
+    
+    // Add action based on whether we're editing or creating a new question
+    if (editingQuestion) {
+        formData.append('action', 'update');
+    } else {
+        formData.append('action', 'create');
+    }
+    
+    $.ajax({
+        url: 'api/question-api.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            hideLoading();
+            
+            if (response.success) {
+                $('#questionModal').modal('hide');
+                
+                swalCustom.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ',
+                    text: response.message
+                }).then(() => {
+                    // Reset form
+                    resetQuestionForm();
+                    
+                    // Reload questions
+                    loadQuestions();
+                    
+                    // Reload topics (to update question count)
+                    loadTopics();
+                });
+            } else {
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: response.message
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            hideLoading();
+            
+            swalCustom.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+            });
+        }
+    });
+}
+
+// Global function to show image preview
+function showImagePreview(imgSrc) {
+    $('#preview-image-large').attr('src', imgSrc);
+    $('#imagePreviewModal').modal('show');
+}
