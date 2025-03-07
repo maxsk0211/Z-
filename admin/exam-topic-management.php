@@ -1257,7 +1257,7 @@ $(document).ready(function() {
                                         <div class="question-content">${question.content}</div>
                                     </div>
                                 </div>
-                                ${question.image ? `<div class="ms-4 mt-2 mb-2"><img src="${question.image}" alt="รูปภาพประกอบคำถาม" class="img-fluid img-thumbnail" style="max-height: 150px;"></div>` : ''}
+                                ${question.image ? `<div class="ms-4 mt-2 mb-2"><img src="../../img/question/${question.image}" alt="รูปภาพประกอบคำถาม" class="img-fluid img-thumbnail" style="max-height: 150px;"></div>` : ''}
                                 <div class="choice-list">
                             `;
                             
@@ -1897,7 +1897,7 @@ $(document).ready(function() {
                     // ตรวจสอบว่ามีรูปภาพหรือไม่
                     if (question.image) {
                         $('#currentImageContainer').removeClass('d-none');
-                        $('#currentImage').attr('src', question.image);
+                        $('#currentImage').attr('src', '../../img/question/' + question.image);
                     }
                     
                     // ใส่ตัวเลือก
