@@ -86,8 +86,7 @@ try {
     <link rel="stylesheet" href="../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
     <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css" />
-    <!-- <link rel="stylesheet" href="../assets/vendor/libs/summernote/summernote-bs5.min.css" /> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" integrity="sha512-rDHV59PgRefDUbMm2lSjvf0ZhXZy3wgROFyao0JxZPGho3oOuWejq/ELx0FOZJpgaE5QovVtRN65Y3rrb7JhdQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../assets/vendor/libs/summernote/summernote-bs5.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Page CSS -->
@@ -896,7 +895,7 @@ try {
     <!-- Vendors JS -->
     <script src="../assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
-    <!-- <script src="../assets/vendor/libs/summernote/summernote-bs5.min.js"></script> -->
+    <script src="../assets/vendor/libs/summernote/summernote-bs5.min.js"></script>
     
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
@@ -979,12 +978,19 @@ try {
         function loadTopics() {
             showLoading();
             
+            // แสดงสถานะการโหลดข้อมูล
+            console.log('กำลังโหลดข้อมูลหัวข้อข้อสอบ...');
+            console.log('Exam Set ID:', examSetId);
+            
             $.ajax({
                 url: 'api/exam-topic-api.php?action=list&exam_set_id=' + examSetId,
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
                     hideLoading();
+                    
+                    // แสดงผลการตอบกลับจาก API เพื่อตรวจสอบ
+                    console.log('ผลการโหลดข้อมูลหัวข้อข้อสอบ:', response);
                     
                     if (response.success) {
                         const topics = response.data;
@@ -993,12 +999,15 @@ try {
                         if (topics.length === 0) {
                             $('#noTopicsPlaceholder').show();
                             $('#topicList').html('');
+                            console.log('ไม่พบหัวข้อข้อสอบ');
                         } else {
                             $('#noTopicsPlaceholder').hide();
                             
                             let html = '';
                             
                             topics.forEach(function(topic) {
+                                console.log('กำลังแสดงหัวข้อ:', topic.name);
+                                
                                 const statusBadgeClass = topic.status == 1 ? 'status-active' : 'status-inactive';
                                 const statusText = topic.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
                                 
@@ -1036,6 +1045,7 @@ try {
                             });
                             
                             $('#topicList').html(html);
+                            console.log('แสดงหัวข้อข้อสอบแล้ว:', topics.length, 'หัวข้อ');
                             
                             // Reinitialize tooltips
                             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -1049,6 +1059,7 @@ try {
                             }
                         }
                     } else {
+                        console.error('เกิดข้อผิดพลาดในการโหลดข้อมูลหัวข้อข้อสอบ:', response.message);
                         swalCustom.fire({
                             icon: 'error',
                             title: 'เกิดข้อผิดพลาด',
@@ -1056,8 +1067,10 @@ try {
                         });
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
                     hideLoading();
+                    console.error('เกิดข้อผิดพลาดในการเชื่อมต่อ API:', error);
+                    console.error('รายละเอียด:', xhr.responseText);
                     
                     swalCustom.fire({
                         icon: 'error',
