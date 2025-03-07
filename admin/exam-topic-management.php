@@ -2008,7 +2008,7 @@ try {
                     <input type="text" class="form-control choice-content-input" name="choice_content[${unique
             
             $('#choices-container').append(choiceHtml);
-          
+        }
           
         
         // Validate question form
