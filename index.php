@@ -1282,3 +1282,68 @@
             });
             
             // Preloader
+            setTimeout(function(){
+                $('.preloader').addClass('fade-out');
+                setTimeout(function(){
+                    $('.preloader').hide();
+                }, 500);
+            }, 1500);
+            
+            // Sticky Navigation
+            $(window).scroll(function(){
+                if($(this).scrollTop() > 100){
+                    $('.main-nav').addClass('scrolled');
+                    $('.scrolltop').addClass('show');
+                } else {
+                    $('.main-nav').removeClass('scrolled');
+                    $('.scrolltop').removeClass('show');
+                }
+            });
+            
+            // Smooth Scroll to Top
+            $('.scrolltop').click(function(){
+                $('html, body').animate({scrollTop: 0}, 800);
+                return false;
+            });
+            
+            // Hero Slider
+            let currentSlide = 0;
+            const slides = [
+                'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+                'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+                'https://images.unsplash.com/photo-1513258496099-48168024aec0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'
+            ];
+            
+            function showSlide(index) {
+                $('.hero-slider-content img').fadeOut(300, function(){
+                    $(this).attr('src', slides[index]).fadeIn(300);
+                });
+                
+                $('.slider-dot').removeClass('active');
+                $('.slider-dot').eq(index).addClass('active');
+            }
+            
+            $('.slider-dot').click(function(){
+                currentSlide = $(this).index();
+                showSlide(currentSlide);
+            });
+            
+            // Auto slide
+            setInterval(function(){
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }, 5000);
+            
+            // Dropdown hover effect
+            $('.dropdown-trigger').hover(
+                function(){
+                    $(this).addClass('active');
+                },
+                function(){
+                    $(this).removeClass('active');
+                }
+            );
+        });
+    </script>
+</body>
+</html>
