@@ -1423,6 +1423,13 @@ try {
             // Update UI for all choices
             $('.choice-item').removeClass('is-correct');
             $(this).closest('.choice-item').addClass('is-correct');
+            
+            // อัปเดตค่า is_correct ของทุกตัวเลือก
+            $('.choice-is-correct').val('0');
+            $(this).closest('.choice-item').find('.choice-is-correct').val('1');
+            
+            // แสดง debug ว่าตัวเลือกไหนถูกต้อง
+            console.log('Changed correct choice to:', $(this).val());
         });
         
         $(document).on('change', '.choice-image-input', function() {
@@ -1991,40 +1998,22 @@ try {
                 removeButtonStyle = '';
             }
             
+            // ปรับปรุงโครงสร้าง HTML ให้มีการบันทึกข้อมูลความถูกต้องของตัวเลือกอย่างชัดเจน
             const choiceHtml = `
             <div class="choice-item ${isCorrect ? 'is-correct' : ''}">
                 <div class="form-check">
                     <input class="form-check-input choice-radio" type="radio" name="correct_choice" value="${uniqueId}" id="radio_${uniqueId}" ${isCorrect ? 'checked' : ''}>
                 </div>
                 <div class="choice-content">
-                    <input type="text" class="form-control choice-content-input" name="choice_content[${uniqueId}]" value="${content}" placeholder="กรอกเนื้อหาตัวเลือก" required>
-                    <input type="hidden" name="choice_id[${uniqueId}]" value="${choiceId}">
-                    <input type="hidden" class="remove-choice-image" name="remove_choice_image[${uniqueId}]" value="0">
-                </div>
-                <div class="choice-image-preview">
-                    ${imagePreviewHtml}
-                </div>
-                <div class="choice-actions">
-                    <div class="form-control-file-wrapper me-1">
-                        <button type="button" class="btn btn-sm btn-outline-primary">
-                            <i class="ri-image-add-line"></i>
-                        </button>
-                        <input type="file" class="choice-image-input" name="choice_image[${uniqueId}]" accept="image/*">
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger choice-remove-image-btn me-1" style="${removeButtonStyle}">
-                        <i class="ri-image-close-line"></i>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-choice-btn">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>`;
+                    <input type="text" class="form-control choice-content-input" name="choice_content[${unique
             
             $('#choices-container').append(choiceHtml);
         }
         
         // Validate question form
         function validateQuestionForm() {
+            console.log('Validating question form...');
+            
             // Validate question part first
             if (!validateQuestionPart()) {
                 // Switch to question tab
@@ -2033,7 +2022,27 @@ try {
             }
             
             // Validate choices part
-            return validateChoicesPart();
+            const choicesValid = validateChoicesPart();
+            
+            // ตรวจสอบการทำงานของฟอร์ม
+            if (choicesValid) {
+                console.log('Form is valid, checking correct choice:', $('input[name="correct_choice"]:checked').val());
+                console.log('Total choices:', $('#choices-container .choice-item').length);
+                
+                // ตรวจสอบว่ามีตัวเลือกที่ถูกต้องและเพิ่มข้อมูลการตรวจสอบ
+                const correctChoice = $('input[name="correct_choice"]:checked').val();
+                if (!correctChoice) {
+                    console.error('No correct choice selected!');
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'กรุณาเลือกคำตอบที่ถูกต้อง',
+                        text: 'ต้องเลือกตัวเลือกที่เป็นคำตอบที่ถูกต้อง 1 ข้อ'
+                    });
+                    return false;
+                }
+            }
+            
+            return choicesValid;
         }
         
         // Validate question part
@@ -2070,8 +2079,12 @@ try {
         
         // Validate choices part
         function validateChoicesPart() {
+            console.log('Validating choices part...');
+            
             // Check if there are at least 2 choices
             const choiceCount = $('#choices-container .choice-item').length;
+            console.log('Choice count:', choiceCount);
+            
             if (choiceCount < 2) {
                 swalCustom.fire({
                     icon: 'error',
@@ -2082,7 +2095,11 @@ try {
             }
 
             // Check if there is at least one correct answer
-            if (!$('input[name="correct_choice"]:checked').length) {
+            const hasCorrectChoice = $('input[name="correct_choice"]:checked').length > 0;
+            console.log('Has correct choice:', hasCorrectChoice);
+            console.log('Correct choice value:', $('input[name="correct_choice"]:checked').val());
+            
+            if (!hasCorrectChoice) {
                 swalCustom.fire({
                     icon: 'error',
                     title: 'กรุณาเลือกคำตอบที่ถูกต้อง',
@@ -2093,20 +2110,24 @@ try {
 
             // Check if all choice content fields are filled
             let allFilled = true;
-            $('.choice-content-input').each(function() {
+            let emptyChoices = [];
+            
+            $('.choice-content-input').each(function(index) {
                 if ($(this).val().trim() === '') {
                     allFilled = false;
                     $(this).addClass('is-invalid');
+                    emptyChoices.push(index + 1);
                 } else {
                     $(this).removeClass('is-invalid');
                 }
             });
-
+            
+            console.log('All choices filled:', allFilled);
             if (!allFilled) {
                 swalCustom.fire({
                     icon: 'error',
                     title: 'กรุณากรอกเนื้อหาตัวเลือกให้ครบถ้วน',
-                    text: 'เนื้อหาตัวเลือกไม่สามารถเป็นค่าว่างได้'
+                    text: 'เนื้อหาตัวเลือกไม่สามารถเป็นค่าว่างได้ (ตัวเลือกที่ว่าง: ' + emptyChoices.join(', ') + ')'
                 });
                 return false;
             }
@@ -2337,6 +2358,10 @@ try {
                     if (response.success) {
                         const question = response.data;
                         
+                        // Debug
+                        console.log('Loaded question data:', question);
+                        console.log('Choices:', question.choices);
+                        
                         // Fill form with question data
                         $('#question_id').val(question.question_id);
                         $('#topic_id').val(question.topic_id);
@@ -2358,12 +2383,26 @@ try {
                         
                         // Clear existing choices
                         $('#choices-container').empty();
+                        choiceCounter = 0;
+                        
+                        // ค้นหาตัวเลือกที่ถูกต้อง
+                        const correctChoice = question.choices.find(choice => choice.is_correct == 1);
+                        console.log('Correct choice:', correctChoice);
+                        
+                        if (!correctChoice) {
+                            console.warn('No correct choice found in question data!');
+                        }
                         
                         // Add choices
                         question.choices.forEach(function(choice) {
+                            // เปรียบเทียบแบบเคร่งครัดสำหรับ boolean
+                            const isCorrect = choice.is_correct == 1; // ใช้ == เพื่อเทียบค่าไม่ว่าจะเป็น string หรือ number
+                            
+                            console.log('Adding choice from DB:', choice.choice_id, 'content:', choice.content, 'isCorrect:', isCorrect, 'is_correct value:', choice.is_correct);
+                            
                             addChoice(
                                 choice.content,
-                                choice.is_correct == 1,
+                                isCorrect,
                                 choice.choice_id,
                                 choice.image
                             );
@@ -2428,21 +2467,151 @@ try {
         function saveQuestion() {
             showLoading();
             
-            // Create form data from the form
+            console.log('Starting saveQuestion...');
+            
+            // กำหนดและตรวจสอบตัวเลือกที่ถูกต้องก่อน
+            const correctChoice = $('input[name="correct_choice"]:checked').val();
+            if (!correctChoice) {
+                hideLoading();
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'กรุณาเลือกคำตอบที่ถูกต้อง',
+                    text: 'โปรดเลือกตัวเลือกที่เป็นคำตอบถูกต้อง'
+                });
+                return;
+            }
+            
+            // ตรวจสอบและรวบรวมข้อมูลตัวเลือกทั้งหมด
+            let choiceItems = [];
+            
+            // รวบรวมข้อมูลตัวเลือกทั้งหมด
+            $('.choice-item').each(function(index) {
+                const choiceElement = $(this).find('.choice-content-input');
+                const choiceId = choiceElement.attr('name').match(/\[(.*?)\]/)[1];
+                const content = choiceElement.val().trim();
+                const isCorrect = $(this).find('.choice-radio').prop('checked');
+                
+                if (content !== '') {
+                    choiceItems.push({
+                        index: index,
+                        id: choiceId,
+                        content: content,
+                        isCorrect: isCorrect
+                    });
+                }
+            });
+            
+            console.log('Collected choices:', choiceItems);
+            console.log('Correct choice ID:', correctChoice);
+            
+            // ตรวจสอบจำนวนตัวเลือก
+            if (choiceItems.length < 2) {
+                hideLoading();
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'ข้อมูลตัวเลือกไม่ครบถ้วน',
+                    text: 'ต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือก'
+                });
+                return;
+            }
+            
+            // ตรวจสอบว่ามีตัวเลือกที่ถูกต้องหรือไม่
+            const correctChoiceItem = choiceItems.find(item => item.isCorrect);
+            if (!correctChoiceItem) {
+                hideLoading();
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'ไม่พบตัวเลือกที่ถูกต้อง',
+                    text: 'กรุณาเลือกตัวเลือกที่เป็นคำตอบที่ถูกต้อง'
+                });
+                return;
+            }
+            
+            // สร้างฟอร์มข้อมูลจากฟอร์มทั้งหมด
             const formData = new FormData($('#question-form')[0]);
             
-            // Add question content from Quill editor
-            const questionContent = quillEditor.root.innerHTML.trim();
-            formData.set('question_content', questionContent);
+            // เพิ่มข้อมูลเพิ่มเติม
+            formData.set('action', editingQuestion ? 'update' : 'create');
             
-            // Add action based on whether we're editing or creating a new question
-            formData.append('action', editingQuestion ? 'update' : 'create');
+            // ส่ง correct_choice โดยทำให้มั่นใจว่าเป็นข้อมูลชนิดเดียวกับที่ส่งใน choice_content
+            formData.set('correct_choice', correctChoice);
             
-            // Ensure the correct choice is set
-            const correctChoice = $('input[name="correct_choice"]:checked').val();
-            if (correctChoice) {
-                formData.set('correct_choice', correctChoice);
+            // บันทึกตัวเลือกที่ถูกต้องให้ชัดเจน
+            choiceItems.forEach(item => {
+                // ต้องใช้ชื่อฟิลด์นี้ให้ตรงกับที่ API รอรับ
+                if (item.isCorrect) {
+                    // แสดง debug ข้อมูลเพื่อตรวจสอบ
+                    console.log('Setting correct choice:', item.id);
+                    
+                    // ใช้ชื่อฟิลด์ให้ตรงกับที่ API ใช้
+                    formData.append('is_correct[' + item.id + ']', '1');
+                } else {
+                    formData.append('is_correct[' + item.id + ']', '0');
+                }
+            });
+            
+            // ตรวจสอบข้อมูลที่จะส่ง
+            // แสดงทุกค่าใน FormData เพื่อตรวจสอบ
+            for (let pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
             }
+            
+        // ร่วมถึงฟังก์ชันตรวจสอบว่าตัวเลือก ID ถูกต้อง - ควรเพิ่มเพื่อความปลอดภัย
+        function validateChoiceId(choiceId) {
+            // ตรวจสอบว่า choiceId มีค่าและเป็นรูปแบบที่คาดหวัง
+            return choiceId && (typeof choiceId === 'string' || typeof choiceId === 'number');
+        }
+            
+        $.ajax({
+                url: 'api/question-api.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response) {
+                    hideLoading();
+                    
+                    if (response.success) {
+                        $('#questionModal').modal('hide');
+                        
+                        swalCustom.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: response.message
+                        }).then(() => {
+                            // Reset form
+                            resetQuestionForm();
+                            
+                            // Reload questions
+                            loadQuestions();
+                            
+                            // Reload topics (to update question count)
+                            loadTopics();
+                        });
+                    } else {
+                        // แสดงข้อความผิดพลาดเพิ่มเติม
+                        console.error('API Error:', response);
+                        
+                        // แสดงข้อความผิดพลาดที่ชัดเจนขึ้นถ้ามี debug info
+                        if (response.debug) {
+                            handleApiError(response, `ข้อผิดพลาด: ${response.message}\n\nข้อมูลดีบัก: ${JSON.stringify(response.debug)}`);
+                        } else {
+                            handleApiError(response, 'ไม่สามารถบันทึกข้อสอบได้: ' + (response.message || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ'));
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    hideLoading();
+                    console.error('AJAX Error:', xhr.responseText);
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        handleApiError(errorResponse, 'เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + (errorResponse.message || error));
+                    } catch (e) {
+                        handleApiError(null, 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้: ' + error);
+                    }
+                }
+            });
             
             $.ajax({
                 url: 'api/question-api.php',
@@ -2472,11 +2641,14 @@ try {
                             loadTopics();
                         });
                     } else {
+                        // แสดงข้อความผิดพลาดเพิ่มเติม
+                        console.error('API Error:', response);
                         handleApiError(response, 'ไม่สามารถบันทึกข้อสอบได้');
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
                     hideLoading();
+                    console.error('AJAX Error:', xhr.responseText);
                     handleApiError(null, 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
                 }
             });
