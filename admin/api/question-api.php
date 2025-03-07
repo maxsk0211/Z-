@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 }
 
 // เรียกใช้ไฟล์เชื่อมต่อฐานข้อมูล
-require_once __DIR__ . '/../../dbcon.php';
+require_once __DIR__ . '/../../dbcon14.php';
 
 // สร้างการเชื่อมต่อกับฐานข้อมูล
 try {
