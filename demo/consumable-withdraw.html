@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>เบิกวัสดุสิ้นเปลือง | ระบบคลังสินค้าขนาดย่อม</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css">
+
+  <!-- Page CSS -->
+
+  <!-- Helpers -->
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#696cff" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#696cff" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">คลังสินค้า</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุสิ้นเปลือง">วัสดุสิ้นเปลือง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="consumable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="consumable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิกวัสดุ">เบิกวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุคงทน">วัสดุคงทน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="durable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือ">เครื่องมือ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนเครื่องมือ">เบิก-คืนเครื่องมือ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการรถ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-monthly-tools.html" class="menu-link">
+                  <div data-i18n="รายงานเครื่องมือประจำเดือน">รายงานเครื่องมือประจำเดือน</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน (เฉพาะผู้บริหาร) -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">สมชาย มีสุข</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4">
+              <span class="text-muted fw-light">วัสดุสิ้นเปลือง /</span> เบิกวัสดุ
+            </h4>
+
+            <!-- Withdraw Material Form -->
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">เบิกวัสดุสิ้นเปลือง</h5>
+                    <small class="text-muted float-end">* หมายถึงข้อมูลที่จำเป็นต้องกรอก</small>
+                  </div>
+                  <div class="card-body">
+                    <form id="withdrawalForm">
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="withdrawal-date">วันที่เบิก *</label>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control flatpickr-date" id="withdrawal-date" placeholder="DD/MM/YYYY" value="28/05/2567" required>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="withdrawal-project">โครงการ *</label>
+                        <div class="col-sm-4">
+                          <select id="withdrawal-project" class="select2 form-select" data-allow-clear="true" required>
+                            <option value="">--- เลือกโครงการ ---</option>
+                            <option value="1">โครงการก่อสร้างรั้ว</option>
+                            <option value="2">โครงการปรับปรุงอาคาร A</option>
+                            <option value="3">โครงการซ่อมแซมห้องประชุม</option>
+                            <option value="4">โครงการระบบไฟฟ้า</option>
+                            <option value="5">โครงการปรับปรุงภูมิทัศน์</option>
+                            <option value="new">+ เพิ่มโครงการใหม่</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="withdrawal-department">แผนก/ฝ่าย</label>
+                        <div class="col-sm-4">
+                          <select id="withdrawal-department" class="form-select">
+                            <option value="">--- เลือกแผนก/ฝ่าย ---</option>
+                            <option value="maintenance">ซ่อมบำรุง</option>
+                            <option value="engineering">วิศวกรรม</option>
+                            <option value="facility">อาคารสถานที่</option>
+                            <option value="admin">ธุรการ</option>
+                          </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label" for="withdrawal-requester">ผู้เบิก *</label>
+                        <div class="col-sm-4">
+                          <select id="withdrawal-requester" class="select2 form-select" required>
+                            <option value="1" selected>สมชาย มีสุข (ตัวคุณ)</option>
+                            <option value="2">สมหญิง รักดี</option>
+                            <option value="3">ชาติชาย ใจเย็น</option>
+                            <option value="4">ณัฐพงษ์ รุ่งเรือง</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="withdrawal-purpose">วัตถุประสงค์</label>
+                        <div class="col-sm-10">
+                          <textarea id="withdrawal-purpose" class="form-control" placeholder="ระบุวัตถุประสงค์ในการเบิกวัสดุ..." rows="2"></textarea>
+                        </div>
+                      </div>
+
+                      <!-- Material Selection -->
+                      <div class="row mb-4">
+                        <div class="col-12">
+                          <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                              <h6 class="mb-0">รายการวัสดุที่ต้องการเบิก</h6>
+                              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                                <i class="bx bx-plus me-1"></i> เพิ่มรายการ
+                              </button>
+                            </div>
+                            <div class="card-body p-0">
+                              <div class="table-responsive text-nowrap">
+                                <table class="table table-hover" id="itemTable">
+                                  <thead>
+                                    <tr>
+                                      <th style="width: 50px;">#</th>
+                                      <th style="width: 100px;">รหัสวัสดุ</th>
+                                      <th>ชื่อวัสดุ</th>
+                                      <th style="width: 120px;">หน่วยนับ</th>
+                                      <th style="width: 100px;">ราคา/หน่วย</th>
+                                      <th style="width: 120px;">จำนวนเบิก</th>
+                                      <th style="width: 130px;">รวมเงิน</th>
+                                      <th style="width: 80px;">จัดการ</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="table-border-bottom-0" id="itemTableBody">
+                                    <tr id="emptyRow">
+                                      <td colspan="8" class="text-center py-3">ยังไม่มีรายการเบิก กรุณาคลิก "เพิ่มรายการ" เพื่อเลือกวัสดุที่ต้องการเบิก</td>
+                                    </tr>
+                                  </tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <td colspan="6" class="text-end fw-bold">ยอดรวมทั้งสิ้น:</td>
+                                      <td class="fw-bold" id="totalAmount">0.00</td>
+                                      <td></td>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="withdrawal-note">หมายเหตุ</label>
+                        <div class="col-sm-10">
+                          <textarea id="withdrawal-note" class="form-control" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)" rows="2"></textarea>
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="attachments">เอกสารแนบ</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" type="file" id="attachments" multiple>
+                          <div class="form-text">สามารถแนบไฟล์ได้หลายไฟล์ (ไฟล์ PDF, JPEG, PNG ขนาดไม่เกิน 5MB ต่อไฟล์)</div>
+                        </div>
+                      </div>
+
+                      <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                          <button type="button" class="btn btn-outline-secondary me-2" onclick="window.location.href='consumable-list.html'">ยกเลิก</button>
+                          <button type="button" class="btn btn-primary" onclick="previewWithdrawal()">บันทึกการเบิก</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Withdrawal History -->
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">ประวัติการเบิกล่าสุด</h5>
+                <a href="consumable-withdraw-history.html" class="btn btn-outline-primary btn-sm">
+                  <i class="bx bx-history me-1"></i> ดูประวัติทั้งหมด
+                </a>
+              </div>
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>เลขที่เบิก</th>
+                      <th>วันที่เบิก</th>
+                      <th>โครงการ</th>
+                      <th>ผู้เบิก</th>
+                      <th>จำนวนรายการ</th>
+                      <th>มูลค่ารวม</th>
+                      <th>สถานะ</th>
+                      <th>จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <tr>
+                      <td><strong>W067</strong></td>
+                      <td>28/05/2567</td>
+                      <td>โครงการปรับปรุงอาคาร A</td>
+                      <td>สมชาย มีสุข</td>
+                      <td>3</td>
+                      <td>1,280.00</td>
+                      <td><span class="badge bg-label-success">เสร็จสิ้น</span></td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="consumable-withdraw-detail.html?id=W067">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์ใบเบิก
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>W066</strong></td>
+                      <td>27/05/2567</td>
+                      <td>โครงการซ่อมแซมห้องประชุม</td>
+                      <td>สมหญิง รักดี</td>
+                      <td>5</td>
+                      <td>3,450.00</td>
+                      <td><span class="badge bg-label-success">เสร็จสิ้น</span></td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="consumable-withdraw-detail.html?id=W066">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์ใบเบิก
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>W065</strong></td>
+                      <td>25/05/2567</td>
+                      <td>โครงการระบบไฟฟ้า</td>
+                      <td>ชาติชาย ใจเย็น</td>
+                      <td>2</td>
+                      <td>980.00</td>
+                      <td><span class="badge bg-label-success">เสร็จสิ้น</span></td>
+                      <td>
+                        <div class="dropdown">
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="consumable-withdraw-detail.html?id=W065">
+                              <i class="bx bx-detail me-1"></i> รายละเอียด
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);">
+                              <i class="bx bx-printer me-1"></i> พิมพ์ใบเบิก
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบคลังสินค้าขนาดย่อม v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Add Item Modal -->
+  <div class="modal fade" id="addItemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addItemModalTitle">เพิ่มรายการวัสดุ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12">
+              <label for="searchMaterial" class="form-label">ค้นหาวัสดุ</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bx bx-search"></i></span>
+                <input type="text" class="form-control" id="searchMaterial" placeholder="ค้นหาตามรหัส, ชื่อวัสดุ...">
+                <button type="button" class="btn btn-outline-primary">ค้นหา</button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>รหัสวัสดุ</th>
+                      <th>ชื่อวัสดุ</th>
+                      <th>หน่วยนับ</th>
+                      <th>ราคา/หน่วย</th>
+                      <th>คงเหลือ</th>
+                      <th>จำนวนเบิก</th>
+                      <th>เลือก</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>C001</td>
+                      <td>ปูนซีเมนต์ตราเสือ</td>
+                      <td>ถุง</td>
+                      <td>160.00</td>
+                      <td>45</td>
+                      <td>
+                        <input type="number" class="form-control form-control-sm" min="1" max="45" value="1">
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addItemToList('C001', 'ปูนซีเมนต์ตราเสือ', 'ถุง', 160, 1)">
+                          <i class="bx bx-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>C002</td>
+                      <td>ตะปู 2 นิ้ว</td>
+                      <td>กก.</td>
+                      <td>90.00</td>
+                      <td>8.5</td>
+                      <td>
+                        <input type="number" class="form-control form-control-sm" min="0.1" max="8.5" value="1" step="0.1">
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addItemToList('C002', 'ตะปู 2 นิ้ว', 'กก.', 90, 1)">
+                          <i class="bx bx-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>C003</td>
+                      <td>ท่อ PVC 1/2 นิ้ว</td>
+                      <td>เส้น</td>
+                      <td>45.00</td>
+                      <td>30</td>
+                      <td>
+                        <input type="number" class="form-control form-control-sm" min="1" max="30" value="1">
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addItemToList('C003', 'ท่อ PVC 1/2 นิ้ว', 'เส้น', 45, 1)">
+                          <i class="bx bx-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>C004</td>
+                      <td>สายไฟ VCT 2x1.5</td>
+                      <td>ม้วน</td>
+                      <td>850.00</td>
+                      <td>5</td>
+                      <td>
+                        <input type="number" class="form-control form-control-sm" min="1" max="5" value="1">
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addItemToList('C004', 'สายไฟ VCT 2x1.5', 'ม้วน', 850, 1)">
+                          <i class="bx bx-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ปิด</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Withdrawal Preview Modal -->
+  <div class="modal fade" id="withdrawalPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="withdrawalPreviewModalTitle">ยืนยันการเบิกวัสดุ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-12 text-center mb-3">
+              <h6>ใบเบิกวัสดุสิ้นเปลือง</h6>
+              <p class="mb-0">เลขที่เบิก: <span class="fw-bold">W068</span></p>
+              <p>วันที่เบิก: <span id="previewDate"></span></p>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <p class="mb-1">ผู้เบิก: <span id="previewRequester" class="fw-semibold"></span></p>
+              <p class="mb-1">แผนก/ฝ่าย: <span id="previewDepartment" class="fw-semibold"></span></p>
+            </div>
+            <div class="col-md-6 mb-2">
+              <p class="mb-1">โครงการ: <span id="previewProject" class="fw-semibold"></span></p>
+              <p class="mb-1">วัตถุประสงค์: <span id="previewPurpose" class="fw-semibold"></span></p>
+            </div>
+          </div>
+
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered">
+              <thead>
+                <tr class="table-secondary">
+                  <th style="width: 40px;">#</th>
+                  <th style="width: 80px;">รหัสวัสดุ</th>
+                  <th>รายการ</th>
+                  <th style="width: 80px;">หน่วยนับ</th>
+                  <th style="width: 80px;">ราคา/หน่วย</th>
+                  <th style="width: 60px;">จำนวน</th>
+                  <th style="width: 100px;">รวมเงิน</th>
+                </tr>
+              </thead>
+              <tbody id="previewItemList">
+                <!-- Items will be inserted here via JavaScript -->
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6" class="text-end fw-bold">รวมเป็นเงินทั้งสิ้น</td>
+                  <td class="text-end fw-bold" id="previewTotalAmount">0.00</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <p class="mb-1">หมายเหตุ: <span id="previewNote" class="fw-semibold"></span></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">แก้ไข</button>
+          <button type="button" class="btn btn-primary" onclick="submitWithdrawal()">ยืนยันการเบิก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="../assets/vendor/libs/select2/select2.js"></script>
+  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize flatpickr
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        locale: 'th'
+      });
+
+      // Initialize Select2
+      $('.select2').select2();
+
+      // Event for "New Project" option
+      $('#withdrawal-project').on('change', function() {
+        if ($(this).val() === 'new') {
+          // You can show a modal or prompt for new project name
+          const newProjectName = prompt("กรุณากรอกชื่อโครงการใหม่:");
+          if (newProjectName) {
+            // Add new option
+            const newOption = new Option(newProjectName, '6', true, true);
+            $('#withdrawal-project').append(newOption).trigger('change');
+          } else {
+            // If cancelled, revert to "Select Project"
+            $(this).val('').trigger('change');
+          }
+        }
+      });
+    });
+
+    // Variable to store items
+    let items = [];
+    let nextItemId = 1;
+
+    // Function to add item to the withdrawal list
+    function addItemToList(itemCode, itemName, unit, price, quantity) {
+      // Check if item already exists
+      const existingItemIndex = items.findIndex(item => item.code === itemCode);
+      
+      if (existingItemIndex >= 0) {
+        // Update quantity if item exists
+        items[existingItemIndex].quantity += parseFloat(quantity);
+      } else {
+        // Add new item
+        items.push({
+          id: nextItemId++,
+          code: itemCode,
+          name: itemName,
+          unit: unit,
+          price: parseFloat(price),
+          quantity: parseFloat(quantity)
+        });
+      }
+
+      // Update the table
+      updateItemTable();
+      
+      // Close the modal
+      $('#addItemModal').modal('hide');
+    }
+
+    // Function to update item table
+    function updateItemTable() {
+      const tableBody = document.getElementById('itemTableBody');
+      const emptyRow = document.getElementById('emptyRow');
+      
+      // Show/hide empty row message
+      if (items.length > 0) {
+        emptyRow.style.display = 'none';
+      } else {
+        emptyRow.style.display = '';
+        document.getElementById('totalAmount').textContent = '0.00';
+        return;
+      }
+      
+      // Clear table body first
+      tableBody.innerHTML = '';
+      
+      // Add items to table
+      let totalAmount = 0;
+      
+      items.forEach((item, index) => {
+        const amount = item.price * item.quantity;
+        totalAmount += amount;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${item.code}</td>
+          <td>${item.name}</td>
+          <td>${item.unit}</td>
+          <td class="text-end">${item.price.toFixed(2)}</td>
+          <td>
+            <input type="number" class="form-control form-control-sm item-quantity" 
+                   data-item-id="${item.id}" value="${item.quantity}" min="0.1" step="0.1"
+                   onchange="updateItemQuantity(${item.id}, this.value)">
+          </td>
+          <td class="text-end">${amount.toFixed(2)}</td>
+          <td>
+            <button type="button" class="btn btn-sm btn-outline-danger"
+                    onclick="removeItem(${item.id})">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+      
+      // Update total amount
+      document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+    }
+
+    // Function to update item quantity
+    function updateItemQuantity(itemId, newQuantity) {
+      const item = items.find(item => item.id === itemId);
+      if (item) {
+        item.quantity = parseFloat(newQuantity);
+        updateItemTable();
+      }
+    }
+
+    // Function to remove item
+    function removeItem(itemId) {
+      items = items.filter(item => item.id !== itemId);
+      updateItemTable();
+    }
+
+    // Function to preview withdrawal before submission
+    function previewWithdrawal() {
+      // Check if there are items
+      if (items.length === 0) {
+        Swal.fire({
+          title: 'ไม่พบรายการวัสดุ',
+          text: 'กรุณาเพิ่มรายการวัสดุที่ต้องการเบิกอย่างน้อย 1 รายการ',
+          icon: 'warning'
+        });
+        return;
+      }
+      
+      // Get form values
+      const date = document.getElementById('withdrawal-date').value;
+      const projectSelect = document.getElementById('withdrawal-project');
+      const project = projectSelect.options[projectSelect.selectedIndex].text;
+      const departmentSelect = document.getElementById('withdrawal-department');
+      const department = departmentSelect.selectedIndex > 0 ? 
+                        departmentSelect.options[departmentSelect.selectedIndex].text : '-';
+      const requesterSelect = document.getElementById('withdrawal-requester');
+      const requester = requesterSelect.options[requesterSelect.selectedIndex].text;
+      const purpose = document.getElementById('withdrawal-purpose').value || '-';
+      const note = document.getElementById('withdrawal-note').value || '-';
+      
+      // Set preview values
+      document.getElementById('previewDate').textContent = date;
+      document.getElementById('previewProject').textContent = project;
+      document.getElementById('previewDepartment').textContent = department;
+      document.getElementById('previewRequester').textContent = requester;
+      document.getElementById('previewPurpose').textContent = purpose;
+      document.getElementById('previewNote').textContent = note;
+      
+      // Set items table
+      const previewItemList = document.getElementById('previewItemList');
+      previewItemList.innerHTML = '';
+      
+      let totalAmount = 0;
+      
+      items.forEach((item, index) => {
+        const amount = item.price * item.quantity;
+        totalAmount += amount;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="text-center">${index + 1}</td>
+          <td>${item.code}</td>
+          <td>${item.name}</td>
+          <td class="text-center">${item.unit}</td>
+          <td class="text-end">${item.price.toFixed(2)}</td>
+          <td class="text-center">${item.quantity}</td>
+          <td class="text-end">${amount.toFixed(2)}</td>
+        `;
+        
+        previewItemList.appendChild(row);
+      });
+      
+      document.getElementById('previewTotalAmount').textContent = totalAmount.toFixed(2);
+      
+      // Show modal
+      $('#withdrawalPreviewModal').modal('show');
+    }
+
+    // Function to submit withdrawal
+    function submitWithdrawal() {
+      // Here you would send the data to the server
+      // For demo, we'll just show a success message
+      
+      $('#withdrawalPreviewModal').modal('hide');
+      
+      Swal.fire({
+        title: 'บันทึกการเบิกสำเร็จ',
+        text: 'บันทึกใบเบิกวัสดุเลขที่ W068 เรียบร้อยแล้ว',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'พิมพ์ใบเบิก',
+        cancelButtonText: 'ปิด'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Handle print action
+          window.alert('เปิดหน้าต่างพิมพ์ใบเบิก');
+        }
+        
+        // Redirect or reset form
+        window.location.href = 'consumable-list.html';
+      });
+    }
+  </script>
+</body>
+</html>
