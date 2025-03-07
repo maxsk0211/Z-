@@ -628,6 +628,9 @@ $csrf_token = $_SESSION['csrf_token'];
                     if (response.success) {
                         const admin = response.data;
                         
+                        // Add debugging log
+                        console.log("Admin data for edit form:", admin);
+                        
                         // Fill form with admin data
                         $('#edit_admin_id').val(admin.admin_id);
                         $('#edit_username').val(admin.username);
