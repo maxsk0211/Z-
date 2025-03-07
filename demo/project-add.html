@@ -32,35 +32,42 @@
   <link rel="stylesheet" href="../assets/vendor/libs/formvalidation/dist/css/formValidation.min.css">
   <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
   <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/bs-stepper/bs-stepper.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/animate-css/animate.css">
 
   <!-- Page CSS -->
   <style>
-    .contact-list-item {
+    /* รวมและปรับปรุง CSS เพื่อความเป็นระเบียบและประสิทธิภาพ */
+    .contact-list-item, .team-list-item {
       border-left: 3px solid transparent;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       cursor: pointer;
+      border-radius: 0.375rem;
     }
     
-    .contact-list-item:hover {
-      background-color: rgba(105, 108, 255, 0.08);
+    .contact-list-item:hover, .team-list-item:hover {
+      background-color: rgba(105, 108, 255, 0.1);
       border-left-color: #696cff;
+      transform: translateX(3px);
     }
     
     .contact-list-item.selected {
       background-color: rgba(105, 108, 255, 0.16);
       border-left-color: #696cff;
+      box-shadow: 0 0.125rem 0.25rem rgba(161, 172, 184, 0.4);
     }
     
     .stepline {
       list-style-type: none;
       position: relative;
       padding-left: 0;
+      margin-bottom: 0;
     }
     
     .stepline li {
       position: relative;
       padding-left: 30px;
-      padding-bottom: 15px;
+      padding-bottom: 20px;
     }
     
     .stepline li:last-child {
@@ -80,7 +87,7 @@
     .stepline li:after {
       content: '';
       position: absolute;
-      top: 0;
+      top: 6px;
       left: 5px;
       height: 12px;
       width: 12px;
@@ -104,16 +111,103 @@
       background-color: #28c76f;
     }
     
-    .team-list-item {
+    /* สไตล์สำหรับการ์ดของแต่ละรายการ */
+    .project-card, .contact-item, .phase-item, .team-item {
       transition: all 0.3s ease;
+      border-radius: 0.75rem;
+      border: 1px solid #dfe4ea;
+      box-shadow: 0 0.125rem 0.25rem rgba(161, 172, 184, 0.12);
     }
     
-    .team-list-item:hover {
-      background-color: rgba(105, 108, 255, 0.08);
+    .project-card:hover, .contact-item:hover, .phase-item:hover, .team-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(161, 172, 184, 0.2);
+    }
+    
+    /* สไตล์สำหรับ Dropzone */
+    .dropzone {
+      border: 2px dashed #d9dee3;
+      border-radius: 0.5rem;
+      background-color: #f8f7fa;
+      transition: all 0.2s ease;
+    }
+    
+    .dropzone:hover {
+      border-color: #696cff;
+      background-color: rgba(105, 108, 255, 0.04);
     }
     
     .dz-message {
-      margin: 2em 0;
+      padding: 2rem 1rem;
+      margin: 0;
+    }
+    
+    /* สไตล์สำหรับ BS Stepper */
+    .bs-stepper .step-trigger {
+      padding: 1rem 0.5rem;
+    }
+    
+    .bs-stepper .step-trigger:hover {
+      background-color: transparent;
+    }
+    
+    .bs-stepper-circle {
+      height: 2.5rem;
+      width: 2.5rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f7fa;
+      color: #697a8d;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .step.active .bs-stepper-circle {
+      background-color: #696cff;
+      color: #fff;
+      box-shadow: 0 0.25rem 1rem rgba(105, 108, 255, 0.4);
+    }
+    
+    .step.active .bs-stepper-label .bs-stepper-title {
+      color: #696cff;
+    }
+    
+    /* สไตล์สำหรับปุ่มลบ */
+    .btn-delete-contact,
+    .btn-delete-phase,
+    .btn-delete-team {
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+    
+    .btn-delete-contact:hover,
+    .btn-delete-phase:hover,
+    .btn-delete-team:hover {
+      opacity: 1;
+    }
+    
+    /* ปรับปรุง responsive design */
+    @media (max-width: 768px) {
+      .bs-stepper-header {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+      }
+      
+      .bs-stepper-content {
+        padding: 0.5rem;
+      }
+      
+      .bs-stepper-circle {
+        height: 2rem;
+        width: 2rem;
+        font-size: 0.875rem;
+      }
+      
+      .bs-stepper-label {
+        font-size: 0.875rem;
+      }
     }
   </style>
 
