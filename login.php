@@ -1053,7 +1053,7 @@ $csrf_token = $_SESSION['csrf_token'];
                     data: formData,
                     processData: false,
                     contentType: false,
-                    dataType: 'json', // ระบุว่าต้องการรับข้อมูลเป็น JSON
+                    dataType: 'json',
                     success: function(data) {
                         // Hide loading overlay
                         hideLoading();
@@ -1079,11 +1079,20 @@ $csrf_token = $_SESSION['csrf_token'];
                                 }
                             });
                         } else {
-                            // Show error message with improved styling
+                            // แสดงข้อความแจ้งเตือนตามประเภทข้อผิดพลาด
+                            let icon = 'error';
+                            let title = 'เข้าสู่ระบบไม่สำเร็จ';
+                            let text = data.message || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
+                            
+                            // ตรวจสอบประเภทข้อผิดพลาด
+                            if (data.error_code === 'account_disabled') {
+                                icon = 'warning'; // ใช้ไอคอนแจ้งเตือนแทนไอคอนข้อผิดพลาด
+                            }
+                            
                             swalCustom.fire({
-                                icon: 'error',
-                                title: 'เข้าสู่ระบบไม่สำเร็จ',
-                                text: data.message || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ',
+                                icon: icon,
+                                title: title,
+                                text: text,
                                 confirmButtonText: '<i class="ri-refresh-line me-1"></i> ลองใหม่',
                                 showCancelButton: false
                             });
@@ -1107,7 +1116,7 @@ $csrf_token = $_SESSION['csrf_token'];
                 });
             }
         });
-        
+
         // Admin login form submission
         $('#admin-login-form').on('submit', function(e) {
             e.preventDefault();
@@ -1125,7 +1134,7 @@ $csrf_token = $_SESSION['csrf_token'];
                     data: formData,
                     processData: false,
                     contentType: false,
-                    dataType: 'json', // ระบุว่าต้องการรับข้อมูลเป็น JSON
+                    dataType: 'json',
                     success: function(data) {
                         // Hide loading overlay
                         hideLoading();
@@ -1151,11 +1160,20 @@ $csrf_token = $_SESSION['csrf_token'];
                                 }
                             });
                         } else {
-                            // Show error message with improved styling
+                            // แสดงข้อความแจ้งเตือนตามประเภทข้อผิดพลาด
+                            let icon = 'error';
+                            let title = 'เข้าสู่ระบบไม่สำเร็จ';
+                            let text = data.message || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
+                            
+                            // ตรวจสอบประเภทข้อผิดพลาด
+                            if (data.error_code === 'account_disabled') {
+                                icon = 'warning'; // ใช้ไอคอนแจ้งเตือนแทนไอคอนข้อผิดพลาด
+                            }
+                            
                             swalCustom.fire({
-                                icon: 'error',
-                                title: 'เข้าสู่ระบบไม่สำเร็จ',
-                                text: data.message || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ',
+                                icon: icon,
+                                title: title,
+                                text: text,
                                 confirmButtonText: '<i class="ri-refresh-line me-1"></i> ลองใหม่',
                                 showCancelButton: false
                             });
