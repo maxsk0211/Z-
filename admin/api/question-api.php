@@ -49,10 +49,15 @@ function uploadImage($file, $oldImage = null) {
         return null;
     }
     
-    // กำหนดโฟลเดอร์
+    // กำหนดโฟลเดอร์ - แก้ไขให้อยู่ในขอบเขตที่อนุญาต
     $uploadDir = __DIR__ . '/../../img/question/';
+    
+    // สร้างโฟลเดอร์ถ้ายังไม่มี
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
+        if (!mkdir($uploadDir, 0777, true)) {
+            error_log("Failed to create upload directory: $uploadDir");
+            throw new Exception('ไม่สามารถสร้างโฟลเดอร์สำหรับอัปโหลดไฟล์ได้');
+        }
     }
     
     // ตรวจสอบนามสกุลไฟล์
@@ -73,6 +78,7 @@ function uploadImage($file, $oldImage = null) {
     
     // อัปโหลดไฟล์
     if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
+        error_log("Failed to upload file: {$file['tmp_name']} to $uploadPath");
         throw new Exception('ไม่สามารถอัปโหลดไฟล์ได้');
     }
     
