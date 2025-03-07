@@ -1042,12 +1042,25 @@ $(document).ready(function() {
         let isValid = true;
         
         // ตรวจสอบเนื้อหาคำถาม
-        const content = $('#content').summernote('code').trim();
-        if (content === '' || content === '<p><br></p>') {
-            $('#content').next('.note-editor').addClass('is-invalid');
-            isValid = false;
+        let content = '';
+        if ($.fn.summernote) {
+            content = $('#content').summernote('code').trim();
+            
+            if (content === '' || content === '<p><br></p>') {
+                $('#content').next('.note-editor').addClass('is-invalid');
+                isValid = false;
+            } else {
+                $('#content').next('.note-editor').removeClass('is-invalid');
+            }
         } else {
-            $('#content').next('.note-editor').removeClass('is-invalid');
+            content = $('#content').val().trim();
+            
+            if (content === '') {
+                $('#content').addClass('is-invalid');
+                isValid = false;
+            } else {
+                $('#content').removeClass('is-invalid');
+            }
         }
         
         // ตรวจสอบว่ามีตัวเลือกอย่างน้อย 2 ตัว
@@ -1079,6 +1092,15 @@ $(document).ready(function() {
                 $(this).removeClass('is-invalid');
             }
         });
+        
+        // ตรวจสอบค่าคะแนน (ถ้ามี)
+        const score = parseFloat($('#score').val());
+        if (isNaN(score) || score <= 0) {
+            $('#score').addClass('is-invalid');
+            isValid = false;
+        } else {
+            $('#score').removeClass('is-invalid');
+        }
         
         return isValid;
     }
