@@ -661,56 +661,56 @@ $csrf_token = $_SESSION['csrf_token'];
         
         // Update admin
         $('#updateAdminBtn').on('click', function() {
-            if (validateForm('#editAdminForm')) {
-                const formData = new FormData($('#editAdminForm')[0]);
-                formData.append('action', 'update');
-                formData.append('change_password', $('#changePasswordCheck').is(':checked') ? '1' : '0');
-                
-                showLoading();
-                
-                $.ajax({
-                    url: 'api/admin-api.php',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    success: function(response) {
-                        hideLoading();
-                        
-                        if (response.success) {
-                            // Close modal
-                            $('#editAdminModal').modal('hide');
-                            
-                            // Reload admin table
-                            adminTable.ajax.reload();
-                            
-                            // Show success message
-                            swalCustom.fire({
-                                icon: 'success',
-                                title: 'สำเร็จ!',
-                                text: 'อัปเดตข้อมูลผู้ดูแลระบบเรียบร้อยแล้ว'
-                            });
-                        } else {
-                            swalCustom.fire({
-                                icon: 'error',
-                                title: 'เกิดข้อผิดพลาด',
-                                text: response.message || 'ไม่สามารถอัปเดตข้อมูลผู้ดูแลระบบได้'
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        hideLoading();
-                        
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                        });
-                    }
-                });
-            }
-        });
+          if (validateForm('#editAdminForm')) {
+              const formData = new FormData($('#editAdminForm')[0]);
+              formData.append('action', 'update');
+              formData.append('change_password', $('#changePasswordCheck').is(':checked') ? '1' : '0');
+              
+              showLoading();
+              
+              $.ajax({
+                  url: 'api/admin-api.php',
+                  type: 'POST',
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  dataType: 'json',
+                  success: function(response) {
+                      hideLoading();
+                      
+                      if (response.success) {
+                          // Close modal
+                          $('#editAdminModal').modal('hide');
+                          
+                          // Reload admin table with refresh (true parameter forces server-side reload)
+                          adminTable.ajax.reload(null, true);
+                          
+                          // Show success message
+                          swalCustom.fire({
+                              icon: 'success',
+                              title: 'สำเร็จ!',
+                              text: 'อัปเดตข้อมูลผู้ดูแลระบบเรียบร้อยแล้ว'
+                          });
+                      } else {
+                          swalCustom.fire({
+                              icon: 'error',
+                              title: 'เกิดข้อผิดพลาด',
+                              text: response.message || 'ไม่สามารถอัปเดตข้อมูลผู้ดูแลระบบได้'
+                          });
+                      }
+                  },
+                  error: function(xhr, status, error) {
+                      hideLoading();
+                      
+                      swalCustom.fire({
+                          icon: 'error',
+                          title: 'เกิดข้อผิดพลาด',
+                          text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                      });
+                  }
+              });
+          }
+      });
         
         // Delete admin
         $(document).on('click', '.delete-btn', function() {
