@@ -26,6 +26,11 @@ function getDBConnection() {
             ]
         );
         
+    // ตั้งค่า character set เป็น UTF-8
+    $conn->exec("SET NAMES utf8mb4");
+    $conn->exec("SET CHARACTER SET utf8mb4");
+    $conn->exec("SET character_set_connection=utf8mb4");
+    
         return $conn;
     } catch (PDOException $e) {
         // บันทึกข้อผิดพลาดลงใน log
