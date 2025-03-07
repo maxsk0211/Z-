@@ -19,9 +19,14 @@
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
-    <!-- Custom CSS -->
-    <style>
-        :root {
+        <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>        :root {
             --primary-color: #FFD54F;
             --secondary-color: #9C27B0;
             --accent-color: #FF5252;
@@ -99,10 +104,14 @@
         }
         
         .top-header .brand-name {
-            color: var(--accent-color);
             font-weight: 600;
             margin: 0;
             font-size: 1.2rem;
+        }
+        
+        .top-header .brand-name a {
+            color: var(--light-color);
+            text-decoration: none;
         }
         
         .top-header .auth-buttons a {
@@ -119,24 +128,41 @@
         .main-nav {
             background-color: var(--primary-color);
             padding: 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
             transition: all 0.3s ease;
+            border-bottom: 3px solid var(--primary-color);
         }
         
-        .main-nav.scrolled {
-            padding: 5px 0;
+        .secondary-nav {
+            background-color: var(--primary-color);
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 99;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .secondary-nav ul {
+            display: flex;
+            margin: 0;
+        }
+        
+        .main-nav.scrolled,
+        .secondary-nav.scrolled {
+            padding: 0;
             background-color: rgba(255, 213, 79, 0.95);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        .main-nav .nav-wrapper {
+        .main-nav .nav-wrapper,
+        .secondary-nav .container {
             padding: 0 20px;
         }
         
-        .main-nav ul li a {
+        .main-nav ul li a,
+        .secondary-nav ul li a {
             color: var(--dark-color);
             font-weight: 500;
             text-transform: none;
@@ -148,7 +174,8 @@
             transition: all 0.3s ease;
         }
         
-        .main-nav ul li a i:not(.fa-chevron-down) {
+        .main-nav ul li a i:not(.fa-chevron-down),
+        .secondary-nav ul li a i:not(.fa-chevron-down) {
             margin-right: 8px;
         }
         
@@ -236,10 +263,9 @@
         /* ===== HERO SECTION ===== */
         .hero-section {
             position: relative;
-            height: 80vh;
             min-height: 500px;
+            background-color: #7B1FA2; /* สีม่วงเข้ม */
             overflow: hidden;
-            background-color: var(--dark-color);
         }
         
         .hero-overlay {
@@ -248,7 +274,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(33, 33, 33, 0.8));
+            background: linear-gradient(135deg, rgba(123, 31, 162, 0.9), rgba(123, 31, 162, 0.7));
             z-index: 1;
         }
         
@@ -263,19 +289,71 @@
             background-position: center;
             filter: blur(3px);
             z-index: 0;
+            opacity: 0.4;
         }
         
         .hero-content {
             position: relative;
             z-index: 2;
-            padding-top: 50px;
-            padding-bottom: 50px;
+            padding: 80px 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: flex-start;
             color: var(--light-color);
-            padding-left: 20px;
-            padding-right: 20px;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.3;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin: 20px 0 30px;
+            opacity: 0.9;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        
+        .hero-image-container {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40%;
+            max-width: 500px;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 3;
+            line-height: 0;
+        }
+        
+        .wave-container svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 70px;
         }
         
         .hero-title {
@@ -872,21 +950,26 @@
         @media (max-width: 992px) {
             .hero-section {
                 height: auto;
-                padding: 100px 0 150px;
+                padding-bottom: 70px;
             }
             
-            .hero-slider {
+            .hero-content {
+                padding: 50px 0;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .hero-image-container {
                 position: relative;
-                width: 100%;
-                margin-top: 50px;
-            }
-            
-            .hero-slider-content {
-                width: 100%;
+                right: auto;
+                top: auto;
+                transform: none;
+                width: 80%;
+                margin: 20px auto;
             }
             
             .slider-dots {
-                bottom: -30px;
+                bottom: 80px;
             }
             
             .feature-card {
@@ -897,9 +980,40 @@
                 margin-bottom: 50px;
             }
             
-            .main-nav ul li a i:not(.fa-chevron-down) {
+            .main-nav ul li a i:not(.fa-chevron-down),
+            .secondary-nav ul li a i:not(.fa-chevron-down) {
                 margin-right: 4px;
                 font-size: 1rem;
+            }
+            
+            .secondary-nav {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .cta-title {
+                font-size: 1.8rem;
+            }
+            
+            .cta-description {
+                font-size: 1rem;
+            }
+            
+            .footer-widget {
+                margin-bottom: 40px;
             }
         }
         
@@ -958,7 +1072,7 @@
         <div class="container">
             <div class="row">
                 <div class="col s8 m6">
-                    <h1 class="brand-name">ระบบประเมินสมรรถนะวิชาชีพครู</h1>
+                    <h1 class="brand-name"><a href="#"><span style="color: #E53935;">ระบบประเมิน</span>สมรรถนะวิชาชีพครู</a></h1>
                 </div>
                 <div class="col s4 m6 right-align auth-buttons">
                     <a href="#" class="auth-link"><i class="fas fa-user-plus"></i> สมัครสมาชิก</a>
@@ -969,20 +1083,28 @@
     </header>
 
     <!-- Navigation -->
-    <nav class="main-nav">
-        <div class="nav-wrapper container">
-            <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="fas fa-bars"></i></a>
-            <ul class="hide-on-med-and-down">
-                <li class="active"><a href="#"><i class="fas fa-home"></i> หน้าหลัก</a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-announce"><i class="fas fa-bullhorn"></i> ข่าวประชาสัมพันธ์ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-exam"><i class="fas fa-calendar-alt"></i> ปฏิทินการสอบ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-online-exam"><i class="fas fa-laptop"></i> สอบออนไลน์ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-results"><i class="fas fa-chart-bar"></i> ประกาศผลสอบ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-bank"><i class="fas fa-book"></i> คลังข้อสอบ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a href="#"><i class="fas fa-user-cog"></i> ผู้ดูแลระบบ</a></li>
-            </ul>
+            <nav class="main-nav">
+            <div class="nav-wrapper container">
+                <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="fas fa-bars"></i></a>
+                <ul class="hide-on-med-and-down">
+                    <li class="active"><a href="#"><i class="fas fa-home"></i> หน้าหลัก</a></li>
+                    <li><a class="dropdown-trigger" href="#" data-target="dropdown-announce"><i class="fas fa-bullhorn"></i> ข่าวประชาสัมพันธ์ <i class="fas fa-chevron-down"></i></a></li>
+                    <li><a class="dropdown-trigger" href="#" data-target="dropdown-exam"><i class="fas fa-calendar-alt"></i> ปฏิทินการสอบ <i class="fas fa-chevron-down"></i></a></li>
+                    <li><a class="dropdown-trigger" href="#" data-target="dropdown-online-exam"><i class="fas fa-laptop"></i> สอบออนไลน์ <i class="fas fa-chevron-down"></i></a></li>
+                    <li><a class="dropdown-trigger" href="#" data-target="dropdown-results"><i class="fas fa-chart-bar"></i> ประกาศผลสอบ <i class="fas fa-chevron-down"></i></a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- เมนูแถวที่ 2 -->
+        <div class="secondary-nav">
+            <div class="container">
+                <ul class="hide-on-med-and-down">
+                    <li><a class="dropdown-trigger" href="#" data-target="dropdown-bank"><i class="fas fa-book"></i> คลังข้อสอบ <i class="fas fa-chevron-down"></i></a></li>
+                    <li><a href="#"><i class="fas fa-user-cog"></i> ผู้ดูแลระบบ</a></li>
+                </ul>
+            </div>
         </div>
-    </nav>
 
     <!-- Mobile Navigation -->
     <ul class="sidenav" id="mobile-nav">
@@ -1038,8 +1160,8 @@
 
         <div class="container">
             <div class="row">
-                <div class="col s12 l7">
-                    <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <div class="col s12">
+                    <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="hero-title">ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา</h1>
                         <p class="hero-subtitle">คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย</p>
                         <div class="hero-btns">
@@ -1051,10 +1173,8 @@
             </div>
         </div>
 
-        <div class="hero-slider" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="300">
-            <div class="hero-slider-content">
-                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="ระบบสอบออนไลน์" class="responsive-img">
-            </div>
+        <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="ระบบสอบออนไลน์" class="hero-image">
         </div>
 
         <div class="slider-dots">
@@ -1063,9 +1183,9 @@
             <div class="slider-dot"></div>
         </div>
 
-        <div class="custom-shape-divider-bottom">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        <div class="wave-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,154.7C384,149,480,107,576,90.7C672,75,768,85,864,112C960,139,1056,181,1152,181.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
             </svg>
         </div>
     </section>
@@ -1265,16 +1385,6 @@
         <i class="fas fa-arrow-up"></i>
     </div>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
-    <!-- AOS Animation Library -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- Custom Script -->
     <script>
         $(document).ready(function(){
             // Initialize Materialize components
@@ -1303,10 +1413,10 @@
             // Sticky Navigation
             $(window).scroll(function(){
                 if($(this).scrollTop() > 100){
-                    $('.main-nav').addClass('scrolled');
+                    $('.main-nav, .secondary-nav').addClass('scrolled');
                     $('.scrolltop').addClass('show');
                 } else {
-                    $('.main-nav').removeClass('scrolled');
+                    $('.main-nav, .secondary-nav').removeClass('scrolled');
                     $('.scrolltop').removeClass('show');
                 }
             });
@@ -1326,7 +1436,7 @@
             ];
             
             function showSlide(index) {
-                $('.hero-slider-content img').fadeOut(300, function(){
+                $('.hero-image').fadeOut(300, function(){
                     $(this).attr('src', slides[index]).fadeIn(300);
                 });
                 
