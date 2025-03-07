@@ -26,19 +26,34 @@ function validateCsrfToken($token) {
 
 function logActivity($conn, $action, $details) {
     try {
-        // ตรวจสอบว่ามีตัวอักษรไทยหรือไม่
-        if (preg_match('/[\x{0E00}-\x{0E7F}]/u', $details)) {
-            // ถ้ามีภาษาไทย ให้ตัดภาษาไทยออกหรือแทนที่ด้วยข้อความภาษาอังกฤษ
-            $details = '[Thai text] ' . preg_replace('/[\x{0E00}-\x{0E7F}]/u', '', $details);
-        }
-
+        // ตั้งค่า character set เป็น utf8mb4
+        $conn->exec("SET NAMES utf8mb4");
+        
+        // ทำความสะอาดข้อความภาษาไทยโดยใช้ sanitize function
+        $safeDetails = sanitizeForLog($details);
+        
         $stmt = $conn->prepare("INSERT INTO admin_log (admin_id, action, details, ip_address) VALUES (?, ?, ?, ?)");
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
-        $stmt->execute([$_SESSION['user_id'], $action, $details, $ip]);
+        $stmt->execute([$_SESSION['user_id'], $action, $safeDetails, $ip]);
     } catch (PDOException $e) {
+        // บันทึกข้อผิดพลาดลงใน log
         error_log("Error logging activity: " . $e->getMessage());
     }
 }
+
+// ฟังก์ชันสำหรับทำความสะอาดข้อความที่จะบันทึกลง log
+function sanitizeForLog($text) {
+    // ตัดทอนข้อความถ้ายาวเกินไป
+    if (mb_strlen($text, 'UTF-8') > 200) {
+        $text = mb_substr($text, 0, 197, 'UTF-8') . '...';
+    }
+    
+    // แทนที่อักขระพิเศษหรือข้อความ HTML
+    $text = strip_tags($text);
+    
+    return $text;
+}
+
 function getCurrentDateTime() {
     return date('Y-m-d H:i:s');
 }
