@@ -409,7 +409,7 @@ $csrf_token = $_SESSION['csrf_token'];
                     hideLoading();
                     
                     // เพิ่มการล็อกข้อมูลเพื่อดีบัก
-                    console.log("API Response Data:", json.data);
+                    // console.log("API Response Data:", json.data);
                     return json.data;
                 },
                 error: function(xhr, error, thrown) {
