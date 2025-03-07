@@ -87,7 +87,10 @@ try {
     <link rel="stylesheet" href="../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
     <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css" />
     <!-- <link rel="stylesheet" href="../assets/vendor/libs/summernote/summernote-bs5.min.css" /> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" integrity="sha512-rDHV59PgRefDUbMm2lSjvf0ZhXZy3wgROFyao0JxZPGho3oOuWejq/ELx0FOZJpgaE5QovVtRN65Y3rrb7JhdQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" integrity="sha512-rDHV59PgRefDUbMm2lSjvf0ZhXZy3wgROFyao0JxZPGho3oOuWejq/ELx0FOZJpgaE5QovVtRN65Y3rrb7JhdQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.css" rel="stylesheet">
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Page CSS -->
@@ -897,7 +900,9 @@ try {
     <script src="../assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
     <!-- <script src="../assets/vendor/libs/summernote/summernote-bs5.min.js"></script> -->
-    
+    <!-- เพิ่มไว้ก่อน Core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.js"></script>
+
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
     
@@ -957,7 +962,14 @@ $(document).ready(function() {
     function resetQuestionForm() {
         $('#question_id').val('0');
         $('#question_action').val('create');
-        $('#content').summernote('code', '');
+        
+        // ตรวจสอบว่า summernote พร้อมใช้งานหรือไม่
+        if ($.fn.summernote) {
+            $('#content').summernote('code', '');
+        } else {
+            $('#content').val('');
+        }
+        
         $('#image').val('');
         $('#score').val('1');
         $('#question_status').val('1');
@@ -1442,28 +1454,40 @@ $(document).ready(function() {
     // --------- Event Handlers ---------
     
     // เตรียม Summernote
-    $('#content').summernote({
-        placeholder: 'เขียนคำถามที่นี่...',
-        height: 150,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['insert', ['link']],
-            ['view', ['fullscreen', 'codeview', 'help']]
-        ],
-        callbacks: {
-            onImageUpload: function(files) {
-                // แจ้งเตือนให้ใช้ช่องอัปโหลดรูปภาพแทน
-                swalCustom.fire({
-                    icon: 'info',
-                    title: 'ใช้ช่องอัปโหลดรูปภาพด้านล่าง',
-                    text: 'กรุณาใช้ช่องอัปโหลดรูปภาพประกอบคำถามที่อยู่ด้านล่างแทน'
-                });
-            }
+    function initSummernote() {
+        if ($.fn.summernote) {
+            $('#content').summernote({
+                placeholder: 'เขียนคำถามที่นี่...',
+                height: 150,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                callbacks: {
+                    onImageUpload: function(files) {
+                        // แจ้งเตือนให้ใช้ช่องอัปโหลดรูปภาพแทน
+                        swalCustom.fire({
+                            icon: 'info',
+                            title: 'ใช้ช่องอัปโหลดรูปภาพด้านล่าง',
+                            text: 'กรุณาใช้ช่องอัปโหลดรูปภาพประกอบคำถามที่อยู่ด้านล่างแทน'
+                        });
+                    }
+                }
+            });
+            
+            // ปรับเปลี่ยน event listener สำหรับ summernote
+            $('#content').on('summernote.change', function() {
+                $(this).next('.note-editor').removeClass('is-invalid');
+            });
+        } else {
+            // ถ้า summernote ยังไม่พร้อม ลองโหลดอีกครั้งใน 500ms
+            setTimeout(initSummernote, 500);
         }
-    });
+    }
     
     // คลิกปุ่มเพิ่มหัวข้อ
     $('#addTopicBtn, #addTopicBtnPlaceholder').on('click', function() {
@@ -1838,7 +1862,13 @@ $(document).ready(function() {
                     $('#question_id').val(question.question_id);
                     $('#question_topic_id').val(question.topic_id);
                     $('#question_action').val('update');
-                    $('#content').summernote('code', question.content);
+                    
+                    if ($.fn.summernote) {
+                        $('#content').summernote('code', question.content);
+                    } else {
+                        $('#content').val(question.content);
+                    }
+
                     $('#score').val(question.score);
                     $('#question_status').val(question.status);
                     
