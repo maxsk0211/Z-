@@ -148,6 +148,10 @@
             transition: all 0.3s ease;
         }
         
+        .main-nav ul li a i:not(.fa-chevron-down) {
+            margin-right: 8px;
+        }
+        
         .main-nav ul li a:hover {
             background-color: rgba(0, 0, 0, 0.05);
             color: var(--secondary-color);
@@ -264,12 +268,14 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            height: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             color: var(--light-color);
-            padding: 0 20px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
         
         .hero-title {
@@ -866,7 +872,7 @@
         @media (max-width: 992px) {
             .hero-section {
                 height: auto;
-                padding: 100px 0;
+                padding: 100px 0 150px;
             }
             
             .hero-slider {
@@ -889,6 +895,11 @@
             
             .about-image {
                 margin-bottom: 50px;
+            }
+            
+            .main-nav ul li a i:not(.fa-chevron-down) {
+                margin-right: 4px;
+                font-size: 1rem;
             }
         }
         
@@ -962,13 +973,13 @@
         <div class="nav-wrapper container">
             <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="fas fa-bars"></i></a>
             <ul class="hide-on-med-and-down">
-                <li class="active"><a href="#">หน้าหลัก</a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-announce">ข่าวประชาสัมพันธ์ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-exam">ปฏิทินการสอบ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-online-exam">สอบออนไลน์ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-results">ประกาศผลสอบ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown-bank">คลังข้อสอบ <i class="fas fa-chevron-down"></i></a></li>
-                <li><a href="#">ผู้ดูแลระบบ</a></li>
+                <li class="active"><a href="#"><i class="fas fa-home"></i> หน้าหลัก</a></li>
+                <li><a class="dropdown-trigger" href="#" data-target="dropdown-announce"><i class="fas fa-bullhorn"></i> ข่าวประชาสัมพันธ์ <i class="fas fa-chevron-down"></i></a></li>
+                <li><a class="dropdown-trigger" href="#" data-target="dropdown-exam"><i class="fas fa-calendar-alt"></i> ปฏิทินการสอบ <i class="fas fa-chevron-down"></i></a></li>
+                <li><a class="dropdown-trigger" href="#" data-target="dropdown-online-exam"><i class="fas fa-laptop"></i> สอบออนไลน์ <i class="fas fa-chevron-down"></i></a></li>
+                <li><a class="dropdown-trigger" href="#" data-target="dropdown-results"><i class="fas fa-chart-bar"></i> ประกาศผลสอบ <i class="fas fa-chevron-down"></i></a></li>
+                <li><a class="dropdown-trigger" href="#" data-target="dropdown-bank"><i class="fas fa-book"></i> คลังข้อสอบ <i class="fas fa-chevron-down"></i></a></li>
+                <li><a href="#"><i class="fas fa-user-cog"></i> ผู้ดูแลระบบ</a></li>
             </ul>
         </div>
     </nav>
@@ -993,7 +1004,7 @@
     <ul id="dropdown-announce" class="dropdown-content">
         <li><a href="#"><i class="fas fa-newspaper"></i> ข่าวทั้งหมด</a></li>
         <li><a href="#"><i class="fas fa-calendar-check"></i> กิจกรรม</a></li>
-        <li><a href="#"><i class="fas fa-file-alt"></i> ประกาศ</a></li>
+        <li><a href="#"><i class="fas fa-bullhorn"></i> ประกาศ</a></li>
     </ul>
 
     <ul id="dropdown-exam" class="dropdown-content">
