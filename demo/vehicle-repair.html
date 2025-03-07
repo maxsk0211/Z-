@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>บันทึกการซ่อมรถ | ระบบคลังสินค้าขนาดย่อม</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/tagify/tagify.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css">
+
+  <!-- Page CSS -->
+  <style>
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+      margin: 0 0 0 0.5rem;
+    }
+    .timeline-item {
+      position: relative;
+      padding-left: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-left: 2px solid #e9ecef;
+    }
+    .timeline-item:last-child {
+      border-left-color: transparent;
+    }
+    .timeline-point {
+      position: absolute;
+      top: 0;
+      left: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #696cff;
+    }
+    .timeline-point-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+    .timeline-info {
+      margin-bottom: 0.5rem;
+    }
+    .timeline-info .timeline-title {
+      font-weight: 600;
+    }
+    .timeline-info .timeline-text {
+      margin-bottom: 0.25rem;
+    }
+    .vehicle-card {
+      cursor: pointer;
+      transition: all .2s ease;
+      border: 1px solid rgba(0,0,0,.05);
+    }
+    .vehicle-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .vehicle-card.selected {
+      border-color: #696cff;
+      background-color: rgba(105, 108, 255, 0.08);
+    }
+    .history-item:hover {
+      background-color: rgba(105, 108, 255, 0.08);
+    }
+    .repair-type-badge {
+      min-width: 100px;
+      text-align: center;
+    }
+  </style>
+
+  <!-- Helpers -->
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#696cff" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#696cff" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">คลังสินค้า</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุสิ้นเปลือง">วัสดุสิ้นเปลือง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="consumable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="consumable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิกวัสดุ">เบิกวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุคงทน">วัสดุคงทน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="durable-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="durable-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือ">เครื่องมือ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-withdraw.html" class="menu-link">
+                  <div data-i18n="เบิก-คืนเครื่องมือ">เบิก-คืนเครื่องมือ</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการรถ</span>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-monthly-tools.html" class="menu-link">
+                  <div data-i18n="รายงานเครื่องมือประจำเดือน">รายงานเครื่องมือประจำเดือน</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน (เฉพาะผู้บริหาร) -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">สมชาย มีสุข</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4">
+              <span class="text-muted fw-light">ยานพาหนะ /</span> บันทึกการซ่อมรถ
+            </h4>
+
+            <!-- คำแนะนำการใช้งาน -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                  <i class="bx bx-info-circle me-2"></i>
+                  คำแนะนำ: เลือกรถที่ต้องการบันทึกข้อมูลการซ่อม จากนั้นกรอกรายละเอียดการซ่อมในแบบฟอร์ม ระบบจะบันทึกประวัติการซ่อมและคำนวณค่าใช้จ่ายให้อัตโนมัติ
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- เลือกรถที่ต้องการบันทึกการซ่อม -->
+            <div class="row mb-4">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header border-bottom">
+                    <h5 class="card-title mb-0">เลือกรถที่ต้องการบันทึกการซ่อม</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label class="form-label">ค้นหารถ</label>
+                        <div class="input-group">
+                          <span class="input-group-text"><i class="bx bx-search"></i></span>
+                          <input type="text" id="vehicleSearch" class="form-control" placeholder="ป้อนทะเบียนรถ, ยี่ห้อ, รุ่น..." />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">ประเภทรถ</label>
+                        <select id="vehicleType" class="form-select">
+                          <option value="">ทั้งหมด</option>
+                          <option value="pickup">รถกระบะ</option>
+                          <option value="sedan">รถเก๋ง</option>
+                          <option value="van">รถตู้</option>
+                          <option value="truck">รถบรรทุก</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">สถานะ</label>
+                        <select id="vehicleStatus" class="form-select">
+                          <option value="">ทั้งหมด</option>
+                          <option value="ready">พร้อมใช้งาน</option>
+                          <option value="repair" selected>กำลังซ่อม</option>
+                          <option value="inuse">กำลังใช้งาน</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row" id="vehiclesList">
+                      <!-- รถคันที่ 1 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card vehicle-card h-100" onclick="selectVehicle('1', 'กข-1234 กรุงเทพ', 'Toyota Hilux Revo', 'pickup')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-primary">
+                                <span class="avatar-initial rounded"><i class="bx bx-car"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">กข-1234 กรุงเทพ</h5>
+                                <small class="text-muted">รถกระบะ</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-primary rounded-pill repair-type-badge">Toyota</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill repair-type-badge">Hilux Revo</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">ปี 2565</small></div>
+                              <span class="badge bg-label-success">พร้อมใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- รถคันที่ 2 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card vehicle-card h-100" onclick="selectVehicle('2', 'ฮต-7890 กรุงเทพ', 'Honda Civic', 'sedan')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-info">
+                                <span class="avatar-initial rounded"><i class="bx bx-car"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">ฮต-7890 กรุงเทพ</h5>
+                                <small class="text-muted">รถเก๋ง</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-info rounded-pill repair-type-badge">Honda</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill repair-type-badge">Civic</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">ปี 2563</small></div>
+                              <span class="badge bg-label-warning">กำลังใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- รถคันที่ 3 (กำลังซ่อม) -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card vehicle-card h-100 selected" onclick="selectVehicle('3', 'ศข-4567 กรุงเทพ', 'Toyota Commuter', 'van')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-warning">
+                                <span class="avatar-initial rounded"><i class="bx bx-car"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">ศข-4567 กรุงเทพ</h5>
+                                <small class="text-muted">รถตู้</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-primary rounded-pill repair-type-badge">Toyota</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill repair-type-badge">Commuter</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">ปี 2564</small></div>
+                              <span class="badge bg-label-danger">กำลังซ่อม</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- รถคันที่ 4 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card vehicle-card h-100" onclick="selectVehicle('4', 'บพ-9876 กรุงเทพ', 'Isuzu NQR', 'truck')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-danger">
+                                <span class="avatar-initial rounded"><i class="bx bx-car"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">บพ-9876 กรุงเทพ</h5>
+                                <small class="text-muted">รถบรรทุก</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-danger rounded-pill repair-type-badge">Isuzu</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill repair-type-badge">NQR</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">ปี 2562</small></div>
+                              <span class="badge bg-label-success">พร้อมใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- รถคันที่ 5 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card vehicle-card h-100" onclick="selectVehicle('5', 'มน-5432 กรุงเทพ', 'Nissan Navara', 'pickup')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-primary">
+                                <span class="avatar-initial rounded"><i class="bx bx-car"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">มน-5432 กรุงเทพ</h5>
+                                <small class="text-muted">รถกระบะ</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-dark rounded-pill repair-type-badge">Nissan</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill repair-type-badge">Navara</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">ปี 2565</small></div>
+                              <span class="badge bg-label-success">พร้อมใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- แบบฟอร์มบันทึกข้อมูลการซ่อมและประวัติการซ่อม -->
+            <div class="row" id="mainContent">
+              <div class="col-md-5 mb-4 mb-md-0">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">บันทึกการซ่อมรถ <span id="selectedVehicleLicense">ศข-4567 กรุงเทพ</span></h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="repairForm">
+                      <div class="mb-3">
+                        <label class="form-label">วันที่เข้าซ่อม *</label>
+                        <input type="text" class="form-control flatpickr-date" id="repairDate" value="27/05/2567" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ประเภทการซ่อม *</label>
+                        <select class="form-select" id="repairType" required>
+                          <option value="">--- เลือกประเภทการซ่อม ---</option>
+                          <option value="maintenance" selected>บำรุงรักษาตามระยะ</option>
+                          <option value="repair">ซ่อมแซมทั่วไป</option>
+                          <option value="accident">ซ่อมแซมจากอุบัติเหตุ</option>
+                          <option value="specific">ซ่อมเฉพาะส่วน</option>
+                          <option value="modify">ดัดแปลง/ปรับปรุง</option>
+                          <option value="other">อื่นๆ</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">เลขไมล์ปัจจุบัน (กม.) *</label>
+                        <input type="number" class="form-control" id="mileage" placeholder="0" min="0" value="58500" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">สถานที่ซ่อม *</label>
+                        <input type="text" class="form-control" id="repairLocation" placeholder="ชื่อศูนย์/อู่ซ่อม" value="ศูนย์บริการโตโยต้า พระราม 2" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">รายละเอียดการซ่อม *</label>
+                        <textarea class="form-control" id="repairDetails" rows="3" placeholder="รายละเอียดการซ่อม" required>ซ่อมบำรุงตามระยะ 50,000 กม. พร้อมเปลี่ยนน้ำมันเครื่อง, กรองน้ำมันเครื่อง, และกรองอากาศ</textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">รายการซ่อม/อะไหล่</label>
+                        <div class="table-responsive mb-2">
+                          <table class="table table-bordered table-sm" id="partsTable">
+                            <thead>
+                              <tr>
+                                <th style="width: 45%;">รายการ</th>
+                                <th style="width: 15%;">จำนวน</th>
+                                <th style="width: 25%;">ราคาต่อชิ้น</th>
+                                <th style="width: 15%;">ลบ</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="น้ำมันเครื่อง"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="1200" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="กรองน้ำมันเครื่อง"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="550" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="กรองอากาศ"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="750" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="ค่าแรง"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="1500" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="addNewPart()">
+                          <i class="bx bx-plus me-1"></i> เพิ่มรายการ
+                        </button>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ค่าใช้จ่ายรวม (บาท) *</label>
+                        <input type="number" class="form-control fw-bold" id="totalCost" placeholder="0.00" min="0" value="4000" readonly>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">วันที่นัดรับรถ</label>
+                        <input type="text" class="form-control flatpickr-date" id="pickupDate" value="28/05/2567">
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ระยะเวลารับประกัน</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control" id="warrantyPeriod" placeholder="0" min="0" value="3">
+                          <select class="form-select" id="warrantyUnit" style="max-width: 120px;">
+                            <option value="days">วัน</option>
+                            <option value="months" selected>เดือน</option>
+                            <option value="years">ปี</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">หมายเหตุเพิ่มเติม</label>
+                        <textarea class="form-control" id="repairNote" rows="2" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)">ตรวจพบรอยขีดข่วนข้างประตูด้านคนขับ แต่ลูกค้าแจ้งว่าเป็นรอยเดิม ไม่ต้องซ่อม</textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">หลักฐานการซ่อม (เอกสาร/รูปภาพ)</label>
+                        <input class="form-control" type="file" id="repairEvidence" multiple>
+                        <small class="form-text">รองรับไฟล์ JPG, PNG, PDF (ขนาดไม่เกิน 5MB ต่อไฟล์)</small>
+                      </div>
+                      <div class="mt-4 text-end">
+                        <button type="reset" class="btn btn-outline-secondary me-2">ล้างข้อมูล</button>
+                        <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-7">
+                <div class="row">
+                  <!-- ข้อมูลสรุปของรถ -->
+                  <div class="col-12 mb-4">
+                    <div class="card">
+                      <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">ข้อมูลสรุปของรถ</h5>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='vehicle-detail.html?id=3'">
+                          <i class="bx bx-detail me-1"></i> ดูรายละเอียดเพิ่มเติม
+                        </button>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="avatar avatar-sm bg-label-primary me-2">
+                                <span class="avatar-initial rounded-circle">
+                                  <i class="bx bx-car"></i>
+                                </span>
+                              </div>
+                              <div>
+                                <h6 class="mb-0">รถตู้ Toyota Commuter ปี 2564</h6>
+                                <small class="text-muted">ทะเบียน: ศข-4567 กรุงเทพ</small>
+                              </div>
+                            </div>
+                            <div class="mb-2">
+                              <p class="mb-1">
+                                <i class="bx bx-time-five me-1 text-muted"></i>
+                                เข้าระบบเมื่อ: <span class="fw-semibold">5 พ.ย. 2566</span>
+                              </p>
+                              <p class="mb-1">
+                                <i class="bx bx-purchase-tag me-1 text-muted"></i>
+                                ราคา: <span class="fw-semibold">1,250,000 บาท</span>
+                              </p>
+                              <p class="mb-0">
+                                <i class="bx bx-tachometer me-1 text-muted"></i>
+                                เลขไมล์ล่าสุด: <span class="fw-semibold">58,500 กม.</span>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <h6 class="mb-2">สถิติการซ่อมบำรุง</h6>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="flex-grow-1 me-3">
+                                <span class="fw-semibold">จำนวนครั้งที่ซ่อม</span>
+                              </div>
+                              <span class="badge bg-label-primary">5 ครั้ง</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="flex-grow-1 me-3">
+                                <span class="fw-semibold">ค่าใช้จ่ายรวมทั้งหมด</span>
+                              </div>
+                              <span class="badge bg-label-danger">28,500 บาท</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                              <div class="flex-grow-1 me-3">
+                                <span class="fw-semibold">ค่าซ่อมเฉลี่ยต่อครั้ง</span>
+                              </div>
+                              <span class="badge bg-label-warning">5,700 บาท</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ประวัติการซ่อม -->
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">ประวัติการซ่อม</h5>
+                        <div>
+                          <button type="button" class="btn btn-sm btn-outline-primary me-1">
+                            <i class="bx bx-export me-1"></i> ส่งออก
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-primary">
+                            <i class="bx bx-printer me-1"></i> พิมพ์
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="timeline">
+                          <!-- รายการซ่อมล่าสุด -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">บำรุงรักษาตามระยะ</h6>
+                                <small class="text-muted">27 ธ.ค. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">ที่ <a href="#" class="text-primary fw-semibold">ศูนย์บริการโตโยต้า พระราม 2</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-primary me-1">40,000 กม.</span>
+                                  <span class="badge bg-label-danger">5,500 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ซ่อมบำรุงตามระยะ 40,000 กม. เปลี่ยนน้ำมันเครื่อง กรองน้ำมันเครื่อง กรองอากาศ และตรวจเช็คระบบต่างๆ
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (4)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- รายการซ่อมที่ 2 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">ซ่อมระบบแอร์</h6>
+                                <small class="text-muted">15 ต.ค. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">ที่ <a href="#" class="text-primary fw-semibold">ร้านแอร์รถยนต์ ดีเย็น</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-primary me-1">32,580 กม.</span>
+                                  <span class="badge bg-label-danger">7,800 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                เติมน้ำยาแอร์และซ่อมคอมเพรสเซอร์แอร์ที่มีปัญหา พร้อมเปลี่ยนกรองแอร์ใหม่
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (2)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- รายการซ่อมที่ 3 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">ซ่อมแซมจากอุบัติเหตุ</h6>
+                                <small class="text-muted">3 ก.ย. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">ที่ <a href="#" class="text-primary fw-semibold">อู่ซ่อมสีรถยนต์ สีดี</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-primary me-1">25,780 กม.</span>
+                                  <span class="badge bg-label-danger">9,200 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ซ่อมและทำสีฝากระโปรงหน้าและกันชนหน้าที่ได้รับความเสียหายจากอุบัติเหตุ
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (6)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- รายการซ่อมที่ 4 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">บำรุงรักษาตามระยะ</h6>
+                                <small class="text-muted">15 มิ.ย. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">ที่ <a href="#" class="text-primary fw-semibold">ศูนย์บริการโตโยต้า พระราม 2</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-primary me-1">20,000 กม.</span>
+                                  <span class="badge bg-label-danger">3,500 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ซ่อมบำรุงตามระยะ 20,000 กม. เปลี่ยนน้ำมันเครื่อง กรองน้ำมันเครื่อง และตรวจเช็คระบบต่างๆ
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (3)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- รายการซ่อมที่ 5 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">เปลี่ยนยางรถยนต์</h6>
+                                <small class="text-muted">22 ม.ค. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">ที่ <a href="#" class="text-primary fw-semibold">บี-ควิก</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-primary me-1">9,850 กม.</span>
+                                  <span class="badge bg-label-danger">12,000 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                เปลี่ยนยางรถยนต์ทั้ง 4 เส้น เป็นยาง Michelin พร้อมตั้งศูนย์ล้อและถ่วงล้อ
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (2)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบคลังสินค้าขนาดย่อม v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Modal Success -->
+  <div class="modal fade" id="repairSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title">บันทึกข้อมูลสำเร็จ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
+          <h4 class="mb-3">บันทึกข้อมูลการซ่อมเรียบร้อยแล้ว</h4>
+          <p class="mb-1">เลขที่รายการ: <strong>RP-20240528001</strong></p>
+          <p class="mb-0">รถทะเบียน: <strong id="successVehicleLicense">ศข-4567 กรุงเทพ</strong></p>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">บันทึกข้อมูลรถคันใหม่</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='report-vehicle-cost.html'">
+            ดูรายงานค่าใช้จ่ายรถ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="../assets/vendor/libs/select2/select2.js"></script>
+  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Select2
+      $('.select2').select2();
+      
+      // Initialize Flatpickr (Date picker)
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        allowInput: true,
+        locale: 'th'
+      });
+      
+      // Handle search
+      document.getElementById('vehicleSearch').addEventListener('keyup', function() {
+        const searchText = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.vehicle-card');
+        
+        cards.forEach(card => {
+          const licensePlate = card.querySelector('h5').textContent.toLowerCase();
+          const brand = card.querySelector('.badge-repair-type') ? 
+                        card.querySelector('.badge-repair-type').textContent.toLowerCase() : '';
+          const type = card.querySelector('small').textContent.toLowerCase();
+          
+          if (licensePlate.includes(searchText) || brand.includes(searchText) || type.includes(searchText)) {
+            card.closest('.col-md-6').style.display = '';
+          } else {
+            card.closest('.col-md-6').style.display = 'none';
+          }
+        });
+      });
+      
+      // Filter by vehicle type
+      document.getElementById('vehicleType').addEventListener('change', function() {
+        const selectedType = this.value;
+        const cards = document.querySelectorAll('.vehicle-card');
+        
+        if (selectedType === '') {
+          cards.forEach(card => {
+            card.closest('.col-md-6').style.display = '';
+          });
+          return;
+        }
+        
+        cards.forEach(card => {
+          const type = card.getAttribute('data-vehicle-type');
+          if (!type) return;
+          
+          if (type === selectedType) {
+            card.closest('.col-md-6').style.display = '';
+          } else {
+            card.closest('.col-md-6').style.display = 'none';
+          }
+        });
+      });
+      
+      // Filter by status
+      document.getElementById('vehicleStatus').addEventListener('change', function() {
+        const selectedStatus = this.value;
+        const cards = document.querySelectorAll('.vehicle-card');
+        
+        if (selectedStatus === '') {
+          cards.forEach(card => {
+            card.closest('.col-md-6').style.display = '';
+          });
+          return;
+        }
+        
+        cards.forEach(card => {
+          const statusBadge = card.querySelector('.badge');
+          if (!statusBadge) return;
+          
+          let status = '';
+          if (statusBadge.classList.contains('bg-label-success')) {
+            status = 'ready';
+          } else if (statusBadge.classList.contains('bg-label-warning')) {
+            status = 'inuse';
+          } else if (statusBadge.classList.contains('bg-label-danger')) {
+            status = 'repair';
+          }
+          
+          if (status === selectedStatus) {
+            card.closest('.col-md-6').style.display = '';
+          } else {
+            card.closest('.col-md-6').style.display = 'none';
+          }
+        });
+      });
+      
+      // Calculate total cost when parts change
+      function calculateTotalCost() {
+        let total = 0;
+        const rows = document.querySelectorAll('#partsTable tbody tr');
+        
+        rows.forEach(row => {
+          const quantity = parseFloat(row.querySelector('.part-quantity').value) || 0;
+          const price = parseFloat(row.querySelector('.part-price').value) || 0;
+          total += quantity * price;
+        });
+        
+        document.getElementById('totalCost').value = total;
+      }
+      
+      // Add event listeners to quantity and price inputs
+      document.querySelectorAll('.part-quantity, .part-price').forEach(input => {
+        input.addEventListener('input', calculateTotalCost);
+      });
+      
+      // Initial calculation
+      calculateTotalCost();
+      
+      // Form submission
+      const repairForm = document.getElementById('repairForm');
+      
+      repairForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate required fields
+        const repairDate = document.getElementById('repairDate').value;
+        const repairType = document.getElementById('repairType').value;
+        const mileage = document.getElementById('mileage').value;
+        const repairLocation = document.getElementById('repairLocation').value;
+        const repairDetails = document.getElementById('repairDetails').value;
+        const totalCost = document.getElementById('totalCost').value;
+        
+        if (!repairDate || !repairType || !mileage || !repairLocation || !repairDetails || !totalCost) {
+          Swal.fire({
+            title: 'ข้อมูลไม่ครบถ้วน',
+            text: 'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง'
+          });
+          return;
+        }
+        
+        // Show success modal
+        const successModal = new bootstrap.Modal(document.getElementById('repairSuccessModal'));
+        document.getElementById('successVehicleLicense').textContent = document.getElementById('selectedVehicleLicense').textContent;
+        successModal.show();
+      });
+    });
+    
+    // Function to select a vehicle
+    function selectVehicle(id, licensePlate, model, type) {
+      // Update selected vehicle
+      document.getElementById('selectedVehicleLicense').textContent = licensePlate;
+      
+      // Add 'selected' class to the selected vehicle and remove from others
+      const cards = document.querySelectorAll('.vehicle-card');
+      cards.forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      
+      // Set data attributes for filtering
+      event.currentTarget.setAttribute('data-vehicle-type', type);
+      
+      // Scroll to the repair form
+      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Function to add a new part row
+    function addNewPart() {
+      const tbody = document.querySelector('#partsTable tbody');
+      const newRow = document.createElement('tr');
+      
+      newRow.innerHTML = `
+        <td><input type="text" class="form-control form-control-sm" placeholder="ชื่อรายการ/อะไหล่"></td>
+        <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+        <td><input type="number" class="form-control form-control-sm part-price" placeholder="0" min="0"></td>
+        <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+      `;
+      
+      tbody.appendChild(newRow);
+      
+      // Add event listeners to new inputs
+      newRow.querySelectorAll('.part-quantity, .part-price').forEach(input => {
+        input.addEventListener('input', function() {
+          let total = 0;
+          const rows = document.querySelectorAll('#partsTable tbody tr');
+          
+          rows.forEach(row => {
+            const quantity = parseFloat(row.querySelector('.part-quantity').value) || 0;
+            const price = parseFloat(row.querySelector('.part-price').value) || 0;
+            total += quantity * price;
+          });
+          
+          document.getElementById('totalCost').value = total;
+        });
+      });
+    }
+    
+    // Function to remove a part row
+    function removePart(button) {
+      const row = button.closest('tr');
+      row.remove();
+      
+      // Recalculate total
+      let total = 0;
+      const rows = document.querySelectorAll('#partsTable tbody tr');
+      
+      rows.forEach(row => {
+        const quantity = parseFloat(row.querySelector('.part-quantity').value) || 0;
+        const price = parseFloat(row.querySelector('.part-price').value) || 0;
+        total += quantity * price;
+      });
+      
+      document.getElementById('totalCost').value = total;
+    }
+  </script>
+</body>
+</html>
