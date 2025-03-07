@@ -901,7 +901,7 @@ try {
     <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
     <!-- <script src="../assets/vendor/libs/summernote/summernote-bs5.min.js"></script> -->
     <!-- เพิ่มไว้ก่อน Core JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/lang/summernote-th-TH.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote.min.js"></script>
 
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
