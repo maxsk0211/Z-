@@ -1082,7 +1082,7 @@
                 </div>
                 <div class="col s4 m6 right-align auth-buttons">
                     <a href="#" class="auth-link"><i class="fas fa-user-plus"></i> สมัครสมาชิก</a>
-                    <a href="#" class="auth-link"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</a>
+                    <a href="login.php" class="auth-link"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</a>
                 </div>
             </div>
         </div>
