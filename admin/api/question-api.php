@@ -25,11 +25,20 @@ function validateCsrfToken($token) {
 }
 
 function logActivity($conn, $action, $details) {
-    $stmt = $conn->prepare("INSERT INTO admin_log (admin_id, action, details, ip_address) VALUES (?, ?, ?, ?)");
-    $ip = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
-    $stmt->execute([$_SESSION['user_id'], $action, $details, $ip]);
-}
+    try {
+        // ตรวจสอบว่ามีตัวอักษรไทยหรือไม่
+        if (preg_match('/[\x{0E00}-\x{0E7F}]/u', $details)) {
+            // ถ้ามีภาษาไทย ให้ตัดภาษาไทยออกหรือแทนที่ด้วยข้อความภาษาอังกฤษ
+            $details = '[Thai text] ' . preg_replace('/[\x{0E00}-\x{0E7F}]/u', '', $details);
+        }
 
+        $stmt = $conn->prepare("INSERT INTO admin_log (admin_id, action, details, ip_address) VALUES (?, ?, ?, ?)");
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
+        $stmt->execute([$_SESSION['user_id'], $action, $details, $ip]);
+    } catch (PDOException $e) {
+        error_log("Error logging activity: " . $e->getMessage());
+    }
+}
 function getCurrentDateTime() {
     return date('Y-m-d H:i:s');
 }
