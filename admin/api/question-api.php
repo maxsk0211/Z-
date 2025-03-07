@@ -50,7 +50,7 @@ function uploadImage($file, $oldImage = null) {
     }
     
     // กำหนดโฟลเดอร์
-    $uploadDir = __DIR__ . '/../../../img/question/';
+    $uploadDir = __DIR__ . '/../../img/question/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
