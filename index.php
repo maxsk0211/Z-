@@ -27,8 +27,9 @@
     
     <!-- AOS Animation Library -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>        
+
     <style>
-    :root {
+        :root {
             --primary-color: #FFD54F;
             --secondary-color: #9C27B0;
             --accent-color: #FF5252;
@@ -268,6 +269,7 @@
             min-height: 500px;
             background-color: #7B1FA2; /* สีม่วงเข้ม */
             overflow: hidden;
+            padding: 50px 0 100px;
         }
         
         .hero-overlay {
@@ -294,10 +296,16 @@
             opacity: 0.4;
         }
         
+        .hero-row {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
         .hero-content {
             position: relative;
             z-index: 2;
-            padding: 80px 0;
+            padding: 30px 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -321,25 +329,19 @@
             line-height: 1.6;
         }
         
-        .hero-image-container {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40%;
-            max-width: 500px;
+        .hero-image-wrapper {
+            position: relative;
             z-index: 2;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
         
         .hero-image {
             width: 100%;
-            height: auto;
-            display: block;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         
         .wave-container {
@@ -951,23 +953,25 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .hero-section {
-                height: auto;
-                padding-bottom: 70px;
+                padding: 50px 0 120px;
+            }
+            
+            .hero-row {
+                flex-direction: column;
             }
             
             .hero-content {
-                padding: 50px 0;
+                padding: 20px 0;
                 align-items: center;
                 text-align: center;
+                margin-bottom: 20px;
             }
             
-            .hero-image-container {
-                position: relative;
-                right: auto;
-                top: auto;
-                transform: none;
-                width: 80%;
-                margin: 20px auto;
+            .hero-image-wrapper {
+                margin-top: 10px;
+                max-width: 80%;
+                margin-left: auto;
+                margin-right: auto;
             }
             
             .slider-dots {
@@ -995,7 +999,7 @@
         
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .hero-subtitle {
@@ -1161,8 +1165,8 @@
         <div class="hero-overlay"></div>
 
         <div class="container">
-            <div class="row">
-                <div class="col s12">
+            <div class="row hero-row">
+                <div class="col s12 l7">
                     <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
                         <h1 class="hero-title">ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา</h1>
                         <p class="hero-subtitle">คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย</p>
@@ -1172,11 +1176,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="col s12 l5">
+                    <div class="hero-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="ระบบสอบออนไลน์" class="hero-image">
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="hero-image-container">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="ระบบสอบออนไลน์" class="hero-image">
         </div>
 
         <div class="slider-dots">
@@ -1228,36 +1233,6 @@
                         </div>
                         <h3 class="feature-title">คลังข้อสอบ</h3>
                         <p class="feature-description">คลังข้อสอบมาตรฐานที่ครอบคลุมสมรรถนะต่างๆ ของครูช่างอุตสาหกรรม สามารถเลือกใช้และปรับแต่งได้ตามต้องการ</p>
-                    </div>
-                </div>
-
-                <div class="col s12 m6 l4" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-certificate"></i>
-                        </div>
-                        <h3 class="feature-title">ใบรับรองผล</h3>
-                        <p class="feature-description">ออกใบรับรองผลการประเมินสมรรถนะที่ได้มาตรฐาน สามารถนำไปใช้ในการพัฒนาวิชาชีพและการศึกษาต่อได้</p>
-                    </div>
-                </div>
-
-                <div class="col s12 m6 l4" data-aos="fade-up" data-aos-delay="500">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3 class="feature-title">ระบบจัดการผู้ใช้</h3>
-                        <p class="feature-description">จัดการผู้ใช้งานได้อย่างมีประสิทธิภาพ กำหนดสิทธิ์การเข้าถึงตามบทบาทหน้าที่ได้อย่างปลอดภัย</p>
-                    </div>
-                </div>
-
-                <div class="col s12 m6 l4" data-aos="fade-up" data-aos-delay="600">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3 class="feature-title">ตารางสอบออนไลน์</h3>
-                        <p class="feature-description">จัดการตารางสอบได้อย่างยืดหยุ่น กำหนดเวลาเริ่มต้นและสิ้นสุดได้ตามต้องการ พร้อมระบบแจ้งเตือน</p>
                     </div>
                 </div>
             </div>
