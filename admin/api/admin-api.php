@@ -283,139 +283,139 @@ switch ($action) {
         }
         break;
         
-    // อัปเดตข้อมูลผู้ดูแลระบบ
-    case 'update':
-        // ตรวจสอบ CSRF token
-        if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Invalid security token'
-            ]);
-            exit;
-        }
-        
-        try {
-            // รับค่าจากฟอร์ม
-            $adminId = intval($_POST['admin_id'] ?? 0);
-            $name = trim($_POST['name'] ?? '');
-            $email = !empty($_POST['email']) ? trim($_POST['email']) : null;
-            $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
-            $changePassword = isset($_POST['change_password']) && $_POST['change_password'] === '1';
-            
-            // ตรวจสอบข้อมูล
-            if ($adminId <= 0 || empty($name)) {
+        // อัปเดตข้อมูลผู้ดูแลระบบ
+        case 'update':
+            // ตรวจสอบ CSRF token
+            if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ข้อมูลไม่ถูกต้อง'
+                    'message' => 'Invalid security token'
                 ]);
                 exit;
             }
             
-            // ตรวจสอบรูปแบบอีเมล
-            if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'รูปแบบอีเมลไม่ถูกต้อง'
-                ]);
-                exit;
-            }
-            
-            // ป้องกันการยกเลิกการใช้งานตัวเอง
-            if ($adminId === $_SESSION['user_id'] && $status === 0) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ไม่สามารถยกเลิกการใช้งานบัญชีของตัวเองได้'
-                ]);
-                exit;
-            }
-            
-            // ตรวจสอบว่ามีการเปลี่ยนรหัสผ่านหรือไม่
-            if ($changePassword) {
-                $password = $_POST['password'] ?? '';
-                $confirmPassword = $_POST['confirm_password'] ?? '';
+            try {
+                // รับค่าจากฟอร์ม
+                $adminId = intval($_POST['admin_id'] ?? 0);
+                $name = trim($_POST['name'] ?? '');
+                $email = !empty($_POST['email']) ? trim($_POST['email']) : null;
+                $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
+                $changePassword = isset($_POST['change_password']) && $_POST['change_password'] === '1';
                 
-                if (empty($password)) {
+                // ตรวจสอบข้อมูล
+                if ($adminId <= 0 || empty($name)) {
                     echo json_encode([
                         'success' => false,
-                        'message' => 'กรุณากรอกรหัสผ่าน'
+                        'message' => 'ข้อมูลไม่ถูกต้อง'
                     ]);
                     exit;
                 }
                 
-                if ($password !== $confirmPassword) {
+                // ตรวจสอบรูปแบบอีเมล
+                if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     echo json_encode([
                         'success' => false,
-                        'message' => 'รหัสผ่านไม่ตรงกัน'
+                        'message' => 'รูปแบบอีเมลไม่ถูกต้อง'
                     ]);
                     exit;
                 }
                 
-                // ตรวจสอบความยาวของรหัสผ่าน
-                if (strlen($password) < 6) {
+                // ป้องกันการยกเลิกการใช้งานตัวเอง
+                if ($adminId === $_SESSION['user_id'] && $status === 0) {
                     echo json_encode([
                         'success' => false,
-                        'message' => 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร'
+                        'message' => 'ไม่สามารถยกเลิกการใช้งานบัญชีของตัวเองได้'
                     ]);
                     exit;
                 }
-            }
-            
-            // ตรวจสอบว่ามีผู้ดูแลระบบรายนี้อยู่หรือไม่
-            $stmt = $conn->prepare("SELECT username FROM admin WHERE admin_id = ?");
-            $stmt->execute([$adminId]);
-            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$admin) {
+                
+                // ตรวจสอบว่ามีการเปลี่ยนรหัสผ่านหรือไม่
+                if ($changePassword) {
+                    $password = $_POST['password'] ?? '';
+                    $confirmPassword = $_POST['confirm_password'] ?? '';
+                    
+                    if (empty($password)) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'กรุณากรอกรหัสผ่าน'
+                        ]);
+                        exit;
+                    }
+                    
+                    if ($password !== $confirmPassword) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'รหัสผ่านไม่ตรงกัน'
+                        ]);
+                        exit;
+                    }
+                    
+                    // ตรวจสอบความยาวของรหัสผ่าน
+                    if (strlen($password) < 6) {
+                        echo json_encode([
+                            'success' => false,
+                            'message' => 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร'
+                        ]);
+                        exit;
+                    }
+                }
+                
+                // ตรวจสอบว่ามีผู้ดูแลระบบรายนี้อยู่หรือไม่
+                $stmt = $conn->prepare("SELECT username FROM admin WHERE admin_id = ?");
+                $stmt->execute([$adminId]);
+                $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if (!$admin) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'ไม่พบข้อมูลผู้ดูแลระบบ'
+                    ]);
+                    exit;
+                }
+                
+                // อัปเดตข้อมูลผู้ดูแลระบบ
+                $currentDateTime = getCurrentDateTime();
+                
+                if ($changePassword) {
+                    // เข้ารหัสรหัสผ่านใหม่
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                    
+                    // อัปเดตข้อมูลรวมถึงรหัสผ่านและสถานะ
+                    $stmt = $conn->prepare("UPDATE admin SET name = ?, email = ?, password = ?, status = ?, updated_at = ? WHERE admin_id = ?");
+                    $stmt->execute([$name, $email, $hashedPassword, $status, $currentDateTime, $adminId]);
+                    
+                    // บันทึกประวัติการทำงาน
+                    logActivity(
+                        $conn, 
+                        'update_admin_with_password', 
+                        "อัปเดตข้อมูลผู้ดูแลระบบรวมถึงรหัสผ่านและสถานะ: {$admin['username']}", 
+                        $_SESSION['user_id']
+                    );
+                } else {
+                    // อัปเดตข้อมูลไม่รวมรหัสผ่าน แต่รวมสถานะ
+                    $stmt = $conn->prepare("UPDATE admin SET name = ?, email = ?, status = ?, updated_at = ? WHERE admin_id = ?");
+                    $stmt->execute([$name, $email, $status, $currentDateTime, $adminId]);
+                    
+                    // บันทึกประวัติการทำงาน
+                    logActivity(
+                        $conn, 
+                        'update_admin', 
+                        "อัปเดตข้อมูลผู้ดูแลระบบและสถานะ: {$admin['username']}", 
+                        $_SESSION['user_id']
+                    );
+                }
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'อัปเดตข้อมูลผู้ดูแลระบบเรียบร้อยแล้ว'
+                ]);
+            } catch (PDOException $e) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'ไม่พบข้อมูลผู้ดูแลระบบ'
+                    'message' => 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' . $e->getMessage()
                 ]);
-                exit;
             }
-            
-            // อัปเดตข้อมูลผู้ดูแลระบบ
-            $currentDateTime = getCurrentDateTime();
-            
-            if ($changePassword) {
-                // เข้ารหัสรหัสผ่านใหม่
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                
-                // อัปเดตข้อมูลรวมถึงรหัสผ่าน
-                $stmt = $conn->prepare("UPDATE admin SET name = ?, email = ?, password = ?, updated_at = ? WHERE admin_id = ?");
-                $stmt->execute([$name, $email, $hashedPassword, $currentDateTime, $adminId]);
-                
-                // บันทึกประวัติการทำงาน
-                logActivity(
-                    $conn, 
-                    'update_admin_with_password', 
-                    "อัปเดตข้อมูลผู้ดูแลระบบรวมถึงรหัสผ่าน: {$admin['username']}", 
-                    $_SESSION['user_id']
-                );
-            } else {
-                // อัปเดตข้อมูลไม่รวมรหัสผ่าน
-                $stmt = $conn->prepare("UPDATE admin SET name = ?, email = ?, updated_at = ? WHERE admin_id = ?");
-                $stmt->execute([$name, $email, $currentDateTime, $adminId]);
-                
-                // บันทึกประวัติการทำงาน
-                logActivity(
-                    $conn, 
-                    'update_admin', 
-                    "อัปเดตข้อมูลผู้ดูแลระบบ: {$admin['username']}", 
-                    $_SESSION['user_id']
-                );
-            }
-            
-            echo json_encode([
-                'success' => true,
-                'message' => 'อัปเดตข้อมูลผู้ดูแลระบบเรียบร้อยแล้ว'
-            ]);
-        } catch (PDOException $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' . $e->getMessage()
-            ]);
-        }
-        break;
+            break;
         
     // ลบผู้ดูแลระบบ
     case 'delete':
