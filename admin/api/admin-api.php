@@ -167,7 +167,7 @@ switch ($action) {
                 exit;
             }
             
-            $stmt = $conn->prepare("SELECT admin_id, username, name, email, created_at, updated_at, 1 AS status FROM admin WHERE admin_id = ?");
+            $stmt = $conn->prepare("SELECT admin_id, username, name, email, created_at, updated_at, status FROM admin WHERE admin_id = ?");
             $stmt->execute([$id]);
             $admin = $stmt->fetch(PDO::FETCH_ASSOC);
             
