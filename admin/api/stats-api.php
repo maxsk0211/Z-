@@ -1,69 +1,51 @@
 <?php
-// stats-api.php - /admin/api/stats-api.php
+// stats-api.php - สำหรับดึงข้อมูลสถิติต่างๆ
 header('Content-Type: application/json');
-
-// เริ่มต้น session
 session_start();
 
 // ตรวจสอบการเข้าสู่ระบบและสิทธิ์ผู้ดูแลระบบ
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
-    echo json_encode([
-        'success' => false,
-        'message' => 'ไม่มีสิทธิ์เข้าถึง'
-    ]);
+    echo json_encode(['success' => false, 'message' => 'ไม่มีสิทธิ์เข้าถึง']);
     exit;
 }
 
-// เรียกใช้ไฟล์เชื่อมต่อฐานข้อมูล
+// เชื่อมต่อฐานข้อมูล
 require_once __DIR__ . '/../../dbcon.php';
 
-// สร้างการเชื่อมต่อกับฐานข้อมูล
 try {
     $conn = getDBConnection();
 } catch (PDOException $e) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้: ' . $e->getMessage()
-    ]);
+    echo json_encode(['success' => false, 'message' => 'ไม่สามารถเชื่อมต่อฐานข้อมูล: ' . $e->getMessage()]);
     exit;
 }
 
-// รับค่า action จาก request
+// รับ action จาก request
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-// ตรวจสอบค่า action และประมวลผลตามค่าที่รับมา
 switch ($action) {
-    // ดึงข้อมูลสถิติเกี่ยวกับชุดข้อสอบ
+    // สถิติของชุดข้อสอบ
     case 'exam_stats':
         try {
             // จำนวนชุดข้อสอบทั้งหมด
-            $stmtTotal = $conn->query("SELECT COUNT(*) FROM exam_set");
-            $totalExamSets = $stmtTotal->fetchColumn();
+            $totalExamSets = $conn->query("SELECT COUNT(*) FROM exam_set")->fetchColumn();
             
-            // จำนวนชุดข้อสอบที่ใช้งานอยู่
-            $stmtActive = $conn->query("SELECT COUNT(*) FROM exam_set WHERE status = 1");
-            $activeExamSets = $stmtActive->fetchColumn();
+            // จำนวนชุดข้อสอบที่ใช้งาน
+            $activeExamSets = $conn->query("SELECT COUNT(*) FROM exam_set WHERE status = 1")->fetchColumn();
             
             // จำนวนชุดข้อสอบที่ไม่ใช้งาน
             $inactiveExamSets = $totalExamSets - $activeExamSets;
             
             // จำนวนหัวข้อทั้งหมด
-            $stmtTopics = $conn->query("SELECT COUNT(*) FROM exam_topic");
-            $totalTopics = $stmtTopics->fetchColumn();
-            
-            // ชุดข้อสอบที่สร้างล่าสุด
-            $stmtRecent = $conn->query("SELECT COUNT(*) FROM exam_set WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)");
-            $recentExamSets = $stmtRecent->fetchColumn();
+            $totalTopics = $conn->query("SELECT COUNT(*) FROM exam_topic")->fetchColumn();
             
             // จำนวนคำถามทั้งหมด
-            $stmtQuestions = $conn->query("SELECT COUNT(*) FROM question");
-            $totalQuestions = $stmtQuestions->fetchColumn();
+            $totalQuestions = $conn->query("SELECT COUNT(*) FROM question")->fetchColumn();
             
-            // จำนวนรอบการสอบที่กำลังดำเนินการ
-            $stmtActiveRounds = $conn->query("SELECT COUNT(*) FROM exam_round WHERE status = 2"); // สถานะ 2 = กำลังสอบ
-            $activeRounds = $stmtActiveRounds->fetchColumn();
+            // จำนวนชุดข้อสอบที่สร้างในรอบ 7 วัน
+            $recentExamSets = $conn->query(
+                "SELECT COUNT(*) FROM exam_set WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
+            )->fetchColumn();
             
-            // ส่งข้อมูลกลับ
             echo json_encode([
                 'success' => true,
                 'data' => [
@@ -71,84 +53,80 @@ switch ($action) {
                     'active_exam_sets' => intval($activeExamSets),
                     'inactive_exam_sets' => intval($inactiveExamSets),
                     'total_topics' => intval($totalTopics),
-                    'recent_exam_sets' => intval($recentExamSets),
                     'total_questions' => intval($totalQuestions),
-                    'active_rounds' => intval($activeRounds)
+                    'recent_exam_sets' => intval($recentExamSets)
                 ]
             ]);
         } catch (PDOException $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลสถิติ: ' . $e->getMessage()
-            ]);
+            echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()]);
         }
         break;
-        
-    // ดึงข้อมูลสถิติเกี่ยวกับหัวข้อการสอบ (สำหรับหน้า exam-topic-management.php)
+    
+    // สถิติของหัวข้อข้อสอบ
     case 'topic_stats':
+        $exam_set_id = isset($_GET['exam_set_id']) ? intval($_GET['exam_set_id']) : 0;
+        
+        if ($exam_set_id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'รหัสชุดข้อสอบไม่ถูกต้อง']);
+            exit;
+        }
+        
         try {
-            // รับค่า exam_set_id จาก request
-            $examSetId = isset($_GET['exam_set_id']) ? intval($_GET['exam_set_id']) : 0;
+            // ข้อมูลชุดข้อสอบ
+            $examSet = $conn->prepare("SELECT name FROM exam_set WHERE exam_set_id = ?");
+            $examSet->execute([$exam_set_id]);
+            $examSetName = $examSet->fetchColumn();
             
-            if ($examSetId <= 0) {
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ไม่พบรหัสชุดข้อสอบ'
-                ]);
+            if (!$examSetName) {
+                echo json_encode(['success' => false, 'message' => 'ไม่พบชุดข้อสอบนี้ในระบบ']);
                 exit;
             }
             
-            // จำนวนหัวข้อทั้งหมดในชุดข้อสอบนี้
-            $stmtTopics = $conn->prepare("SELECT COUNT(*) FROM exam_topic WHERE exam_set_id = ?");
-            $stmtTopics->execute([$examSetId]);
-            $totalTopics = $stmtTopics->fetchColumn();
+            // จำนวนหัวข้อทั้งหมด
+            $totalTopics = $conn->prepare(
+                "SELECT COUNT(*) FROM exam_topic WHERE exam_set_id = ?"
+            );
+            $totalTopics->execute([$exam_set_id]);
+            $totalTopicsCount = $totalTopics->fetchColumn();
             
-            // จำนวนหัวข้อที่ใช้งานอยู่
-            $stmtActiveTopics = $conn->prepare("SELECT COUNT(*) FROM exam_topic WHERE exam_set_id = ? AND status = 1");
-            $stmtActiveTopics->execute([$examSetId]);
-            $activeTopics = $stmtActiveTopics->fetchColumn();
+            // จำนวนหัวข้อที่ใช้งาน
+            $activeTopics = $conn->prepare(
+                "SELECT COUNT(*) FROM exam_topic WHERE exam_set_id = ? AND status = 1"
+            );
+            $activeTopics->execute([$exam_set_id]);
+            $activeTopicsCount = $activeTopics->fetchColumn();
             
             // จำนวนหัวข้อที่ไม่ใช้งาน
-            $inactiveTopics = $totalTopics - $activeTopics;
+            $inactiveTopicsCount = $totalTopicsCount - $activeTopicsCount;
             
-            // จำนวนคำถามทั้งหมดในชุดข้อสอบนี้
-            $stmtQuestions = $conn->prepare("
-                SELECT COUNT(*) FROM question q
+            // จำนวนคำถามทั้งหมด
+            $totalQuestions = $conn->prepare("
+                SELECT COUNT(q.question_id) 
+                FROM question q
                 JOIN exam_topic t ON q.topic_id = t.topic_id
                 WHERE t.exam_set_id = ?
             ");
-            $stmtQuestions->execute([$examSetId]);
-            $totalQuestions = $stmtQuestions->fetchColumn();
+            $totalQuestions->execute([$exam_set_id]);
+            $totalQuestionsCount = $totalQuestions->fetchColumn();
             
-            // ข้อมูลเกี่ยวกับชุดข้อสอบ
-            $stmtExamSet = $conn->prepare("SELECT name FROM exam_set WHERE exam_set_id = ?");
-            $stmtExamSet->execute([$examSetId]);
-            $examSetName = $stmtExamSet->fetchColumn();
-            
-            // ส่งข้อมูลกลับ
             echo json_encode([
                 'success' => true,
                 'data' => [
-                    'exam_set_id' => $examSetId,
+                    'exam_set_id' => $exam_set_id,
                     'exam_set_name' => $examSetName,
-                    'total_topics' => intval($totalTopics),
-                    'active_topics' => intval($activeTopics),
-                    'inactive_topics' => intval($inactiveTopics),
-                    'total_questions' => intval($totalQuestions)
+                    'total_topics' => intval($totalTopicsCount),
+                    'active_topics' => intval($activeTopicsCount),
+                    'inactive_topics' => intval($inactiveTopicsCount),
+                    'total_questions' => intval($totalQuestionsCount)
                 ]
             ]);
         } catch (PDOException $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'เกิดข้อผิดพลาดในการดึงข้อมูลสถิติ: ' . $e->getMessage()
-            ]);
+            echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()]);
         }
         break;
-        
+    
     default:
-        echo json_encode([
-            'success' => false,
-            'message' => 'Invalid action'
-        ]);
+        echo json_encode(['success' => false, 'message' => 'ไม่พบ action ที่ระบุ']);
         break;
 }
+?>
