@@ -1862,7 +1862,7 @@ $(document).ready(function() {
                     $('#question_id').val(question.question_id);
                     $('#question_topic_id').val(question.topic_id);
                     $('#question_action').val('update');
-                    
+
                     if ($.fn.summernote) {
                         $('#content').summernote('code', question.content);
                     } else {
@@ -2017,7 +2017,12 @@ cancelButtonColor: '#6c757d'
     $(function() {
         // แสดงสถานะการโหลดข้อมูล
         showLoading();
-        
+
+        // เริ่มต้น Summernote เมื่อไฟล์พร้อม
+        $(window).on('load', function() {
+            initSummernote();
+        });
+
         // เริ่มโหลดข้อมูลจากฐานข้อมูลเมื่อโหลดหน้าเสร็จ
         console.log('เริ่มดึงข้อมูลจากฐานข้อมูล...');
         
@@ -2038,6 +2043,7 @@ cancelButtonColor: '#6c757d'
         
         // Initialize tooltips
         $('[data-bs-toggle="tooltip"]').tooltip();
+        
     });
 });
 
