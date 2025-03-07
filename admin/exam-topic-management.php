@@ -903,423 +903,612 @@ try {
     
     <!-- Page JS -->
     <script>
-    $(document).ready(function() {
-        // Custom SweetAlert2 config
-        const swalCustom = Swal.mixin({
-            customClass: {
-                popup: 'custom-swal-popup',
-                title: 'custom-swal-title',
-                content: 'custom-swal-content'
-            },
-            buttonsStyling: true,
-            confirmButtonText: '<i class="ri-check-line me-1"></i> ตกลง',
-            cancelButtonText: '<i class="ri-close-line me-1"></i> ยกเลิก',
-            showClass: {
-                popup: 'animate__animated animate__fadeInUp animate__faster'
-            },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutDown animate__faster'
-            }
-        });
+$(document).ready(function() {
+    // --------- ตัวแปรหลัก ---------
+    const examSetId = <?= $exam_set_id ?>; // รับค่า exam_set_id จาก PHP
+    let currentTopicId = 0;
+    let currentTopicName = '';
+    const csrfToken = $('input[name="csrf_token"]').val();
+    const choiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    
+    // --------- SweetAlert2 Config ---------
+    const swalCustom = Swal.mixin({
+        customClass: {
+            popup: 'custom-swal-popup',
+            title: 'custom-swal-title',
+            content: 'custom-swal-content'
+        },
+        buttonsStyling: true,
+        confirmButtonText: '<i class="ri-check-line me-1"></i> ตกลง',
+        cancelButtonText: '<i class="ri-close-line me-1"></i> ยกเลิก',
+        showClass: {
+            popup: 'animate__animated animate__fadeInUp animate__faster'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutDown animate__faster'
+        }
+    });
+    
+    // --------- Helper Functions ---------
+    
+    // แสดงการโหลด
+    function showLoading() {
+        $('#loadingOverlay').addClass('show');
+    }
+    
+    // ซ่อนการโหลด
+    function hideLoading() {
+        $('#loadingOverlay').removeClass('show');
+    }
+    
+    // รีเซ็ตฟอร์มหัวข้อ
+    function resetTopicForm() {
+        $('#topic_id').val('0');
+        $('#action').val('create');
+        $('#name').val('');
+        $('#description').val('');
+        $('#status').val('1');
         
-        // Base URL ของระบบ
-        const baseUrl = '../';
+        $('#topicModalLabel').text('เพิ่มหัวข้อข้อสอบใหม่');
+        $('#topicForm .is-invalid').removeClass('is-invalid');
+    }
+    
+    // รีเซ็ตฟอร์มคำถาม
+    function resetQuestionForm() {
+        $('#question_id').val('0');
+        $('#question_action').val('create');
+        $('#content').summernote('code', '');
+        $('#image').val('');
+        $('#score').val('1');
+        $('#question_status').val('1');
+        $('#currentImageContainer').addClass('d-none');
+        $('#currentImage').attr('src', '');
+        $('#removeImage').prop('checked', false);
         
-        // Exam Set ID
-        const examSetId = <?= $exam_set_id ?>;
+        $('#choiceContainer').empty();
         
-        // รายการตัวเลือกในแบบฟอร์มคำถาม
-        let choiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-        
-        // Current Topic ID
-        let currentTopicId = 0;
-        let currentTopicName = '';
-        
-        // Function to show loading overlay
-        function showLoading() {
-            $('#loadingOverlay').addClass('show');
+        // เพิ่มตัวเลือกเริ่มต้น 4 ตัวเลือก
+        for (let i = 0; i < 4; i++) {
+            addChoiceField(i);
         }
         
-        // Function to hide loading overlay
-        function hideLoading() {
-            $('#loadingOverlay').removeClass('show');
+        $('#questionModalLabel').text('เพิ่มคำถามใหม่');
+        $('#questionForm .is-invalid').removeClass('is-invalid');
+    }
+    
+    // เพิ่มตัวเลือกใหม่
+    function addChoiceField(index, content = '', isCorrect = false) {
+        const letter = choiceLetters[index] || '';
+        
+        const html = `
+        <div class="choice-row" data-index="${index}">
+            <div class="choice-label-col">
+                <span class="choice-label">${letter}</span>
+            </div>
+            <div class="choice-content-col">
+                <input type="text" class="form-control choice-input" name="choices[${index}][content]" 
+                       placeholder="ตัวเลือก ${letter}" value="${content}">
+                <input type="hidden" name="choices[${index}][is_correct]" class="choice-correct-input" value="${isCorrect ? '1' : '0'}">
+            </div>
+            <div class="choice-correct-col">
+                <div class="form-check">
+                    <input class="form-check-input choice-radio" type="radio" name="correct_choice" 
+                           value="${index}" id="choice_${index}" ${isCorrect ? 'checked' : ''}>
+                    <label class="form-check-label" for="choice_${index}">
+                        ถูกต้อง
+                    </label>
+                </div>
+            </div>
+            <div class="choice-remove-col">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-choice-btn">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+        </div>
+        `;
+        
+        $('#choiceContainer').append(html);
+    }
+    
+    // ตรวจสอบความถูกต้องของฟอร์มหัวข้อ
+    function validateTopicForm() {
+        let isValid = true;
+        
+        // ตรวจสอบชื่อหัวข้อ
+        if ($('#name').val().trim() === '') {
+            $('#name').addClass('is-invalid');
+            isValid = false;
+        } else {
+            $('#name').removeClass('is-invalid');
         }
         
-        // Initialize rich text editor
-        $('#content').summernote({
-            placeholder: 'เขียนคำถามที่นี่...',
-            height: 150,
-            toolbar: [
-              ['style', ['style']],
-              ['font', ['bold', 'underline', 'clear']],
-              ['color', ['color']],
-              ['para', ['ul', 'ol', 'paragraph']],
-              ['insert', ['link']],
-              ['view', ['fullscreen', 'codeview', 'help']]
-            ],
-            callbacks: {
-                onImageUpload: function(files) {
-                    // แจ้งเตือนให้ใช้ช่องอัปโหลดรูปภาพแทน
-                    swalCustom.fire({
-                        icon: 'info',
-                        title: 'ใช้ช่องอัปโหลดรูปภาพด้านล่าง',
-                        text: 'กรุณาใช้ช่องอัปโหลดรูปภาพประกอบคำถามที่อยู่ด้านล่างแทน'
-                    });
-                }
-            }
-        });
+        return isValid;
+    }
+    
+    // ตรวจสอบความถูกต้องของฟอร์มคำถาม
+    function validateQuestionForm() {
+        let isValid = true;
         
-        // Initialize Bootstrap tooltips
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+        // ตรวจสอบเนื้อหาคำถาม
+        const content = $('#content').summernote('code').trim();
+        if (content === '' || content === '<p><br></p>') {
+            $('#content').next('.note-editor').addClass('is-invalid');
+            isValid = false;
+        } else {
+            $('#content').next('.note-editor').removeClass('is-invalid');
+        }
         
-        // โหลดรายการหัวข้อข้อสอบทั้งหมด
-        function loadTopics() {
-            showLoading();
-            
-            $.ajax({
-                url: 'api/exam-topic-api.php?action=list&exam_set_id=' + examSetId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    hideLoading();
-                    
-                    if (response.success) {
-                        const topics = response.data;
-                        
-                        // ตรวจสอบว่ามีหัวข้อหรือไม่
-                        if (topics.length === 0) {
-                            $('#noTopicsPlaceholder').show();
-                            $('#topicList').html('');
-                        } else {
-                            $('#noTopicsPlaceholder').hide();
-                            
-                            let html = '';
-                            
-                            topics.forEach(function(topic) {
-                                const statusBadgeClass = topic.status == 1 ? 'status-active' : 'status-inactive';
-                                const statusText = topic.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
-                                
-                                html += `
-                                <div class="topic-card card ${currentTopicId === parseInt(topic.topic_id) ? 'active' : ''}" 
-                                     data-id="${topic.topic_id}" data-name="${topic.name}">
-                                    <div class="card-body">
-                                        <h5 class="topic-title">${topic.name}</h5>
-                                        <p class="topic-description">${topic.description || '-'}</p>
-                                        <div class="topic-footer">
-                                            <div>
-                                                <span class="question-count"><i class="ri-question-line me-1"></i>${topic.question_count} คำถาม</span>
-                                                <span class="status-badge ${statusBadgeClass} ms-2">${statusText}</span>
-                                            </div>
-                                            <div class="topic-actions">
-                                                <button type="button" class="btn btn-sm btn-outline-primary edit-topic-btn"
-                                                        data-id="${topic.topic_id}"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-title="แก้ไขหัวข้อ">
-                                                    <i class="ri-pencil-line"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger delete-topic-btn"
-                                                        data-id="${topic.topic_id}"
-                                                        data-name="${topic.name}"
-                                                        data-question-count="${topic.question_count}"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-title="ลบหัวข้อ">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                `;
-                            });
-                            
-                            $('#topicList').html(html);
-                            
-                            // Reinitialize tooltips
-                            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                                return new bootstrap.Tooltip(tooltipTriggerEl);
-                            });
-                            
-                            // ถ้ามีการเลือกหัวข้อไว้แล้วให้โหลดคำถามในหัวข้อนั้น
-                            if (currentTopicId > 0) {
-                                loadQuestions(currentTopicId, currentTopicName);
-                            }
-                        }
-                    } else {
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: response.message || 'ไม่สามารถโหลดรายการหัวข้อข้อสอบได้'
-                        });
-                    }
-                },
-                error: function() {
-                    hideLoading();
-                    
-                    swalCustom.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                    });
-                }
+        // ตรวจสอบว่ามีตัวเลือกอย่างน้อย 2 ตัว
+        if ($('.choice-row').length < 2) {
+            swalCustom.fire({
+                icon: 'error',
+                title: 'ข้อมูลไม่ครบถ้วน',
+                text: 'กรุณาระบุตัวเลือกอย่างน้อย 2 ตัวเลือก'
             });
+            isValid = false;
         }
         
-        // โหลดคำถามในหัวข้อที่เลือก
-        function loadQuestions(topicId, topicName) {
-            showLoading();
-            
-            currentTopicId = topicId;
-            currentTopicName = topicName;
-            
-            $.ajax({
-                url: 'api/question-api.php?action=list_by_topic&topic_id=' + topicId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    hideLoading();
+        // ตรวจสอบว่ามีการเลือกคำตอบที่ถูกต้อง
+        if ($('.choice-radio:checked').length === 0) {
+            swalCustom.fire({
+                icon: 'error',
+                title: 'ข้อมูลไม่ครบถ้วน',
+                text: 'กรุณาเลือกคำตอบที่ถูกต้อง'
+            });
+            isValid = false;
+        }
+        
+        // ตรวจสอบว่าแต่ละตัวเลือกมีเนื้อหา
+        $('.choice-input').each(function() {
+            if ($(this).val().trim() === '') {
+                $(this).addClass('is-invalid');
+                isValid = false;
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+        
+        return isValid;
+    }
+    
+    // --------- AJAX Functions ---------
+    
+    // โหลดรายการหัวข้อข้อสอบ
+    function loadTopics() {
+        showLoading();
+        
+        $.ajax({
+            url: 'api/exam-topic-api.php',
+            type: 'GET',
+            data: {
+                action: 'list',
+                exam_set_id: examSetId
+            },
+            dataType: 'json',
+            success: function(response) {
+                hideLoading();
+                
+                if (response.success) {
+                    const topics = response.data;
                     
-                    if (response.success) {
-                        const questions = response.data;
+                    // ตรวจสอบว่ามีหัวข้อหรือไม่
+                    if (topics.length === 0) {
+                        $('#noTopicsPlaceholder').show();
+                        $('#topicList').html('');
+                    } else {
+                        $('#noTopicsPlaceholder').hide();
                         
-                        let html = `
-                        <div class="question-header">
-                            <h5 class="question-panel-title">คำถามในหัวข้อ: ${topicName}</h5>
-                            <button type="button" class="btn btn-primary add-question-btn" data-topic-id="${topicId}">
-                                <i class="ri-add-line me-1"></i> เพิ่มคำถาม
-                            </button>
-                        </div>
-                        `;
+                        let html = '';
                         
-                        if (questions.length === 0) {
+                        topics.forEach(function(topic) {
+                            const statusBadgeClass = topic.status == 1 ? 'status-active' : 'status-inactive';
+                            const statusText = topic.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
+                            
                             html += `
-                            <div class="no-questions-placeholder">
-                                <i class="ri-question-mark placeholder-icon"></i>
-                                <p class="placeholder-text">ยังไม่มีคำถามในหัวข้อนี้</p>
-                                <p class="placeholder-subtext">คลิกปุ่ม "เพิ่มคำถาม" เพื่อเริ่มสร้างคำถามใหม่</p>
-                                <button type="button" class="btn btn-primary add-question-btn" data-topic-id="${topicId}">
-                                    <i class="ri-add-line me-1"></i> เพิ่มคำถาม
-                                </button>
-                            </div>
-                            `;
-                        } else {
-                            for (let i = 0; i < questions.length; i++) {
-                                const question = questions[i];
-                                const questionNumber = i + 1;
-                                const statusBadgeClass = question.status == 1 ? 'status-active' : 'status-inactive';
-                                const statusText = question.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
-                                
-                                html += `
-                                <div class="question-item">
-                                    <div class="d-flex align-items-start">
-                                        <span class="question-number">${questionNumber}</span>
-                                        <div class="flex-grow-1">
-                                            <div class="question-content">${question.content}</div>
-                                        </div>
-                                    </div>
-                                    ${question.image ? `<div class="ms-4 mt-2 mb-2"><img src="${baseUrl + question.image}" alt="รูปภาพประกอบคำถาม" class="img-fluid img-thumbnail" style="max-height: 150px;"></div>` : ''}
-                                    <div class="choice-list">
-                                `;
-                                
-                                for (let j = 0; j < question.choices.length; j++) {
-                                    const choice = question.choices[j];
-                                    const choiceLetter = choiceLetters[j];
-                                    
-                                    html += `
-                                    <div class="choice-item">
-                                        <span class="choice-label ${choice.is_correct == 1 ? 'choice-correct' : ''}">${choiceLetter}</span>
-                                        <div>${choice.content}</div>
-                                    </div>
-                                    `;
-                                }
-                                
-                                html += `
-                                    </div>
-                                    <div class="question-meta">
+                            <div class="topic-card card ${currentTopicId === parseInt(topic.topic_id) ? 'active' : ''}" 
+                                 data-id="${topic.topic_id}" data-name="${topic.name}">
+                                <div class="card-body">
+                                    <h5 class="topic-title">${topic.name}</h5>
+                                    <p class="topic-description">${topic.description || '-'}</p>
+                                    <div class="topic-footer">
                                         <div>
-                                            <span>คะแนน: ${question.score} คะแนน</span>
-                                            <span class="ms-3 status-badge ${statusBadgeClass}">${statusText}</span>
+                                            <span class="question-count"><i class="ri-question-line me-1"></i>${topic.question_count} คำถาม</span>
+                                            <span class="status-badge ${statusBadgeClass} ms-2">${statusText}</span>
                                         </div>
-                                        <div class="question-actions">
-                                            <button type="button" class="btn btn-sm btn-outline-primary edit-question-btn"
-                                                    data-id="${question.question_id}"
-                                                    data-topic-id="${topicId}"
+                                        <div class="topic-actions">
+                                            <button type="button" class="btn btn-sm btn-outline-primary edit-topic-btn"
+                                                    data-id="${topic.topic_id}"
                                                     data-bs-toggle="tooltip"
-                                                    data-bs-title="แก้ไขคำถาม">
+                                                    data-bs-title="แก้ไขหัวข้อ">
                                                 <i class="ri-pencil-line"></i>
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger delete-question-btn"
-                                                    data-id="${question.question_id}"
+                                            <button type="button" class="btn btn-sm btn-outline-danger delete-topic-btn"
+                                                    data-id="${topic.topic_id}"
+                                                    data-name="${topic.name}"
+                                                    data-question-count="${topic.question_count}"
                                                     data-bs-toggle="tooltip"
-                                                    data-bs-title="ลบคำถาม">
+                                                    data-bs-title="ลบหัวข้อ">
                                                 <i class="ri-delete-bin-line"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                `;
-                            }
+                            </div>
+                            `;
+                        });
+                        
+                        $('#topicList').html(html);
+                        
+                        // Initialize tooltips
+                        $('[data-bs-toggle="tooltip"]').tooltip();
+                        
+                        // ถ้ามีการเลือกหัวข้อไว้แล้วให้โหลดคำถามในหัวข้อนั้น
+                        if (currentTopicId > 0) {
+                            loadQuestions(currentTopicId, currentTopicName);
                         }
-                        
-                        $('#questionPanel').html(html);
-                        
-                        // Reinitialize tooltips
-                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                            return new bootstrap.Tooltip(tooltipTriggerEl);
-                        });
-                        
-                        // ไฮไลท์หัวข้อที่เลือก
-                        $('.topic-card').removeClass('active');
-                        $(`.topic-card[data-id="${topicId}"]`).addClass('active');
-                    } else {
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: response.message || 'ไม่สามารถโหลดรายการคำถามได้'
-                        });
                     }
-                },
-                error: function() {
-                    hideLoading();
-                    
+                } else {
                     swalCustom.fire({
                         icon: 'error',
                         title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                        text: response.message || 'ไม่สามารถโหลดรายการหัวข้อข้อสอบได้'
                     });
                 }
-            });
-        }
+            },
+            error: function() {
+                hideLoading();
+                
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                });
+            }
+        });
+    }
+    
+    // โหลดคำถามในหัวข้อที่เลือก
+    function loadQuestions(topicId, topicName) {
+        showLoading();
         
-        // โหลดคำถามทั้งหมดในชุดข้อสอบ
-        function loadAllQuestions() {
+        currentTopicId = topicId;
+        currentTopicName = topicName;
+        
+        $.ajax({
+            url: 'api/question-api.php',
+            type: 'GET',
+            data: {
+                action: 'list_by_topic',
+                topic_id: topicId
+            },
+            dataType: 'json',
+            success: function(response) {
+                hideLoading();
+                
+                if (response.success) {
+                    const questions = response.data;
+                    
+                    let html = `
+                    <div class="question-header">
+                        <h5 class="question-panel-title">คำถามในหัวข้อ: ${topicName}</h5>
+                        <button type="button" class="btn btn-primary add-question-btn" data-topic-id="${topicId}">
+                            <i class="ri-add-line me-1"></i> เพิ่มคำถาม
+                        </button>
+                    </div>
+                    `;
+                    
+                    if (questions.length === 0) {
+                        html += `
+                        <div class="no-questions-placeholder">
+                            <i class="ri-question-mark placeholder-icon"></i>
+                            <p class="placeholder-text">ยังไม่มีคำถามในหัวข้อนี้</p>
+                            <p class="placeholder-subtext">คลิกปุ่ม "เพิ่มคำถาม" เพื่อเริ่มสร้างคำถามใหม่</p>
+                            <button type="button" class="btn btn-primary add-question-btn" data-topic-id="${topicId}">
+                                <i class="ri-add-line me-1"></i> เพิ่มคำถาม
+                            </button>
+                        </div>
+                        `;
+                    } else {
+                        for (let i = 0; i < questions.length; i++) {
+                            const question = questions[i];
+                            const questionNumber = i + 1;
+                            const statusBadgeClass = question.status == 1 ? 'status-active' : 'status-inactive';
+                            const statusText = question.status == 1 ? 'ใช้งาน' : 'ไม่ใช้งาน';
+                            
+                            html += `
+                            <div class="question-item">
+                                <div class="d-flex align-items-start">
+                                    <span class="question-number">${questionNumber}</span>
+                                    <div class="flex-grow-1">
+                                        <div class="question-content">${question.content}</div>
+                                    </div>
+                                </div>
+                                ${question.image ? `<div class="ms-4 mt-2 mb-2"><img src="${question.image}" alt="รูปภาพประกอบคำถาม" class="img-fluid img-thumbnail" style="max-height: 150px;"></div>` : ''}
+                                <div class="choice-list">
+                            `;
+                            
+                            for (let j = 0; j < question.choices.length; j++) {
+                                const choice = question.choices[j];
+                                const choiceLetter = choiceLetters[j];
+                                
+                                html += `
+                                <div class="choice-item">
+                                    <span class="choice-label ${choice.is_correct == 1 ? 'choice-correct' : ''}">${choiceLetter}</span>
+                                    <div>${choice.content}</div>
+                                </div>
+                                `;
+                            }
+                            
+                            html += `
+                                </div>
+                                <div class="question-meta">
+                                    <div>
+                                        <span>คะแนน: ${question.score} คะแนน</span>
+                                        <span class="ms-3 status-badge ${statusBadgeClass}">${statusText}</span>
+                                    </div>
+                                    <div class="question-actions">
+                                        <button type="button" class="btn btn-sm btn-outline-primary edit-question-btn"
+                                                data-id="${question.question_id}"
+                                                data-topic-id="${topicId}"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-title="แก้ไขคำถาม">
+                                            <i class="ri-pencil-line"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger delete-question-btn"
+                                                data-id="${question.question_id}"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-title="ลบคำถาม">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }
+                    }
+                    
+                    $('#questionPanel').html(html);
+                    
+                    // Initialize tooltips
+                    $('[data-bs-toggle="tooltip"]').tooltip();
+                    
+                    // ไฮไลท์หัวข้อที่เลือก
+                    $('.topic-card').removeClass('active');
+                    $(`.topic-card[data-id="${topicId}"]`).addClass('active');
+                } else {
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: response.message || 'ไม่สามารถโหลดรายการคำถามได้'
+                    });
+                }
+            },
+            error: function() {
+                hideLoading();
+                
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                });
+            }
+        });
+    }
+    
+    // โหลดคำถามทั้งหมดในชุดข้อสอบ
+    function loadAllQuestions() {
+        showLoading();
+        
+        $.ajax({
+            url: 'api/question-api.php',
+            type: 'GET',
+            data: {
+                action: 'list_by_exam_set',
+                exam_set_id: examSetId
+            },
+            dataType: 'json',
+            success: function(response) {
+                hideLoading();
+                
+                if (response.success) {
+                    // ตรวจสอบว่าตาราง DataTable ถูกสร้างไว้แล้วหรือไม่
+                    if ($.fn.DataTable.isDataTable('#allQuestionsTable')) {
+                        $('#allQuestionsTable').DataTable().destroy();
+                    }
+                    
+                    // สร้างตาราง DataTable ใหม่
+                    $('#allQuestionsTable').DataTable({
+                        data: response.data,
+                        columns: [
+                            { 
+                                data: null, 
+                                render: function(data, type, row, meta) {
+                                    return meta.row + 1;
+                                }
+                            },
+                            { 
+                                data: 'topic_name',
+                                render: function(data, type, row) {
+                                    return data || '-';
+                                }
+                            },
+                            { 
+                                data: 'content',
+                                render: function(data, type, row) {
+                                    if (type === 'display') {
+                                        // ลบ HTML tags สำหรับการแสดงผล
+                                        return $('<div>').html(data).text().substring(0, 100) + (data.length > 100 ? '...' : '');
+                                    }
+                                    return data;
+                                }
+                            },
+                            { 
+                                data: 'choices',
+                                render: function(data, type, row) {
+                                    if (type === 'display') {
+                                        return data.length + ' ตัวเลือก';
+                                    }
+                                    return data.length;
+                                }
+                            },
+                            { 
+                                data: 'choices',
+                                render: function(data, type, row) {
+                                    if (type === 'display') {
+                                        for (let i = 0; i < data.length; i++) {
+                                            if (data[i].is_correct == 1) {
+                                                return choiceLetters[i] || '-';
+                                            }
+                                        }
+                                        return '-';
+                                    }
+                                    return '-';
+                                }
+                            },
+                            { 
+                                data: 'score',
+                                render: function(data, type, row) {
+                                    return data || '0';
+                                }
+                            },
+                            { 
+                                data: null,
+                                render: function(data, type, row) {
+                                    if (type === 'display') {
+                                        return `
+                                        <div class="d-flex">
+                                            <button type="button" class="btn btn-sm btn-outline-primary edit-question-btn me-1"
+                                                    data-id="${row.question_id}"
+                                                    data-topic-id="${row.topic_id}">
+                                                <i class="ri-pencil-line"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger delete-question-btn"
+                                                    data-id="${row.question_id}">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                        `;
+                                    }
+                                    return null;
+                                },
+                                orderable: false
+                            }
+                        ],
+                        language: {
+                            url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/th.json',
+                        },
+                        responsive: true,
+                        dom: '<"row mb-3"<"col-md-6"B><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: '<i class="ri-file-excel-2-line me-1"></i> Excel',
+                                className: 'btn btn-success btn-sm me-2',
+                                exportOptions: {
+                                    columns: [0, 1, 2, 3, 4, 5]
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="ri-printer-line me-1"></i> พิมพ์',
+                                className: 'btn btn-info btn-sm me-2',
+                                exportOptions: {
+                                    columns: [0, 1, 2, 3, 4, 5]
+                                }
+                            }
+                        ],
+                        order: [[0, 'asc']]
+                    });
+                } else {
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: response.message || 'ไม่สามารถโหลดรายการคำถามได้'
+                    });
+                }
+            },
+            error: function() {
+                hideLoading();
+                
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                });
+            }
+        });
+    }
+    
+    // --------- Event Handlers ---------
+    
+    // เตรียม Summernote
+    $('#content').summernote({
+        placeholder: 'เขียนคำถามที่นี่...',
+        height: 150,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+            onImageUpload: function(files) {
+                // แจ้งเตือนให้ใช้ช่องอัปโหลดรูปภาพแทน
+                swalCustom.fire({
+                    icon: 'info',
+                    title: 'ใช้ช่องอัปโหลดรูปภาพด้านล่าง',
+                    text: 'กรุณาใช้ช่องอัปโหลดรูปภาพประกอบคำถามที่อยู่ด้านล่างแทน'
+                });
+            }
+        }
+    });
+    
+    // คลิกปุ่มเพิ่มหัวข้อ
+    $('#addTopicBtn, #addTopicBtnPlaceholder').on('click', function() {
+        resetTopicForm();
+        $('#topicModal').modal('show');
+    });
+    
+    // คลิกปุ่มบันทึกหัวข้อ
+    $('#saveTopicBtn').on('click', function() {
+        if (validateTopicForm()) {
             showLoading();
             
+            const formData = new FormData($('#topicForm')[0]);
+            
             $.ajax({
-                url: 'api/question-api.php?action=list_by_exam_set&exam_set_id=' + examSetId,
-                type: 'GET',
+                url: 'api/exam-topic-api.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
                 dataType: 'json',
                 success: function(response) {
                     hideLoading();
                     
                     if (response.success) {
-                        // ตรวจสอบว่าตาราง DataTable ถูกสร้างไว้แล้วหรือไม่
-                        if ($.fn.DataTable.isDataTable('#allQuestionsTable')) {
-                            $('#allQuestionsTable').DataTable().destroy();
-                        }
+                        // ปิด Modal
+                        $('#topicModal').modal('hide');
                         
-                        // สร้างตาราง DataTable ใหม่
-                        $('#allQuestionsTable').DataTable({
-                            data: response.data,
-                            columns: [
-                                { 
-                                    data: null, 
-                                    render: function(data, type, row, meta) {
-                                        return meta.row + 1;
-                                    }
-                                },
-                                { 
-                                    data: 'topic_name',
-                                    render: function(data, type, row) {
-                                        return data || '-';
-                                    }
-                                },
-                                { 
-                                    data: 'content',
-                                    render: function(data, type, row) {
-                                        if (type === 'display') {
-                                            // Remove HTML tags for display
-                                            return $('<div>').html(data).text().substring(0, 100) + (data.length > 100 ? '...' : '');
-                                        }
-                                        return data;
-                                    }
-                                },
-                                { 
-                                    data: 'choices',
-                                    render: function(data, type, row) {
-                                        if (type === 'display') {
-                                            return data.length + ' ตัวเลือก';
-                                        }
-                                        return data.length;
-                                    }
-                                },
-                                { 
-                                    data: 'choices',
-                                    render: function(data, type, row) {
-                                        if (type === 'display') {
-                                            for (let i = 0; i < data.length; i++) {
-                                                if (data[i].is_correct == 1) {
-                                                    return choiceLetters[i] || '-';
-                                                }
-                                            }
-                                            return '-';
-                                        }
-                                        return '-';
-                                    }
-                                },
-                                { 
-                                    data: 'score',
-                                    render: function(data, type, row) {
-                                        return data || '0';
-                                    }
-                                },
-                                { 
-                                    data: null,
-                                    render: function(data, type, row) {
-                                        if (type === 'display') {
-                                            return `
-                                            <div class="d-flex">
-                                                <button type="button" class="btn btn-sm btn-outline-primary edit-question-btn me-1"
-                                                        data-id="${row.question_id}"
-                                                        data-topic-id="${row.topic_id}">
-                                                    <i class="ri-pencil-line"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger delete-question-btn"
-                                                        data-id="${row.question_id}">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </button>
-                                            </div>
-                                            `;
-                                        }
-                                        return null;
-                                    },
-                                    orderable: false
-                                }
-                            ],
-                            language: {
-                                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/th.json',
-                            },
-                            responsive: true,
-                            dom: '<"row mb-3"<"col-md-6"B><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
-                            buttons: [
-                                {
-                                    extend: 'excel',
-                                    text: '<i class="ri-file-excel-2-line me-1"></i> Excel',
-                                    className: 'btn btn-success btn-sm me-2',
-                                    exportOptions: {
-                                        columns: [0, 1, 2, 3, 4, 5]
-                                    }
-                                },
-                                {
-                                    extend: 'print',
-                                    text: '<i class="ri-printer-line me-1"></i> พิมพ์',
-                                    className: 'btn btn-info btn-sm me-2',
-                                    exportOptions: {
-                                        columns: [0, 1, 2, 3, 4, 5]
-                                    }
-                                }
-                            ],
-                            order: [[0, 'asc']]
+                        // แสดงข้อความสำเร็จ
+                        swalCustom.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ!',
+                            text: formData.get('action') === 'create' ? 'เพิ่มหัวข้อข้อสอบใหม่เรียบร้อยแล้ว' : 'อัปเดตข้อมูลหัวข้อข้อสอบเรียบร้อยแล้ว',
+                            timer: 2000,
+                            showConfirmButton: false
                         });
+                        
+                        // โหลดรายการหัวข้อใหม่
+                        loadTopics();
+                        loadAllQuestions();
                     } else {
                         swalCustom.fire({
                             icon: 'error',
                             title: 'เกิดข้อผิดพลาด',
-                            text: response.message || 'ไม่สามารถโหลดรายการคำถามได้'
+                            text: response.message || 'ไม่สามารถบันทึกข้อมูลได้'
                         });
                     }
                 },
@@ -1334,174 +1523,129 @@ try {
                 }
             });
         }
+    });
+    
+    // คลิกปุ่มแก้ไขหัวข้อ
+    $(document).on('click', '.edit-topic-btn', function(e) {
+        e.stopPropagation();
         
-        // เพิ่มตัวเลือกในแบบฟอร์มคำถาม
-        function addChoiceField(index, content = '', isCorrect = false) {
-            const letter = choiceLetters[index] || '';
-            
-            const html = `
-            <div class="choice-row" data-index="${index}">
-                <div class="choice-label-col">
-                    <span class="choice-label">${letter}</span>
-                </div>
-                <div class="choice-content-col">
-                    <input type="text" class="form-control choice-input" name="choices[${index}][content]" 
-                           placeholder="ตัวเลือก ${letter}" value="${content}">
-                    <input type="hidden" name="choices[${index}][is_correct]" class="choice-correct-input" value="${isCorrect ? '1' : '0'}">
-                </div>
-                <div class="choice-correct-col">
-                    <div class="form-check">
-                        <input class="form-check-input choice-radio" type="radio" name="correct_choice" 
-                               value="${index}" id="choice_${index}" ${isCorrect ? 'checked' : ''}>
-                        <label class="form-check-label" for="choice_${index}">
-                            ถูกต้อง
-                        </label>
-                    </div>
-                </div>
-                <div class="choice-remove-col">
-                    <button type="button" class="btn btn-sm btn-outline-danger remove-choice-btn">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-            `;
-            
-            $('#choiceContainer').append(html);
-        }
+        const topicId = $(this).data('id');
         
-        // รีเซ็ตฟอร์มหัวข้อ
-        function resetTopicForm() {
-            $('#topic_id').val('0');
-            $('#action').val('create');
-            $('#name').val('');
-            $('#description').val('');
-            $('#status').val('1');
-            
-            $('#topicModalLabel').text('เพิ่มหัวข้อข้อสอบใหม่');
-            $('#topicForm .is-invalid').removeClass('is-invalid');
-        }
+        showLoading();
         
-        // รีเซ็ตฟอร์มคำถาม
-        function resetQuestionForm() {
-            $('#question_id').val('0');
-            $('#question_action').val('create');
-            $('#content').summernote('code', '');
-            $('#image').val('');
-            $('#score').val('1');
-            $('#question_status').val('1');
-            $('#currentImageContainer').addClass('d-none');
-            $('#currentImage').attr('src', '');
-            $('#removeImage').prop('checked', false);
-            
-            $('#choiceContainer').empty();
-            
-            // เพิ่มตัวเลือกเริ่มต้น 4 ตัวเลือก
-            for (let i = 0; i < 4; i++) {
-                addChoiceField(i);
-            }
-            
-            $('#questionModalLabel').text('เพิ่มคำถามใหม่');
-            $('#questionForm .is-invalid').removeClass('is-invalid');
-        }
-        
-        // ตรวจสอบความถูกต้องของฟอร์มหัวข้อ
-        function validateTopicForm() {
-            let isValid = true;
-            
-            // ตรวจสอบชื่อหัวข้อ
-            if ($('#name').val().trim() === '') {
-                $('#name').addClass('is-invalid');
-                isValid = false;
-            } else {
-                $('#name').removeClass('is-invalid');
-            }
-            
-            return isValid;
-        }
-        
-        // ตรวจสอบความถูกต้องของฟอร์มคำถาม
-        function validateQuestionForm() {
-            let isValid = true;
-            
-            // ตรวจสอบเนื้อหาคำถาม
-            const content = $('#content').summernote('code').trim();
-            if (content === '' || content === '<p><br></p>') {
-                $('#content').next('.note-editor').addClass('is-invalid');
-                isValid = false;
-            } else {
-                $('#content').next('.note-editor').removeClass('is-invalid');
-            }
-            
-            // ตรวจสอบว่ามีตัวเลือกอย่างน้อย 2 ตัว
-            if ($('.choice-row').length < 2) {
-                swalCustom.fire({
-                    icon: 'error',
-                    title: 'ข้อมูลไม่ครบถ้วน',
-                    text: 'กรุณาระบุตัวเลือกอย่างน้อย 2 ตัวเลือก'
-                });
-                isValid = false;
-            }
-            
-            // ตรวจสอบว่ามีการเลือกคำตอบที่ถูกต้อง
-            if ($('.choice-radio:checked').length === 0) {
-                swalCustom.fire({
-                    icon: 'error',
-                    title: 'ข้อมูลไม่ครบถ้วน',
-                    text: 'กรุณาเลือกคำตอบที่ถูกต้อง'
-                });
-                isValid = false;
-            }
-            
-            // ตรวจสอบว่าแต่ละตัวเลือกมีเนื้อหา
-            $('.choice-input').each(function() {
-                if ($(this).val().trim() === '') {
-                    $(this).addClass('is-invalid');
-                    isValid = false;
-                } else {
-                    $(this).removeClass('is-invalid');
-                }
-            });
-            
-            return isValid;
-        }
-        
-        // Event Handlers
-        
-        // คลิกปุ่มเพิ่มหัวข้อ
-        $('#addTopicBtn, #addTopicBtnPlaceholder').on('click', function() {
-            resetTopicForm();
-            $('#topicModal').modal('show');
-        });
-        
-        // คลิกปุ่มบันทึกหัวข้อ
-        $('#saveTopicBtn').on('click', function() {
-            if (validateTopicForm()) {
-                showLoading();
+        $.ajax({
+            url: 'api/exam-topic-api.php',
+            type: 'GET',
+            data: {
+                action: 'get',
+                id: topicId
+            },
+            dataType: 'json',
+            success: function(response) {
+                hideLoading();
                 
-                const formData = new FormData($('#topicForm')[0]);
+                if (response.success) {
+                    const topic = response.data;
+                    
+                    // รีเซ็ตฟอร์มก่อน
+                    resetTopicForm();
+                    
+                    // ใส่ข้อมูลเดิมลงในฟอร์ม
+                    $('#topic_id').val(topic.topic_id);
+                    $('#action').val('update');
+                    $('#name').val(topic.name);
+                    $('#description').val(topic.description || '');
+                    $('#status').val(topic.status);
+                    
+                    // เปลี่ยนชื่อ Modal
+                    $('#topicModalLabel').text('แก้ไขหัวข้อข้อสอบ');
+                    
+                    // แสดง Modal
+                    $('#topicModal').modal('show');
+                } else {
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: response.message || 'ไม่สามารถโหลดข้อมูลหัวข้อได้'
+                    });
+                }
+            },
+            error: function() {
+                hideLoading();
+                
+                swalCustom.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                });
+            }
+        });
+    });
+    
+    // คลิกปุ่มลบหัวข้อ
+    $(document).on('click', '.delete-topic-btn', function(e) {
+        e.stopPropagation();
+        
+        const topicId = $(this).data('id');
+        const topicName = $(this).data('name');
+        const questionCount = $(this).data('question-count');
+        
+        if (parseInt(questionCount) > 0) {
+            swalCustom.fire({
+                icon: 'warning',
+                title: 'ไม่สามารถลบได้',
+                text: `หัวข้อ "${topicName}" มีคำถามอยู่ ${questionCount} ข้อ กรุณาลบคำถามทั้งหมดก่อนลบหัวข้อ`
+            });
+            return;
+        }
+        
+        swalCustom.fire({
+            icon: 'warning',
+            title: 'ยืนยันการลบ',
+            html: `คุณต้องการลบหัวข้อ <span class="fw-bold">"${topicName}"</span> ใช่หรือไม่?<br><small class="text-danger">*หากลบแล้วจะไม่สามารถกู้คืนได้</small>`,
+            showCancelButton: true,
+            confirmButtonText: '<i class="ri-delete-bin-line me-1"></i> ลบ',
+            confirmButtonColor: '#dc3545',
+            cancelButtonText: 'ยกเลิก',
+            cancelButtonColor: '#6c757d'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                showLoading();
                 
                 $.ajax({
                     url: 'api/exam-topic-api.php',
                     type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    data: {
+                        action: 'delete',
+                        topic_id: topicId,
+                        csrf_token: csrfToken
+                    },
                     dataType: 'json',
                     success: function(response) {
                         hideLoading();
                         
                         if (response.success) {
-                            // ปิด Modal
-                            $('#topicModal').modal('hide');
-                            
                             // แสดงข้อความสำเร็จ
                             swalCustom.fire({
                                 icon: 'success',
                                 title: 'สำเร็จ!',
-                                text: formData.get('action') === 'create' ? 'เพิ่มหัวข้อข้อสอบใหม่เรียบร้อยแล้ว' : 'อัปเดตข้อมูลหัวข้อข้อสอบเรียบร้อยแล้ว',
+                                text: 'ลบหัวข้อข้อสอบเรียบร้อยแล้ว',
                                 timer: 2000,
                                 showConfirmButton: false
                             });
+                            
+                            // ถ้าหัวข้อที่ลบเป็นหัวข้อที่กำลังเลือกอยู่ ให้รีเซ็ต
+                            if (currentTopicId === topicId) {
+                                currentTopicId = 0;
+                                currentTopicName = '';
+                                $('#questionPanel').html(`
+                                <div class="no-topic-selected-placeholder" id="noTopicSelectedPlaceholder">
+                                    <i class="ri-question-mark placeholder-icon"></i>
+                                    <p class="placeholder-text">กรุณาเลือกหัวข้อข้อสอบ</p>
+                                    <p class="placeholder-subtext">เลือกหัวข้อข้อสอบจากรายการด้านซ้ายเพื่อดูคำถามในหัวข้อนั้น</p>
+                                </div>
+                                `);
+                            }
                             
                             // โหลดรายการหัวข้อใหม่
                             loadTopics();
@@ -1510,7 +1654,7 @@ try {
                             swalCustom.fire({
                                 icon: 'error',
                                 title: 'เกิดข้อผิดพลาด',
-                                text: response.message || 'ไม่สามารถบันทึกข้อมูลได้'
+                                text: response.message || 'ไม่สามารถลบหัวข้อได้'
                             });
                         }
                     },
@@ -1526,45 +1670,130 @@ try {
                 });
             }
         });
+    });
+    
+    // คลิกที่หัวข้อเพื่อดูคำถาม
+    $(document).on('click', '.topic-card', function() {
+        const topicId = $(this).data('id');
+        const topicName = $(this).data('name');
         
-        // คลิกปุ่มแก้ไขหัวข้อ
-        $(document).on('click', '.edit-topic-btn', function(e) {
-            e.stopPropagation();
+        if (currentTopicId !== topicId) {
+            loadQuestions(topicId, topicName);
+        }
+    });
+    
+    // คลิกปุ่มเพิ่มคำถาม
+    $(document).on('click', '.add-question-btn, #addQuestionFabBtn', function() {
+        const topicId = $(this).data('topic-id') || currentTopicId;
+        
+        if (topicId > 0) {
+            $('#question_topic_id').val(topicId);
+            resetQuestionForm();
+            $('#questionModal').modal('show');
+        } else {
+            swalCustom.fire({
+                icon: 'warning',
+                title: 'กรุณาเลือกหัวข้อ',
+                text: 'กรุณาเลือกหัวข้อข้อสอบที่ต้องการเพิ่มคำถามก่อน'
+            });
+        }
+    });
+    
+    // คลิกปุ่มเพิ่มตัวเลือก
+    $('#addChoiceBtn').on('click', function() {
+        const index = $('.choice-row').length;
+        
+        if (index < 10) { // จำกัดไม่เกิน 10 ตัวเลือก
+            addChoiceField(index);
+        } else {
+            swalCustom.fire({
+                icon: 'warning',
+                title: 'ข้อจำกัด',
+                text: 'ไม่สามารถเพิ่มตัวเลือกได้มากกว่า 10 ตัวเลือก'
+            });
+        }
+    });
+    
+    // คลิกปุ่มลบตัวเลือก
+    $(document).on('click', '.remove-choice-btn', function() {
+        const choiceRow = $(this).closest('.choice-row');
+        
+        if ($('.choice-row').length > 2) { // ต้องมีอย่างน้อย 2 ตัวเลือก
+            choiceRow.remove();
             
-            const topicId = $(this).data('id');
-            
+            // รีเซ็ตลำดับและ index ใหม่
+            $('.choice-row').each(function(idx) {
+                const letter = choiceLetters[idx];
+                $(this).attr('data-index', idx);
+                $(this).find('.choice-label').text(letter);
+                $(this).find('.choice-input').attr('name', `choices[${idx}][content]`).attr('placeholder', `ตัวเลือก ${letter}`);
+                $(this).find('.choice-correct-input').attr('name', `choices[${idx}][is_correct]`);
+                $(this).find('.choice-radio').val(idx).attr('id', `choice_${idx}`);
+                $(this).find('.form-check-label').attr('for', `choice_${idx}`);
+            });
+        } else {
+            swalCustom.fire({
+                icon: 'warning',
+                title: 'ข้อจำกัด',
+                text: 'ต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือก'
+            });
+        }
+    });
+    
+    // เลือกคำตอบที่ถูกต้อง
+    $(document).on('change', '.choice-radio', function() {
+        // รีเซ็ตทุกตัวเลือกให้เป็นคำตอบที่ไม่ถูกต้อง
+        $('.choice-correct-input').val('0');
+        
+        // กำหนดตัวเลือกที่เลือกให้เป็นคำตอบที่ถูกต้อง
+        const index = $(this).val();
+        $(`input[name="choices[${index}][is_correct]"]`).val('1');
+    });
+    
+    // ปุ่มล้างรูปภาพ
+    $('#clearImageBtn').on('click', function() {
+        $('#image').val('');
+    });
+    
+    // คลิกปุ่มบันทึกคำถาม
+    $('#saveQuestionBtn').on('click', function() {
+        if (validateQuestionForm()) {
             showLoading();
             
+            const formData = new FormData($('#questionForm')[0]);
+            
             $.ajax({
-                url: 'api/exam-topic-api.php?action=get&id=' + topicId,
-                type: 'GET',
+                url: 'api/question-api.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
                 dataType: 'json',
                 success: function(response) {
                     hideLoading();
                     
                     if (response.success) {
-                        const topic = response.data;
+                        // ปิด Modal
+                        $('#questionModal').modal('hide');
                         
-                        // รีเซ็ตฟอร์มก่อน
-                        resetTopicForm();
+                        // แสดงข้อความสำเร็จ
+                        swalCustom.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ!',
+                            text: formData.get('action') === 'create' ? 'เพิ่มคำถามใหม่เรียบร้อยแล้ว' : 'อัปเดตข้อมูลคำถามเรียบร้อยแล้ว',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                         
-                        // ใส่ข้อมูลเดิมลงในฟอร์ม
-                        $('#topic_id').val(topic.topic_id);
-                        $('#action').val('update');
-                        $('#name').val(topic.name);
-                        $('#description').val(topic.description || '');
-                        $('#status').val(topic.status);
-                        
-                        // เปลี่ยนชื่อ Modal
-                        $('#topicModalLabel').text('แก้ไขหัวข้อข้อสอบ');
-                        
-                        // แสดง Modal
-                        $('#topicModal').modal('show');
+                        // โหลดคำถามใหม่
+                        loadQuestions(currentTopicId, currentTopicName);
+                        loadTopics(); // โหลดหัวข้อใหม่เพื่ออัปเดตจำนวนคำถาม
+                        loadAllQuestions();
                     } else {
                         swalCustom.fire({
                             icon: 'error',
                             title: 'เกิดข้อผิดพลาด',
-                            text: response.message || 'ไม่สามารถโหลดข้อมูลหัวข้อได้'
+                            text: response.message || 'ไม่สามารถบันทึกข้อมูลได้'
                         });
                     }
                 },
@@ -1578,252 +1807,136 @@ try {
                     });
                 }
             });
-        });
+        }
+    });
+    
+    // คลิกปุ่มแก้ไขคำถาม
+    $(document).on('click', '.edit-question-btn', function() {
+        const questionId = $(this).data('id');
+        const topicId = $(this).data('topic-id');
         
-        // คลิกปุ่มลบหัวข้อ
-        $(document).on('click', '.delete-topic-btn', function(e) {
-            e.stopPropagation();
-            
-            const topicId = $(this).data('id');
-            const topicName = $(this).data('name');
-            const questionCount = $(this).data('question-count');
-            
-            if (parseInt(questionCount) > 0) {
-                swalCustom.fire({
-                    icon: 'warning',
-                    title: 'ไม่สามารถลบได้',
-                    text: `หัวข้อ "${topicName}" มีคำถามอยู่ ${questionCount} ข้อ กรุณาลบคำถามทั้งหมดก่อนลบหัวข้อ`
-                });
-                return;
-            }
-            
-            swalCustom.fire({
-                icon: 'warning',
-                title: 'ยืนยันการลบ',
-                html: `คุณต้องการลบหัวข้อ <span class="fw-bold">"${topicName}"</span> ใช่หรือไม่?<br><small class="text-danger">*หากลบแล้วจะไม่สามารถกู้คืนได้</small>`,
-                showCancelButton: true,
-                confirmButtonText: '<i class="ri-delete-bin-line me-1"></i> ลบ',
-                confirmButtonColor: '#dc3545',
-                cancelButtonText: 'ยกเลิก',
-                cancelButtonColor: '#6c757d'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    showLoading();
+        showLoading();
+        
+        $.ajax({
+            url: 'api/question-api.php',
+            type: 'GET',
+            data: {
+                action: 'get',
+                id: questionId
+            },
+            dataType: 'json',
+            success: function(response) {
+                hideLoading();
+                
+                if (response.success) {
+                    const question = response.data;
                     
-                    $.ajax({
-                        url: 'api/exam-topic-api.php',
-                        type: 'POST',
-                        data: {
-                            action: 'delete',
-                            topic_id: topicId,
-                            csrf_token: $('input[name="csrf_token"]').val()
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            hideLoading();
-                            
-                            if (response.success) {
-                                // แสดงข้อความสำเร็จ
-                                swalCustom.fire({
-                                    icon: 'success',
-                                    title: 'สำเร็จ!',
-                                    text: 'ลบหัวข้อข้อสอบเรียบร้อยแล้ว',
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                });
-                                
-                                // ถ้าหัวข้อที่ลบเป็นหัวข้อที่กำลังเลือกอยู่ ให้รีเซ็ต
-                                if (currentTopicId === topicId) {
-                                    currentTopicId = 0;
-                                    currentTopicName = '';
-                                    $('#questionPanel').html(`
-                                    <div class="no-topic-selected-placeholder" id="noTopicSelectedPlaceholder">
-                                        <i class="ri-question-mark placeholder-icon"></i>
-                                        <p class="placeholder-text">กรุณาเลือกหัวข้อข้อสอบ</p>
-                                        <p class="placeholder-subtext">เลือกหัวข้อข้อสอบจากรายการด้านซ้ายเพื่อดูคำถามในหัวข้อนั้น</p>
-                                    </div>
-                                    `);
-                                }
-                                
-                                // โหลดรายการหัวข้อใหม่
-                                loadTopics();
-                                loadAllQuestions();
-                            } else {
-                                swalCustom.fire({
-                                    icon: 'error',
-                                    title: 'เกิดข้อผิดพลาด',
-                                    text: response.message || 'ไม่สามารถลบหัวข้อได้'
-                                });
-                            }
-                        },
-                        error: function() {
-                            hideLoading();
-                            
-                            swalCustom.fire({
-                                icon: 'error',
-                                title: 'เกิดข้อผิดพลาด',
-                                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                            });
+                    // รีเซ็ตฟอร์มก่อน
+                    resetQuestionForm();
+                    
+                    // ใส่ข้อมูลเดิมลงในฟอร์ม
+                    $('#question_id').val(question.question_id);
+                    $('#question_topic_id').val(question.topic_id);
+                    $('#question_action').val('update');
+                    $('#content').summernote('code', question.content);
+                    $('#score').val(question.score);
+                    $('#question_status').val(question.status);
+                    
+                    // ตรวจสอบว่ามีรูปภาพหรือไม่
+                    if (question.image) {
+                        $('#currentImageContainer').removeClass('d-none');
+                        $('#currentImage').attr('src', question.image);
+                    }
+                    
+                    // ใส่ตัวเลือก
+                    $('#choiceContainer').empty();
+                    if (question.choices && question.choices.length > 0) {
+                        for (let i = 0; i < question.choices.length; i++) {
+                            const choice = question.choices[i];
+                            addChoiceField(i, choice.content, choice.is_correct == 1);
                         }
+                    } else {
+                        // ถ้าไม่มีตัวเลือก ให้เพิ่มตัวเลือกเริ่มต้น 4 ตัวเลือก
+                        for (let i = 0; i < 4; i++) {
+                            addChoiceField(i);
+                        }
+                    }
+                    
+                    // เปลี่ยนชื่อ Modal
+                    $('#questionModalLabel').text('แก้ไขคำถาม');
+                    
+                    // แสดง Modal
+                    $('#questionModal').modal('show');
+                } else {
+                    swalCustom.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: response.message || 'ไม่สามารถโหลดข้อมูลคำถามได้'
                     });
                 }
-            });
-        });
-        
-        // คลิกที่หัวข้อเพื่อดูคำถาม
-        $(document).on('click', '.topic-card', function() {
-            const topicId = $(this).data('id');
-            const topicName = $(this).data('name');
-            
-            if (currentTopicId !== topicId) {
-                loadQuestions(topicId, topicName);
-            }
-        });
-        
-        // คลิกปุ่มเพิ่มคำถาม
-        $(document).on('click', '.add-question-btn, #addQuestionFabBtn', function() {
-            const topicId = $(this).data('topic-id') || currentTopicId;
-            
-            if (topicId > 0) {
-                $('#question_topic_id').val(topicId);
-                resetQuestionForm();
-                $('#questionModal').modal('show');
-            } else {
-                swalCustom.fire({
-                    icon: 'warning',
-                    title: 'กรุณาเลือกหัวข้อ',
-                    text: 'กรุณาเลือกหัวข้อข้อสอบที่ต้องการเพิ่มคำถามก่อน'
-                });
-            }
-        });
-        
-        // คลิกปุ่มเพิ่มตัวเลือก
-        $('#addChoiceBtn').on('click', function() {
-            const index = $('.choice-row').length;
-            
-            if (index < 10) { // จำกัดไม่เกิน 10 ตัวเลือก
-                addChoiceField(index);
-            } else {
-                swalCustom.fire({
-                    icon: 'warning',
-                    title: 'ข้อจำกัด',
-                    text: 'ไม่สามารถเพิ่มตัวเลือกได้มากกว่า 10 ตัวเลือก'
-                });
-            }
-        });
-        
-        // คลิกปุ่มลบตัวเลือก
-        $(document).on('click', '.remove-choice-btn', function() {
-            const choiceRow = $(this).closest('.choice-row');
-            
-            if ($('.choice-row').length > 2) { // ต้องมีอย่างน้อย 2 ตัวเลือก
-                choiceRow.remove();
+            },
+            error: function() {
+                hideLoading();
                 
-                // รีเซ็ตลำดับและ index ใหม่
-                $('.choice-row').each(function(idx) {
-                    const letter = choiceLetters[idx];
-                    $(this).attr('data-index', idx);
-                    $(this).find('.choice-label').text(letter);
-                    $(this).find('.choice-input').attr('name', `choices[${idx}][content]`).attr('placeholder', `ตัวเลือก ${letter}`);
-                    $(this).find('.choice-correct-input').attr('name', `choices[${idx}][is_correct]`);
-                    $(this).find('.choice-radio').val(idx).attr('id', `choice_${idx}`);
-                    $(this).find('.form-check-label').attr('for', `choice_${idx}`);
-                });
-            } else {
                 swalCustom.fire({
-                    icon: 'warning',
-                    title: 'ข้อจำกัด',
-                    text: 'ต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือก'
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
                 });
             }
         });
+    });
+    
+    // คลิกปุ่มลบคำถาม
+    $(document).on('click', '.delete-question-btn', function() {
+        const questionId = $(this).data('id');
         
-        // เลือกคำตอบที่ถูกต้อง
-        $(document).on('change', '.choice-radio', function() {
-            // รีเซ็ตทุกตัวเลือกให้เป็นคำตอบที่ไม่ถูกต้อง
-            $('.choice-correct-input').val('0');
-            
-            // กำหนดตัวเลือกที่เลือกให้เป็นคำตอบที่ถูกต้อง
-            const index = $(this).val();
-            $(`input[name="choices[${index}][is_correct]"]`).val('1');
-        });
-        
-        // ปุ่มล้างรูปภาพ
-        $('#clearImageBtn').on('click', function() {
-            $('#image').val('');
-        });
-        
-        // คลิกปุ่มบันทึกคำถาม
-        $('#saveQuestionBtn').on('click', function() {
-            if (validateQuestionForm()) {
+        swalCustom.fire({
+            icon: 'warning',
+            title: 'ยืนยันการลบ',
+            html: 'คุณต้องการลบคำถามนี้ใช่หรือไม่?<br><small class="text-danger">*หากลบแล้วจะไม่สามารถกู้คืนได้</small>',
+            showCancelButton: true,
+            confirmButtonText: '<i class="ri-delete-bin-line me-1"></i> ลบ',
+            confirmButtonColor: '#dc3545',
+            cancelButtonText: 'ยกเลิก',
+cancelButtonColor: '#6c757d'
+        }).then((result) => {
+            if (result.isConfirmed) {
                 showLoading();
-                
-                const formData = new FormData($('#questionForm')[0]);
-                
-                // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
-                if ($('#image')[0].files.length > 0) {
-                    const file = $('#image')[0].files[0];
-                    
-                    // ตรวจสอบขนาดไฟล์
-                    if (file.size > 2 * 1024 * 1024) { // 2MB
-                        hideLoading();
-                        
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'ไฟล์มีขนาดใหญ่เกินไป',
-                            text: 'กรุณาอัปโหลดไฟล์ขนาดไม่เกิน 2MB'
-                        });
-                        
-                        return;
-                    }
-                    
-                    // ตรวจสอบประเภทไฟล์
-                    const fileType = file.type.toLowerCase();
-                    if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/gif') {
-                        hideLoading();
-                        
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'ประเภทไฟล์ไม่ถูกต้อง',
-                            text: 'กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น (JPEG, PNG, GIF)'
-                        });
-                        
-                        return;
-                    }
-                }
                 
                 $.ajax({
                     url: 'api/question-api.php',
                     type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
+                    data: {
+                        action: 'delete',
+                        question_id: questionId,
+                        csrf_token: csrfToken
+                    },
                     dataType: 'json',
                     success: function(response) {
                         hideLoading();
                         
                         if (response.success) {
-                            // ปิด Modal
-                            $('#questionModal').modal('hide');
-                            
                             // แสดงข้อความสำเร็จ
                             swalCustom.fire({
                                 icon: 'success',
                                 title: 'สำเร็จ!',
-                                text: formData.get('action') === 'create' ? 'เพิ่มคำถามใหม่เรียบร้อยแล้ว' : 'อัปเดตข้อมูลคำถามเรียบร้อยแล้ว',
+                                text: 'ลบคำถามเรียบร้อยแล้ว',
                                 timer: 2000,
                                 showConfirmButton: false
                             });
                             
                             // โหลดคำถามใหม่
-                            loadQuestions(currentTopicId, currentTopicName);
+                            if (currentTopicId > 0) {
+                                loadQuestions(currentTopicId, currentTopicName);
+                            }
                             loadTopics(); // โหลดหัวข้อใหม่เพื่ออัปเดตจำนวนคำถาม
                             loadAllQuestions();
                         } else {
                             swalCustom.fire({
                                 icon: 'error',
                                 title: 'เกิดข้อผิดพลาด',
-                                text: response.message || 'ไม่สามารถบันทึกข้อมูลได้'
+                                text: response.message || 'ไม่สามารถลบคำถามได้'
                             });
                         }
                     },
@@ -1839,176 +1952,39 @@ try {
                 });
             }
         });
-        
-        // คลิกปุ่มแก้ไขคำถาม
-        $(document).on('click', '.edit-question-btn', function() {
-            const questionId = $(this).data('id');
-            const topicId = $(this).data('topic-id');
-            
-            showLoading();
-            
-            $.ajax({
-                url: 'api/question-api.php?action=get&id=' + questionId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    hideLoading();
-                    
-                    if (response.success) {
-                        const question = response.data;
-                        
-                        // รีเซ็ตฟอร์มก่อน
-                        resetQuestionForm();
-                        
-                        // ใส่ข้อมูลเดิมลงในฟอร์ม
-                        $('#question_id').val(question.question_id);
-                        $('#question_topic_id').val(question.topic_id);
-                        $('#question_action').val('update');
-                        $('#content').summernote('code', question.content);
-                        $('#score').val(question.score);
-                        $('#question_status').val(question.status);
-                        
-                        // ตรวจสอบว่ามีรูปภาพหรือไม่
-                        if (question.image) {
-                            $('#currentImageContainer').removeClass('d-none');
-                            $('#currentImage').attr('src', baseUrl + question.image);
-                        }
-                        
-                        // ใส่ตัวเลือก
-                        $('#choiceContainer').empty();
-                        if (question.choices && question.choices.length > 0) {
-                            for (let i = 0; i < question.choices.length; i++) {
-                                const choice = question.choices[i];
-                                addChoiceField(i, choice.content, choice.is_correct == 1);
-                            }
-                        } else {
-                            // ถ้าไม่มีตัวเลือก ให้เพิ่มตัวเลือกเริ่มต้น 4 ตัวเลือก
-                            for (let i = 0; i < 4; i++) {
-                                addChoiceField(i);
-                            }
-                        }
-                        
-                        // เปลี่ยนชื่อ Modal
-                        $('#questionModalLabel').text('แก้ไขคำถาม');
-                        
-                        // แสดง Modal
-                        $('#questionModal').modal('show');
-                    } else {
-                        swalCustom.fire({
-                            icon: 'error',
-                            title: 'เกิดข้อผิดพลาด',
-                            text: response.message || 'ไม่สามารถโหลดข้อมูลคำถามได้'
-                        });
-                    }
-                },
-                error: function() {
-                    hideLoading();
-                    
-                    swalCustom.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                    });
-                }
-            });
-        });
-        
-        // คลิกปุ่มลบคำถาม
-        $(document).on('click', '.delete-question-btn', function() {
-            const questionId = $(this).data('id');
-            
-            swalCustom.fire({
-                icon: 'warning',
-                title: 'ยืนยันการลบ',
-                html: 'คุณต้องการลบคำถามนี้ใช่หรือไม่?<br><small class="text-danger">*หากลบแล้วจะไม่สามารถกู้คืนได้</small>',
-                showCancelButton: true,
-                confirmButtonText: '<i class="ri-delete-bin-line me-1"></i> ลบ',
-                confirmButtonColor: '#dc3545',
-                cancelButtonText: 'ยกเลิก',
-                cancelButtonColor: '#6c757d'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    showLoading();
-                    
-                    $.ajax({
-                        url: 'api/question-api.php',
-                        type: 'POST',
-                        data: {
-                            action: 'delete',
-                            question_id: questionId,
-                            csrf_token: $('input[name="csrf_token"]').val()
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            hideLoading();
-                            
-                            if (response.success) {
-                                // แสดงข้อความสำเร็จ
-                                swalCustom.fire({
-                                    icon: 'success',
-                                    title: 'สำเร็จ!',
-                                    text: 'ลบคำถามเรียบร้อยแล้ว',
-                                    timer: 2000,
-                                    showConfirmButton: false
-                                });
-                                
-                                // โหลดคำถามใหม่
-                                if (currentTopicId > 0) {
-                                    loadQuestions(currentTopicId, currentTopicName);
-                                }
-                                loadTopics(); // โหลดหัวข้อใหม่เพื่ออัปเดตจำนวนคำถาม
-                                loadAllQuestions();
-                            } else {
-                                swalCustom.fire({
-                                    icon: 'error',
-                                    title: 'เกิดข้อผิดพลาด',
-                                    text: response.message || 'ไม่สามารถลบคำถามได้'
-                                });
-                            }
-                        },
-                        error: function() {
-                            hideLoading();
-                            
-                            swalCustom.fire({
-                                icon: 'error',
-                                title: 'เกิดข้อผิดพลาด',
-                                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
-                            });
-                        }
-                    });
-                }
-            });
-        });
-        
-        // ปุ่มส่งออก
-        $('#exportQuestionsBtn').on('click', function() {
-            if ($.fn.DataTable.isDataTable('#allQuestionsTable')) {
-                $('#allQuestionsTable').DataTable().button(0).trigger();
-            }
-        });
-        
-        // ลงทะเบียน Event Listener สำหรับอินพุตในฟอร์ม
-        $('#name, #description, #status').on('input change', function() {
-            $(this).removeClass('is-invalid');
-        });
-        
-        $('#content').on('summernote.change', function() {
-            $(this).next('.note-editor').removeClass('is-invalid');
-        });
-        
-        $(document).on('input', '.choice-input', function() {
-            $(this).removeClass('is-invalid');
-        });
-        
-        // เมื่อปิด Modal ให้รีเซ็ตฟอร์ม
-        $('#topicModal').on('hidden.bs.modal', function() {
-            resetTopicForm();
-        });
-        
-        $('#questionModal').on('hidden.bs.modal', function() {
-            resetQuestionForm();
-        });
-        
+    });
+    
+    // ปุ่มส่งออก
+    $('#exportQuestionsBtn').on('click', function() {
+        if ($.fn.DataTable.isDataTable('#allQuestionsTable')) {
+            $('#allQuestionsTable').DataTable().button(0).trigger();
+        }
+    });
+    
+    // ลงทะเบียน Event Listener สำหรับอินพุตในฟอร์ม
+    $('#name, #description, #status').on('input change', function() {
+        $(this).removeClass('is-invalid');
+    });
+    
+    $('#content').on('summernote.change', function() {
+        $(this).next('.note-editor').removeClass('is-invalid');
+    });
+    
+    $(document).on('input', '.choice-input', function() {
+        $(this).removeClass('is-invalid');
+    });
+    
+    // เมื่อปิด Modal ให้รีเซ็ตฟอร์ม
+    $('#topicModal').on('hidden.bs.modal', function() {
+        resetTopicForm();
+    });
+    
+    $('#questionModal').on('hidden.bs.modal', function() {
+        resetQuestionForm();
+    });
+    
+    // เริ่มต้นการทำงาน
+    $(function() {
         // แสดงสถานะการโหลดข้อมูล
         showLoading();
         
@@ -2029,4 +2005,12 @@ try {
             <p class="placeholder-subtext">เลือกหัวข้อข้อสอบจากรายการด้านซ้ายเพื่อดูคำถามในหัวข้อนั้น</p>
         </div>
         `);
+        
+        // Initialize tooltips
+        $('[data-bs-toggle="tooltip"]').tooltip();
     });
+});
+
+    </script>
+</body>
+</html>
