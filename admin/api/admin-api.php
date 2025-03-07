@@ -115,11 +115,11 @@ switch ($action) {
             $totalRecords = $stmtCount->fetch(PDO::FETCH_ASSOC)['total'];
             $filteredRecords = $totalRecords;
             
-            // สร้าง SQL สำหรับการดึงข้อมูล
+            // สร้าง SQL สำหรับการดึงข้อมูล - ดึงค่า status จริงจากฐานข้อมูล
             $sql = "SELECT admin_id, username, name, email, created_at, updated_at, 
-                   1 AS status, -- เพิ่มคอลัมน์ status เป็น 1 (ใช้งาน) ทุกรายการเนื่องจากยังไม่มีคอลัมน์ status จริงในตาราง
-                   (CASE WHEN admin_id = ? THEN 1 ELSE 0 END) AS is_current_user
-                  FROM admin" . $searchSql;
+               status, -- ใช้ค่า status จริงจากฐานข้อมูล
+               (CASE WHEN admin_id = ? THEN 1 ELSE 0 END) AS is_current_user
+              FROM admin" . $searchSql;
             
             // เพิ่มการเรียงลำดับและการแบ่งหน้า
             $orderColumn = isset($_GET['order'][0]['column']) ? intval($_GET['order'][0]['column']) : 0;
