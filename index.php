@@ -1144,4 +1144,141 @@
                     <div class="about-content">
                         <h2 class="about-title">เกี่ยวกับระบบประเมินสมรรถนะวิชาชีพครู</h2>
                         <p class="about-description">
-                            ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมใน
+                            ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา พัฒนาขึ้นโดยคณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย เพื่อยกระดับมาตรฐานการประเมินสมรรถนะวิชาชีพครูให้มีประสิทธิภาพและทันสมัย
+                        </p>
+                        <p class="about-description">
+                            ระบบของเรามุ่งเน้นการประเมินสมรรถนะครูอย่างรอบด้าน ทั้งด้านความรู้ ทักษะ และเจตคติ สอดคล้องกับมาตรฐานวิชาชีพครูและบริบทของการจัดการศึกษาอาชีวศึกษาในปัจจุบัน
+                        </p>
+
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <h3 class="stat-number">3,500+</h3>
+                                <p class="stat-label">ผู้ใช้งาน</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3 class="stat-number">120+</h3>
+                                <p class="stat-label">สถาบันการศึกษา</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3 class="stat-number">15,000+</h3>
+                                <p class="stat-label">การทดสอบ</p>
+                            </div>
+                        </div>
+
+                        <a href="#" class="btn about-btn waves-effect waves-light">
+                            <i class="fas fa-info-circle"></i> ข้อมูลเพิ่มเติม
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="cta-bg-circles">
+            <div class="cta-circle cta-circle-1"></div>
+            <div class="cta-circle cta-circle-2"></div>
+            <div class="cta-circle cta-circle-3"></div>
+        </div>
+
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2 class="cta-title">เริ่มต้นประเมินสมรรถนะวิชาชีพครูได้ทันที</h2>
+                <p class="cta-description">ร่วมเป็นส่วนหนึ่งในการพัฒนาศักยภาพครูช่างอุตสาหกรรมไทย ด้วยระบบประเมินที่ทันสมัย มาตรฐานสูง ใช้งานง่าย</p>
+                <a href="#" class="btn cta-btn waves-effect waves-light">
+                    <i class="fas fa-user-plus"></i> สมัครใช้งานฟรี
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 l4">
+                    <div class="footer-logo">
+                        <h4>ระบบประเมินสมรรถนะวิชาชีพครู</h4>
+                    </div>
+                    <p class="footer-description">
+                        ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-line"></i></a>
+                    </div>
+                </div>
+
+                <div class="col s12 m6 l4">
+                    <h4 class="footer-widget-title">ลิงก์ด่วน</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> หน้าหลัก</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> ข่าวประชาสัมพันธ์</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> ปฏิทินการสอบ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> สอบออนไลน์</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> ประกาศผลสอบ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> คลังข้อสอบ</a></li>
+                    </ul>
+                </div>
+
+                <div class="col s12 m6 l4">
+                    <h4 class="footer-widget-title">ติดต่อเรา</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี<br>มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย<br>เลขที่ 1 ถ.ราชดำเนินนอก ต.บ่อยาง อ.เมือง จ.สงขลา 90000</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>0-7431-7100 ต่อ 3000, 3016</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>ied@rmutsv.ac.th</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Top Button -->
+    <div class="scrolltop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom Script -->
+    <script>
+        $(document).ready(function(){
+            // Initialize Materialize components
+            $('.sidenav').sidenav();
+            $('.dropdown-trigger').dropdown({
+                coverTrigger: false,
+                constrainWidth: false,
+                hover: true
+            });
+            
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Preloader
