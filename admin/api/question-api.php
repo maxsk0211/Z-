@@ -94,8 +94,8 @@ function uploadImage($file, $oldImage = null) {
     }
     
     // ลบไฟล์เก่า
-    if ($oldImage && file_exists(__DIR__ . '/../../' . $oldImage)) {
-        unlink(__DIR__ . '/../../' . $oldImage);
+    if ($oldImage && file_exists(__DIR__ . '/../../img/question/' . $oldImage)) {
+        unlink(__DIR__ . '/../../img/question/' . $oldImage);
     }
     
     return $newFilename;
@@ -371,11 +371,11 @@ switch ($action) {
             
             // จัดการรูปภาพ
             $imagePath = $oldQuestion['image'];
-            
+
             if ($remove_image) {
                 // ลบรูปภาพเก่า
-                if ($imagePath && file_exists(__DIR__ . '/../../' . $imagePath)) {
-                    unlink(__DIR__ . '/../../' . $imagePath);
+                if ($imagePath && file_exists(__DIR__ . '/../../img/question/' . $imagePath)) {
+                    unlink(__DIR__ . '/../../img/question/' . $imagePath);
                 }
                 $imagePath = null;
             } else if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
@@ -466,8 +466,8 @@ switch ($action) {
             $stmt->execute([$question_id]);
             
             // ลบรูปภาพประกอบ (ถ้ามี)
-            if ($question['image'] && file_exists(__DIR__ . '/../../' . $question['image'])) {
-                unlink(__DIR__ . '/../../' . $question['image']);
+            if ($question['image'] && file_exists(__DIR__ . '/../../img/question/' . $question['image'])) {
+                unlink(__DIR__ . '/../../img/question/' . $question['image']);
             }
             
             // บันทึก transaction
