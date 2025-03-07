@@ -44,8 +44,16 @@ function logActivity($conn, $action, $details) {
 // ฟังก์ชันสำหรับทำความสะอาดข้อความที่จะบันทึกลง log
 function sanitizeForLog($text) {
     // ตัดทอนข้อความถ้ายาวเกินไป
-    if (mb_strlen($text, 'UTF-8') > 200) {
-        $text = mb_substr($text, 0, 197, 'UTF-8') . '...';
+    if (function_exists('mb_strlen')) {
+        // ใช้ฟังก์ชัน mbstring ถ้ามี
+        if (mb_strlen($text, 'UTF-8') > 200) {
+            $text = mb_substr($text, 0, 197, 'UTF-8') . '...';
+        }
+    } else {
+        // ใช้ฟังก์ชันพื้นฐานถ้าไม่มี mbstring
+        if (strlen($text) > 200) {
+            $text = substr($text, 0, 197) . '...';
+        }
     }
     
     // แทนที่อักขระพิเศษหรือข้อความ HTML
@@ -53,7 +61,6 @@ function sanitizeForLog($text) {
     
     return $text;
 }
-
 function getCurrentDateTime() {
     return date('Y-m-d H:i:s');
 }
