@@ -935,4 +935,367 @@
                         <li class="dropdown-trigger">
                             <a href="#">ประกาศผลสอบ<i class="material-icons right">arrow_drop_down</i></a>
                             <ul class="dropdown-content">
-                                <li><a href="#"><i class="material-icons left">new_releases</i>ผลการสอบล่าสุด
+                                <li><a href="#"><i class="material-icons left">new_releases</i>ผลการสอบล่าสุด</a></li>
+                                <li><a href="#"><i class="material-icons left">history</i>ประวัติการสอบ</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-trigger">
+                            <a href="#">คลังข้อสอบ<i class="material-icons right">arrow_drop_down</i></a>
+                            <ul class="dropdown-content">
+                                <li><a href="#"><i class="material-icons left">school</i>ทดลองทำข้อสอบ</a></li>
+                                <li><a href="#"><i class="material-icons left">menu_book</i>แนวข้อสอบ</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-trigger">
+                            <a href="#">ผู้ดูแลระบบ<i class="material-icons right">arrow_drop_down</i></a>
+                            <ul class="dropdown-content">
+                                <li><a href="#"><i class="material-icons left">settings</i>จัดการข้อมูล</a></li>
+                                <li><a href="#"><i class="material-icons left">assessment</i>รายงาน</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Mobile Sidenav -->
+    <ul class="sidenav" id="mobile-nav">
+        <li><div class="user-view">
+            <div class="background" style="background-color: var(--secondary-color)"></div>
+            <a href="#"><i class="material-icons white-text" style="font-size: 48px;">school</i></a>
+            <a href="#"><span class="white-text name">ระบบประเมินสมรรถนะวิชาชีพครู</span></a>
+            <a href="#"><span class="white-text email">มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย</span></a>
+        </div></li>
+        
+        <li><a class="subheader">เมนูหลัก</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">home</i>หน้าแรก</a></li>
+        <li><div class="divider"></div></li>
+        
+        <li><a class="subheader">ข่าวสาร</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">article</i>ข่าวทั้งหมด</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">announcement</i>ประกาศ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">event</i>กิจกรรม</a></li>
+        <li><div class="divider"></div></li>
+        
+        <li><a class="subheader">การสอบ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">event_note</i>ตารางสอบ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">schedule</i>กำหนดการ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">edit</i>สอบออนไลน์</a></li>
+        <li><div class="divider"></div></li>
+        
+        <li><a class="subheader">ผลการสอบ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">new_releases</i>ผลการสอบล่าสุด</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">history</i>ประวัติการสอบ</a></li>
+        <li><div class="divider"></div></li>
+        
+        <li><a class="subheader">คลังข้อมูล</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">school</i>ทดลองทำข้อสอบ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">menu_book</i>แนวข้อสอบ</a></li>
+        <li><div class="divider"></div></li>
+        
+        <li><a href="#" class="waves-effect"><i class="material-icons">login</i>เข้าสู่ระบบ</a></li>
+        <li><a href="#" class="waves-effect"><i class="material-icons">person_add</i>สมัครสมาชิก</a></li>
+    </ul>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="circle-decoration"></div>
+        <div class="shape-1"></div>
+        <div class="shape-2"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m6" data-aos="fade-right" data-aos-duration="1000">
+                    <div class="hero-content">
+                        <h1 class="animate__animated animate__fadeInUp">ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา</h1>
+                        <h2 class="animate__animated animate__fadeInUp animate__delay-1s">คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี<br>มหาวิทยาลัยเทคโนโลยีราชมงคลศรีวิชัย</h2>
+                        <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-2s">
+                            <a href="#" class="btn btn-start waves-effect waves-light">
+                                <i class="material-icons left">play_arrow</i>เริ่มทำแบบทดสอบ
+                            </a>
+                            <a href="#" class="btn btn-learn waves-effect waves-light">
+                                <i class="material-icons left">info</i>เรียนรู้เพิ่มเติม
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="hero-image">
+                        <img src="https://cdn.pixabay.com/photo/2021/11/04/06/27/programmer-6767507_1280.png" alt="ระบบประเมินสมรรถนะวิชาชีพครู" class="responsive-img">
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>คุณสมบัติของระบบ</h2>
+                <p>ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมในสถานศึกษา มีคุณสมบัติที่หลากหลายเพื่อช่วยให้การประเมินเป็นไปอย่างมีประสิทธิภาพ</p>
+            </div>
+            
+            <div class="row">
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="material-icons">computer</i>
+                        </div>
+                        <h3>สอบออนไลน์</h3>
+                        <p>ทำแบบทดสอบผ่านระบบออนไลน์ได้ทุกที่ทุกเวลา พร้อมระบบจับเวลาและประมวลผลอัตโนมัติ</p>
+                        <a href="#" class="btn-flat waves-effect">อ่านเพิ่มเติม<i class="material-icons right">arrow_forward</i></a>
+                    </div>
+                </div>
+                
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="material-icons">assessment</i>
+                        </div>
+                        <h3>วิเคราะห์ผลการสอบ</h3>
+                        <p>วิเคราะห์ผลการทำแบบทดสอบและแสดงผลสมรรถนะในแต่ละด้านพร้อมคำแนะนำในการพัฒนา</p>
+                        <a href="#" class="btn-flat waves-effect">อ่านเพิ่มเติม<i class="material-icons right">arrow_forward</i></a>
+                    </div>
+                </div>
+                
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="material-icons">school</i>
+                        </div>
+                        <h3>คลังข้อสอบมาตรฐาน</h3>
+                        <p>ระบบมีคลังข้อสอบมาตรฐานตามเกณฑ์สมรรถนะวิชาชีพครูช่างอุตสาหกรรมที่ครอบคลุมทุกด้าน</p>
+                        <a href="#" class="btn-flat waves-effect">อ่านเพิ่มเติม<i class="material-icons right">arrow_forward</i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="material-icons">history</i>
+                        </div>
+                        <h3>ประวัติการทดสอบ</h3>
+                        <p>เก็บประวัติการทำแบบทดสอบทั้งหมด สามารถดูพัฒนาการของตนเองได้อย่างต่อเนื่อง</p>
+                        <a href="#" class="btn-flat waves-effect">อ่านเพิ่มเติม<i class="material-icons right">arrow_forward</i></a>
+                    </div>
+                </div>
+                
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="material-icons">security</i>
+                        </div>
+                        <h3>ความปลอดภัยสูง</h3>
+                        <p>ระบบมีความปลอดภัยสูง รักษาความลับของข้อมูลและผลการทดสอบของผู้ใช้งานทุกคน</p>
+                        <a href="#" class="btn-flat waves-effect">อ่านเพิ่มเติม<i class="material-icons right">arrow_forward</i></a>
+                    </div>
+                </div>
+                
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="material-icons">devices</i>
+                        </div>
+                        <h3>รองรับทุกอุปกรณ์</h3>
+                        <p>สามารถใช้งานได้บนทุกอุปกรณ์ ทั้งคอมพิวเตอร์ แท็บเล็ต และสมาร์ทโฟน</p>
+                        <a href="#" class="btn-flat waves-effect">อ่านเพิ่มเติม<i class="material-icons right">arrow_forward</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section class="latest-news" id="news">
+        <div class="news-background"></div>
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>ข่าวประชาสัมพันธ์ล่าสุด</h2>
+                <p>ติดตามข่าวสารและประกาศสำคัญเกี่ยวกับการประเมินสมรรถนะวิชาชีพครูช่างอุตสาหกรรม</p>
+            </div>
+            
+            <div class="row">
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="news-card">
+                        <div class="news-img">
+                            <img src="https://picsum.photos/id/180/800/600" alt="การอบรมเชิงปฏิบัติการ">
+                            <span class="news-date">12 มี.ค. 2566</span>
+                        </div>
+                        <div class="news-content">
+                            <h3>การอบรมเชิงปฏิบัติการ</h3>
+                            <p>การอบรมเชิงปฏิบัติการเพื่อพัฒนาทักษะวิชาชีพครูช่างอุตสาหกรรม ในวันที่ 20-22 มีนาคม 2566</p>
+                            <a href="#" class="btn-flat waves-effect">อ่านต่อ<i class="material-icons right">arrow_forward</i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="news-card">
+                        <div class="news-img">
+                            <img src="https://picsum.photos/id/60/800/600" alt="ประกาศรับสมัครทดสอบ">
+                            <span class="news-date">5 มี.ค. 2566</span>
+                        </div>
+                        <div class="news-content">
+                            <h3>ประกาศรับสมัครทดสอบ</h3>
+                            <p>เปิดรับสมัครผู้เข้าทดสอบสมรรถนะวิชาชีพครูช่างอุตสาหกรรมประจำปี 2566 ตั้งแต่วันนี้ถึง 30 มีนาคม</p>
+                            <a href="#" class="btn-flat waves-effect">อ่านต่อ<i class="material-icons right">arrow_forward</i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col s12 m4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="news-card">
+                        <div class="news-img">
+                            <img src="https://picsum.photos/id/20/800/600" alt="ประกาศผลการทดสอบ">
+                            <span class="news-date">28 ก.พ. 2566</span>
+                        </div>
+                        <div class="news-content">
+                            <h3>ประกาศผลการทดสอบ</h3>
+                            <p>ประกาศผลการทดสอบสมรรถนะวิชาชีพครูช่างอุตสาหกรรมรอบเดือนกุมภาพันธ์ 2566</p>
+                            <a href="#" class="btn-flat waves-effect">อ่านต่อ<i class="material-icons right">arrow_forward</i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="center-align" style="margin-top: 40px;" data-aos="fade-up">
+                <a href="#" class="btn btn-start waves-effect waves-light">
+                    <i class="material-icons left">article</i>ดูข่าวทั้งหมด
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section" style="background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark)); padding: 80px 0; color: white;">
+        <div class="container center-align" data-aos="zoom-in">
+            <h2 style="font-size: 2.2rem; margin-bottom: 20px;">พร้อมทดสอบสมรรถนะวิชาชีพครูแล้วหรือยัง?</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                ลงทะเบียนเข้าร่วมการทดสอบเพื่อประเมินและพัฒนาสมรรถนะวิชาชีพครูช่างอุตสาหกรรมของคุณ
+            </p>
+            <div>
+                <a href="#" class="btn btn-start waves-effect waves-light pulse" style="margin-right: 15px;">
+                    <i class="material-icons left">how_to_reg</i>ลงทะเบียนเข้าร่วม
+                </a>
+                <a href="#" class="btn btn-learn waves-effect waves-light" style="background-color: transparent; border: 2px solid white;">
+                    <i class="material-icons left">contact_support</i>สอบถามข้อมูล
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Counter Stats Section -->
+    <section class="stats-section" style="padding: 80px 0; background-color: white;">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m3 center-align" data-aos="fade-up" data-aos-delay="100">
+                    <div class="counter-item">
+                        <i class="material-icons" style="font-size: 48px; color: var(--primary-color)">people</i>
+                        <h3 class="counter" style="font-size: 2.5rem; font-weight: 600; margin: 15px 0;">3,254</h3>
+                        <p style="font-size: 1.2rem; color: var(--secondary-dark);">ผู้ใช้งานทั้งหมด</p>
+                    </div>
+                </div>
+                
+                <div class="col s12 m3 center-align" data-aos="fade-up" data-aos-delay="200">
+                    <div class="counter-item">
+                        <i class="material-icons" style="font-size: 48px; color: var(--primary-color)">assignment</i>
+                        <h3 class="counter" style="font-size: 2.5rem; font-weight: 600; margin: 15px 0;">12,763</h3>
+                        <p style="font-size: 1.2rem; color: var(--secondary-dark);">การทดสอบทั้งหมด</p>
+                    </div>
+                </div>
+                
+                <div class="col s12 m3 center-align" data-aos="fade-up" data-aos-delay="300">
+                    <div class="counter-item">
+                        <i class="material-icons" style="font-size: 48px; color: var(--primary-color)">school</i>
+                        <h3 class="counter" style="font-size: 2.5rem; font-weight: 600; margin: 15px 0;">487</h3>
+                        <p style="font-size: 1.2rem; color: var(--secondary-dark);">สถานศึกษาทั่วประเทศ</p>
+                    </div>
+                </div>
+                
+                <div class="col s12 m3 center-align" data-aos="fade-up" data-aos-delay="400">
+                    <div class="counter-item">
+                        <i class="material-icons" style="font-size: 48px; color: var(--primary-color)">star</i>
+                        <h3 class="counter" style="font-size: 2.5rem; font-weight: 600; margin: 15px 0;">9.8</h3>
+                        <p style="font-size: 1.2rem; color: var(--secondary-dark);">คะแนนความพึงพอใจ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="testimonial-section" style="padding: 80px 0; background-color: #f9f9f9; position: relative; overflow: hidden;">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>เสียงจากผู้ใช้งาน</h2>
+                <p>ความคิดเห็นจากครูช่างอุตสาหกรรมที่ใช้งานระบบประเมินสมรรถนะของเรา</p>
+            </div>
+            
+            <div class="carousel carousel-slider center" data-indicators="true" style="height: 350px;">
+                <div class="carousel-item" style="background-color: transparent;">
+                    <div class="testimonial-card" style="background: white; border-radius: 10px; padding: 30px; max-width: 700px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1);" data-aos="fade-up">
+                        <div class="testimonial-content">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <i class="material-icons" style="font-size: 48px; color: var(--primary-color);">format_quote</i>
+                            </div>
+                            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; font-style: italic; color: #666;">
+                                "ระบบประเมินสมรรถนะความรู้วิชาชีพครูช่างอุตสาหกรรมนี้ช่วยให้ผมทราบจุดแข็งและจุดที่ต้องพัฒนาของตนเองได้อย่างชัดเจน ทำให้วางแผนพัฒนาตนเองได้ตรงจุด"
+                            </p>
+                            <div class="testimonial-author" style="display: flex; align-items: center; justify-content: center;">
+                                <div class="author-img" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="ผู้ใช้งาน" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="author-info">
+                                    <h5 style="margin: 0; font-weight: 600; color: var(--secondary-dark);">อาจารย์สมชาย ใจดี</h5>
+                                    <p style="margin: 5px 0 0; font-size: 0.9rem; color: #999;">วิทยาลัยเทคนิคนครศรีธรรมราช</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item" style="background-color: transparent;">
+                    <div class="testimonial-card" style="background: white; border-radius: 10px; padding: 30px; max-width: 700px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div class="testimonial-content">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <i class="material-icons" style="font-size: 48px; color: var(--primary-color);">format_quote</i>
+                            </div>
+                            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; font-style: italic; color: #666;">
+                                "ผมประทับใจกับความสะดวกในการใช้งานและความแม่นยำในการประเมิน ข้อเสนอแนะที่ได้รับมีประโยชน์มากต่อการพัฒนาการสอนของผม"
+                            </p>
+                            <div class="testimonial-author" style="display: flex; align-items: center; justify-content: center;">
+                                <div class="author-img" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
+                                    <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="ผู้ใช้งาน" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="author-info">
+                                    <h5 style="margin: 0; font-weight: 600; color: var(--secondary-dark);">อาจารย์วิชัย มั่นคง</h5>
+                                    <p style="margin: 5px 0 0; font-size: 0.9rem; color: #999;">วิทยาลัยเทคนิคภูเก็ต</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item" style="background-color: transparent;">
+                    <div class="testimonial-card" style="background: white; border-radius: 10px; padding: 30px; max-width: 700px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div class="testimonial-content">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <i class="material-icons" style="font-size: 48px; color: var(--primary-color);">format_quote</i>
+                            </div>
+                            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; font-style: italic; color: #666;">
+                                "ระบบนี้เป็นเครื่องมือที่ดีมากในการพัฒนาวิชาชีพครู แบบทดสอบมีมาตรฐาน และช่วยให้ดิฉันเห็นพัฒนาการของตนเองได้อย่างชัดเจน"
+                            </p>
+                            <div class="testimonial-author" style="display: flex; align-items: center; justify-content: center;">
+                                <div class="author-img" style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; margin-right: 15px;">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="ผู้ใช้งาน" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="author-info">
+                                    <h5 style="margin: 0; font-weight: 600; color: var(--secondary-dark);">อาจารย์สุนันทา พัฒนา</h5>
