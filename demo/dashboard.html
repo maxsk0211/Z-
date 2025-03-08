@@ -1266,36 +1266,36 @@
       theme: 'light'
     };
   </script>
-    <script>
-      // แก้ไขการแสดงผลเมนู
-      function initializeMenu() {
-        // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
-        const menuToggles = document.querySelectorAll('.menu-toggle');
-        menuToggles.forEach(toggle => {
-          toggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            const menuItem = this.closest('.menu-item');
-            const menuSub = menuItem.querySelector('.menu-sub');
-            
-            // Toggle active และ open classes
-            menuItem.classList.toggle('active');
-            menuItem.classList.toggle('open');
-            
-            // แสดง/ซ่อนเมนูย่อย
-            if (menuSub.style.display === 'block') {
-              menuSub.style.display = 'none';
-            } else {
-              menuSub.style.display = 'block';
-            }
-          });
-        });
-      }
-    </script>    
+  
   <!-- Main JS -->
   <script src="../assets/js/main.js"></script>
 
   <!-- Page JS -->
   <script>
+      
+    // แก้ไขการแสดงผลเมนู
+    function initializeMenu() {
+      // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
+      const menuToggles = document.querySelectorAll('.menu-toggle');
+      menuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          const menuItem = this.closest('.menu-item');
+          const menuSub = menuItem.querySelector('.menu-sub');
+          
+          // Toggle active และ open classes
+          menuItem.classList.toggle('active');
+          menuItem.classList.toggle('open');
+          
+          // แสดง/ซ่อนเมนูย่อย
+          if (menuSub.style.display === 'block') {
+            menuSub.style.display = 'none';
+          } else {
+            menuSub.style.display = 'block';
+          }
+        });
+      });
+    }
     document.addEventListener('DOMContentLoaded', function() {
       // Month Names
       const months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
