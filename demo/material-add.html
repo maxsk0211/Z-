@@ -9,9 +9,6 @@
   <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
 
   <!-- Fonts -->
-  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -21,18 +18,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Core CSS -->
-  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
-  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/core.css">
+  <link rel="stylesheet" href="../assets/css/theme-default.css">
   <link rel="stylesheet" href="../assets/css/demo.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
 
   <!-- Vendors CSS -->
-  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.css">
   
   <!-- Page CSS -->
   <style>
@@ -1041,6 +1036,58 @@
       });
     }
     
+    // Helper function to show wizard step
+    function showWizardStep(stepNumber) {
+      console.log("Changing to step: " + stepNumber);
+      
+      // ซ่อนทุกขั้นตอน
+      document.querySelectorAll('.wizard-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // ยกเลิก active ของทุกขั้นตอน
+      document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+      });
+      
+      // แสดงขั้นตอนที่เลือก
+      document.querySelector(`.wizard-content[data-step="${stepNumber}"]`).classList.add('active');
+      document.querySelector(`.wizard-step[data-step="${stepNumber}"]`).classList.add('active');
+      
+      // เลื่อนไปด้านบนของฟอร์ม
+      document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Helper function to validate required fields
+    function validateRequiredFields(fields) {
+      let isValid = true;
+      let errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน:';
+      
+      fields.forEach(field => {
+        const element = document.getElementById(field.id);
+        if (!element.value.trim()) {
+          isValid = false;
+          errorMessage += `\n- ${field.label}`;
+          element.classList.add('is-invalid');
+        } else {
+          element.classList.remove('is-invalid');
+        }
+      });
+      
+      if (!isValid) {
+        alert(errorMessage);
+      }
+      
+      return isValid;
+    }
+    
+    // Helper function to generate material ID
+    function generateMaterialId(prefix) {
+      // ในตัวอย่างนี้จะสร้างรหัสสุ่ม
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      return `${prefix}-${randomNum}`;
+    }
+    
     // Initialize page components
     document.addEventListener('DOMContentLoaded', function() {
       // เรียกใช้ฟังก์ชันจัดการเมนู
@@ -1145,98 +1192,56 @@
         });
       });
       
-      // Wizard Step Change
-      const wizardSteps = document.querySelectorAll('.wizard-step');
-      wizardSteps.forEach(step => {
+      // Wizard Step Change - ทำให้สามารถคลิกที่ตัวเลขขั้นตอนเพื่อเปลี่ยนได้
+      document.querySelectorAll('.wizard-step').forEach(step => {
         step.addEventListener('click', function() {
           const targetStep = this.getAttribute('data-step');
           showWizardStep(targetStep);
         });
       });
       
-      // Next Step Button Events
+      // กำหนด Event listener สำหรับปุ่มถัดไปใหม่ทั้งหมด
       document.querySelectorAll('.next-step').forEach(button => {
         button.addEventListener('click', function() {
+          console.log("Next button clicked");
           const nextStep = this.getAttribute('data-next');
+          console.log("Going to step: " + nextStep);
           
-          // ตรวจสอบข้อมูลในขั้นตอนปัจจุบันก่อนไปขั้นตอนถัดไป
+          // ตรวจสอบข้อมูลเฉพาะขั้นตอนที่ 1 ก่อนไปขั้นถัดไป
           if (nextStep === '2') {
-            // ตรวจสอบข้อมูลพื้นฐาน
+            // ตรวจสอบเฉพาะชื่อวัสดุและหน่วยนับเท่านั้น
             const requiredFields = [
               { id: 'materialName', label: 'ชื่อวัสดุ' },
-              { id: 'materialUnit', label: 'หน่วยนับ' },
-              { id: 'materialPrice', label: 'ราคาต่อหน่วย' },
-              { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
+              { id: 'materialUnit', label: 'หน่วยนับ' }
             ];
             
             if (!validateRequiredFields(requiredFields)) return;
           }
           
+          // เปลี่ยนไปยังขั้นตอนถัดไป
           showWizardStep(nextStep);
         });
       });
       
-      // Previous Step Button Events
+      // กำหนด Event listener สำหรับปุ่มย้อนกลับ
       document.querySelectorAll('.prev-step').forEach(button => {
         button.addEventListener('click', function() {
+          console.log("Previous button clicked");
           const prevStep = this.getAttribute('data-prev');
+          console.log("Going back to step: " + prevStep);
           showWizardStep(prevStep);
         });
       });
       
-      // Helper function to show wizard step
-      function showWizardStep(stepNumber) {
-        // ซ่อนทุกขั้นตอน
-        document.querySelectorAll('.wizard-content').forEach(content => {
-          content.classList.remove('active');
-        });
-        
-        // ยกเลิก active ของทุกขั้นตอน
-        document.querySelectorAll('.wizard-step').forEach(step => {
-          step.classList.remove('active');
-        });
-        
-        // แสดงขั้นตอนที่เลือก
-        document.querySelector(`.wizard-content[data-step="${stepNumber}"]`).classList.add('active');
-        document.querySelector(`.wizard-step[data-step="${stepNumber}"]`).classList.add('active');
-        
-        // เลื่อนไปด้านบนของฟอร์ม
-        document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth' });
-      }
-      
-      // Helper function to validate required fields
-      function validateRequiredFields(fields) {
-        let isValid = true;
-        let errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน:';
-        
-        fields.forEach(field => {
-          const element = document.getElementById(field.id);
-          if (!element.value.trim()) {
-            isValid = false;
-            errorMessage += `\n- ${field.label}`;
-            element.classList.add('is-invalid');
-          } else {
-            element.classList.remove('is-invalid');
-          }
-        });
-        
-        if (!isValid) {
-          alert(errorMessage);
-        }
-        
-        return isValid;
-      }
-      
       // Form Submit Event
       document.getElementById('addMaterialForm').addEventListener('submit', function(e) {
         e.preventDefault();
+        console.log("Form submitted");
         
-        // ตรวจสอบข้อมูลก่อนบันทึก
+        // ตรวจสอบข้อมูลก่อนบันทึก - ตรวจสอบเฉพาะฟิลด์ที่จำเป็นจริงๆ
         const requiredFields = [
           { id: 'materialName', label: 'ชื่อวัสดุ' },
-          { id: 'materialUnit', label: 'หน่วยนับ' },
-          { id: 'materialPrice', label: 'ราคาต่อหน่วย' },
-          { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
+          { id: 'materialUnit', label: 'หน่วยนับ' }
         ];
         
         if (!validateRequiredFields(requiredFields)) return;
@@ -1254,13 +1259,6 @@
         
         $('#successModal').modal('show');
       });
-      
-      // Helper function to generate material ID
-      function generateMaterialId(prefix) {
-        // ในตัวอย่างนี้จะสร้างรหัสสุ่ม
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        return `${prefix}-${randomNum}`;
-      }
     });
   </script>
 </body>
