@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>เพิ่มวัสดุใหม่ | ระบบจัดสวนครบวงจร</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/css/core.css">
+  <link rel="stylesheet" href="../assets/css/theme-default.css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  
+  <!-- Page CSS -->
+  <style>
+    :root {
+      --primary: #28a745;
+      --primary-light: #e9fff0;
+      --warning: #ffa726;
+      --warning-light: #ffedcc;
+      --danger: #ec407a;
+      --danger-light: #ffe8e8;
+      --info: #42a5f5;
+      --info-light: #e3f2fd;
+      --text-primary: #566a7f;
+      --text-secondary: #99a0ac;
+      --bg-light: #f5f6fa;
+    }
+    
+    /* แก้ไขการแสดงผลเมนู */
+    .menu-sub {
+      display: none; /* ค่าเริ่มต้นซ่อนเมนูย่อย */
+    }
+    
+    .menu-item.active.open > .menu-sub,
+    .menu-sub.show {
+      display: block !important; /* แสดงเมนูย่อยเมื่อ active หรือมี class show */
+    }
+    
+    .section-heading {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-heading::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
+    }
+    
+    .form-control, .form-select {
+      border-radius: 0.375rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid #dce1e8;
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .required-label:after {
+      content: " *";
+      color: var(--danger);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+      border-radius: 0.75rem;
+      border: none;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
+      margin-bottom: 1.5rem;
+    }
+    
+    .custom-option {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .custom-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .custom-option.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .custom-option-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.375rem;
+      margin-right: 1rem;
+      color: var(--text-primary);
+      background-color: rgba(40, 167, 69, 0.16);
+    }
+    
+    .custom-option.selected .custom-option-icon {
+      color: white;
+      background-color: var(--primary);
+    }
+    
+    .dropzone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      border: 2px dashed #dce1e8;
+      border-radius: 0.375rem;
+      background-color: #fafbfc;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .dropzone:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .dropzone-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .preview-image {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 0.375rem;
+      border: 1px solid #dce1e8;
+      margin-bottom: 1rem;
+    }
+    
+    .input-group-text {
+      background-color: #f5f6fa;
+      border-color: #dce1e8;
+    }
+    
+    .form-label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .category-badge {
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 500;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+    }
+
+    .category-plants {
+      background-color: #4CAF50;
+    }
+
+    .category-tools {
+      background-color: #2196F3;
+    }
+
+    .category-materials {
+      background-color: #FF9800;
+    }
+
+    .category-decorations {
+      background-color: #9C27B0;
+    }
+
+    .category-chemicals {
+      background-color: #F44336;
+    }
+    
+    .category-option {
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+    }
+    
+    .category-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      color: white;
+    }
+    
+    .wizard-steps {
+      display: flex;
+      padding: 0;
+      margin: 0 0 1rem 0;
+    }
+    
+    .wizard-step {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-secondary);
+      position: relative;
+      border-bottom: 3px solid #e0e0e0;
+      cursor: pointer;
+    }
+    
+    .wizard-step.active {
+      border-bottom-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .wizard-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: -0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 1px;
+      background-color: #e0e0e0;
+    }
+    
+    .wizard-step-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wizard-content {
+      display: none;
+    }
+    
+    .wizard-content.active {
+      display: block;
+    }
+    
+    .wizard-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#28a745" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#28a745" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">Green Gardens</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto sidebar-toggle">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- โครงการลูกค้า -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการโครงการลูกค้า</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-layout"></i>
+              <div data-i18n="โครงการ">โครงการ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="project-list.html" class="menu-link">
+                  <div data-i18n="รายการโครงการ">รายการโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มโครงการใหม่">เพิ่มโครงการใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-progress.html" class="menu-link">
+                  <div data-i18n="ติดตามความคืบหน้า">ติดตามความคืบหน้า</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุทั่วไป">วัสดุทั่วไป</div>
+            </a>
+            <ul class="menu-sub" style="display: block;">
+              <li class="menu-item">
+                <a href="material-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item active">
+                <a href="material-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุเครื่องมือช่าง">วัสดุเครื่องมือช่าง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="construction-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="construction-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือช่าง">เครื่องมือช่าง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="inventory-withdraw.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-transfer"></i>
+              <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+            </a>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการยานพาหนะ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-projects.html" class="menu-link">
+                  <div data-i18n="รายงานโครงการ">รายงานโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- Notification -->
+              <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <a class="nav-link dropdown-toggle hide-arrow position-relative" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <i class="bx bx-bell bx-sm"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0 dropdown-menu-notification">
+                  <li class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                      <h5 class="text-body mb-0 me-auto">การแจ้งเตือน</h5>
+                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i class="bx fs-4 bx-envelope-open"></i></a>
+                    </div>
+                  </li>
+                  <li class="dropdown-notifications-list scrollable-container">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar bg-light-danger">
+                              <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-package"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">วัสดุใกล้หมด</h6>
+                            <p class="mb-0">ดินปลูกต้นไม้ เหลือน้อยกว่า 10 ถุง</p>
+                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-error"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">วัสดุหมด</h6>
+                            <p class="mb-0">หินแกรนิตก้อนเล็ก หมดสต็อก</p>
+                            <small class="text-muted">เมื่อวานนี้</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="dropdown-menu-footer border-top p-2">
+                    <a href="javascript:void(0);" class="btn btn-primary d-flex justify-content-center">
+                      ดูการแจ้งเตือนทั้งหมด
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ Notification -->
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">บุญชัย ผู้จัดการ</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4">
+              <span class="text-muted fw-light">จัดการวัสดุ /</span> เพิ่มวัสดุใหม่
+            </h4>
+
+            <!-- Horizontal Form -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">เพิ่มวัสดุใหม่</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="wizard-steps">
+                      <div class="wizard-step active" data-step="1">
+                        <div class="wizard-step-icon"><i class="bx bx-info-circle"></i></div>
+                        <div>ข้อมูลพื้นฐาน</div>
+                      </div>
+                      <div class="wizard-step" data-step="2">
+                        <div class="wizard-step-icon"><i class="bx bx-image"></i></div>
+                        <div>รูปภาพ</div>
+                      </div>
+                      <div class="wizard-step" data-step="3">
+                        <div class="wizard-step-icon"><i class="bx bx-detail"></i></div>
+                        <div>รายละเอียดเพิ่มเติม</div>
+                      </div>
+                      <div class="wizard-step" data-step="4">
+                        <div class="wizard-step-icon"><i class="bx bx-building"></i></div>
+                        <div>ซัพพลายเออร์</div>
+                      </div>
+                    </div>
+                    
+                    <form id="addMaterialForm">
+                      <!-- ขั้นตอนที่ 1: ข้อมูลพื้นฐาน -->
+                      <div class="wizard-content active" data-step="1">
+                        <h6 class="section-heading">ข้อมูลพื้นฐาน</h6>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label for="materialIdPrefix" class="form-label">รหัสวัสดุ</label>
+                            <div class="input-group">
+                              <select class="form-select" id="materialIdPrefix" style="max-width: 120px;">
+                                <option value="M">M - วัสดุทั่วไป</option>
+                                <option value="P">P - ต้นไม้</option>
+                                <option value="T">T - เครื่องมือ</option>
+                                <option value="C">C - วัสดุก่อสร้าง</option>
+                                <option value="F">F - ปุ๋ย/เคมี</option>
+                              </select>
+                              <span class="input-group-text">-</span>
+                              <input type="text" class="form-control bg-lighter" value="xxxx" readonly>
+                            </div>
+                            <small class="text-muted">รหัสจะถูกสร้างอัตโนมัติหลังจากบันทึก</small>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialName" class="form-label required-label">ชื่อวัสดุ</label>
+                            <input type="text" class="form-control" id="materialName" placeholder="ระบุชื่อวัสดุ" required>
+                          </div>
+
+                          <div class="col-md-12 mb-3">
+                            <label class="form-label required-label">หมวดหมู่</label>
+                            <div class="d-flex flex-wrap">
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryMaterials" value="materials" checked>
+                                <label class="form-check-label" for="categoryMaterials">
+                                  <span class="category-icon" style="background-color: #FF9800;"><i class="bx bx-package"></i></span>
+                                  วัสดุ
+                                </label>
+                              </div>
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryPlants" value="plants">
+                                <label class="form-check-label" for="categoryPlants">
+                                  <span class="category-icon" style="background-color: #4CAF50;"><i class="bx bx-leaf"></i></span>
+                                  ต้นไม้
+                                </label>
+                              </div>
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryDecorations" value="decorations">
+                                <label class="form-check-label" for="categoryDecorations">
+                                  <span class="category-icon" style="background-color: #9C27B0;"><i class="bx bx-palette"></i></span>
+                                  ตกแต่ง
+                                </label>
+                              </div>
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryTools" value="tools">
+                                <label class="form-check-label" for="categoryTools">
+                                  <span class="category-icon" style="background-color: #2196F3;"><i class="bx bx-wrench"></i></span>
+                                  เครื่องมือ
+                                </label>
+                              </div>
+                              <div class="form-check category-option mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryChemicals" value="chemicals">
+                                <label class="form-check-label" for="categoryChemicals">
+                                  <span class="category-icon" style="background-color: #F44336;"><i class="bx bx-vial"></i></span>
+                                  ปุ๋ย/เคมี
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="materialQuantity" class="form-label required-label">จำนวนเริ่มต้น</label>
+                            <input type="number" class="form-control" id="materialQuantity" value="0" min="0" required>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="materialUnit" class="form-label required-label">หน่วยนับ</label>
+                            <input type="text" class="form-control" id="materialUnit" placeholder="ระบุหน่วยนับ (เช่น ชิ้น, อัน, ถุง)" required>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="materialReorderPoint" class="form-label required-label">จุดสั่งซื้อ</label>
+                            <input type="number" class="form-control" id="materialReorderPoint" value="10" min="0" required>
+                            <small class="text-muted">จำนวนต่ำสุดที่ต้องการแจ้งเตือนให้สั่งซื้อ</small>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialPrice" class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
+                            <div class="input-group">
+                              <span class="input-group-text">฿</span>
+                              <input type="number" class="form-control" id="materialPrice" value="0" min="0" step="0.01" required>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialLocation" class="form-label">สถานที่จัดเก็บ</label>
+                            <input type="text" class="form-control" id="materialLocation" placeholder="ระบุสถานที่จัดเก็บ (เช่น คลังใหญ่ ชั้น A)">
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <div></div>
+                          <button type="button" class="btn btn-primary next-step" data-next="2">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 2: รูปภาพ -->
+                      <div class="wizard-content" data-step="2">
+                        <h6 class="section-heading">รูปภาพวัสดุ</h6>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="text-center mb-3">
+                              <img src="../assets/img/materials/placeholder.png" id="materialPreviewImage" class="preview-image d-none" alt="รูปภาพวัสดุ">
+                            </div>
+                            <div class="dropzone" id="materialImageDropzone">
+                              <div class="dz-message">
+                                <div class="dropzone-icon">
+                                  <i class="bx bx-upload"></i>
+                                </div>
+                                <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ</h5>
+                                <p class="text-muted mb-0">รองรับไฟล์ .jpg, .jpeg, .png ขนาดไม่เกิน 5MB</p>
+                              </div>
+                            </div>
+                            <div class="form-check mt-3">
+                              <input class="form-check-input" type="checkbox" id="noImageCheckbox">
+                              <label class="form-check-label" for="noImageCheckbox">
+                                ไม่มีรูปภาพในขณะนี้
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary prev-step" data-prev="1"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary next-step" data-next="3">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 3: รายละเอียดเพิ่มเติม -->
+                      <div class="wizard-content" data-step="3">
+                        <h6 class="section-heading">รายละเอียดเพิ่มเติม</h6>
+                        <div class="row g-3">
+                          <div class="col-md-12 mb-3">
+                            <label for="materialDescription" class="form-label">รายละเอียด</label>
+                            <textarea class="form-control" id="materialDescription" rows="4" placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับวัสดุ"></textarea>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialBarcode" class="form-label">บาร์โค้ด/รหัส SKU</label>
+                            <input type="text" class="form-control" id="materialBarcode" placeholder="ระบุบาร์โค้ด (ถ้ามี)">
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialTags" class="form-label">แท็ก/คำค้นหา</label>
+                            <input type="text" class="form-control" id="materialTags" placeholder="ระบุแท็กคั่นด้วยเครื่องหมายคอมม่า (,)">
+                            <small class="text-muted">เช่น สวน,ตกแต่ง,กลางแจ้ง</small>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialMinimumOrder" class="form-label">จำนวนสั่งซื้อขั้นต่ำ</label>
+                            <input type="number" class="form-control" id="materialMinimumOrder" value="1" min="1">
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialWeight" class="form-label">น้ำหนัก (กก.)</label>
+                            <input type="number" class="form-control" id="materialWeight" value="0" min="0" step="0.01">
+                          </div>
+
+                          <div class="col-md-12">
+                            <label for="materialNotes" class="form-label">หมายเหตุ</label>
+                            <textarea class="form-control" id="materialNotes" rows="2" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary prev-step" data-prev="2"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary next-step" data-next="4">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 4: ซัพพลายเออร์ -->
+                      <div class="wizard-content" data-step="4">
+                        <h6 class="section-heading">ข้อมูลซัพพลายเออร์</h6>
+                        <div class="row g-3">
+                          <div class="col-md-12 mb-3">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" id="hasSupplierCheckbox" checked>
+                              <label class="form-check-label" for="hasSupplierCheckbox">
+                                มีข้อมูลซัพพลายเออร์
+                              </label>
+                            </div>
+                          </div>
+
+                          <div id="supplierFormSection">
+                            <div class="col-md-6 mb-3">
+                              <label for="supplierSelect" class="form-label">เลือกซัพพลายเออร์ที่มีอยู่แล้ว</label>
+                              <select class="form-select" id="supplierSelect">
+                                <option value="" selected>-- เลือกซัพพลายเออร์ --</option>
+                                <option value="1">บริษัท กรีนการ์เด้น จำกัด</option>
+                                <option value="2">บริษัท ไทยวัสดุภัณฑ์ จำกัด</option>
+                                <option value="3">ร้านต้นไม้นานาพันธุ์</option>
+                                <option value="4">บริษัท เครื่องมือช่างไทย จำกัด</option>
+                                <option value="new">+ เพิ่มซัพพลายเออร์ใหม่</option>
+                              </select>
+                            </div>
+
+                            <div id="newSupplierForm" style="display: none;">
+                              <div class="row g-3">
+                                <div class="col-md-6">
+                                  <label for="supplierName" class="form-label">ชื่อซัพพลายเออร์</label>
+                                  <input type="text" class="form-control" id="supplierName" placeholder="ระบุชื่อบริษัทหรือร้านค้า">
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label for="supplierContact" class="form-label">ข้อมูลติดต่อ</label>
+                                  <input type="text" class="form-control" id="supplierContact" placeholder="ระบุหมายเลขโทรศัพท์ หรืออีเมล">
+                                </div>
+
+                                <div class="col-md-12">
+                                  <label for="supplierAddress" class="form-label">ที่อยู่</label>
+                                  <textarea class="form-control" id="supplierAddress" rows="2" placeholder="ระบุที่อยู่ซัพพลายเออร์"></textarea>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-12"><hr></div>
+
+                            <div class="col-md-6 mb-3">
+                              <label for="purchasePrice" class="form-label">ราคาซื้อล่าสุด (บาท)</label>
+                              <div class="input-group">
+                                <span class="input-group-text">฿</span>
+                                <input type="number" class="form-control" id="purchasePrice" value="0" min="0" step="0.01">
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                              <label for="lastOrderDate" class="form-label">วันที่สั่งซื้อล่าสุด</label>
+                              <input type="text" class="form-control flatpickr-date" id="lastOrderDate" placeholder="DD/MM/YYYY">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                              <label for="leadTime" class="form-label">ระยะเวลานำเข้า (วัน)</label>
+                              <input type="number" class="form-control" id="leadTime" value="3" min="1" placeholder="ระบุจำนวนวัน">
+                              <small class="text-muted">ระยะเวลาตั้งแต่สั่งซื้อจนได้รับสินค้า</small>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                              <label for="warrantyPeriod" class="form-label">ระยะเวลารับประกัน (วัน)</label>
+                              <input type="number" class="form-control" id="warrantyPeriod" value="0" min="0">
+                              <small class="text-muted">ใส่ 0 หากไม่มีการรับประกัน</small>
+                            </div>
+                          </div>
+
+                          <div class="col-12 mt-3">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="termsCheck">
+                              <label class="form-check-label" for="termsCheck">
+                                ฉันได้ตรวจสอบข้อมูลทั้งหมดและยืนยันว่าข้อมูลถูกต้อง
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary prev-step" data-prev="3"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="submit" class="btn btn-success" id="saveNewMaterialBtn">
+                            <i class="bx bx-check-circle me-1"></i> บันทึกวัสดุใหม่
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบจัดสวนครบวงจร v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Success Alert Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header bg-success">
+          <h5 class="modal-title text-white">สำเร็จ</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
+          <h5>บันทึกข้อมูลสำเร็จ</h5>
+          <p class="mb-2">เพิ่มวัสดุใหม่เรียบร้อยแล้ว</p>
+          <p class="fw-bold" id="newMaterialId">รหัสวัสดุ: M-0009</p>
+        </div>
+        <div class="modal-footer">
+          <a href="material-list.html" class="btn btn-outline-secondary">ไปยังรายการวัสดุ</a>
+          <a href="material-add.html" class="btn btn-success">เพิ่มวัสดุใหม่</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    // แก้ไขการแสดงผลเมนู
+    function initializeMenu() {
+      // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
+      const menuToggles = document.querySelectorAll('.menu-toggle');
+      menuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          const menuItem = this.closest('.menu-item');
+          const menuSub = menuItem.querySelector('.menu-sub');
+          
+          // Toggle active และ open classes
+          menuItem.classList.toggle('active');
+          menuItem.classList.toggle('open');
+          
+          // แสดง/ซ่อนเมนูย่อย
+          if (menuSub.style.display === 'block') {
+            menuSub.style.display = 'none';
+          } else {
+            menuSub.style.display = 'block';
+          }
+        });
+      });
+    }
+    
+    // Initialize page components
+    document.addEventListener('DOMContentLoaded', function() {
+      // เรียกใช้ฟังก์ชันจัดการเมนู
+      initializeMenu();
+      
+      // Initialize Flatpickr for date input
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        locale: {
+          firstDayOfWeek: 1
+        }
+      });
+      
+      // Initialize Dropzone for material image
+      const materialImageDropzone = new Dropzone("#materialImageDropzone", {
+        url: "/api/upload-material-image", // API URL สำหรับการอัปโหลดรูปภาพ
+        maxFiles: 1,
+        maxFilesize: 5, // 5MB
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ",
+        dictRemoveFile: "ลบไฟล์",
+        init: function() {
+          this.on("addedfile", function(file) {
+            // แสดงรูปภาพที่อัปโหลดใหม่ใน preview
+            if (file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                const previewImage = document.getElementById('materialPreviewImage');
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('d-none');
+              };
+              reader.readAsDataURL(file);
+
+              // ยกเลิกการเลือก "ไม่มีรูปภาพ"
+              document.getElementById('noImageCheckbox').checked = false;
+            }
+          });
+
+          this.on("removedfile", function() {
+            // ซ่อน preview เมื่อลบไฟล์
+            const previewImage = document.getElementById('materialPreviewImage');
+            previewImage.classList.add('d-none');
+          });
+        }
+      });
+      
+      // No Image Checkbox Event
+      document.getElementById('noImageCheckbox').addEventListener('change', function() {
+        if (this.checked) {
+          // ลบไฟล์ในตัวอย่าง Dropzone
+          if (materialImageDropzone.files.length > 0) {
+            materialImageDropzone.removeAllFiles();
+          }
+          // ซ่อน preview
+          document.getElementById('materialPreviewImage').classList.add('d-none');
+        }
+      });
+      
+      // Supplier Select Change Event
+      document.getElementById('supplierSelect').addEventListener('change', function() {
+        const newSupplierForm = document.getElementById('newSupplierForm');
+        if (this.value === 'new') {
+          newSupplierForm.style.display = 'block';
+        } else {
+          newSupplierForm.style.display = 'none';
+          
+          // ถ้าเลือกซัพพลายเออร์ที่มีอยู่แล้ว ให้ใส่ข้อมูลตัวอย่าง
+          if (this.value === '1') {
+            document.getElementById('purchasePrice').value = '120';
+            document.getElementById('lastOrderDate').value = '05/03/2568';
+            document.getElementById('leadTime').value = '3';
+          } else if (this.value === '2') {
+            document.getElementById('purchasePrice').value = '150';
+            document.getElementById('lastOrderDate').value = '28/02/2568';
+            document.getElementById('leadTime').value = '5';
+          }
+        }
+      });
+      
+      // Has Supplier Checkbox Event
+      document.getElementById('hasSupplierCheckbox').addEventListener('change', function() {
+        const supplierFormSection = document.getElementById('supplierFormSection');
+        if (this.checked) {
+          supplierFormSection.style.display = 'block';
+        } else {
+          supplierFormSection.style.display = 'none';
+        }
+      });
+      
+      // Material Category Change Event
+      document.querySelectorAll('input[name="materialCategory"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          // เปลี่ยน prefix ของรหัสวัสดุตามหมวดหมู่
+          const materialIdPrefix = document.getElementById('materialIdPrefix');
+          if (this.value === 'materials') materialIdPrefix.value = 'M';
+          else if (this.value === 'plants') materialIdPrefix.value = 'P';
+          else if (this.value === 'tools') materialIdPrefix.value = 'T';
+          else if (this.value === 'decorations') materialIdPrefix.value = 'D';
+          else if (this.value === 'chemicals') materialIdPrefix.value = 'F';
+        });
+      });
+      
+      // Wizard Step Change
+      const wizardSteps = document.querySelectorAll('.wizard-step');
+      wizardSteps.forEach(step => {
+        step.addEventListener('click', function() {
+          const targetStep = this.getAttribute('data-step');
+          showWizardStep(targetStep);
+        });
+      });
+      
+      // Next Step Button Events
+      document.querySelectorAll('.next-step').forEach(button => {
+        button.addEventListener('click', function() {
+          const nextStep = this.getAttribute('data-next');
+          
+          // ตรวจสอบข้อมูลในขั้นตอนปัจจุบันก่อนไปขั้นตอนถัดไป
+          if (nextStep === '2') {
+            // ตรวจสอบข้อมูลพื้นฐาน
+            const requiredFields = [
+              { id: 'materialName', label: 'ชื่อวัสดุ' },
+              { id: 'materialUnit', label: 'หน่วยนับ' },
+              { id: 'materialPrice', label: 'ราคาต่อหน่วย' },
+              { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
+            ];
+            
+            if (!validateRequiredFields(requiredFields)) return;
+          }
+          
+          showWizardStep(nextStep);
+        });
+      });
+      
+      // Previous Step Button Events
+      document.querySelectorAll('.prev-step').forEach(button => {
+        button.addEventListener('click', function() {
+          const prevStep = this.getAttribute('data-prev');
+          showWizardStep(prevStep);
+        });
+      });
+      
+      // Helper function to show wizard step
+      function showWizardStep(stepNumber) {
+        // ซ่อนทุกขั้นตอน
+        document.querySelectorAll('.wizard-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        // ยกเลิก active ของทุกขั้นตอน
+        document.querySelectorAll('.wizard-step').forEach(step => {
+          step.classList.remove('active');
+        });
+        
+        // แสดงขั้นตอนที่เลือก
+        document.querySelector(`.wizard-content[data-step="${stepNumber}"]`).classList.add('active');
+        document.querySelector(`.wizard-step[data-step="${stepNumber}"]`).classList.add('active');
+        
+        // เลื่อนไปด้านบนของฟอร์ม
+        document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Helper function to validate required fields
+      function validateRequiredFields(fields) {
+        let isValid = true;
+        let errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน:';
+        
+        fields.forEach(field => {
+          const element = document.getElementById(field.id);
+          if (!element.value.trim()) {
+            isValid = false;
+            errorMessage += `\n- ${field.label}`;
+            element.classList.add('is-invalid');
+          } else {
+            element.classList.remove('is-invalid');
+          }
+        });
+        
+        if (!isValid) {
+          alert(errorMessage);
+        }
+        
+        return isValid;
+      }
+      
+      // Form Submit Event
+      document.getElementById('addMaterialForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // ตรวจสอบข้อมูลก่อนบันทึก
+        const requiredFields = [
+          { id: 'materialName', label: 'ชื่อวัสดุ' },
+          { id: 'materialUnit', label: 'หน่วยนับ' },
+          { id: 'materialPrice', label: 'ราคาต่อหน่วย' },
+          { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
+        ];
+        
+        if (!validateRequiredFields(requiredFields)) return;
+        
+        // ตรวจสอบว่ายืนยันข้อมูลแล้วหรือไม่
+        if (!document.getElementById('termsCheck').checked) {
+          alert('กรุณายืนยันข้อมูลโดยการติ๊กเครื่องหมายถูก');
+          return;
+        }
+        
+        // ในตัวอย่างนี้ไม่ได้ส่งข้อมูลไปยัง API จริง แต่จะแสดง Modal สำเร็จแทน
+        const categoryPrefix = document.getElementById('materialIdPrefix').value;
+        const newId = generateMaterialId(categoryPrefix);
+        document.getElementById('newMaterialId').textContent = `รหัสวัสดุ: ${newId}`;
+        
+        $('#successModal').modal('show');
+      });
+      
+      // Helper function to generate material ID
+      function generateMaterialId(prefix) {
+        // ในตัวอย่างนี้จะสร้างรหัสสุ่ม
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        return `${prefix}-${randomNum}`;
+      }
+    });
+  </script>
+</body>
+</html>
