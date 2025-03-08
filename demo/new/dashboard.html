@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>แดชบอร์ด | ระบบจัดสวนครบวงจร</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/core.css">
+  <link rel="stylesheet" href="assets/css/theme-default.css">
+  <link rel="stylesheet" href="assets/css/demo.css">
+
+  <!-- Vendor CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  
+  <!-- Page CSS -->
+  <style>
+    :root {
+      --primary: #28a745;
+      --primary-light: #e9fff0;
+      --warning: #ffa726;
+      --warning-light: #ffedcc;
+      --danger: #ec407a;
+      --danger-light: #ffe8e8;
+      --info: #42a5f5;
+      --info-light: #e3f2fd;
+      --text-primary: #566a7f;
+      --text-secondary: #99a0ac;
+      --bg-light: #f5f6fa;
+    }
+    
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-primary);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+      border-radius: 0.75rem;
+      border: none;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
+      margin-bottom: 1.5rem;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1.5rem rgba(161, 172, 184, 0.2);
+    }
+    
+    .stats-card {
+      border-left: 4px solid transparent;
+    }
+    
+    .stats-card.primary-border {
+      border-left-color: var(--primary);
+    }
+    
+    .stats-card.success-border {
+      border-left-color: #28c76f;
+    }
+    
+    .stats-card.danger-border {
+      border-left-color: var(--danger);
+    }
+    
+    .stats-card.warning-border {
+      border-left-color: var(--warning);
+    }
+    
+    .avatar-stats {
+      height: 48px;
+      width: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    
+    .quick-stats-icon {
+      height: 38px;
+      width: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+    }
+    
+    .recent-item {
+      transition: all 0.2s ease;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .recent-item:hover {
+      background-color: rgba(40, 167, 69, 0.08);
+      transform: translateX(5px);
+    }
+    
+    .alert-inventory {
+      position: relative;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      border: none;
+    }
+    
+    .alert-inventory::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--danger);
+    }
+    
+    .progress.progress-thin {
+      height: 6px;
+    }
+    
+    .quick-action-btn {
+      transition: all 0.2s ease;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    
+    .quick-action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.2);
+      color: var(--primary);
+    }
+    
+    .quick-action-btn i {
+      font-size: 2.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    
+    .section-heading {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-heading::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      height: 20px;
+      width: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: var(--danger);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .welcome-bg {
+      background-image: url(assets/img/illustrations/bg-shape-primary.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: contain;
+    }
+    
+    .inventory-status {
+      height: 10px;
+      width: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+    
+    .inventory-status.in-stock {
+      background-color: #28c76f;
+    }
+    
+    .inventory-status.low-stock {
+      background-color: var(--warning);
+    }
+    
+    .inventory-status.out-of-stock {
+      background-color: var(--danger);
+    }
+    
+    .scrollable-list {
+      max-height: 360px;
+      overflow-y: auto;
+    }
+    
+    /* Custom scrollbar */
+    .scrollable-list::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    .scrollable-list::-webkit-scrollbar-thumb {
+      background-color: rgba(40, 167, 69, 0.16);
+      border-radius: 3px;
+    }
+    
+    .scrollable-list::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    
+    .app-brand-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .app-brand-logo svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .app-brand-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+
+    .sidebar-toggle {
+      cursor: pointer;
+    }
+
+    /* Menu Styles */
+    .layout-menu {
+      height: 100vh;
+      position: fixed;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .layout-menu-fixed .layout-page {
+      padding-left: 240px;
+    }
+
+    .menu-item.active {
+      background-color: var(--primary-light);
+    }
+
+    .menu-item.active .menu-link {
+      color: var(--primary);
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 0.625rem 1.25rem;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .menu-icon {
+      margin-right: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .menu-item.active .menu-icon {
+      color: var(--primary);
+    }
+
+    .menu-header {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .menu-divider {
+      border-top: 1px solid #e7e7e8;
+      margin: 0.5rem 0;
+    }
+
+    /* Badge Styles */
+    .bg-label-primary {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .bg-label-warning {
+      background-color: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .bg-label-danger {
+      background-color: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .category-badge {
+      border-radius: 50rem;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#28a745" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#28a745" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">Green Gardens</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto sidebar-toggle">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item active">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- โครงการลูกค้า -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการโครงการลูกค้า</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-layout"></i>
+              <div data-i18n="โครงการ">โครงการ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="project-list.html" class="menu-link">
+                  <div data-i18n="รายการโครงการ">รายการโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มโครงการใหม่">เพิ่มโครงการใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-progress.html" class="menu-link">
+                  <div data-i18n="ติดตามความคืบหน้า">ติดตามความคืบหน้า</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุทั่วไป">วัสดุทั่วไป</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="material-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="material-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุเครื่องมือช่าง">วัสดุเครื่องมือช่าง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="construction-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="construction-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือช่าง">เครื่องมือช่าง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="inventory-withdraw.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-transfer"></i>
+              <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+            </a>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการยานพาหนะ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-projects.html" class="menu-link">
+                  <div data-i18n="รายงานโครงการ">รายงานโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- Notification -->
+              <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <a class="nav-link dropdown-toggle hide-arrow position-relative" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <i class="bx bx-bell bx-sm"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0 dropdown-menu-notification">
+                  <li class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                      <h5 class="text-body mb-0 me-auto">การแจ้งเตือน</h5>
+                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i class="bx fs-4 bx-envelope-open"></i></a>
+                    </div>
+                  </li>
+                  <li class="dropdown-notifications-list scrollable-container">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar bg-light-primary">
+                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-wrench"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">เครื่องตัดหญ้า #T001 ถูกคืนแล้ว</h6>
+                            <p class="mb-0">เครื่องมือถูกคืนโดย สมชาย ใจดี</p>
+                            <small class="text-muted">30 นาทีที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-error"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">ดินปลูกต้นไม้เหลือน้อย</h6>
+                            <p class="mb-0">วัสดุเหลือต่ำกว่าจุดสั่งซื้อ</p>
+                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-success"><i class="bx bx-check-circle"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">รับวัสดุใหม่เรียบร้อยแล้ว</h6>
+                            <p class="mb-0">ต้นไม้ประดับ จำนวน 20 ต้น</p>
+                            <small class="text-muted">2 ชั่วโมงที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-car"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">การซ่อมรถทะเบียน กข-1234 เสร็จสิ้น</h6>
+                            <p class="mb-0">รถพร้อมใช้งานแล้ว</p>
+                            <small class="text-muted">5 ชั่วโมงที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-info"><i class="bx bx-package"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">มีการเบิกวัสดุจำนวน 5 รายการ</h6>
+                            <p class="mb-0">โดย นายชัยณรงค์ สวนสวย</p>
+                            <small class="text-muted">1 วันที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="dropdown-menu-footer border-top p-2">
+                    <a href="javascript:void(0);" class="btn btn-primary d-flex justify-content-center">
+                      ดูการแจ้งเตือนทั้งหมด
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ Notification -->
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">บุญชัย ผู้จัดการ</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            <!-- Welcome Card -->
+            <div class="card bg-primary text-white mb-4 welcome-bg overflow-hidden">
+              <div class="card-body p-4">
+                <div class="row">
+                  <div class="col-lg-8 col-md-7">
+                    <h4 class="text-white mb-3">สวัสดี, คุณบุญชัย! <i class="bx bx-party"></i></h4>
+                    <p class="mb-3 pb-1">ยินดีต้อนรับสู่ระบบจัดสวนครบวงจร - วันนี้วันที่ <strong>8 มีนาคม 2568</strong></p>
+                    
+                    <div class="d-flex flex-column flex-md-row gap-md-3">
+                      <div class="d-flex align-items-center mb-2 mb-md-0">
+                        <div class="badge rounded-pill bg-white bg-opacity-25 me-2 p-2">
+                          <i class='bx bx-time-five'></i>
+                        </div>
+                        <div>
+                          <small class="text-white text-opacity-75 d-block">รายการรอดำเนินการ</small>
+                          <h6 class="mb-0 text-white">12 รายการ</h6>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center mb-2 mb-md-0">
+                        <div class="badge rounded-pill bg-white bg-opacity-25 me-2 p-2">
+                          <i class='bx bx-error-circle'></i>
+                        </div>
+                        <div>
+                          <small class="text-white text-opacity-75 d-block">การแจ้งเตือนวันนี้</small>
+                          <h6 class="mb-0 text-white">5 รายการ</h6>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <div class="badge rounded-pill bg-white bg-opacity-25 me-2 p-2">
+                          <i class='bx bx-check-double'></i>
+                        </div>
+                        <div>
+                          <small class="text-white text-opacity-75 d-block">โครงการปัจจุบัน</small>
+                          <h6 class="mb-0 text-white">12 โครงการ</h6>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mt-4">
+                      <button type="button" class="btn btn-sm btn-light text-primary me-2">ดูรายงาน</button>
+                      <button type="button" class="btn btn-sm btn-outline-light">จัดการการแจ้งเตือน</button>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-5 text-center text-md-end d-none d-md-block">
+                    <img src="assets/img/illustrations/man-with-laptop-light.png" height="160" class="mt-md-n4">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="section-heading">ทางลัดด่วน</h5>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <a href="project-add.html" class="card quick-action-btn bg-label-primary h-100">
+                  <i class="bx bx-layout text-primary"></i>
+                  <span class="fw-semibold">เพิ่มโครงการใหม่</span>
+                </a>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <a href="inventory-withdraw.html" class="card quick-action-btn bg-label-primary h-100">
+                  <i class="bx bx-package text-primary"></i>
+                  <span class="fw-semibold">เบิกวัสดุ</span>
+                </a>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <a href="inventory-withdraw.html" class="card quick-action-btn bg-label-primary h-100">
+                  <i class="bx bx-transfer text-primary"></i>
+                  <span class="fw-semibold">เบิก-คืนเครื่องมือ</span>
+                </a>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <a href="vehicle-repair.html" class="card quick-action-btn bg-label-primary h-100">
+                  <i class="bx bx-car text-primary"></i>
+                  <span class="fw-semibold">บันทึกการซ่อมรถ</span>
+                </a>
+              </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <div class="card stats-card primary-border h-100">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 class="card-title mb-1">โครงการปัจจุบัน</h5>
+                        <h3 class="mb-2 fw-bold">12</h3>
+                        <span class="badge bg-label-primary">
+                          <i class="bx bx-trending-up me-1"></i>
+                          <span>+2 โครงการเดือนนี้</span>
+                        </span>
+                      </div>
+                      <div class="avatar-stats bg-label-primary">
+                        <i class="bx bx-layout text-primary fs-3"></i>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                      <div class="progress w-100 progress-thin">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="ms-3 fw-semibold">75%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <div class="card stats-card warning-border h-100">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 class="card-title mb-1">วัสดุพร้อมใช้</h5>
+                        <h3 class="mb-2 fw-bold">127</h3>
+                        <span class="badge bg-label-warning">
+                          <i class="bx bx-package me-1"></i>
+                          <span>85% ของทั้งหมด</span>
+                        </span>
+                      </div>
+                      <div class="avatar-stats bg-label-warning">
+                        <i class="bx bx-package text-warning fs-3"></i>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                      <div class="progress w-100 progress-thin">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="ms-3 fw-semibold">85%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <div class="card stats-card info-border h-100">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 class="card-title mb-1">เครื่องมือพร้อมใช้</h5>
+                        <h3 class="mb-2 fw-bold">35</h3>
+                        <span class="badge bg-label-info">
+                          <i class="bx bx-wrench me-1"></i>
+                          <span>จาก 42 ชิ้น (83%)</span>
+                        </span>
+                      </div>
+                      <div class="avatar-stats bg-label-info">
+                        <i class="bx bx-wrench text-info fs-3"></i>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                      <div class="progress w-100 progress-thin">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 83%;" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="ms-3 fw-semibold">83%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                <div class="card stats-card danger-border h-100">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 class="card-title mb-1">มูลค่าคลัง</h5>
+                        <h3 class="mb-2 fw-bold">฿345K</h3>
+                        <span class="badge bg-label-success">
+                          <i class="bx bx-trending-up me-1"></i>
+                          <span>+5% จากเดือนที่แล้ว</span>
+                        </span>
+                      </div>
+                      <div class="avatar-stats bg-label-danger">
+                        <i class="bx bx-money text-danger fs-3"></i>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                      <div class="progress w-100 progress-thin">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <span class="ms-3 fw-semibold">65%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <!-- Chart Section -->
+              <div class="col-xl-8 col-lg-7 mb-4">
+                <div class="card h-100">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">สถิติการเบิกวัสดุรายเดือน</h5>
+                    <div class="d-flex">
+                      <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="materialTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bx bx-filter-alt me-1"></i> ประเภทวัสดุ
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="materialTypeDropdown">
+                          <li><a class="dropdown-item active" href="javascript:void(0);">ทั้งหมด</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);">วัสดุทั่วไป</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);">วัสดุเครื่องมือช่าง</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);">เครื่องมือช่าง</a></li>
+                        </ul>
+                      </div>
+                      <div class="dropdown ms-2">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bx bx-calendar me-1"></i> 2568
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="yearDropdown">
+                          <li><a class="dropdown-item active" href="javascript:void(0);">2568</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);">2567</a></li>
+                          <li><a class="dropdown-item" href="javascript:void(0);">2566</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row mb-2">
+                      <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                        <div class="d-flex align-items-center">
+                          <div class="rounded-circle me-2" style="width: 10px; height: 10px; background: #28a745;"></div>
+                          <div class="me-2">วัสดุทั่วไป</div>
+                          <div class="fw-semibold">4,280</div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                        <div class="d-flex align-items-center">
+                          <div class="rounded-circle me-2" style="width: 10px; height: 10px; background: #ffa726;"></div>
+                          <div class="me-2">วัสดุเครื่องมือช่าง</div>
+                          <div class="fw-semibold">2,430</div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                        <div class="d-flex align-items-center">
+                          <div class="rounded-circle me-2" style="width: 10px; height: 10px; background: #42a5f5;"></div>
+                          <div class="me-2">เครื่องมือช่าง</div>
+                          <div class="fw-semibold">1,840</div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-6">
+                        <div class="d-flex align-items-center">
+                          <div class="rounded-circle me-2" style="width: 10px; height: 10px; background: #ec407a;"></div>
+                          <div class="me-2">รวมทั้งหมด</div>
+                          <div class="fw-semibold">8,550</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="withdrawalStatistics" style="height: 350px;"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Recent Activities and Alerts -->
+              <div class="col-xl-4 col-lg-5">
+                <div class="row">
+                  <!-- Alerts Section -->
+                  <div class="col-12 mb-4">
+                    <div class="card h-100">
+                      <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                          <i class="bx bx-error-circle text-danger me-2"></i>
+                          การแจ้งเตือนสำคัญ
+                        </h5>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-text-secondary p-0">
+                          ทั้งหมด <i class="bx bx-right-arrow-alt"></i>
+                        </a>
+                      </div>
+                      <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                          <a href="javascript:void(0);" class="list-group-item list-group-item-action p-3 stock-alert">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                              <div>
+                                <span class="inventory-status out-of-stock"></span>
+                                <span class="fw-semibold">ดินปลูกต้นไม้</span>
+                              </div>
+                              <span class="badge bg-danger">ใกล้หมด</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <small class="text-muted">รหัส: M-0001</small>
+                              <small class="text-muted">เหลือ 5 กระสอบ (ต่ำกว่าจุดสั่งซื้อ)</small>
+                            </div>
+                          </a>
+                          <a href="javascript:void(0);" class="list-group-item list-group-item-action p-3 stock-alert">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                              <div>
+                                <span class="inventory-status low-stock"></span>
+                                <span class="fw-semibold">ตะปู 2 นิ้ว</span>
+                              </div>
+                              <span class="badge bg-warning text-dark">ใกล้หมด</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <small class="text-muted">รหัส: T-0010</small>
+                              <small class="text-muted">เหลือ 2.5 กก. (ต่ำกว่าจุดสั่งซื้อ)</small>
+                            </div>
+                          </a>
+                          <a href="javascript:void(0);" class="list-group-item list-group-item-action p-3 stock-alert">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                              <div>
+                                <span class="inventory-status low-stock"></span>
+                                <span class="fw-semibold">กระถางดินเผา 6"</span>
+                              </div>
+                              <span class="badge bg-danger text-white">หมด</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <small class="text-muted">รหัส: M-0006</small>
+                              <small class="text-muted">ต้องสั่งเพิ่ม</small>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Material Types Chart -->
+                  <div class="col-12 mb-4">
+                    <div class="card h-100">
+                      <div class="card-header">
+                        <h5 class="card-title mb-0">สัดส่วนประเภทวัสดุ</h5>
+                      </div>
+                      <div class="card-body">
+                        <div id="materialTypeChart" style="height: 250px;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- ต่อจากส่วน Recent Activities and Alerts -->
+
+                <!-- เพิ่มส่วนของสถิติโครงการ -->
+                <div class="row">
+                    <!-- Project Stats Chart -->
+                    <div class="col-xl-6 col-lg-6 mb-4">
+                    <!-- เนื้อหาจาก project-stats-section ส่วนแรก -->
+                    </div>
+                    
+                    <!-- Projects Timeline -->
+                    <div class="col-xl-6 col-lg-6 mb-4">
+                    <!-- เนื้อหาจาก project-stats-section ส่วนที่สอง -->
+                    </div>
+                </div>
+                
+                <!-- Latest Projects Section -->
+                <div class="row">
+                    <!-- เนื้อหาจาก project-stats-section ส่วนที่สาม -->
+                </div>
+                
+                <!-- แล้วตามด้วย Recent Transactions Section -->
+                <div class="row">
+                    <div class="col-12 mb-4">
+                    <!-- รายการล่าสุด (ที่มีอยู่แล้ว) -->
+                    </div>
+                </div>
+
+
+
+              </div>
+            </div>
+            
+            <!-- Recent Transactions Section -->
+            <div class="row">
+              <div class="col-12 mb-4">
+                <div class="card">
+                  <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">รายการล่าสุด</h5>
+                    <button type="button" class="btn btn-primary btn-sm">
+                      <i class="bx bx-plus me-1"></i> เพิ่มรายการใหม่
+                    </button>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="scrollable-list">
+                      <div class="list-group list-group-flush">
+                        <div class="list-group-item recent-item">
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center">
+                              <div class="transaction-icon bg-label-primary me-3">
+                                <i class="bx bx-package fs-4 text-primary"></i>
+                              </div>
+                              <div class="me-2">
+                                <span class="category-badge bg-label-primary">เบิกวัสดุ</span>
+                                <h6 class="mb-0 mt-1">ดินปลูกต้นไม้ 2 กระสอบ</h6>
+                                <small class="text-muted">เบิกโดย: บุญชัย ผู้จัดการ</small>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                              <h6 class="mb-0 text-danger">-฿240</h6>
+                              <small class="text-muted">8 มี.ค. 2568, 09:10</small>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-item">
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center">
+                              <div class="transaction-icon bg-label-success me-3">
+                                <i class="bx bx-wrench fs-4 text-success"></i>
+                              </div>
+                              <div class="me-2">
+                                <span class="category-badge bg-label-success">คืนเครื่องมือ</span>
+                                <h6 class="mb-0 mt-1">เครื่องตัดหญ้า</h6>
+                                <small class="text-muted">คืนโดย: สมชาย ใจดี</small>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                              <h6 class="mb-0 text-success">คืนแล้ว</h6>
+                              <small class="text-muted">7 มี.ค. 2568, 16:35</small>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-item">
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center">
+                              <div class="transaction-icon bg-label-info me-3">
+                                <i class="bx bx-layout fs-4 text-info"></i>
+                              </div>
+                              <div class="me-2">
+                                <span class="category-badge bg-label-info">โครงการใหม่</span>
+                                <h6 class="mb-0 mt-1">สวนหย่อมบ้านคุณสมชาย</h6>
+                                <small class="text-muted">สร้างโดย: บุญชัย ผู้จัดการ</small>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                              <h6 class="mb-0 text-info">฿45,000</h6>
+                              <small class="text-muted">5 มี.ค. 2568, 11:20</small>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-item">
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center">
+                              <div class="transaction-icon bg-label-warning me-3">
+                                <i class="bx bx-receipt fs-4 text-warning"></i>
+                              </div>
+                              <div class="me-2">
+                                <span class="category-badge bg-label-warning">เพิ่มวัสดุใหม่</span>
+                                <h6 class="mb-0 mt-1">ต้นไม้ประดับขนาดเล็ก</h6>
+                                <small class="text-muted">จำนวน: 20 ต้น</small>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                              <h6 class="mb-0 text-success">+฿3,000</h6>
+                              <small class="text-muted">3 มี.ค. 2568, 14:45</small>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-item">
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center">
+                              <div class="transaction-icon bg-label-danger me-3">
+                                <i class="bx bx-car fs-4 text-danger"></i>
+                              </div>
+                              <div class="me-2">
+                                <span class="category-badge bg-label-danger">ซ่อมรถ</span>
+                                <h6 class="mb-0 mt-1">รถกระบะ ทะเบียน กข-1234</h6>
+                                <small class="text-muted">เช็คระยะ 10,000 กม.</small>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end">
+                              <h6 class="mb-0 text-danger">-฿4,500</h6>
+                              <small class="text-muted">1 มี.ค. 2568, 08:30</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="p-3 text-center border-top">
+                      <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary">
+                        ดูรายการทั้งหมด
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบจัดสวนครบวงจร v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.js"></script>
+
+  <!-- Main JS -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Month Names
+      const months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+      
+      // Withdrawal Statistics Chart
+      const withdrawalStatisticsOptions = {
+        series: [
+          {
+            name: 'วัสดุทั่วไป',
+            type: 'column',
+            data: [380, 420, 450, 480, 470, 400, 390, 420, 480, 450, 440, 500]
+          },
+          {
+            name: 'วัสดุเครื่องมือช่าง',
+            type: 'column',
+            data: [220, 230, 190, 250, 220, 210, 180, 250, 270, 220, 190, 200]
+          },
+          {
+            name: 'เครื่องมือช่าง',
+            type: 'column',
+            data: [150, 140, 160, 180, 130, 170, 180, 160, 120, 190, 140, 120]
+          },
+          {
+            name: 'รวมทั้งหมด',
+            type: 'line',
+            data: [750, 790, 800, 910, 820, 780, 750, 830, 870, 860, 770, 820]
+          }
+        ],
+        chart: {
+          height: 350,
+          type: 'line',
+          stacked: false,
+          toolbar: {
+            show: false
+          },
+          fontFamily: 'Prompt, sans-serif',
+          zoom: {
+            enabled: false
+          }
+        },
+        stroke: {
+          width: [0, 0, 0, 3],
+          curve: 'smooth'
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '60%',
+            borderRadius: 4
+          }
+        },
+        fill: {
+          opacity: [1, 1, 1, 0.1]
+        },
+        markers: {
+          size: 4,
+          colors: '#ec407a',
+          strokeColors: '#fff',
+          strokeWidth: 2,
+          hover: {
+            size: 6
+          }
+        },
+        labels: months,
+        colors: ['#28a745', '#ffa726', '#42a5f5', '#ec407a'],
+        dataLabels: {
+          enabled: false
+        },
+        grid: {
+          padding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 10
+          },
+          strokeDashArray: 3
+        },
+        xaxis: {
+          type: 'category',
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'จำนวนรายการ',
+            style: {
+              fontSize: '12px',
+              fontWeight: 400
+            }
+          },
+          labels: {
+            formatter: function(val) {
+              return val.toFixed(0);
+            }
+          }
+        },
+        tooltip: {
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function(y) {
+              if(typeof y !== "undefined") {
+                return `${y.toFixed(0)} รายการ`;
+              }
+              return y;
+            }
+          }
+        },
+        legend: {
+          show: false
+        }
+      };
+      
+      // Material Type Chart
+      const materialTypeOptions = {
+        series: [40, 30, 20, 10],
+        chart: {
+          type: 'donut',
+          height: 250,
+          fontFamily: 'Prompt, sans-serif',
+          toolbar: {
+            show: false
+          }
+        },
+        labels: ['วัสดุทั่วไป', 'วัสดุเครื่องมือช่าง', 'เครื่องมือช่าง', 'อื่นๆ'],
+        colors: ['#28a745', '#ffa726', '#42a5f5', '#ec407a'],
+        dataLabels: {
+          enabled: false
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '75%',
+              labels: {
+                show: true,
+                name: {
+                  show: true,
+                  fontSize: '22px',
+                  fontFamily: 'Prompt, sans-serif',
+                  offsetY: -10
+                },
+                value: {
+                  show: true,
+                  fontSize: '16px',
+                  fontFamily: 'Prompt, sans-serif',
+                  formatter: function (val) {
+                    return val + '%';
+                  }
+                },
+                total: {
+                  show: true,
+                  label: 'รวม',
+                  fontSize: '16px',
+                  fontFamily: 'Prompt, sans-serif',
+                  formatter: function (w) {
+                    return '100%';
+                  }
+                }
+              }
+            }
+          }
+        },
+        legend: {
+          show: true,
+          position: 'bottom',
+          horizontalAlign: 'center',
+          markers: {
+            offsetX: -5
+          },
+          itemMargin: {
+            horizontal: 10
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function(value) {
+              return value + '%';
+            }
+          }
+        },
+        stroke: {
+          width: 0
+        }
+      };
+      
+      // Initialize the charts
+      let withdrawalChart = new ApexCharts(
+        document.querySelector("#withdrawalStatistics"),
+        withdrawalStatisticsOptions
+      );
+      withdrawalChart.render();
+      
+      let materialTypeChart = new ApexCharts(
+        document.querySelector("#materialTypeChart"),
+        materialTypeOptions
+      );
+      materialTypeChart.render();
+      
+      // Initialize tooltips
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+      
+      // Initialize Perfect Scrollbar for scrollable areas
+      if (document.querySelector('.scrollable-list')) {
+        new PerfectScrollbar('.scrollable-list');
+      }
+      
+      // Menu toggle functionality
+      document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+        document.querySelector('.layout-wrapper').classList.toggle('layout-menu-expanded');
+      });
+    });
+  </script>
+</body>
+</html>
