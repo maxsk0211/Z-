@@ -46,7 +46,15 @@
       --text-secondary: #99a0ac;
       --bg-light: #f5f6fa;
     }
+       /* แก้ไขการแสดงผลเมนู */
+    .menu-sub {
+      display: none; /* ค่าเริ่มต้นซ่อนเมนูย่อย */
+    }
     
+    .menu-item.active.open > .menu-sub,
+    .menu-sub.show {
+      display: block !important; /* แสดงเมนูย่อยเมื่อ active หรือมี class show */
+    }
     body {
       font-family: 'Prompt', sans-serif;
       background-color: var(--bg-light);
