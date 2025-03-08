@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>แก้ไขข้อมูลวัสดุ | ระบบจัดสวนครบวงจร</title>
+  <title>แก้ไขวัสดุ | ระบบจัดสวนครบวงจร</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
@@ -140,7 +140,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 150px;
+      min-height: 200px;
       border: 2px dashed #dce1e8;
       border-radius: 0.375rem;
       background-color: #fafbfc;
@@ -178,53 +178,6 @@
       font-weight: 500;
     }
     
-    .timeline {
-      position: relative;
-      padding-left: 2rem;
-    }
-    
-    .timeline:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 2px;
-      height: 100%;
-      background-color: #e7e7e8;
-    }
-    
-    .timeline-item {
-      position: relative;
-      padding-bottom: 1.5rem;
-    }
-    
-    .timeline-item:last-child {
-      padding-bottom: 0;
-    }
-    
-    .timeline-point {
-      position: absolute;
-      left: -2rem;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 50%;
-      background-color: var(--primary);
-      transform: translateX(50%);
-      z-index: 1;
-    }
-    
-    .timeline-content {
-      padding: 1rem;
-      border-radius: 0.375rem;
-      background-color: #fff;
-      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.08);
-    }
-    
-    .timeline-date {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
     .category-badge {
       padding: 0.35em 0.65em;
       font-size: 0.75em;
@@ -255,6 +208,213 @@
 
     .category-chemicals {
       background-color: #F44336;
+    }
+    
+    .category-option {
+      display: flex;
+      align-items: center;
+      margin-right: 1rem;
+    }
+    
+    .category-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      color: white;
+    }
+    
+    .wizard-steps {
+      display: flex;
+      padding: 0;
+      margin: 0 0 1rem 0;
+    }
+    
+    .wizard-step {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-secondary);
+      position: relative;
+      border-bottom: 3px solid #e0e0e0;
+      cursor: pointer;
+    }
+    
+    .wizard-step.active {
+      border-bottom-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .wizard-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: -0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1rem;
+      height: 1px;
+      background-color: #e0e0e0;
+    }
+    
+    .wizard-step-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wizard-content {
+      display: none;
+    }
+    
+    .wizard-content.active {
+      display: block;
+    }
+    
+    .wizard-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    /* เพิ่มสไตล์ใหม่สำหรับส่วนข้อมูลต้นทุนและใบสั่งซื้อ */
+    .cost-method-option {
+      padding: 0.75rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .cost-method-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .cost-method-option.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .cost-method-title {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .cost-method-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0;
+    }
+    
+    .receipt-info {
+      background-color: var(--bg-light);
+      border-radius: 0.375rem;
+      padding: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .initial-stock-info {
+      background-color: rgba(40, 167, 69, 0.08);
+      border-radius: 0.375rem;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .collapse-header {
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      background-color: var(--bg-light);
+      border-radius: 0.375rem;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .collapse-header:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .collapse-icon {
+      transition: transform 0.2s ease;
+    }
+    
+    .collapsed .collapse-icon {
+      transform: rotate(-90deg);
+    }
+    
+    .cost-info-badge {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      margin-left: 0.5rem;
+    }
+
+    /* เพิ่มสไตล์สำหรับประวัติการแก้ไข */
+    .timeline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: relative;
+    }
+
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 16px;
+      width: 2px;
+      background-color: #e0e0e0;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 45px;
+      padding-bottom: 1.5rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background-color: var(--primary);
+    }
+
+    .timeline-content {
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 0.375rem;
+    }
+
+    .timeline-date {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-title {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-text {
+      margin-bottom: 0;
     }
   </style>
 </head>
@@ -344,6 +504,11 @@
               <li class="menu-item">
                 <a href="material-add.html" class="menu-link">
                   <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="stock-receipt.html" class="menu-link">
+                  <div data-i18n="รับเข้าสต็อก">รับเข้าสต็อก</div>
                 </a>
               </li>
             </ul>
@@ -447,6 +612,11 @@
               <li class="menu-item">
                 <a href="report-executive.html" class="menu-link">
                   <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-stock-value.html" class="menu-link">
+                  <div data-i18n="รายงานมูลค่าคงคลัง">รายงานมูลค่าคงคลัง</div>
                 </a>
               </li>
             </ul>
@@ -627,169 +797,403 @@
                 <div class="card mb-4">
                   <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">แก้ไขข้อมูลวัสดุ</h5>
-                    <small class="text-muted float-end">แก้ไขล่าสุด: 08/03/2568</small>
+                    <div>
+                      <span class="badge bg-label-info">ID: M-0001</span>
+                      <span class="badge bg-label-warning ms-1">สถานะ: ใกล้หมด</span>
+                    </div>
                   </div>
                   <div class="card-body">
+                    <div class="wizard-steps">
+                      <div class="wizard-step active" data-step="1">
+                        <div class="wizard-step-icon"><i class="bx bx-info-circle"></i></div>
+                        <div>ข้อมูลพื้นฐาน</div>
+                      </div>
+                      <div class="wizard-step" data-step="2">
+                        <div class="wizard-step-icon"><i class="bx bx-image"></i></div>
+                        <div>รูปภาพ</div>
+                      </div>
+                      <div class="wizard-step" data-step="3">
+                        <div class="wizard-step-icon"><i class="bx bx-detail"></i></div>
+                        <div>รายละเอียดเพิ่มเติม</div>
+                      </div>
+                      <div class="wizard-step" data-step="4">
+                        <div class="wizard-step-icon"><i class="bx bx-money"></i></div>
+                        <div>ต้นทุนและการคำนวณ</div>
+                      </div>
+                      <div class="wizard-step" data-step="5">
+                        <div class="wizard-step-icon"><i class="bx bx-building"></i></div>
+                        <div>ซัพพลายเออร์</div>
+                      </div>
+                      <div class="wizard-step" data-step="6">
+                        <div class="wizard-step-icon"><i class="bx bx-history"></i></div>
+                        <div>ประวัติการแก้ไข</div>
+                      </div>
+                    </div>
+                    
                     <form id="editMaterialForm">
-                      <div class="row mb-4">
-                        <div class="col-md-6">
-                          <div class="row">
-                            <div class="col-md-12 mb-3">
-                              <label for="materialId" class="form-label">รหัสวัสดุ</label>
-                              <input type="text" class="form-control" id="materialId" value="M-0001" readonly>
-                              <small class="text-muted">รหัสวัสดุไม่สามารถเปลี่ยนแปลงได้</small>
+                      <!-- ขั้นตอนที่ 1: ข้อมูลพื้นฐาน -->
+                      <div class="wizard-content active" data-step="1">
+                        <h6 class="section-heading">ข้อมูลพื้นฐาน</h6>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label for="materialId" class="form-label">รหัสวัสดุ</label>
+                            <input type="text" class="form-control bg-lighter" id="materialId" value="M-0001" readonly>
+                            <small class="text-muted">รหัสวัสดุไม่สามารถแก้ไขได้</small>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="materialName" class="form-label required-label">ชื่อวัสดุ</label>
+                            <input type="text" class="form-control" id="materialName" value="ดินปลูกต้นไม้" required>
+                          </div>
+
+                          <div class="col-md-12 mb-3">
+                            <label class="form-label required-label">หมวดหมู่</label>
+                            <div class="d-flex flex-wrap">
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryMaterials" value="materials" checked>
+                                <label class="form-check-label" for="categoryMaterials">
+                                  <span class="category-icon" style="background-color: #FF9800;"><i class="bx bx-package"></i></span>
+                                  วัสดุ
+                                </label>
+                              </div>
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryPlants" value="plants">
+                                <label class="form-check-label" for="categoryPlants">
+                                  <span class="category-icon" style="background-color: #4CAF50;"><i class="bx bx-leaf"></i></span>
+                                  ต้นไม้
+                                </label>
+                              </div>
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryDecorations" value="decorations">
+                                <label class="form-check-label" for="categoryDecorations">
+                                  <span class="category-icon" style="background-color: #9C27B0;"><i class="bx bx-palette"></i></span>
+                                  ตกแต่ง
+                                </label>
+                              </div>
+                              <div class="form-check category-option me-4 mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryTools" value="tools">
+                                <label class="form-check-label" for="categoryTools">
+                                  <span class="category-icon" style="background-color: #2196F3;"><i class="bx bx-wrench"></i></span>
+                                  เครื่องมือ
+                                </label>
+                              </div>
+                              <div class="form-check category-option mb-2">
+                                <input class="form-check-input" type="radio" name="materialCategory" id="categoryChemicals" value="chemicals">
+                                <label class="form-check-label" for="categoryChemicals">
+                                  <span class="category-icon" style="background-color: #F44336;"><i class="bx bx-vial"></i></span>
+                                  ปุ๋ย/เคมี
+                                </label>
+                              </div>
                             </div>
-                            <div class="col-md-12 mb-3">
-                              <label for="materialName" class="form-label required-label">ชื่อวัสดุ</label>
-                              <input type="text" class="form-control" id="materialName" value="ดินปลูกต้นไม้" placeholder="ระบุชื่อวัสดุ" required>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="materialUnit" class="form-label required-label">หน่วยนับ</label>
+                            <input type="text" class="form-control" id="materialUnit" value="ถุง" required>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="materialReorderPoint" class="form-label required-label">จุดสั่งซื้อ</label>
+                            <input type="number" class="form-control" id="materialReorderPoint" value="10" min="0" required>
+                            <small class="text-muted">จำนวนต่ำสุดที่ต้องการแจ้งเตือนให้สั่งซื้อ</small>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="materialLocation" class="form-label">สถานที่จัดเก็บ</label>
+                            <input type="text" class="form-control" id="materialLocation" value="ชั้น A-3 คลังสินค้าหลัก">
+                          </div>
+
+                          <div class="col-12">
+                            <!-- แสดงข้อมูลคงคลังปัจจุบัน -->
+                            <div class="alert alert-info">
+                              <div class="d-flex align-items-center">
+                                <i class="bx bx-info-circle me-2 fs-4"></i>
+                                <div>
+                                  <h6 class="alert-heading mb-1">ข้อมูลคงคลังปัจจุบัน</h6>
+                                  <p class="mb-0">จำนวนคงเหลือ: <strong>18 ถุง</strong> | มูลค่าคงคลัง: <strong>฿2,200.00</strong> | ต้นทุนเฉลี่ย: <strong>฿122.22</strong></p>
+                                  <small>การแก้ไขข้อมูลพื้นฐานจะไม่กระทบต่อจำนวนคงเหลือ หากต้องการปรับปรุงสต็อก ให้ใช้เมนู "รับเข้าสต็อก" หรือ "เบิก-คืนวัสดุ"</small>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col-md-12 mb-3">
-                              <label for="materialCategory" class="form-label required-label">หมวดหมู่</label>
-                              <select class="form-select" id="materialCategory" required>
-                                <option value="" disabled>เลือกหมวดหมู่</option>
-                                <option value="materials" selected>วัสดุ</option>
-                                <option value="plants">ต้นไม้</option>
-                                <option value="decorations">ตกแต่ง</option>
-                                <option value="tools">เครื่องมือ</option>
-                                <option value="chemicals">ปุ๋ย/เคมี</option>
+                          </div>
+
+                          <div class="col-12 mt-3">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="termsCheck">
+                              <label class="form-check-label" for="termsCheck">
+                                ฉันได้ตรวจสอบข้อมูลทั้งหมดและยืนยันว่าข้อมูลถูกต้อง
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <div></div>
+                          <button type="button" class="btn btn-primary" onclick="nextStep(2)">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 2: รูปภาพ -->
+                      <div class="wizard-content" data-step="2">
+                        <h6 class="section-heading">รูปภาพวัสดุ</h6>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="text-center mb-3">
+                              <img src="../assets/img/materials/soil.jpg" id="materialPreviewImage" class="preview-image" alt="รูปภาพวัสดุ">
+                            </div>
+                            <div class="dropzone" id="materialImageDropzone">
+                              <div class="dz-message">
+                                <div class="dropzone-icon">
+                                  <i class="bx bx-upload"></i>
+                                </div>
+                                <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพใหม่</h5>
+                                <p class="text-muted mb-0">รองรับไฟล์ .jpg, .jpeg, .png ขนาดไม่เกิน 5MB</p>
+                              </div>
+                            </div>
+                            <div class="form-check mt-3">
+                              <input class="form-check-input" type="checkbox" id="noImageCheckbox">
+                              <label class="form-check-label" for="noImageCheckbox">
+                                ลบรูปภาพ (ไม่มีรูปภาพ)
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary" onclick="prevStep(1)"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary" onclick="nextStep(3)">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 3: รายละเอียดเพิ่มเติม -->
+                      <div class="wizard-content" data-step="3">
+                        <h6 class="section-heading">รายละเอียดเพิ่มเติม</h6>
+                        <div class="row g-3">
+                          <div class="col-md-12 mb-3">
+                            <label for="materialDescription" class="form-label">รายละเอียด</label>
+                            <textarea class="form-control" id="materialDescription" rows="4">ดินปลูกต้นไม้คุณภาพดี ผสมธาตุอาหารที่จำเป็นสำหรับการเจริญเติบโตของพืช เหมาะสำหรับต้นไม้ประดับทั่วไป ขนาดบรรจุ 10 กิโลกรัมต่อถุง</textarea>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialBarcode" class="form-label">บาร์โค้ด/รหัส SKU</label>
+                            <input type="text" class="form-control" id="materialBarcode" value="8850001234567">
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialTags" class="form-label">แท็ก/คำค้นหา</label>
+                            <input type="text" class="form-control" id="materialTags" value="ดิน,วัสดุปลูก,ต้นไม้,อุปกรณ์สวน">
+                            <small class="text-muted">เช่น สวน,ตกแต่ง,กลางแจ้ง</small>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialMinimumOrder" class="form-label">จำนวนสั่งซื้อขั้นต่ำ</label>
+                            <input type="number" class="form-control" id="materialMinimumOrder" value="5" min="1">
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialWeight" class="form-label">น้ำหนัก (กก.)</label>
+                            <input type="number" class="form-control" id="materialWeight" value="10" min="0" step="0.01">
+                          </div>
+
+                          <div class="col-md-12">
+                            <label for="materialNotes" class="form-label">หมายเหตุ</label>
+                            <textarea class="form-control" id="materialNotes" rows="2">ใช้งานกับโครงการจัดสวนที่ต้องการดินคุณภาพสูง</textarea>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary" onclick="prevStep(2)"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary" onclick="nextStep(4)">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 4: การคำนวณต้นทุน (ใหม่) -->
+                      <div class="wizard-content" data-step="4">
+                        <h6 class="section-heading">การคำนวณต้นทุนและราคา</h6>
+                        <div class="row mb-4">
+                          <div class="col-md-6">
+                            <label for="materialSalePrice" class="form-label required-label">ราคาขาย/ใช้งาน (บาท)</label>
+                            <div class="input-group">
+                              <span class="input-group-text">฿</span>
+                              <input type="number" class="form-control" id="materialSalePrice" min="0" step="0.01" required value="150">
+                            </div>
+                            <small class="text-muted">ราคาที่ใช้ในการคิดมูลค่าโครงการ</small>
+                          </div>
+
+                          <div class="col-md-6">
+                            <label for="materialAvgCost" class="form-label">ต้นทุนเฉลี่ยปัจจุบัน (บาท)</label>
+                            <div class="input-group">
+                              <span class="input-group-text">฿</span>
+                              <input type="number" class="form-control bg-lighter" id="materialAvgCost" value="122.22" readonly>
+                            </div>
+                            <small class="text-muted">ต้นทุนเฉลี่ยปัจจุบันไม่สามารถแก้ไขได้โดยตรง จะคำนวณอัตโนมัติจากการรับเข้าสต็อก</small>
+                          </div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <div class="col-12">
+                            <label class="form-label required-label">วิธีคำนวณต้นทุน</label>
+                            <div class="cost-method-option selected" id="fifoMethod">
+                              <div class="cost-method-title">
+                                <i class="bx bx-sort-alt-2 me-1"></i>
+                                เข้าก่อน-ออกก่อน (FIFO - First In, First Out)
+                                <span class="cost-info-badge">ค่าเริ่มต้น</span>
+                              </div>
+                              <p class="cost-method-desc">สินค้าที่ซื้อเข้ามาก่อนจะถูกเบิกออกไปใช้ก่อน เหมาะสำหรับสินค้าที่มีอายุจำกัด</p>
+                            </div>
+                            <div class="cost-method-option" id="averageMethod">
+                              <div class="cost-method-title">
+                                <i class="bx bx-bar-chart-alt-2 me-1"></i>
+                                ต้นทุนเฉลี่ยถ่วงน้ำหนัก (Weighted Average)
+                              </div>
+                              <p class="cost-method-desc">คำนวณต้นทุนโดยเฉลี่ยจากทุกล็อตที่มีในคลัง ทำให้ต้นทุนเฉลี่ยปรับเปลี่ยนตามการซื้อแต่ละครั้ง</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                          <div class="d-flex align-items-center">
+                            <i class="bx bx-error-circle me-2 fs-4"></i>
+                            <div>
+                              <h6 class="alert-heading mb-1">คำเตือนการเปลี่ยนวิธีคำนวณต้นทุน</h6>
+                              <p class="mb-0">การเปลี่ยนวิธีคำนวณต้นทุนอาจส่งผลต่อมูลค่าคงคลังและต้นทุนสินค้าที่ใช้ในโครงการต่างๆ ควรปรึกษาฝ่ายบัญชีก่อนเปลี่ยนแปลง</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary" onclick="prevStep(3)"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary" onclick="nextStep(5)">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 5: ซัพพลายเออร์ -->
+                      <div class="wizard-content" data-step="5">
+                        <h6 class="section-heading">ข้อมูลซัพพลายเออร์</h6>
+                        <div class="row g-3">
+                          <div class="col-md-12 mb-3">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" id="hasSupplierCheckbox" checked>
+                              <label class="form-check-label" for="hasSupplierCheckbox">
+                                มีข้อมูลซัพพลายเออร์
+                              </label>
+                            </div>
+                          </div>
+
+                          <div id="supplierFormSection">
+                            <div class="col-md-6 mb-3">
+                              <label for="supplierSelect" class="form-label">เลือกซัพพลายเออร์ที่มีอยู่แล้ว</label>
+                              <select class="form-select" id="supplierSelect">
+                                <option value="">-- เลือกซัพพลายเออร์ --</option>
+                                <option value="1" selected>บริษัท กรีนการ์เด้น จำกัด</option>
+                                <option value="2">บริษัท ไทยวัสดุภัณฑ์ จำกัด</option>
+                                <option value="3">ร้านต้นไม้นานาพันธุ์</option>
+                                <option value="4">บริษัท เครื่องมือช่างไทย จำกัด</option>
+                                <option value="new">+ เพิ่มซัพพลายเออร์ใหม่</option>
                               </select>
                             </div>
-                            <div class="col-md-6 mb-3">
-                              <label for="materialQuantity" class="form-label required-label">จำนวนคงเหลือ</label>
-                              <input type="number" class="form-control" id="materialQuantity" value="8" min="0" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                              <label for="materialUnit" class="form-label required-label">หน่วยนับ</label>
-                              <input type="text" class="form-control" id="materialUnit" value="ถุง" placeholder="ระบุหน่วยนับ" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                              <label for="materialPrice" class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
-                              <div class="input-group">
-                                <span class="input-group-text">฿</span>
-                                <input type="number" class="form-control" id="materialPrice" value="120" min="0" step="0.01" required>
+
+                            <div id="newSupplierForm" style="display: none;">
+                              <div class="row g-3">
+                                <div class="col-md-6">
+                                  <label for="supplierName" class="form-label">ชื่อซัพพลายเออร์</label>
+                                  <input type="text" class="form-control" id="supplierName" placeholder="ระบุชื่อบริษัทหรือร้านค้า">
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label for="supplierContact" class="form-label">ข้อมูลติดต่อ</label>
+                                  <input type="text" class="form-control" id="supplierContact" placeholder="ระบุหมายเลขโทรศัพท์ หรืออีเมล">
+                                </div>
+
+                                <div class="col-md-12">
+                                  <label for="supplierAddress" class="form-label">ที่อยู่</label>
+                                  <textarea class="form-control" id="supplierAddress" rows="2" placeholder="ระบุที่อยู่ซัพพลายเออร์"></textarea>
+                                </div>
                               </div>
                             </div>
+
+                            <div class="col-12"><hr></div>
+
                             <div class="col-md-6 mb-3">
-                              <label for="materialReorderPoint" class="form-label required-label">จุดสั่งซื้อ</label>
-                              <input type="number" class="form-control" id="materialReorderPoint" value="10" min="0" required>
-                              <small class="text-muted">จำนวนต่ำสุดที่ต้องการแจ้งเตือนให้สั่งซื้อ</small>
+                              <label for="leadTime" class="form-label">ระยะเวลานำเข้า (วัน)</label>
+                              <input type="number" class="form-control" id="leadTime" value="3" min="1" placeholder="ระบุจำนวนวัน">
+                              <small class="text-muted">ระยะเวลาตั้งแต่สั่งซื้อจนได้รับสินค้า</small>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                              <label for="warrantyPeriod" class="form-label">ระยะเวลารับประกัน (วัน)</label>
+                              <input type="number" class="form-control" id="warrantyPeriod" value="30" min="0">
+                              <small class="text-muted">ใส่ 0 หากไม่มีการรับประกัน</small>
+                            </div>
+                            
+                            <div class="col-md-12 mb-3">
+                              <label for="supplierNotes" class="form-label">หมายเหตุเกี่ยวกับซัพพลายเออร์</label>
+                              <textarea class="form-control" id="supplierNotes" rows="2">ราคาปรับขึ้นทุกไตรมาส ควรสั่งซื้อในปริมาณมากเพื่อรับส่วนลด</textarea>
+                            </div>
+                          </div>
+
+                          <div class="col-12 mt-3">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="termsCheck">
+                              <label class="form-check-label" for="termsCheck">
+                                ฉันได้ตรวจสอบข้อมูลทั้งหมดและยืนยันว่าข้อมูลถูกต้อง
+                              </label>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <label class="form-label">รูปภาพวัสดุ</label>
-                          <div class="text-center mb-3">
-                            <img src="../assets/img/materials/soil.jpg" id="materialPreviewImage" class="preview-image" alt="ดินปลูกต้นไม้">
-                          </div>
-                          <div class="dropzone" id="materialImageDropzone">
-                            <div class="dz-message">
-                              <div class="dropzone-icon">
-                                <i class="bx bx-upload"></i>
-                              </div>
-                              <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพใหม่</h5>
-                              <p class="text-muted mb-0">รองรับไฟล์ .jpg, .jpeg, .png ขนาดไม่เกิน 5MB</p>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary" onclick="prevStep(4)"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary" onclick="nextStep(6)">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+
+                      <!-- ขั้นตอนที่ 6: ประวัติการแก้ไข -->
+                      <div class="wizard-content" data-step="6">
+                        <h6 class="section-heading">ประวัติการแก้ไข</h6>
+                        
+                        <div class="timeline">
+                          <div class="timeline-item">
+                            <div class="timeline-icon">
+                              <i class="bx bx-edit"></i>
+                            </div>
+                            <div class="timeline-content">
+                              <div class="timeline-date">10/03/2568, 15:30 น.</div>
+                              <h6 class="timeline-title">ปรับปรุงข้อมูลราคา</h6>
+                              <p class="timeline-text">ปรับปรุงราคาขายจาก 120 บาท เป็น 150 บาท ตามราคาตลาดที่ปรับขึ้น</p>
+                              <small class="text-muted">โดย: นางสาวสมหญิง รักษ์สวน (พนักงานคลังสินค้า)</small>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-4">
-                        <div class="col-md-12 mb-3">
-                          <label for="materialDescription" class="form-label">รายละเอียด</label>
-                          <textarea class="form-control" id="materialDescription" rows="4" placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับวัสดุ">ดินปลูกต้นไม้คุณภาพดี ผสมธาตุอาหารที่จำเป็นสำหรับการเจริญเติบโตของพืช เหมาะสำหรับต้นไม้ประดับทั่วไป ขนาดบรรจุ 10 กิโลกรัมต่อถุง</textarea>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-4">
-                        <div class="col-md-12">
-                          <h6 class="section-heading">ข้อมูลเพิ่มเติม</h6>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="materialLocation" class="form-label">สถานที่จัดเก็บ</label>
-                          <input type="text" class="form-control" id="materialLocation" value="ชั้น A-3 คลังสินค้าหลัก" placeholder="ระบุสถานที่จัดเก็บ">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="materialBarcode" class="form-label">บาร์โค้ด</label>
-                          <input type="text" class="form-control" id="materialBarcode" value="8851234567890" placeholder="ระบุบาร์โค้ด (ถ้ามี)">
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-4">
-                        <div class="col-md-12">
-                          <h6 class="section-heading">ข้อมูลซัพพลายเออร์</h6>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="supplierName" class="form-label">ชื่อซัพพลายเออร์</label>
-                          <input type="text" class="form-control" id="supplierName" value="บริษัท กรีนการ์เด้น จำกัด" placeholder="ระบุชื่อซัพพลายเออร์">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="supplierContact" class="form-label">ข้อมูลติดต่อ</label>
-                          <input type="text" class="form-control" id="supplierContact" value="02-123-4567, sales@greengarden.co.th" placeholder="ระบุข้อมูลติดต่อ">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="lastOrderDate" class="form-label">วันที่สั่งซื้อล่าสุด</label>
-                          <input type="text" class="form-control flatpickr-date" id="lastOrderDate" value="05/03/2568" placeholder="DD/MM/YYYY">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="leadTime" class="form-label">ระยะเวลานำเข้า (วัน)</label>
-                          <input type="number" class="form-control" id="leadTime" value="3" min="1" placeholder="ระบุจำนวนวัน">
-                          <small class="text-muted">ระยะเวลาตั้งแต่สั่งซื้อจนได้รับสินค้า</small>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-4">
-                        <div class="col-md-12">
-                          <h6 class="section-heading">ประวัติการแก้ไข</h6>
-                          <div class="timeline">
-                            <div class="timeline-item">
-                              <div class="timeline-point"></div>
-                              <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="fw-semibold">บุญชัย ผู้จัดการ</span>
-                                  <span class="timeline-date">08/03/2568 10:30</span>
-                                </div>
-                                <p class="mb-0">แก้ไขจำนวนคงเหลือจาก 10 เป็น 8 ถุง</p>
-                              </div>
+                          
+                          <div class="timeline-item">
+                            <div class="timeline-icon">
+                              <i class="bx bx-package"></i>
                             </div>
-                            <div class="timeline-item">
-                              <div class="timeline-point"></div>
-                              <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="fw-semibold">สมหญิง รักษ์สวน</span>
-                                  <span class="timeline-date">05/03/2568 14:15</span>
-                                </div>
-                                <p class="mb-0">นำเข้าวัสดุใหม่ 10 ถุง</p>
-                              </div>
+                            <div class="timeline-content">
+                              <div class="timeline-date">15/02/2568, 10:15 น.</div>
+                              <h6 class="timeline-title">เปลี่ยนข้อมูลจุดสั่งซื้อ</h6>
+                              <p class="timeline-text">แก้ไขจุดสั่งซื้อจาก 5 ถุง เป็น 10 ถุง เนื่องจากความต้องการใช้งานที่เพิ่มขึ้น</p>
+                              <small class="text-muted">โดย: นายชัยณรงค์ สวนสวย (พนักงานจัดสวน)</small>
                             </div>
-                            <div class="timeline-item">
-                              <div class="timeline-point"></div>
-                              <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="fw-semibold">วิเชียร แข็งแรง</span>
-                                  <span class="timeline-date">01/03/2568 09:45</span>
-                                </div>
-                                <p class="mb-0">เพิ่มข้อมูลซัพพลายเออร์</p>
-                              </div>
+                          </div>
+                          
+                          <div class="timeline-item">
+                            <div class="timeline-icon">
+                              <i class="bx bx-plus-circle"></i>
                             </div>
-                            <div class="timeline-item">
-                              <div class="timeline-point"></div>
-                              <div class="timeline-content">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                  <span class="fw-semibold">บุญชัย ผู้จัดการ</span>
-                                  <span class="timeline-date">20/02/2568 13:20</span>
-                                </div>
-                                <p class="mb-0">สร้างรายการวัสดุใหม่</p>
-                              </div>
+                            <div class="timeline-content">
+                              <div class="timeline-date">01/01/2568, 09:00 น.</div>
+                              <h6 class="timeline-title">สร้างรายการใหม่</h6>
+                              <p class="timeline-text">เพิ่มวัสดุใหม่เข้าระบบ: ดินปลูกต้นไม้</p>
+                              <small class="text-muted">โดย: นายบุญชัย ผู้จัดการ (ผู้บริหาร)</small>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col-12 text-end">
-                          <a href="material-list.html" class="btn btn-outline-secondary me-2">ยกเลิก</a>
-                          <button type="button" class="btn btn-warning me-2" id="adjustQtyBtn">ปรับปรุงจำนวน</button>
-                          <button type="submit" class="btn btn-primary" id="saveChangesBtn">บันทึกการแก้ไข</button>
+
+                        <div class="wizard-buttons">
+                          <button type="button" class="btn btn-outline-secondary" onclick="prevStep(5)"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="submit" class="btn btn-success" id="saveEditMaterialBtn">
+                            <i class="bx bx-save me-1"></i> บันทึกการแก้ไข
+                          </button>
                         </div>
                       </div>
                     </form>
@@ -831,49 +1235,6 @@
   </div>
   <!-- / Layout wrapper -->
 
-  <!-- Adjust Quantity Modal -->
-  <div class="modal fade" id="adjustQuantityModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">ปรับปรุงจำนวนวัสดุ</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="adjustType" class="form-label">ประเภทการปรับปรุง</label>
-            <select class="form-select" id="adjustType">
-              <option value="add" selected>เพิ่มจำนวน (รับเข้า)</option>
-              <option value="subtract">ลดจำนวน (ตัดจำหน่าย)</option>
-              <option value="set">กำหนดจำนวนใหม่ (นับสต็อก)</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="adjustQuantity" class="form-label">จำนวนที่ต้องการปรับ</label>
-            <input type="number" class="form-control" id="adjustQuantity" min="1" value="1">
-          </div>
-          <div class="mb-3">
-            <label for="adjustReason" class="form-label">เหตุผล</label>
-            <textarea class="form-control" id="adjustReason" rows="3" placeholder="ระบุเหตุผลในการปรับปรุงจำนวน"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="adjustProject" class="form-label">โครงการที่เกี่ยวข้อง (ถ้ามี)</label>
-            <select class="form-select" id="adjustProject">
-              <option value="" selected>-- ไม่มีโครงการที่เกี่ยวข้อง --</option>
-              <option value="P-2567-001">P-2567-001 - สวนหย่อมบ้านคุณสมชาย</option>
-              <option value="P-2567-002">P-2567-002 - ปรับปรุงภูมิทัศน์บริษัท ABC</option>
-              <option value="P-2567-003">P-2567-003 - สวนหลังบ้านคุณสมหญิง</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-          <button type="button" class="btn btn-primary" id="confirmAdjustBtn">ยืนยันการปรับปรุง</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Success Alert Modal -->
   <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -885,11 +1246,69 @@
         <div class="modal-body text-center">
           <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
           <h5>บันทึกข้อมูลสำเร็จ</h5>
-          <p class="mb-0">ข้อมูลวัสดุถูกปรับปรุงเรียบร้อยแล้ว</p>
+          <p class="mb-2">แก้ไขข้อมูลวัสดุเรียบร้อยแล้ว</p>
+          <p class="fw-bold" id="editedMaterialId">รหัสวัสดุ: M-0001</p>
         </div>
         <div class="modal-footer">
-          <a href="material-list.html" class="btn btn-outline-secondary">กลับสู่รายการวัสดุ</a>
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">ตกลง</button>
+          <a href="material-list.html" class="btn btn-outline-secondary">ไปยังรายการวัสดุ</a>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">ปิด</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discard Changes Confirmation Modal -->
+  <div class="modal fade" id="discardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title text-white">ยืนยันการยกเลิก</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="bx bx-error-circle text-danger mb-3" style="font-size: 5rem;"></i>
+          <h5>ยืนยันการยกเลิกการแก้ไข?</h5>
+          <p class="mb-0">ข้อมูลที่คุณแก้ไขทั้งหมดจะหายไป</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <a href="material-list.html" class="btn btn-danger">ยืนยันการยกเลิก</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Supplier Modal -->
+  <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">เพิ่มซัพพลายเออร์ใหม่</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-12 mb-3">
+              <label for="newSupplierName" class="form-label required-label">ชื่อซัพพลายเออร์</label>
+              <input type="text" class="form-control" id="newSupplierName" placeholder="ระบุชื่อบริษัทหรือร้านค้า" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="newSupplierContact" class="form-label">ข้อมูลติดต่อ</label>
+              <input type="text" class="form-control" id="newSupplierContact" placeholder="ระบุหมายเลขโทรศัพท์ หรืออีเมล">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="newSupplierTaxId" class="form-label">เลขประจำตัวผู้เสียภาษี</label>
+              <input type="text" class="form-control" id="newSupplierTaxId" placeholder="เลขประจำตัวผู้เสียภาษี">
+            </div>
+            <div class="col-md-12 mb-3">
+              <label for="newSupplierAddress" class="form-label">ที่อยู่</label>
+              <textarea class="form-control" id="newSupplierAddress" rows="3" placeholder="ระบุที่อยู่ซัพพลายเออร์"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="saveNewSupplierBtn">บันทึกซัพพลายเออร์</button>
         </div>
       </div>
     </div>
@@ -944,7 +1363,8 @@
         dateFormat: "d/m/Y",
         locale: {
           firstDayOfWeek: 1
-        }
+        },
+        defaultDate: new Date()
       });
       
       // Initialize Dropzone for material image
@@ -955,7 +1375,7 @@
         acceptedFiles: "image/*",
         addRemoveLinks: true,
         autoProcessQueue: false,
-        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ",
+        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพใหม่",
         dictRemoveFile: "ลบไฟล์",
         init: function() {
           this.on("addedfile", function(file) {
@@ -963,107 +1383,180 @@
             if (file.type.startsWith('image/')) {
               const reader = new FileReader();
               reader.onload = function(e) {
-                document.getElementById('materialPreviewImage').src = e.target.result;
+                const previewImage = document.getElementById('materialPreviewImage');
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('d-none');
               };
               reader.readAsDataURL(file);
+
+              // ยกเลิกการเลือก "ไม่มีรูปภาพ"
+              document.getElementById('noImageCheckbox').checked = false;
+            }
+          });
+
+          this.on("removedfile", function() {
+            // ซ่อน preview แต่ไม่ซ่อนเมื่อแก้ไข เพราะมีรูปเดิมอยู่แล้ว
+            // ในกรณีแก้ไข จะเลือกคืนรูปเดิม
+            if (document.getElementById('noImageCheckbox').checked) {
+              document.getElementById('materialPreviewImage').classList.add('d-none');
+            } else {
+              // คืนรูปเดิม
+              document.getElementById('materialPreviewImage').src = "../assets/img/materials/soil.jpg";
             }
           });
         }
       });
       
-      // Adjust Quantity Button Event
-      document.getElementById('adjustQtyBtn').addEventListener('click', function() {
-        $('#adjustQuantityModal').modal('show');
+      // No Image Checkbox Event
+      document.getElementById('noImageCheckbox').addEventListener('change', function() {
+        if (this.checked) {
+          // ลบไฟล์ในตัวอย่าง Dropzone
+          if (materialImageDropzone.files.length > 0) {
+            materialImageDropzone.removeAllFiles();
+          }
+          // ซ่อน preview
+          document.getElementById('materialPreviewImage').classList.add('d-none');
+        } else {
+          // แสดงรูปเดิมถ้ายกเลิกการเลือก "ไม่มีรูปภาพ"
+          document.getElementById('materialPreviewImage').classList.remove('d-none');
+        }
       });
       
-      // Confirm Adjust Button Event
-      document.getElementById('confirmAdjustBtn').addEventListener('click', function() {
-        const adjustType = document.getElementById('adjustType').value;
-        const adjustQuantity = parseInt(document.getElementById('adjustQuantity').value);
-        let currentQuantity = parseInt(document.getElementById('materialQuantity').value);
-        let newQuantity = currentQuantity;
-        
-        // คำนวณจำนวนใหม่
-        if (adjustType === 'add') {
-          newQuantity = currentQuantity + adjustQuantity;
-        } else if (adjustType === 'subtract') {
-          newQuantity = Math.max(0, currentQuantity - adjustQuantity);
-        } else if (adjustType === 'set') {
-          newQuantity = adjustQuantity;
+      // Supplier Select Change Event
+      document.getElementById('supplierSelect').addEventListener('change', function() {
+        const newSupplierForm = document.getElementById('newSupplierForm');
+        if (this.value === 'new') {
+          // แสดง modal เพิ่มซัพพลายเออร์ใหม่
+          $('#addSupplierModal').modal('show');
+          // รีเซ็ตค่าที่เลือกใน dropdown
+          setTimeout(() => {
+            $(this).val('1').trigger('change');
+          }, 100);
+        } else if (this.value !== '') {
+          newSupplierForm.style.display = 'none';
+          
+          // ถ้าเลือกซัพพลายเออร์ที่มีอยู่แล้ว ให้ใส่ข้อมูลตัวอย่าง
+          if (this.value === '1') {
+            document.getElementById('leadTime').value = '3';
+            document.getElementById('warrantyPeriod').value = '30';
+          } else if (this.value === '2') {
+            document.getElementById('leadTime').value = '5';
+            document.getElementById('warrantyPeriod').value = '0';
+          } else if (this.value === '3') {
+            document.getElementById('leadTime').value = '2';
+            document.getElementById('warrantyPeriod').value = '15';
+          }
         }
-        
-        // อัปเดตจำนวนในฟอร์ม
-        document.getElementById('materialQuantity').value = newQuantity;
-        
-        // ปิด Modal
-        $('#adjustQuantityModal').modal('hide');
-        
-        // แสดงข้อความแจ้งเตือนว่าปรับปรุงจำนวนเรียบร้อยแล้ว
-        alert(`ปรับปรุงจำนวนวัสดุเรียบร้อยแล้ว จากเดิม ${currentQuantity} เป็น ${newQuantity} ${document.getElementById('materialUnit').value}`);
-        
-        // เพิ่มประวัติการแก้ไขใหม่ในช่อง Timeline
-        const timeline = document.querySelector('.timeline');
-        const newTimelineItem = document.createElement('div');
-        newTimelineItem.className = 'timeline-item';
-        newTimelineItem.innerHTML = `
-          <div class="timeline-point"></div>
-          <div class="timeline-content">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="fw-semibold">บุญชัย ผู้จัดการ</span>
-              <span class="timeline-date">${getCurrentDateTime()}</span>
-            </div>
-            <p class="mb-0">ปรับปรุงจำนวนคงเหลือจาก ${currentQuantity} เป็น ${newQuantity} ${document.getElementById('materialUnit').value} (${getAdjustTypeText(adjustType)})</p>
-          </div>
-        `;
-        
-        // เพิ่ม timeline item ใหม่ไว้ด้านบนสุด
-        timeline.insertBefore(newTimelineItem, timeline.firstChild);
       });
       
-      // Helper function to get adjust type text
-      function getAdjustTypeText(adjustType) {
-        switch(adjustType) {
-          case 'add':
-            return 'รับเข้า';
-          case 'subtract':
-            return 'ตัดจำหน่าย';
-          case 'set':
-            return 'นับสต็อก';
-          default:
-            return '';
+      // Has Supplier Checkbox Event
+      document.getElementById('hasSupplierCheckbox').addEventListener('change', function() {
+        const supplierFormSection = document.getElementById('supplierFormSection');
+        if (this.checked) {
+          supplierFormSection.style.display = 'block';
+        } else {
+          supplierFormSection.style.display = 'none';
         }
+      });
+      
+      // Material Category Change Event
+      document.querySelectorAll('input[name="materialCategory"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          // แสดงการเปลี่ยนแปลงในการแก้ไข
+          console.log(`เปลี่ยนหมวดหมู่เป็น: ${this.value}`);
+        });
+      });
+      
+      // Cost Method Option Events
+      document.getElementById('fifoMethod').addEventListener('click', function() {
+        document.getElementById('fifoMethod').classList.add('selected');
+        document.getElementById('averageMethod').classList.remove('selected');
+      });
+      
+      document.getElementById('averageMethod').addEventListener('click', function() {
+        document.getElementById('averageMethod').classList.add('selected');
+        document.getElementById('fifoMethod').classList.remove('selected');
+      });
+      
+      // Save New Supplier Event
+      document.getElementById('saveNewSupplierBtn').addEventListener('click', function() {
+        const supplierName = document.getElementById('newSupplierName').value.trim();
+        
+        if (!supplierName) {
+          alert('กรุณาระบุชื่อซัพพลายเออร์');
+          return;
+        }
+        
+        // เพิ่มซัพพลายเออร์ใหม่ในรายการ
+        const supplierSelect = document.getElementById('supplierSelect');
+        const newOption = new Option(`${supplierName} (เพิ่มใหม่)`, 'new-supplier', true, true);
+        $(supplierSelect).append(newOption).trigger('change');
+        
+        // ปิด modal
+        $('#addSupplierModal').modal('hide');
+      });
+      
+      // ฟังก์ชันสำหรับไปยังขั้นตอนถัดไป
+      window.nextStep = function(step) {
+        console.log("Going to next step: " + step);
+        
+        // ตรวจสอบข้อมูลเฉพาะขั้นตอนที่ 1 ก่อนไปขั้นถัดไป
+        if (step === 2) {
+          // ตรวจสอบข้อมูลพื้นฐาน (เฉพาะชื่อวัสดุและหน่วยนับ)
+          const requiredFields = [
+            { id: 'materialName', label: 'ชื่อวัสดุ' },
+            { id: 'materialUnit', label: 'หน่วยนับ' }
+          ];
+          
+          if (!validateRequiredFields(requiredFields)) return;
+        }
+        
+        // เปลี่ยนไปยังขั้นตอนถัดไป
+        showWizardStep(step);
       }
       
-      // Helper function to get current date and time
-      function getCurrentDateTime() {
-        const now = new Date();
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const year = now.getFullYear() + 543; // แปลงเป็น พ.ศ.
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        
-        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      // ฟังก์ชันสำหรับย้อนกลับไปขั้นตอนก่อนหน้า
+      window.prevStep = function(step) {
+        console.log("Going back to step: " + step);
+        showWizardStep(step);
       }
       
-      // Form Submit Event
-      document.getElementById('editMaterialForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+      // ทำให้สามารถคลิกที่ตัวเลขขั้นตอนเพื่อเปลี่ยนได้
+      document.querySelectorAll('.wizard-step').forEach(step => {
+        step.addEventListener('click', function() {
+          const targetStep = parseInt(this.getAttribute('data-step'));
+          showWizardStep(targetStep);
+        });
+      });
+      
+      // Helper function to show wizard step
+      function showWizardStep(stepNumber) {
+        console.log("Changing to step: " + stepNumber);
         
-        // ตรวจสอบข้อมูลก่อนบันทึก
-        const requiredFields = [
-          { id: 'materialName', label: 'ชื่อวัสดุ' },
-          { id: 'materialCategory', label: 'หมวดหมู่' },
-          { id: 'materialQuantity', label: 'จำนวนคงเหลือ' },
-          { id: 'materialUnit', label: 'หน่วยนับ' },
-          { id: 'materialPrice', label: 'ราคาต่อหน่วย' },
-          { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
-        ];
+        // ซ่อนทุกขั้นตอน
+        document.querySelectorAll('.wizard-content').forEach(content => {
+          content.classList.remove('active');
+        });
         
+        // ยกเลิก active ของทุกขั้นตอน
+        document.querySelectorAll('.wizard-step').forEach(step => {
+          step.classList.remove('active');
+        });
+        
+        // แสดงขั้นตอนที่เลือก
+        document.querySelector(`.wizard-content[data-step="${stepNumber}"]`).classList.add('active');
+        document.querySelector(`.wizard-step[data-step="${stepNumber}"]`).classList.add('active');
+        
+        // เลื่อนไปด้านบนของฟอร์ม
+        document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Helper function to validate required fields
+      function validateRequiredFields(fields) {
         let isValid = true;
         let errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน:';
         
-        requiredFields.forEach(field => {
+        fields.forEach(field => {
           const element = document.getElementById(field.id);
           if (!element.value.trim()) {
             isValid = false;
@@ -1076,12 +1569,50 @@
         
         if (!isValid) {
           alert(errorMessage);
+        }
+        
+        return isValid;
+      }
+      
+      // Form Submit Event
+      document.getElementById('editMaterialForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // ตรวจสอบข้อมูลก่อนบันทึก
+        const requiredFields = [
+          { id: 'materialName', label: 'ชื่อวัสดุ' },
+          { id: 'materialUnit', label: 'หน่วยนับ' },
+          { id: 'materialSalePrice', label: 'ราคาขาย/ใช้งาน' },
+          { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
+        ];
+        
+        if (!validateRequiredFields(requiredFields)) return;
+        
+        // ตรวจสอบว่ายืนยันข้อมูลแล้วหรือไม่
+        if (!document.getElementById('termsCheck').checked) {
+          alert('กรุณายืนยันข้อมูลโดยการติ๊กเครื่องหมายถูก');
           return;
         }
         
-        // ส่งข้อมูลไปยัง API (ในตัวอย่างนี้จะแสดง Modal สำเร็จแทน)
+        // ในตัวอย่างนี้ไม่ได้ส่งข้อมูลไปยัง API จริง แต่จะแสดง Modal สำเร็จแทน
+        document.getElementById('editedMaterialId').textContent = `รหัสวัสดุ: ${document.getElementById('materialId').value}`;
+        
         $('#successModal').modal('show');
       });
+      
+      // Helper function to format numbers with commas
+      function numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      
+      // Initialize Select2
+      $('.form-select').select2({
+        width: '100%'
+      });
+      
+      // Init tooltips
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     });
   </script>
 </body>
