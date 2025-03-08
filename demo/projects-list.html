@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>รายการโครงการก่อสร้าง | ระบบคลังสินค้าขนาดย่อม</title>
+  <title>รายการโครงการ | ระบบจัดสวนครบวงจร</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,59 +15,56 @@
 
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Core CSS -->
-  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
-  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
-  <link rel="stylesheet" href="../assets/css/demo.css">
+  <link rel="stylesheet" href="assets/css/core.css">
+  <link rel="stylesheet" href="assets/css/theme-default.css">
+  <link rel="stylesheet" href="assets/css/demo.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
 
   <!-- Vendors CSS -->
-  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs5/2.4.1/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  
   <!-- Page CSS -->
   <style>
     .project-status {
-      height: 10px;
       width: 10px;
+      height: 10px;
       border-radius: 50%;
       display: inline-block;
       margin-right: 0.5rem;
     }
     
-    .project-status.active {
-      background-color: #28c76f;
+    .status-active {
+      background-color: #28a745;
     }
     
-    .project-status.delay {
-      background-color: #ea5455;
+    .status-pending {
+      background-color: #ffa726;
     }
     
-    .project-status.completed {
-      background-color: #696cff;
+    .status-completed {
+      background-color: #42a5f5;
     }
     
-    .project-status.pending {
-      background-color: #ff9f43;
+    .status-cancelled {
+      background-color: #ec407a;
     }
-
-    .project-status.cancelled {
-      background-color: #82868b;
+    
+    .project-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 0.5rem;
     }
     
     .project-card {
       transition: all 0.3s ease;
-      border-radius: 0.75rem;
-      border: none;
-      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
+      cursor: pointer;
     }
     
     .project-card:hover {
@@ -75,57 +72,93 @@
       box-shadow: 0 0.5rem 1.5rem rgba(161, 172, 184, 0.2);
     }
     
-    .project-card .border-left {
-      border-left: 4px solid transparent;
+    .tab-content {
+      padding: 1.5rem;
     }
     
-    .project-card .border-left.active {
-      border-left-color: #28c76f;
+    .filter-item {
+      cursor: pointer;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid #e7e7e8;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s ease;
     }
     
-    .project-card .border-left.delay {
-      border-left-color: #ea5455;
+    .filter-item:hover, .filter-item.active {
+      background-color: #e9fff0;
+      border-color: #28a745;
+      color: #28a745;
     }
     
-    .project-card .border-left.completed {
-      border-left-color: #696cff;
+    .search-input {
+      width: 100%;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.9375rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #566a7f;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 0.375rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
     
-    .project-card .border-left.pending {
-      border-left-color: #ff9f43;
+    .search-input:focus {
+      border-color: #28a745;
+      outline: 0;
+      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
     }
     
-    .project-card .border-left.cancelled {
-      border-left-color: #82868b;
-    }
-    
-    .project-progress {
-      height: 8px;
-      border-radius: 4px;
-    }
-
-    .filters-card {
-      transition: all 0.3s ease;
-    }
-    
-    .filters-card.collapsed {
-      max-height: 60px;
-      overflow: hidden;
-    }
-    
-    .toggle-filters {
+    .project-action-btn {
+      width: 2rem;
+      height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.375rem;
+      color: #566a7f;
+      background-color: transparent;
+      border: none;
       cursor: pointer;
       transition: all 0.2s ease;
     }
     
-    .toggle-filters.rotate {
-      transform: rotate(180deg);
+    .project-action-btn:hover {
+      background-color: #f5f6fa;
+      color: #28a745;
+    }
+    
+    .project-action-btn.edit:hover {
+      color: #ffa726;
+    }
+    
+    .project-action-btn.delete:hover {
+      color: #ec407a;
+    }
+    
+    .dt-buttons {
+      margin-bottom: 1rem;
+    }
+    
+    .dt-button {
+      padding: 0.4375rem 1.25rem;
+      font-size: 0.9375rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #fff;
+      background-color: #28a745;
+      border: 1px solid #28a745;
+      border-radius: 0.375rem;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    .dt-button:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
     }
   </style>
-
-  <!-- Helpers -->
-  <script src="../assets/vendor/js/helpers.js"></script>
-  <script src="../assets/js/config.js"></script>
 </head>
 
 <body>
@@ -139,14 +172,14 @@
           <a href="dashboard.html" class="app-brand-link">
             <span class="app-brand-logo demo">
               <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
-                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#696cff" />
-                <polygon points="13 15 10 12 13 9 16 12" fill="#696cff" opacity="0.7" />
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#28a745" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#28a745" opacity="0.7" />
               </svg>
             </span>
-            <span class="app-brand-text demo menu-text fw-bold ms-2">คลังสินค้า</span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">Green Gardens</span>
           </a>
 
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto sidebar-toggle">
             <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
             <i class="bx bx-x d-block d-xl-none bx-sm"></i>
           </a>
@@ -165,6 +198,35 @@
             </a>
           </li>
 
+          <!-- โครงการลูกค้า -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการโครงการลูกค้า</span>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-layout"></i>
+              <div data-i18n="โครงการ">โครงการ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item active">
+                <a href="project-list.html" class="menu-link">
+                  <div data-i18n="รายการโครงการ">รายการโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มโครงการใหม่">เพิ่มโครงการใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-progress.html" class="menu-link">
+                  <div data-i18n="ติดตามความคืบหน้า">ติดตามความคืบหน้า</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
           <!-- วัสดุ -->
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
@@ -173,22 +235,17 @@
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-package"></i>
-              <div data-i18n="วัสดุสิ้นเปลือง">วัสดุสิ้นเปลือง</div>
+              <div data-i18n="วัสดุทั่วไป">วัสดุทั่วไป</div>
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
-                <a href="consumable-list.html" class="menu-link">
+                <a href="material-list.html" class="menu-link">
                   <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="consumable-add.html" class="menu-link">
+                <a href="material-add.html" class="menu-link">
                   <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="consumable-withdraw.html" class="menu-link">
-                  <div data-i18n="เบิกวัสดุ">เบิกวัสดุ</div>
                 </a>
               </li>
             </ul>
@@ -197,22 +254,17 @@
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-              <div data-i18n="วัสดุคงทน">วัสดุคงทน</div>
+              <div data-i18n="วัสดุเครื่องมือช่าง">วัสดุเครื่องมือช่าง</div>
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
-                <a href="durable-list.html" class="menu-link">
+                <a href="construction-list.html" class="menu-link">
                   <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
                 </a>
               </li>
               <li class="menu-item">
-                <a href="durable-add.html" class="menu-link">
+                <a href="construction-add.html" class="menu-link">
                   <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="durable-withdraw.html" class="menu-link">
-                  <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
                 </a>
               </li>
             </ul>
@@ -221,7 +273,7 @@
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-wrench"></i>
-              <div data-i18n="เครื่องมือ">เครื่องมือ</div>
+              <div data-i18n="เครื่องมือช่าง">เครื่องมือช่าง</div>
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
@@ -234,17 +286,19 @@
                   <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
                 </a>
               </li>
-              <li class="menu-item">
-                <a href="tools-withdraw.html" class="menu-link">
-                  <div data-i18n="เบิก-คืนเครื่องมือ">เบิก-คืนเครื่องมือ</div>
-                </a>
-              </li>
             </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="inventory-withdraw.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-transfer"></i>
+              <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+            </a>
           </li>
 
           <!-- รถ -->
           <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">จัดการรถ</span>
+            <span class="menu-header-text">จัดการยานพาหนะ</span>
           </li>
 
           <li class="menu-item">
@@ -271,40 +325,6 @@
             </ul>
           </li>
 
-          <!-- โครงการก่อสร้าง -->
-          <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">โครงการก่อสร้าง</span>
-          </li>
-
-          <li class="menu-item active open">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon tf-icons bx bx-building-house"></i>
-              <div data-i18n="รับเหมาก่อสร้าง">รับเหมาก่อสร้าง</div>
-            </a>
-            <ul class="menu-sub">
-              <li class="menu-item">
-                <a href="projects-dashboard.html" class="menu-link">
-                  <div data-i18n="ภาพรวมโครงการ">ภาพรวมโครงการ</div>
-                </a>
-              </li>
-              <li class="menu-item active">
-                <a href="projects-list.html" class="menu-link">
-                  <div data-i18n="รายการโครงการ">รายการโครงการ</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="project-add.html" class="menu-link">
-                  <div data-i18n="เพิ่มโครงการใหม่">เพิ่มโครงการใหม่</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="project-calendar.html" class="menu-link">
-                  <div data-i18n="ปฏิทินโครงการ">ปฏิทินโครงการ</div>
-                </a>
-              </li>
-            </ul>
-          </li>
-
           <!-- รายงาน -->
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">รายงาน</span>
@@ -317,8 +337,8 @@
             </a>
             <ul class="menu-sub">
               <li class="menu-item">
-                <a href="report-monthly-tools.html" class="menu-link">
-                  <div data-i18n="รายงานเครื่องมือประจำเดือน">รายงานเครื่องมือประจำเดือน</div>
+                <a href="report-projects.html" class="menu-link">
+                  <div data-i18n="รายงานโครงการ">รายงานโครงการ</div>
                 </a>
               </li>
               <li class="menu-item">
@@ -331,15 +351,10 @@
                   <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
                 </a>
               </li>
-              <li class="menu-item">
-                <a href="report-projects.html" class="menu-link">
-                  <div data-i18n="รายงานโครงการก่อสร้าง">รายงานโครงการก่อสร้าง</div>
-                </a>
-              </li>
             </ul>
           </li>
 
-          <!-- ผู้ใช้งาน (เฉพาะผู้บริหาร) -->
+          <!-- ผู้ใช้งาน -->
           <li class="menu-header small text-uppercase">
             <span class="menu-header-text">ระบบจัดการ</span>
           </li>
@@ -389,43 +404,13 @@
             <!-- /Search -->
 
             <ul class="navbar-nav flex-row align-items-center ms-auto">
-              <!-- Language -->
-              <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                  <i class="fi fi-th fis rounded-circle me-1 fs-3"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a class="dropdown-item selected" href="javascript:void(0);" data-language="th">
-                      <i class="fi fi-th fis rounded-circle fs-4 me-1"></i>
-                      <span class="align-middle">ไทย</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="javascript:void(0);" data-language="en">
-                      <i class="fi fi-us fis rounded-circle fs-4 me-1"></i>
-                      <span class="align-middle">English</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <!-- /Language -->
-
-              <!-- Style Switcher -->
-              <li class="nav-item me-2 me-xl-0">
-                <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
-                  <i class="bx bx-sm"></i>
-                </a>
-              </li>
-              <!--/ Style Switcher -->
-
               <!-- Notification -->
               <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <a class="nav-link dropdown-toggle hide-arrow position-relative" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                   <i class="bx bx-bell bx-sm"></i>
-                  <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end py-0">
+                <ul class="dropdown-menu dropdown-menu-end py-0 dropdown-menu-notification">
                   <li class="dropdown-menu-header border-bottom">
                     <div class="dropdown-header d-flex align-items-center py-3">
                       <h5 class="text-body mb-0 me-auto">การแจ้งเตือน</h5>
@@ -437,14 +422,14 @@
                       <li class="list-group-item list-group-item-action dropdown-notifications-item">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
-                            <div class="avatar">
-                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-building-house"></i></span>
+                            <div class="avatar bg-light-primary">
+                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-layout"></i></span>
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-1">โครงการอาคารพาณิชย์ใกล้หมดสัญญา</h6>
-                            <p class="mb-0">สัญญาจะสิ้นสุดภายใน 7 วัน</p>
-                            <small class="text-muted">30 นาทีที่แล้ว</small>
+                            <h6 class="mb-1">มีโครงการใหม่เพิ่ม</h6>
+                            <p class="mb-0">สวนหย่อมบ้านคุณสมชาย</p>
+                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
                           </div>
                           <div class="flex-shrink-0 dropdown-notifications-actions">
                             <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
@@ -456,13 +441,13 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar">
-                              <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-error"></i></span>
+                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-error"></i></span>
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-1">โครงการหมู่บ้านจัดสรรล่าช้า</h6>
-                            <p class="mb-0">ความคืบหน้าน้อยกว่าแผนงาน 15%</p>
-                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
+                            <h6 class="mb-1">กำหนดส่งมอบงานใกล้ถึง</h6>
+                            <p class="mb-0">โครงการปรับปรุงภูมิทัศน์บริษัท ABC</p>
+                            <small class="text-muted">เหลืออีก 3 วัน</small>
                           </div>
                           <div class="flex-shrink-0 dropdown-notifications-actions">
                             <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
@@ -472,8 +457,8 @@
                       </li>
                     </ul>
                   </li>
-                  <li class="dropdown-menu-footer border-top">
-                    <a href="javascript:void(0);" class="dropdown-item d-flex justify-content-center p-3">
+                  <li class="dropdown-menu-footer border-top p-2">
+                    <a href="javascript:void(0);" class="btn btn-primary d-flex justify-content-center">
                       ดูการแจ้งเตือนทั้งหมด
                     </a>
                   </li>
@@ -485,7 +470,7 @@
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                    <img src="assets/img/avatars/1.png" alt class="rounded-circle">
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -494,11 +479,11 @@
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                            <img src="assets/img/avatars/1.png" alt class="rounded-circle">
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block">สมชาย มีสุข</span>
+                          <span class="fw-semibold d-block">บุญชัย ผู้จัดการ</span>
                           <small class="text-muted">ผู้บริหาร</small>
                         </div>
                       </div>
@@ -535,883 +520,533 @@
           <!-- Content -->
           <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4">
-              <span class="text-muted fw-light">โครงการก่อสร้าง /</span> รายการโครงการ
+              <span class="text-muted fw-light">จัดการโครงการ /</span> รายการโครงการ
             </h4>
 
-            <!-- Filters Card -->
-            <div class="card mb-4 filters-card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">ค้นหาและกรองข้อมูล</h5>
-                <div class="d-flex gap-2 align-items-center">
-                  <span class="toggle-filters">
-                    <i class="bx bx-chevron-up fs-4"></i>
-                  </span>
-                </div>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="row mb-3">
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">รหัสโครงการ</label>
-                      <input type="text" class="form-control" placeholder="รหัสโครงการ">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">ชื่อโครงการ</label>
-                      <input type="text" class="form-control" placeholder="ชื่อโครงการ">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">ประเภทโครงการ</label>
-                      <select class="form-select select2" multiple>
-                        <option value="">ทั้งหมด</option>
-                        <option value="house">บ้านพักอาศัย</option>
-                        <option value="commercial">อาคารพาณิชย์</option>
-                        <option value="condo">คอนโดมิเนียม</option>
-                        <option value="office">อาคารสำนักงาน</option>
-                        <option value="factory">โรงงาน</option>
-                        <option value="other">อื่นๆ</option>
-                      </select>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">สถานะโครงการ</label>
-                      <select class="form-select select2" multiple>
-                        <option value="">ทั้งหมด</option>
-                        <option value="active">กำลังดำเนินการ</option>
-                        <option value="pending">รอดำเนินการ</option>
-                        <option value="delay">ล่าช้า</option>
-                        <option value="completed">เสร็จสิ้น</option>
-                        <option value="cancelled">ยกเลิก</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">ชื่อลูกค้า</label>
-                      <input type="text" class="form-control" placeholder="ชื่อลูกค้า">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">ผู้รับผิดชอบ</label>
-                      <select class="form-select select2">
-                        <option value="">ทั้งหมด</option>
-                        <option value="1">สมชาย มีสุข</option>
-                        <option value="2">ณัฐพงษ์ รุ่งเรือง</option>
-                        <option value="3">สมหญิง รักดี</option>
-                        <option value="4">มานะ สมบัติ</option>
-                        <option value="5">วิชัย สว่าง</option>
-                      </select>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">วันเริ่มต้น</label>
-                      <input type="text" class="form-control flatpickr-range" placeholder="ช่วงวันที่">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label">มูลค่าโครงการ</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" placeholder="ขั้นต่ำ">
-                        <span class="input-group-text">-</span>
-                        <input type="text" class="form-control" placeholder="สูงสุด">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-end gap-2">
-                    <button type="reset" class="btn btn-outline-secondary">รีเซ็ต</button>
-                    <button type="submit" class="btn btn-primary">ค้นหา</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- Projects Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <div>
-                <h5 class="mb-0">รายการโครงการทั้งหมด</h5>
-                <span class="text-muted">พบ 15 โครงการ</span>
-              </div>
-              <div class="d-flex gap-3">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-outline-primary active" data-bs-toggle="view" data-bs-target="table">
-                    <i class="bx bx-list-ul"></i>
-                  </button>
-                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="view" data-bs-target="grid">
-                    <i class="bx bx-grid-alt"></i>
-                  </button>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="window.location.href='project-add.html'">
-                  <i class="bx bx-plus me-1"></i> เพิ่มโครงการใหม่
-                </button>
-              </div>
-            </div>
-
-            <!-- Projects Table View -->
-            <div class="view-content active" id="table-view">
-              <div class="card">
-                <div class="table-responsive">
-                  <table class="table table-hover" id="projectsTable">
-                    <thead>
-                      <tr>
-                        <th>รหัส</th>
-                        <th>ชื่อโครงการ</th>
-                        <th>ประเภท</th>
-                        <th>ลูกค้า</th>
-                        <th>วันเริ่มต้น</th>
-                        <th>วันสิ้นสุด</th>
-                        <th>มูลค่า (ล้านบาท)</th>
-                        <th>ความคืบหน้า</th>
-                        <th>สถานะ</th>
-                        <th>จัดการ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><a href="project-detail.html?id=P015" class="fw-semibold">P015</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P015" class="text-body">
-                            <span class="fw-semibold">โครงการบ้านพักอาศัย 2 ชั้น</span>
-                          </a>
-                        </td>
-                        <td>บ้านพักอาศัย</td>
-                        <td>คุณวิชัย รักดี</td>
-                        <td>15/05/2567</td>
-                        <td>15/11/2567</td>
-                        <td>5.8</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">25%</small>
-                        </td>
-                        <td><span class="badge bg-label-success">กำลังดำเนินการ</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P015">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-bar-chart-alt me-1"></i> อัพเดทความคืบหน้า
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><a href="project-detail.html?id=P014" class="fw-semibold">P014</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P014" class="text-body">
-                            <span class="fw-semibold">อาคารสำนักงาน 5 ชั้น</span>
-                          </a>
-                        </td>
-                        <td>อาคารสำนักงาน</td>
-                        <td>บริษัท ธุรกิจก้าวหน้า จำกัด</td>
-                        <td>01/05/2567</td>
-                        <td>30/08/2568</td>
-                        <td>45.2</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 15%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">15%</small>
-                        </td>
-                        <td><span class="badge bg-label-success">กำลังดำเนินการ</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P014">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-bar-chart-alt me-1"></i> อัพเดทความคืบหน้า
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><a href="project-detail.html?id=P013" class="fw-semibold">P013</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P013" class="text-body">
-                            <span class="fw-semibold">ต่อเติมบ้านพักอาศัยชั้นเดียว</span>
-                          </a>
-                        </td>
-                        <td>ต่อเติมอาคาร</td>
-                        <td>คุณสมศักดิ์ ใจดี</td>
-                        <td>20/04/2567</td>
-                        <td>20/06/2567</td>
-                        <td>1.2</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">75%</small>
-                        </td>
-                        <td><span class="badge bg-label-success">กำลังดำเนินการ</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P013">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-bar-chart-alt me-1"></i> อัพเดทความคืบหน้า
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><a href="project-detail.html?id=P012" class="fw-semibold">P012</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P012" class="text-body">
-                            <span class="fw-semibold">คอนโดมิเนียม 8 ชั้น</span>
-                          </a>
-                        </td>
-                        <td>คอนโดมิเนียม</td>
-                        <td>บริษัท พร็อพเพอร์ตี้ ดีเวลลอปเม้นท์ จำกัด</td>
-                        <td>15/01/2567</td>
-                        <td>05/06/2567</td>
-                        <td>32.5</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">85%</small>
-                        </td>
-                        <td><span class="badge bg-label-warning">ใกล้ครบกำหนด</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P012">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-bar-chart-alt me-1"></i> อัพเดทความคืบหน้า
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><a href="project-detail.html?id=P011" class="fw-semibold">P011</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P011" class="text-body">
-                            <span class="fw-semibold">โรงงานผลิตชิ้นส่วนอิเล็กทรอนิกส์</span>
-                          </a>
-                        </td>
-                        <td>โรงงาน</td>
-                        <td>บริษัท อิเล็กทรอนิกส์ เทค จำกัด</td>
-                        <td>01/12/2566</td>
-                        <td>01/12/2567</td>
-                        <td>78.5</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">35%</small>
-                        </td>
-                        <td><span class="badge bg-label-danger">ล่าช้า</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P011">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-bar-chart-alt me-1"></i> อัพเดทความคืบหน้า
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><a href="project-detail.html?id=P010" class="fw-semibold">P010</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P010" class="text-body">
-                            <span class="fw-semibold">อาคารพาณิชย์ 4 ชั้น</span>
-                          </a>
-                        </td>
-                        <td>อาคารพาณิชย์</td>
-                        <td>คุณพิชัย มั่งมี</td>
-                        <td>15/11/2566</td>
-                        <td>15/05/2567</td>
-                        <td>12.5</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">100%</small>
-                        </td>
-                        <td><span class="badge bg-label-primary">เสร็จสิ้น</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P010">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-file-find me-1"></i> รายงานปิดโครงการ
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                      <tr>
-                        <td><a href="project-detail.html?id=P009" class="fw-semibold">P009</a></td>
-                        <td>
-                          <a href="project-detail.html?id=P009" class="text-body">
-                            <span class="fw-semibold">โรงแรมริมแม่น้ำ</span>
-                          </a>
-                        </td>
-                        <td>โรงแรม</td>
-                        <td>บริษัท ริเวอร์ไซด์ จำกัด</td>
-                        <td>01/10/2566</td>
-                        <td>01/10/2568</td>
-                        <td>120.0</td>
-                        <td>
-                          <div class="progress" style="height: 8px; min-width: 100px;">
-                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small class="mt-1">0%</small>
-                        </td>
-                        <td><span class="badge bg-label-secondary">ยกเลิก</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="project-detail.html?id=P009">
-                                <i class="bx bx-detail me-1"></i> รายละเอียด
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-refresh me-1"></i> เริ่มใหม่
-                              </a>
-                              <a class="dropdown-item" href="javascript:void(0);">
-                                <i class="bx bx-trash me-1"></i> ลบ
-                              </a>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Projects Grid View -->
-            <div class="view-content" id="grid-view" style="display: none;">
-              <div class="row">
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card h-100 project-card">
-                    <div class="card-body border-left active">
-                      <div class="d-flex justify-content-between mb-2">
-                        <a href="project-detail.html?id=P015" class="text-body">
-                          <h5 class="mb-1">โครงการบ้านพักอาศัย 2 ชั้น</h5>
-                        </a>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="project-detail.html?id=P015">
-                              <i class="bx bx-detail me-1"></i> รายละเอียด
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-trash me-1"></i> ลบ
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap">
-                        <div class="bg-label-primary rounded d-flex align-items-center justify-content-center me-3 mb-2" style="width: 48px; height: 48px;">
-                          <i class="bx bx-home fs-3 text-primary"></i>
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0"><span class="project-status active"></span> กำลังดำเนินการ</h6>
-                          <small class="text-muted">รหัส: P015</small>
-                        </div>
-                      </div>
-                      <p class="mb-3 mt-2">บ้านพักอาศัย 2 ชั้น 4 ห้องนอน 3 ห้องน้ำ พื้นที่ใช้สอย 250 ตร.ม.</p>
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar-group d-flex align-items-center me-3">
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมชาย มีสุข">
-                              <img src="../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="ณัฐพงษ์ รุ่งเรือง">
-                              <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="มานะ สมบัติ">
-                              <img src="../assets/img/avatars/8.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="badge bg-label-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="ประเภทโครงการ">บ้านพักอาศัย</span>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>ความคืบหน้า</span>
-                        <span>25%</span>
-                      </div>
-                      <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                          <i class="bx bx-calendar-alt text-muted me-1"></i>
-                          <span class="text-muted text-nowrap">15/05/2567 - 15/11/2567</span>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="text-muted">5.8 ล้านบาท</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card h-100 project-card">
-                    <div class="card-body border-left active">
-                      <div class="d-flex justify-content-between mb-2">
-                        <a href="project-detail.html?id=P014" class="text-body">
-                          <h5 class="mb-1">อาคารสำนักงาน 5 ชั้น</h5>
-                        </a>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="project-detail.html?id=P014">
-                              <i class="bx bx-detail me-1"></i> รายละเอียด
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-trash me-1"></i> ลบ
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap">
-                        <div class="bg-label-info rounded d-flex align-items-center justify-content-center me-3 mb-2" style="width: 48px; height: 48px;">
-                          <i class="bx bx-building fs-3 text-info"></i>
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0"><span class="project-status active"></span> กำลังดำเนินการ</h6>
-                          <small class="text-muted">รหัส: P014</small>
-                        </div>
-                      </div>
-                      <p class="mb-3 mt-2">อาคารสำนักงาน 5 ชั้น พื้นที่ใช้สอย 1,200 ตร.ม. พร้อมที่จอดรถใต้ดิน</p>
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar-group d-flex align-items-center me-3">
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมชาย มีสุข">
-                              <img src="../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="ณัฐพงษ์ รุ่งเรือง">
-                              <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมหญิง รักดี">
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="badge bg-label-info" data-bs-toggle="tooltip" data-bs-placement="top" title="ประเภทโครงการ">อาคารสำนักงาน</span>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>ความคืบหน้า</span>
-                        <span>15%</span>
-                      </div>
-                      <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 15%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                          <i class="bx bx-calendar-alt text-muted me-1"></i>
-                          <span class="text-muted text-nowrap">01/05/2567 - 30/08/2568</span>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="text-muted">45.2 ล้านบาท</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card h-100 project-card">
-                    <div class="card-body border-left active">
-                      <div class="d-flex justify-content-between mb-2">
-                        <a href="project-detail.html?id=P013" class="text-body">
-                          <h5 class="mb-1">ต่อเติมบ้านพักอาศัยชั้นเดียว</h5>
-                        </a>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="project-detail.html?id=P013">
-                              <i class="bx bx-detail me-1"></i> รายละเอียด
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-trash me-1"></i> ลบ
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap">
-                        <div class="bg-label-success rounded d-flex align-items-center justify-content-center me-3 mb-2" style="width: 48px; height: 48px;">
-                          <i class="bx bx-home fs-3 text-success"></i>
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0"><span class="project-status active"></span> กำลังดำเนินการ</h6>
-                          <small class="text-muted">รหัส: P013</small>
-                        </div>
-                      </div>
-                      <p class="mb-3 mt-2">ต่อเติมบ้านพักอาศัยชั้นเดียว เพิ่มห้องนอน 1 ห้อง และห้องครัว พื้นที่ 45 ตร.ม.</p>
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar-group d-flex align-items-center me-3">
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="มานะ สมบัติ">
-                              <img src="../assets/img/avatars/8.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="ณัฐพงษ์ รุ่งเรือง">
-                              <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="badge bg-label-success" data-bs-toggle="tooltip" data-bs-placement="top" title="ประเภทโครงการ">ต่อเติมอาคาร</span>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>ความคืบหน้า</span>
-                        <span>75%</span>
-                      </div>
-                      <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                          <i class="bx bx-calendar-alt text-muted me-1"></i>
-                          <span class="text-muted text-nowrap">20/04/2567 - 20/06/2567</span>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="text-muted">1.2 ล้านบาท</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card h-100 project-card">
-                    <div class="card-body border-left pending">
-                      <div class="d-flex justify-content-between mb-2">
-                        <a href="project-detail.html?id=P012" class="text-body">
-                          <h5 class="mb-1">คอนโดมิเนียม 8 ชั้น</h5>
-                        </a>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="project-detail.html?id=P012">
-                              <i class="bx bx-detail me-1"></i> รายละเอียด
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-trash me-1"></i> ลบ
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap">
-                        <div class="bg-label-warning rounded d-flex align-items-center justify-content-center me-3 mb-2" style="width: 48px; height: 48px;">
-                          <i class="bx bx-building-house fs-3 text-warning"></i>
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0"><span class="project-status pending"></span> ใกล้ครบกำหนด</h6>
-                          <small class="text-muted">รหัส: P012</small>
-                        </div>
-                      </div>
-                      <p class="mb-3 mt-2">คอนโดมิเนียม 8 ชั้น 96 ยูนิต พร้อมสระว่ายน้ำและฟิตเนส</p>
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar-group d-flex align-items-center me-3">
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมชาย มีสุข">
-                              <img src="../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="ณัฐพงษ์ รุ่งเรือง">
-                              <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมหญิง รักดี">
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="badge bg-label-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="ประเภทโครงการ">คอนโดมิเนียม</span>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>ความคืบหน้า</span>
-                        <span>85%</span>
-                      </div>
-                      <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                          <i class="bx bx-calendar-alt text-muted me-1"></i>
-                          <span class="text-muted text-nowrap">15/01/2567 - 05/06/2567</span>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="text-muted">32.5 ล้านบาท</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card h-100 project-card">
-                    <div class="card-body border-left delay">
-                      <div class="d-flex justify-content-between mb-2">
-                        <a href="project-detail.html?id=P011" class="text-body">
-                          <h5 class="mb-1">โรงงานผลิตชิ้นส่วนอิเล็กทรอนิกส์</h5>
-                        </a>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="project-detail.html?id=P011">
-                              <i class="bx bx-detail me-1"></i> รายละเอียด
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-trash me-1"></i> ลบ
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap">
-                        <div class="bg-label-danger rounded d-flex align-items-center justify-content-center me-3 mb-2" style="width: 48px; height: 48px;">
-                          <i class="bx bx-factory fs-3 text-danger"></i>
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0"><span class="project-status delay"></span> ล่าช้า</h6>
-                          <small class="text-muted">รหัส: P011</small>
-                        </div>
-                      </div>
-                      <p class="mb-3 mt-2">โรงงานผลิตชิ้นส่วนอิเล็กทรอนิกส์ พื้นที่ 5,000 ตร.ม. พร้อมสำนักงานและโกดัง</p>
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar-group d-flex align-items-center me-3">
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมชาย มีสุข">
-                              <img src="../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="ณัฐพงษ์ รุ่งเรือง">
-                              <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="วิชัย สว่าง">
-                              <img src="../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="badge bg-label-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="ประเภทโครงการ">โรงงาน</span>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>ความคืบหน้า</span>
-                        <span>35%</span>
-                      </div>
-                      <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                          <i class="bx bx-calendar-alt text-muted me-1"></i>
-                          <span class="text-muted text-nowrap">01/12/2566 - 01/12/2567</span>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="text-muted">78.5 ล้านบาท</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 mb-3">
-                  <div class="card h-100 project-card">
-                    <div class="card-body border-left completed">
-                      <div class="d-flex justify-content-between mb-2">
-                        <a href="project-detail.html?id=P010" class="text-body">
-                          <h5 class="mb-1">อาคารพาณิชย์ 4 ชั้น</h5>
-                        </a>
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="project-detail.html?id=P010">
-                              <i class="bx bx-detail me-1"></i> รายละเอียด
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-edit-alt me-1"></i> แก้ไข
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);">
-                              <i class="bx bx-trash me-1"></i> ลบ
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="d-flex align-items-center flex-wrap">
-                        <div class="bg-label-primary rounded d-flex align-items-center justify-content-center me-3 mb-2" style="width: 48px; height: 48px;">
-                          <i class="bx bx-store fs-3 text-primary"></i>
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0"><span class="project-status completed"></span> เสร็จสิ้น</h6>
-                          <small class="text-muted">รหัส: P010</small>
-                        </div>
-                      </div>
-                      <p class="mb-3 mt-2">อาคารพาณิชย์ 4 ชั้น 4 คูหา พื้นที่ใช้สอยรวม 640 ตร.ม.</p>
-                      <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center">
-                          <div class="avatar-group d-flex align-items-center me-3">
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="สมชาย มีสุข">
-                              <img src="../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                            <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="ณัฐพงษ์ รุ่งเรือง">
-                              <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="badge bg-label-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="ประเภทโครงการ">อาคารพาณิชย์</span>
-                        </div>
-                      </div>
-                      <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>ความคืบหน้า</span>
-                        <span>100%</span>
-                      </div>
-                      <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                          <i class="bx bx-calendar-alt text-muted me-1"></i>
-                          <span class="text-muted text-nowrap">15/11/2566 - 15/05/2567</span>
-                        </div>
-                        <div class="ms-auto">
-                          <span class="text-muted">12.5 ล้านบาท</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pagination -->
-            <div class="d-flex justify-content-between mt-3">
-              <div>
-                <small class="text-muted">แสดงข้อมูล 1-10 จาก 15 รายการ</small>
-              </div>
-              <nav aria-label="Page navigation">
-                <ul class="pagination">
-                  <li class="page-item prev">
-                    <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
+            <!-- Project List Tabs -->
+            <div class="card">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                  <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#table-view" aria-controls="table-view" aria-selected="true">
+                      <i class="bx bx-table me-1"></i> แบบตาราง
+                    </button>
                   </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="javascript:void(0);">1</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="javascript:void(0);">2</a>
-                  </li>
-                  <li class="page-item next">
-                    <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#card-view" aria-controls="card-view" aria-selected="false">
+                      <i class="bx bx-grid-alt me-1"></i> แบบการ์ด
+                    </button>
                   </li>
                 </ul>
-              </nav>
+              </div>
+
+              <div class="tab-content">
+                <!-- Table View Tab -->
+                <div class="tab-pane fade show active" id="table-view" role="tabpanel">
+                  <div class="card-body">
+                    <div class="row mb-4">
+                      <div class="col-md-6 col-12 mb-3 mb-md-0">
+                        <div class="d-flex flex-wrap">
+                          <div class="filter-item active">ทั้งหมด</div>
+                          <div class="filter-item">กำลังดำเนินการ</div>
+                          <div class="filter-item">รอการตรวจรับ</div>
+                          <div class="filter-item">เสร็จสิ้น</div>
+                          <div class="filter-item">ยกเลิก</div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-12 text-md-end">
+                        <div class="d-flex justify-content-md-end">
+                          <div class="me-2 flex-grow-1 flex-md-grow-0" style="max-width: 250px;">
+                            <input type="text" class="search-input" placeholder="ค้นหาโครงการ...">
+                          </div>
+                          <a href="project-add.html" class="btn btn-primary">+ เพิ่มโครงการใหม่</a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Project Table -->
+                    <div class="table-responsive text-nowrap">
+                      <table class="table table-hover" id="projectTable">
+                        <thead>
+                          <tr>
+                            <th>รหัสโครงการ</th>
+                            <th>ชื่อโครงการ</th>
+                            <th>ลูกค้า</th>
+                            <th>วันที่เริ่ม</th>
+                            <th>กำหนดเสร็จ</th>
+                            <th>สถานะ</th>
+                            <th>ความคืบหน้า</th>
+                            <th>ผู้รับผิดชอบ</th>
+                            <th>การจัดการ</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                          <tr>
+                            <td><span class="fw-medium">P-2567-001</span></td>
+                            <td>สวนหย่อมบ้านคุณสมชาย</td>
+                            <td>สมชาย มีทรัพย์</td>
+                            <td>05/03/2568</td>
+                            <td>05/04/2568</td>
+                            <td><span class="badge bg-label-primary">กำลังดำเนินการ</span></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                                  <div class="progress-bar bg-primary" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="fw-semibold ms-2">60%</small>
+                              </div>
+                            </td>
+                            <td>นายชัยณรงค์ สวนสวย</td>
+                            <td>
+                              <div class="d-inline-block">
+                                <button type="button" class="project-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-project-id="P-2567-001">
+                                  <i class="bx bx-show"></i>
+                                </button>
+                                <button type="button" class="project-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
+                                  <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="project-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
+                                  <i class="bx bx-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><span class="fw-medium">P-2567-002</span></td>
+                            <td>ปรับปรุงภูมิทัศน์บริษัท ABC</td>
+                            <td>บริษัท ABC จำกัด</td>
+                            <td>10/02/2568</td>
+                            <td>20/03/2568</td>
+                            <td><span class="badge bg-label-primary">กำลังดำเนินการ</span></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                                  <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="fw-semibold ms-2">75%</small>
+                              </div>
+                            </td>
+                            <td>นายชัยณรงค์ สวนสวย</td>
+                            <td>
+                              <div class="d-inline-block">
+                                <button type="button" class="project-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-project-id="P-2567-002">
+                                  <i class="bx bx-show"></i>
+                                </button>
+                                <button type="button" class="project-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
+                                  <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="project-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
+                                  <i class="bx bx-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><span class="fw-medium">P-2567-003</span></td>
+                            <td>สวนหลังบ้านคุณสมหญิง</td>
+                            <td>สมหญิง รักสวย</td>
+                            <td>15/01/2568</td>
+                            <td>15/02/2568</td>
+                            <td><span class="badge bg-label-warning">รอการตรวจรับ</span></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                                  <div class="progress-bar bg-warning" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="fw-semibold ms-2">90%</small>
+                              </div>
+                            </td>
+                            <td>นางสาวสมหญิง รักษ์สวน</td>
+                            <td>
+                              <div class="d-inline-block">
+                                <button type="button" class="project-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-project-id="P-2567-003">
+                                  <i class="bx bx-show"></i>
+                                </button>
+                                <button type="button" class="project-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
+                                  <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="project-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
+                                  <i class="bx bx-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><span class="fw-medium">P-2566-015</span></td>
+                            <td>จัดสวนหน้าบ้านคุณวิชัย</td>
+                            <td>วิชัย มั่งมี</td>
+                            <td>10/12/2567</td>
+                            <td>10/01/2568</td>
+                            <td><span class="badge bg-label-success">เสร็จสิ้น</span></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                                  <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="fw-semibold ms-2">100%</small>
+                              </div>
+                            </td>
+                            <td>นายวิเชียร แข็งแรง</td>
+                            <td>
+                              <div class="d-inline-block">
+                                <button type="button" class="project-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-project-id="P-2566-015">
+                                  <i class="bx bx-show"></i>
+                                </button>
+                                <button type="button" class="project-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
+                                  <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="project-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
+                                  <i class="bx bx-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><span class="fw-medium">P-2566-014</span></td>
+                            <td>โครงการสวนสาธารณะ ซอย 5</td>
+                            <td>เทศบาลเมือง X</td>
+                            <td>20/11/2567</td>
+                            <td>20/02/2568</td>
+                            <td><span class="badge bg-label-success">เสร็จสิ้น</span></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                                  <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="fw-semibold ms-2">100%</small>
+                              </div>
+                            </td>
+                            <td>นายชัยณรงค์ สวนสวย</td>
+                            <td>
+                              <div class="d-inline-block">
+                                <button type="button" class="project-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-project-id="P-2566-014">
+                                  <i class="bx bx-show"></i>
+                                </button>
+                                <button type="button" class="project-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
+                                  <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="project-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
+                                  <i class="bx bx-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><span class="fw-medium">P-2566-013</span></td>
+                            <td>จัดสวนหย่อมโรงเรียน XYZ</td>
+                            <td>โรงเรียน XYZ</td>
+                            <td>05/11/2567</td>
+                            <td>05/12/2567</td>
+                            <td><span class="badge bg-label-success">เสร็จสิ้น</span></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1" style="height: 8px; width: 80px;">
+                                  <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <small class="fw-semibold ms-2">100%</small>
+                              </div>
+                            </td>
+                            <td>นายวิเชียร แข็งแรง</td>
+                            <td>
+                              <div class="d-inline-block">
+                                <button type="button" class="project-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-project-id="P-2566-013">
+                                  <i class="bx bx-show"></i>
+                                </button>
+                                <button type="button" class="project-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
+                                  <i class="bx bx-edit"></i>
+                                </button>
+                                <button type="button" class="project-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
+                                  <i class="bx bx-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Card View Tab -->
+                <div class="tab-pane fade" id="card-view" role="tabpanel">
+                  <div class="card-body">
+                    <div class="row mb-4">
+                      <div class="col-md-6 col-12 mb-3 mb-md-0">
+                        <div class="d-flex flex-wrap">
+                          <div class="filter-item active">ทั้งหมด</div>
+                          <div class="filter-item">กำลังดำเนินการ</div>
+                          <div class="filter-item">รอการตรวจรับ</div>
+                          <div class="filter-item">เสร็จสิ้น</div>
+                          <div class="filter-item">ยกเลิก</div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-12 text-md-end">
+                        <div class="d-flex justify-content-md-end">
+                          <div class="me-2 flex-grow-1 flex-md-grow-0" style="max-width: 250px;">
+                            <input type="text" class="search-input" placeholder="ค้นหาโครงการ...">
+                          </div>
+                          <a href="project-add.html" class="btn btn-primary">+ เพิ่มโครงการใหม่</a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Project Cards -->
+                    <div class="row">
+                      <!-- Card 1 -->
+                      <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card project-card h-100">
+                          <img class="card-img-top project-image" src="assets/img/projects/garden1.jpg" alt="สวนหย่อมบ้านคุณสมชาย">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                              <span class="badge bg-label-primary">กำลังดำเนินการ</span>
+                              <span class="text-muted small">P-2567-001</span>
+                            </div>
+                            <h5 class="card-title mb-0">สวนหย่อมบ้านคุณสมชาย</h5>
+                            <p class="text-muted small mb-2">ลูกค้า: สมชาย มีทรัพย์</p>
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small class="fw-semibold ms-2">60%</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <div>
+                                <i class="bx bx-calendar text-muted me-1"></i>
+                                <span class="text-muted small">05/03/2568</span>
+                              </div>
+                              <div>
+                                <i class="bx bx-calendar-check text-muted me-1"></i>
+                                <span class="text-muted small">05/04/2568</span>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <i class="bx bx-user text-muted me-1"></i>
+                              <span class="text-muted small">นายชัยณรงค์ สวนสวย</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="text-muted small">งบประมาณ: 45,000 บาท</div>
+                              <div>
+                                <button type="button" class="btn btn-sm btn-primary view-btn me-1" data-project-id="P-2567-001">ดูรายละเอียด</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary">แก้ไข</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Card 2 -->
+                      <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card project-card h-100">
+                          <img class="card-img-top project-image" src="assets/img/projects/landscape1.jpg" alt="ปรับปรุงภูมิทัศน์บริษัท ABC">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                              <span class="badge bg-label-primary">กำลังดำเนินการ</span>
+                              <span class="text-muted small">P-2567-002</span>
+                            </div>
+                            <h5 class="card-title mb-0">ปรับปรุงภูมิทัศน์บริษัท ABC</h5>
+                            <p class="text-muted small mb-2">ลูกค้า: บริษัท ABC จำกัด</p>
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small class="fw-semibold ms-2">75%</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <div>
+                                <i class="bx bx-calendar text-muted me-1"></i>
+                                <span class="text-muted small">10/02/2568</span>
+                              </div>
+                              <div>
+                                <i class="bx bx-calendar-check text-muted me-1"></i>
+                                <span class="text-muted small">20/03/2568</span>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <i class="bx bx-user text-muted me-1"></i>
+                              <span class="text-muted small">นายชัยณรงค์ สวนสวย</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="text-muted small">งบประมาณ: 120,000 บาท</div>
+                              <div>
+                                <button type="button" class="btn btn-sm btn-primary view-btn me-1" data-project-id="P-2567-002">ดูรายละเอียด</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary">แก้ไข</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Card 3 -->
+                      <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card project-card h-100">
+                          <img class="card-img-top project-image" src="assets/img/projects/garden2.jpg" alt="สวนหลังบ้านคุณสมหญิง">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                              <span class="badge bg-label-warning">รอการตรวจรับ</span>
+                              <span class="text-muted small">P-2567-003</span>
+                            </div>
+                            <h5 class="card-title mb-0">สวนหลังบ้านคุณสมหญิง</h5>
+                            <p class="text-muted small mb-2">ลูกค้า: สมหญิง รักสวย</p>
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small class="fw-semibold ms-2">90%</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <div>
+                                <i class="bx bx-calendar text-muted me-1"></i>
+                                <span class="text-muted small">15/01/2568</span>
+                              </div>
+                              <div>
+                                <i class="bx bx-calendar-check text-muted me-1"></i>
+                                <span class="text-muted small">15/02/2568</span>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <i class="bx bx-user text-muted me-1"></i>
+                              <span class="text-muted small">นางสาวสมหญิง รักษ์สวน</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="text-muted small">งบประมาณ: 35,000 บาท</div>
+                              <div>
+                                <button type="button" class="btn btn-sm btn-primary view-btn me-1" data-project-id="P-2567-003">ดูรายละเอียด</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary">แก้ไข</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Card 4 -->
+                      <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card project-card h-100">
+                          <img class="card-img-top project-image" src="assets/img/projects/garden3.jpg" alt="จัดสวนหน้าบ้านคุณวิชัย">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                              <span class="badge bg-label-success">เสร็จสิ้น</span>
+                              <span class="text-muted small">P-2566-015</span>
+                            </div>
+                            <h5 class="card-title mb-0">จัดสวนหน้าบ้านคุณวิชัย</h5>
+                            <p class="text-muted small mb-2">ลูกค้า: วิชัย มั่งมี</p>
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small class="fw-semibold ms-2">100%</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <div>
+                                <i class="bx bx-calendar text-muted me-1"></i>
+                                <span class="text-muted small">10/12/2567</span>
+                              </div>
+                              <div>
+                                <i class="bx bx-calendar-check text-muted me-1"></i>
+                                <span class="text-muted small">10/01/2568</span>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <i class="bx bx-user text-muted me-1"></i>
+                              <span class="text-muted small">นายวิเชียร แข็งแรง</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="text-muted small">งบประมาณ: 30,000 บาท</div>
+                              <div>
+                                <button type="button" class="btn btn-sm btn-primary view-btn me-1" data-project-id="P-2566-015">ดูรายละเอียด</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary">แก้ไข</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Card 5 -->
+                      <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card project-card h-100">
+                          <img class="card-img-top project-image" src="assets/img/projects/park1.jpg" alt="โครงการสวนสาธารณะ ซอย 5">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                              <span class="badge bg-label-success">เสร็จสิ้น</span>
+                              <span class="text-muted small">P-2566-014</span>
+                            </div>
+                            <h5 class="card-title mb-0">โครงการสวนสาธารณะ ซอย 5</h5>
+                            <p class="text-muted small mb-2">ลูกค้า: เทศบาลเมือง X</p>
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small class="fw-semibold ms-2">100%</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <div>
+                                <i class="bx bx-calendar text-muted me-1"></i>
+                                <span class="text-muted small">20/11/2567</span>
+                              </div>
+                              <div>
+                                <i class="bx bx-calendar-check text-muted me-1"></i>
+                                <span class="text-muted small">20/02/2568</span>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <i class="bx bx-user text-muted me-1"></i>
+                              <span class="text-muted small">นายชัยณรงค์ สวนสวย</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="text-muted small">งบประมาณ: 250,000 บาท</div>
+                              <div>
+                                <button type="button" class="btn btn-sm btn-primary view-btn me-1" data-project-id="P-2566-014">ดูรายละเอียด</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary">แก้ไข</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Card 6 -->
+                      <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card project-card h-100">
+                          <img class="card-img-top project-image" src="assets/img/projects/school1.jpg" alt="จัดสวนหย่อมโรงเรียน XYZ">
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                              <span class="badge bg-label-success">เสร็จสิ้น</span>
+                              <span class="text-muted small">P-2566-013</span>
+                            </div>
+                            <h5 class="card-title mb-0">จัดสวนหย่อมโรงเรียน XYZ</h5>
+                            <p class="text-muted small mb-2">ลูกค้า: โรงเรียน XYZ</p>
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="progress flex-grow-1" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <small class="fw-semibold ms-2">100%</small>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                              <div>
+                                <i class="bx bx-calendar text-muted me-1"></i>
+                                <span class="text-muted small">05/11/2567</span>
+                              </div>
+                              <div>
+                                <i class="bx bx-calendar-check text-muted me-1"></i>
+                                <span class="text-muted small">05/12/2567</span>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <i class="bx bx-user text-muted me-1"></i>
+                              <span class="text-muted small">นายวิเชียร แข็งแรง</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div class="text-muted small">งบประมาณ: 120,000 บาท</div>
+                              <div>
+                                <button type="button" class="btn btn-sm btn-primary view-btn me-1" data-project-id="P-2566-013">ดูรายละเอียด</button>
+                                <button type="button" class="btn btn-sm btn-outline-primary">แก้ไข</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <!-- / Content -->
@@ -1423,7 +1058,7 @@
                 © <script>
                   document.write(new Date().getFullYear())
                 </script>
-                , ระบบคลังสินค้าขนาดย่อม v1.0
+                , ระบบจัดสวนครบวงจร v1.0
               </div>
               <div>
                 <a href="#" class="footer-link me-4">หน้าหลัก</a>
@@ -1447,126 +1082,425 @@
   </div>
   <!-- / Layout wrapper -->
 
+  <!-- Project Detail Modal -->
+  <div class="modal fade" id="projectDetailModal" tabindex="-1" aria-labelledby="projectDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="projectDetailModalLabel">รายละเอียดโครงการ</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <div class="text-muted mb-1">รหัสโครงการ</div>
+              <div class="fw-bold" id="modal-project-id">P-2567-001</div>
+            </div>
+            <div class="col-md-8">
+              <div class="text-muted mb-1">ชื่อโครงการ</div>
+              <div class="fw-bold" id="modal-project-name">สวนหย่อมบ้านคุณสมชาย</div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <div class="text-muted mb-1">วันที่เริ่ม</div>
+              <div id="modal-project-start-date">05/03/2568</div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-muted mb-1">กำหนดเสร็จ</div>
+              <div id="modal-project-end-date">05/04/2568</div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-muted mb-1">สถานะ</div>
+              <div id="modal-project-status"><span class="badge bg-primary">กำลังดำเนินการ</span></div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="text-muted mb-1">ลูกค้า</div>
+              <div id="modal-project-customer">สมชาย มีทรัพย์</div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-muted mb-1">โทรศัพท์</div>
+              <div id="modal-project-phone">081-234-5678</div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="text-muted mb-1">ที่อยู่</div>
+              <div id="modal-project-address">123/45 หมู่บ้านสวยงาม ถ.รัชดา กรุงเทพฯ</div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="text-muted mb-1">ผู้รับผิดชอบ</div>
+              <div id="modal-project-owner">นายชัยณรงค์ สวนสวย</div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-muted mb-1">งบประมาณ</div>
+              <div id="modal-project-budget">45,000 บาท</div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="text-muted mb-1">รายละเอียดงาน</div>
+              <div id="modal-project-description">
+                จัดสวนหย่อมบริเวณหน้าบ้าน ด้วยต้นไม้ประดับและหินแกรนิต พร้อมระบบน้ำ และไฟส่องสว่าง
+              </div>
+            </div>
+          </div>
+          
+          <hr>
+          
+          <h6 class="mb-3">ความคืบหน้า</h6>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="progress" style="height: 20px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="card bg-label-primary h-100">
+                <div class="card-body">
+                  <h6 class="card-title mb-1">วัสดุที่ใช้ไป</h6>
+                  <h3 class="mb-0" id="modal-project-material-cost">฿28,425</h3>
+                  <small class="text-muted">63.17% ของงบประมาณ</small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <div class="card bg-label-info h-100">
+                <div class="card-body">
+                  <h6 class="card-title mb-1">เครื่องมือที่ใช้</h6>
+                  <h3 class="mb-0" id="modal-project-tools">5 รายการ</h3>
+                  <small class="text-muted">ใช้งานอยู่: 3 รายการ</small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <div class="card bg-label-warning h-100">
+                <div class="card-body">
+                  <h6 class="card-title mb-1">กำลังคน</h6>
+                  <h3 class="mb-0" id="modal-project-workers">8 คน</h3>
+                  <small class="text-muted">ทำงานวันนี้: 6 คน</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-12">
+              <h6 class="mb-3">รายการวัสดุที่ใช้</h6>
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th>รหัสวัสดุ</th>
+                      <th>รายการ</th>
+                      <th>จำนวน</th>
+                      <th>ราคาต่อหน่วย</th>
+                      <th class="text-end">รวม</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>M-0003</td>
+                      <td>ต้นไม้ประดับขนาดเล็ก</td>
+                      <td>30 ต้น</td>
+                      <td>฿150</td>
+                      <td class="text-end">฿4,500</td>
+                    </tr>
+                    <tr>
+                      <td>M-0005</td>
+                      <td>หญ้าเทียม</td>
+                      <td>12 ตร.ม.</td>
+                      <td>฿320</td>
+                      <td class="text-end">฿3,840</td>
+                    </tr>
+                    <tr>
+                      <td>T-0007</td>
+                      <td>ปูนซีเมนต์ตราช้าง</td>
+                      <td>25 ถุง</td>
+                      <td>฿150</td>
+                      <td class="text-end">฿3,750</td>
+                    </tr>
+                    <tr>
+                      <td>M-0004</td>
+                      <td>หินแกรนิตก้อนเล็ก</td>
+                      <td>75 กก.</td>
+                      <td>฿45</td>
+                      <td class="text-end">฿3,375</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th colspan="4" class="text-end">รวม</th>
+                      <th class="text-end">฿15,465</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ปิด</button>
+          <a href="project-progress.html" class="btn btn-primary">ติดตามความคืบหน้า</a>
+          <a href="project-edit.html" class="btn btn-warning">แก้ไขโครงการ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">ยืนยันการลบ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          คุณต้องการลบโครงการนี้ใช่หรือไม่?
+          <p class="text-danger mt-2 mb-0">การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">ลบโครงการ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Core JS -->
-  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-  <script src="../assets/vendor/libs/popper/popper.js"></script>
-  <script src="../assets/vendor/js/bootstrap.js"></script>
-  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
-  <script src="../assets/vendor/js/menu.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
 
   <!-- Vendors JS -->
-  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
-  <script src="../assets/vendor/libs/datatables/jquery.dataTables.js"></script>
-  <script src="../assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-  <script src="../assets/vendor/libs/datatables-responsive/datatables.responsive.js"></script>
-  <script src="../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js"></script>
-  <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
-  <script src="../assets/vendor/libs/select2/select2.js"></script>
-  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive/2.4.1/dataTables.responsive.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs5/2.4.1/responsive.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons/2.4.1/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons-bs5/2.4.1/buttons.bootstrap5.min.js"></script>
 
   <!-- Main JS -->
-  <script src="../assets/js/main.js"></script>
+  <script src="assets/js/main.js"></script>
 
   <!-- Page JS -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Initialize DataTables
-      const projectsTable = $('#projectsTable').DataTable({
-        dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+    // Project data
+    const projectsData = [
+      {
+        id: 'P-2567-001',
+        name: 'สวนหย่อมบ้านคุณสมชาย',
+        customer: 'สมชาย มีทรัพย์',
+        phone: '081-234-5678',
+        address: '123/45 หมู่บ้านสวยงาม ถ.รัชดา กรุงเทพฯ',
+        startDate: '05/03/2568',
+        endDate: '05/04/2568',
+        status: 'กำลังดำเนินการ',
+        statusClass: 'bg-primary',
+        progress: 60,
+        owner: 'นายชัยณรงค์ สวนสวย',
+        budget: '45,000',
+        materialCost: '28,425',
+        materialPercent: '63.17',
+        description: 'จัดสวนหย่อมบริเวณหน้าบ้าน ด้วยต้นไม้ประดับและหินแกรนิต พร้อมระบบน้ำ และไฟส่องสว่าง',
+        tools: '5',
+        toolsInUse: '3',
+        workers: '8',
+        workersToday: '6'
+      },
+      {
+        id: 'P-2567-002',
+        name: 'ปรับปรุงภูมิทัศน์บริษัท ABC',
+        customer: 'บริษัท ABC จำกัด',
+        phone: '02-123-4567',
+        address: '99 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ',
+        startDate: '10/02/2568',
+        endDate: '20/03/2568',
+        status: 'กำลังดำเนินการ',
+        statusClass: 'bg-primary',
+        progress: 75,
+        owner: 'นายชัยณรงค์ สวนสวย',
+        budget: '120,000',
+        materialCost: '78,500',
+        materialPercent: '65.42',
+        description: 'ปรับปรุงภูมิทัศน์รอบอาคารสำนักงาน เพิ่มพื้นที่สีเขียว และทางเดินสวนใหม่',
+        tools: '7',
+        toolsInUse: '5',
+        workers: '12',
+        workersToday: '10'
+      },
+      {
+        id: 'P-2567-003',
+        name: 'สวนหลังบ้านคุณสมหญิง',
+        customer: 'สมหญิง รักสวย',
+        phone: '089-876-5432',
+        address: '56/7 หมู่บ้านสวนสวย ซ.ลาดพร้าว 101 กรุงเทพฯ',
+        startDate: '15/01/2568',
+        endDate: '15/02/2568',
+        status: 'รอการตรวจรับ',
+        statusClass: 'bg-warning',
+        progress: 90,
+        owner: 'นางสาวสมหญิง รักษ์สวน',
+        budget: '35,000',
+        materialCost: '31,200',
+        materialPercent: '89.14',
+        description: 'จัดสวนหลังบ้าน มีน้ำพุขนาดเล็ก พร้อมม้านั่งและระบบไฟส่องสว่าง',
+        tools: '4',
+        toolsInUse: '1',
+        workers: '5',
+        workersToday: '2'
+      }
+    ];
+
+    // Initialize DataTable
+    $(document).ready(function() {
+      // Initialize DataTable
+      const projectTable = $('#projectTable').DataTable({
+        dom: '<"d-flex justify-content-between align-items-center mb-3"<"d-flex align-items-center"l><"d-flex flex-wrap"f>>t<"d-flex justify-content-between"ip>',
         language: {
-          search: '',
-          searchPlaceholder: 'ค้นหา...',
-          paginate: {
-            previous: '<i class="bx bx-chevron-left"></i>',
-            next: '<i class="bx bx-chevron-right"></i>'
-          },
-          info: "แสดงข้อมูล _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+          search: "ค้นหา:",
           lengthMenu: "แสดง _MENU_ รายการ",
-          zeroRecords: "ไม่พบข้อมูล",
-          infoEmpty: "แสดงข้อมูล 0 ถึง 0 จาก 0 รายการ",
-          infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)"
+          info: "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ รายการ",
+          infoEmpty: "แสดง 0 ถึง 0 จากทั้งหมด 0 รายการ",
+          infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
+          paginate: {
+            first: "หน้าแรก",
+            last: "หน้าสุดท้าย",
+            next: "ถัดไป",
+            previous: "ก่อนหน้า"
+          }
         },
-        lengthMenu: [10, 25, 50, 75, 100],
+        responsive: true,
+        ordering: true,
         pageLength: 10,
-        responsive: true
+        lengthMenu: [5, 10, 25, 50],
+        columnDefs: [
+          { orderable: false, targets: [8] }
+        ]
       });
-
-      // Initialize Select2
-      $('.select2').select2();
-
-      // Initialize Flatpickr
-      $('.flatpickr-range').flatpickr({
-        mode: 'range',
-        altInput: true,
-        altFormat: 'd/m/Y',
-        dateFormat: 'Y-m-d',
-        locale: {
-          rangeSeparator: ' ถึง '
-        }
+      
+      // Custom search input
+      $('.search-input').on('keyup', function() {
+        projectTable.search(this.value).draw();
       });
-
-      // Toggle filter panel
-      $('.toggle-filters').on('click', function() {
-        $(this).toggleClass('rotate');
-        $('.filters-card').toggleClass('collapsed');
-      });
-
-      // Toggle view between grid and table
-      $('[data-bs-toggle="view"]').on('click', function() {
-        const target = $(this).data('bs-target');
-        $('[data-bs-toggle="view"]').removeClass('active');
+      
+      // Filter items 
+      $('.filter-item').on('click', function() {
+        $('.filter-item').removeClass('active');
         $(this).addClass('active');
         
-        $('.view-content').removeClass('active').hide();
-        $('#' + target + '-view').addClass('active').show();
-      });
-
-      // Delete confirmation
-      $(document).on('click', '.dropdown-item.text-danger, .dropdown-item:has(.bx-trash)', function(e) {
-        if ($(this).find('.bx-trash').length > 0 || $(this).hasClass('text-danger')) {
-          e.preventDefault();
-          const projectName = $(this).closest('tr').find('td:nth-child(2)').text().trim() || 
-                            $(this).closest('.card').find('h5').text().trim();
-          
-          Swal.fire({
-            title: 'ยืนยันการลบ?',
-            text: `คุณต้องการลบโครงการ "${projectName}" ใช่หรือไม่?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'ใช่, ลบเลย!',
-            cancelButtonText: 'ยกเลิก',
-            customClass: {
-              confirmButton: 'btn btn-danger me-3',
-              cancelButton: 'btn btn-outline-secondary'
-            },
-            buttonsStyling: false
-          }).then(function (result) {
-            if (result.value) {
-              Swal.fire({
-                icon: 'success',
-                title: 'ลบโครงการสำเร็จ!',
-                text: `โครงการ "${projectName}" ถูกลบเรียบร้อยแล้ว`,
-                customClass: {
-                  confirmButton: 'btn btn-success'
-                },
-                buttonsStyling: false
-              });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-              Swal.fire({
-                title: 'ยกเลิกการลบ',
-                text: 'โครงการของคุณปลอดภัย :)',
-                icon: 'error',
-                customClass: {
-                  confirmButton: 'btn btn-primary'
-                },
-                buttonsStyling: false
-              });
-            }
-          });
+        const filterValue = $(this).text();
+        
+        if (filterValue === 'ทั้งหมด') {
+          projectTable.column(5).search('').draw();
+        } else {
+          projectTable.column(5).search(filterValue).draw();
         }
       });
+      
+      // View project details 
+      $(document).on('click', '.view-btn', function() {
+        const projectId = $(this).data('project-id');
+        showProjectDetails(projectId);
+      });
+      
+      // Delete button click event
+      $(document).on('click', '.delete', function() {
+        const row = $(this).closest('tr');
+        const projectId = row.find('td:first-child .fw-medium').text();
+        
+        // Set the project ID to the confirm delete button
+        $('#confirmDeleteBtn').data('project-id', projectId);
+        
+        // Show the confirmation modal
+        $('#deleteConfirmModal').modal('show');
+      });
+      
+      // Confirm delete button click event
+      $('#confirmDeleteBtn').on('click', function() {
+        const projectId = $(this).data('project-id');
+        
+        // Here you would usually send AJAX request to delete the project
+        console.log(`Deleting project: ${projectId}`);
+        
+        // For demo purposes, remove the row from the table
+        projectTable.row($(`td:contains('${projectId}')`).closest('tr')).remove().draw();
+        
+        // Also remove from card view if present
+        $(`.card:has([data-project-id="${projectId}"])`).remove();
+        
+        // Hide the modal
+        $('#deleteConfirmModal').modal('hide');
+        
+        // Show success message
+        alert(`ลบโครงการ ${projectId} เรียบร้อยแล้ว`);
+      });
+      
+      // Initialize tooltips
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
     });
+    
+    // Show project details in modal
+    function showProjectDetails(projectId) {
+      const project = projectsData.find(p => p.id === projectId) || 
+                      { id: projectId, name: 'โครงการตัวอย่าง', customer: 'ลูกค้าตัวอย่าง', 
+                       startDate: '01/01/2568', endDate: '30/01/2568', status: 'กำลังดำเนินการ', 
+                       statusClass: 'bg-primary', progress: 50 };
+      
+      // Fill the modal with project details
+      $('#modal-project-id').text(project.id);
+      $('#modal-project-name').text(project.name);
+      $('#modal-project-start-date').text(project.startDate);
+      $('#modal-project-end-date').text(project.endDate);
+      $('#modal-project-customer').text(project.customer);
+      $('#modal-project-phone').text(project.phone || '');
+      $('#modal-project-address').text(project.address || '');
+      $('#modal-project-owner').text(project.owner || '');
+      $('#modal-project-budget').text(project.budget ? project.budget + ' บาท' : '');
+      $('#modal-project-description').text(project.description || '');
+      $('#modal-project-material-cost').text(project.materialCost ? '฿' + project.materialCost : '');
+      $('#modal-project-tools').text(project.tools ? project.tools + ' รายการ' : '');
+      $('#modal-project-workers').text(project.workers ? project.workers + ' คน' : '');
+      
+      // Status badge
+      $('#modal-project-status').html(`<span class="badge ${project.statusClass}">${project.status}</span>`);
+      
+      // Progress bar
+      const progressBar = $('.modal-body .progress-bar');
+      progressBar.css('width', project.progress + '%');
+      progressBar.text(project.progress + '%');
+      
+      // Update progress bar class based on status
+      progressBar.removeClass('bg-primary bg-warning bg-success');
+      if (project.status === 'กำลังดำเนินการ') {
+        progressBar.addClass('bg-primary');
+      } else if (project.status === 'รอการตรวจรับ') {
+        progressBar.addClass('bg-warning');
+      } else if (project.status === 'เสร็จสิ้น') {
+        progressBar.addClass('bg-success');
+      }
+      
+      // Show the modal
+      $('#projectDetailModal').modal('show');
+    }
   </script>
 </body>
 </html>
