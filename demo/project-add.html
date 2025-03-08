@@ -15,201 +15,278 @@
 
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css">
 
   <!-- Core CSS -->
-  <link rel="stylesheet" href="assets/css/core.css">
-  <link rel="stylesheet" href="assets/css/theme-default.css">
-  <link rel="stylesheet" href="assets/css/demo.css">
-  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
 
   <!-- Vendors CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/sweetalert2/sweetalert2.css">
   
   <!-- Page CSS -->
   <style>
-    .form-label {
-      font-weight: 500;
+    :root {
+      --primary: #28a745;
+      --primary-light: #e9fff0;
+      --warning: #ffa726;
+      --warning-light: #ffedcc;
+      --danger: #ec407a;
+      --danger-light: #ffe8e8;
+      --info: #42a5f5;
+      --info-light: #e3f2fd;
+      --text-primary: #566a7f;
+      --text-secondary: #99a0ac;
+      --bg-light: #f5f6fa;
     }
     
-    .required::after {
-      content: '*';
-      color: #ec407a;
-      margin-left: 3px;
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-primary);
     }
     
-    .card-form {
+    .card {
+      transition: all 0.3s ease;
+      border-radius: 0.75rem;
+      border: none;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
       margin-bottom: 1.5rem;
     }
     
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-      color: #566a7f;
+    .section-heading {
       position: relative;
-      padding-bottom: 0.75rem;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
     }
     
-    .section-title::after {
+    .section-heading::before {
       content: '';
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 0;
-      width: 40px;
-      height: 3px;
-      background-color: #28a745;
-      border-radius: 3px;
+      width: 4px;
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
     }
     
-    .select2-container--default .select2-selection--single {
-      height: 40px;
-      border: 1px solid #d9dee3;
+    .form-control, .form-select {
       border-radius: 0.375rem;
-    }
-    
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-      line-height: 38px;
-      padding-left: 0.875rem;
-      color: #566a7f;
-    }
-    
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-      height: 38px;
-      right: 8px;
-    }
-    
-    .select2-container--default .select2-search--dropdown .select2-search__field {
-      border-radius: 0.375rem;
-      border: 1px solid #d9dee3;
-      padding: 0.438rem 0.875rem;
-    }
-    
-    .select2-container--default .select2-results__option--highlighted[aria-selected] {
-      background-color: #28a745;
-    }
-    
-    .select2-container--default .select2-selection--multiple {
-      border: 1px solid #d9dee3;
-      border-radius: 0.375rem;
-    }
-    
-    .select2-container--default .select2-selection--multiple .select2-selection__choice {
-      background-color: #e9fff0;
-      border: 1px solid #28a745;
-      border-radius: 0.375rem;
-      padding: 2px 8px;
-      margin-top: 5px;
-      margin-right: 5px;
-      color: #28a745;
-    }
-    
-    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-      color: #28a745;
-      margin-right: 5px;
-    }
-    
-    .flatpickr-calendar {
-      font-family: 'Prompt', sans-serif;
-    }
-    
-    .flatpickr-input {
-      height: calc(1.53em + 0.875rem + 2px);
-      padding: 0.438rem 0.875rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid #dce1e8;
       font-size: 0.9375rem;
-      line-height: 1.53;
-      border-radius: 0.375rem;
-      border: 1px solid #d9dee3;
-    }
-    
-    .dropzone {
-      border: 2px dashed #d9dee3;
-      border-radius: 0.375rem;
-      min-height: 150px;
-      padding: 20px;
       transition: all 0.2s ease;
     }
     
-    .dropzone:hover {
-      border-color: #28a745;
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
     }
     
-    .dropzone .dz-message {
-      margin: 2em 0;
-      text-align: center;
-    }
-    
-    .dropzone .dz-message .bx {
-      font-size: 2.5rem;
-      color: #28a745;
-      margin-bottom: 0.5rem;
-    }
-    
-    .dropzone .dz-preview .dz-image {
-      border-radius: 0.375rem;
-    }
-    
-    .dropzone .dz-preview.dz-file-preview .dz-image {
-      background-color: #e9fff0;
-    }
-    
-    .dropzone .dz-preview .dz-error-message {
-      border-radius: 0.375rem;
-    }
-    
-    .material-item {
-      background-color: #f8f9fa;
-      border-radius: 0.375rem;
-      padding: 0.75rem;
-      margin-bottom: 0.75rem;
-      border: 1px solid #e7e7e8;
-      position: relative;
-    }
-    
-    .material-item .remove-item {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      background-color: #fff;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
+    .custom-option {
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: #ec407a;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
       cursor: pointer;
       transition: all 0.2s ease;
     }
     
-    .material-item .remove-item:hover {
-      background-color: #ffe8e8;
+    .custom-option:hover {
+      background-color: var(--primary-light);
     }
     
-    .material-item .form-control-sm {
-      height: calc(1.5em + 0.5rem + 2px);
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-      border-radius: 0.25rem;
+    .custom-option.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
     }
     
-    .material-item .form-select-sm {
-      height: calc(1.5em + 0.5rem + 2px);
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-      border-radius: 0.25rem;
-    }
-    
-    .total-summary {
-      background-color: #e9fff0;
+    .custom-option-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
       border-radius: 0.375rem;
+      margin-right: 1rem;
+      color: var(--text-primary);
+      background-color: rgba(40, 167, 69, 0.16);
+    }
+    
+    .custom-option.selected .custom-option-icon {
+      color: white;
+      background-color: var(--primary);
+    }
+    
+    .task-item {
+      display: flex;
+      padding: 0.75rem 1rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    
+    .task-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .material-item {
+      padding: 0.75rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    
+    .material-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .draggable-handle {
+      cursor: move;
+      color: #c2c7d0;
+    }
+    
+    .task-complete {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+    
+    .dropzone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      border: 2px dashed #dce1e8;
+      border-radius: 0.375rem;
+      background-color: #fafbfc;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .dropzone:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .dropzone-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .preview-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 0.375rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #dce1e8;
+    }
+    
+    .input-group-text {
+      background-color: #f5f6fa;
+      border-color: #dce1e8;
+    }
+    
+    .form-label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .required-label:after {
+      content: " *";
+      color: var(--danger);
+    }
+    
+    .input-group-addon {
+      background-color: #f5f6fa;
+      border-color: #dce1e8;
+    }
+    
+    .tab-content {
+      padding: 1.5rem;
+    }
+    
+    .select2-container {
+      width: 100% !important;
+    }
+    
+    .select2-container--default .select2-selection--single {
+      height: 38px;
+      border: 1px solid #dce1e8;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 38px;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 36px;
+    }
+    
+    .select2-container--default .select2-selection--multiple {
+      border: 1px solid #dce1e8;
+    }
+    
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #e7e7e8;
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+    
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+    
+    .timeline-point {
+      position: absolute;
+      left: -2rem;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: var(--primary);
+      transform: translateX(50%);
+      z-index: 1;
+    }
+    
+    .timeline-content {
       padding: 1rem;
-      margin-top: 1rem;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.08);
+    }
+    
+    .timeline-date {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
     }
   </style>
 </head>
@@ -476,13 +553,13 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar bg-light-primary">
-                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-layout"></i></span>
+                              <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-wrench"></i></span>
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-1">มีโครงการใหม่เพิ่ม</h6>
-                            <p class="mb-0">สวนหย่อมบ้านคุณสมชาย</p>
-                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
+                            <h6 class="mb-1">เครื่องตัดหญ้า #T001 ถูกคืนแล้ว</h6>
+                            <p class="mb-0">เครื่องมือถูกคืนโดย สมชาย ใจดี</p>
+                            <small class="text-muted">30 นาทีที่แล้ว</small>
                           </div>
                           <div class="flex-shrink-0 dropdown-notifications-actions">
                             <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
@@ -494,13 +571,13 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar">
-                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-error"></i></span>
+                              <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-error"></i></span>
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-1">กำหนดส่งมอบงานใกล้ถึง</h6>
-                            <p class="mb-0">โครงการปรับปรุงภูมิทัศน์บริษัท ABC</p>
-                            <small class="text-muted">เหลืออีก 3 วัน</small>
+                            <h6 class="mb-1">ดินปลูกต้นไม้เหลือน้อย</h6>
+                            <p class="mb-0">วัสดุเหลือต่ำกว่าจุดสั่งซื้อ</p>
+                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
                           </div>
                           <div class="flex-shrink-0 dropdown-notifications-actions">
                             <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
@@ -576,376 +653,954 @@
               <span class="text-muted fw-light">จัดการโครงการ /</span> เพิ่มโครงการใหม่
             </h4>
 
-            <form id="projectForm" class="needs-validation" novalidate>
-              <div class="row">
-                <!-- ข้อมูลโครงการ -->
-                <div class="col-xl-8 col-md-7 mb-md-0 mb-4">
-                  <div class="card card-form">
-                    <div class="card-header">
-                      <h5 class="card-title mb-0">ข้อมูลโครงการ</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">รหัสโครงการ</label>
-                        <div class="col-sm-9">
-                          <div class="input-group">
-                            <span class="input-group-text">P-</span>
-                            <input type="text" class="form-control" id="projectId" placeholder="2567-001" value="2567-001" readonly>
-                          </div>
-                          <div class="form-text">รหัสจะถูกสร้างโดยอัตโนมัติ</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">ชื่อโครงการ</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" id="projectName" placeholder="ชื่อโครงการ" required>
-                          <div class="invalid-feedback">กรุณาระบุชื่อโครงการ</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">วันที่เริ่ม</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control flatpickr-input" id="startDate" placeholder="วัน/เดือน/ปี" required>
-                          <div class="invalid-feedback">กรุณาระบุวันที่เริ่ม</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">กำหนดส่งมอบ</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control flatpickr-input" id="endDate" placeholder="วัน/เดือน/ปี" required>
-                          <div class="invalid-feedback">กรุณาระบุกำหนดส่งมอบ</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label">ผู้รับผิดชอบ</label>
-                        <div class="col-sm-9">
-                          <select class="select2 form-select" id="projectManager" data-placeholder="เลือกผู้รับผิดชอบโครงการ">
-                            <option value=""></option>
-                            <option value="1">นายชัยณรงค์ สวนสวย</option>
-                            <option value="2">นางสาวสมหญิง รักษ์สวน</option>
-                            <option value="3">นายวิเชียร แข็งแรง</option>
-                          </select>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label">พนักงานในโครงการ</label>
-                        <div class="col-sm-9">
-                          <select class="select2 form-select" id="projectStaff" multiple data-placeholder="เลือกพนักงานในโครงการ">
-                            <option value="1">สมศักดิ์ รักงาน</option>
-                            <option value="2">สมจิตร ใจดี</option>
-                            <option value="3">วิภา สวยงาม</option>
-                            <option value="4">ชาติชาย ศรีไทย</option>
-                            <option value="5">มานี ดีจริง</option>
-                            <option value="6">ปิยะ รักชาติ</option>
-                          </select>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">งบประมาณ (บาท)</label>
-                        <div class="col-sm-9">
-                          <input type="number" class="form-control" id="budget" placeholder="0.00" min="0" step="0.01" required>
-                          <div class="invalid-feedback">กรุณาระบุงบประมาณ</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-0">
-                        <label class="col-sm-3 col-form-label form-label">รายละเอียดงาน</label>
-                        <div class="col-sm-9">
-                          <textarea class="form-control" id="description" rows="4" placeholder="รายละเอียดงาน"></textarea>
-                        </div>
-                      </div>
-                    </div>
+            <!-- Form Steps -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header border-bottom">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                      <li class="nav-item">
+                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#tab-1" aria-controls="tab-1" aria-selected="true">
+                          <i class="bx bx-info-circle me-1"></i> ข้อมูลทั่วไป
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tab-2" aria-controls="tab-2" aria-selected="false">
+                          <i class="bx bx-user me-1"></i> ข้อมูลลูกค้า
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tab-3" aria-controls="tab-3" aria-selected="false">
+                          <i class="bx bx-list-ul me-1"></i> ข้อมูลโครงการ
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tab-4" aria-controls="tab-4" aria-selected="false">
+                          <i class="bx bx-package me-1"></i> วัสดุและอุปกรณ์
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tab-5" aria-controls="tab-5" aria-selected="false">
+                          <i class="bx bx-image me-1"></i> รูปภาพและเอกสาร
+                        </button>
+                      </li>
+                    </ul>
                   </div>
-                  
-                  <!-- ที่อยู่ลูกค้า -->
-                  <div class="card card-form mt-4">
-                    <div class="card-header">
-                      <h5 class="card-title mb-0">ข้อมูลลูกค้า</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">ชื่อลูกค้า</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" id="customerName" placeholder="ชื่อลูกค้า" required>
-                          <div class="invalid-feedback">กรุณาระบุชื่อลูกค้า</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label">ประเภทลูกค้า</label>
-                        <div class="col-sm-9">
-                          <select class="form-select" id="customerType">
-                            <option value="individual">บุคคลธรรมดา</option>
-                            <option value="company">บริษัท/หน่วยงาน</option>
-                          </select>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label">เบอร์โทรศัพท์</label>
-                        <div class="col-sm-9">
-                          <input type="tel" class="form-control" id="customerPhone" placeholder="เบอร์โทรศัพท์">
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label">อีเมล</label>
-                        <div class="col-sm-9">
-                          <input type="email" class="form-control" id="customerEmail" placeholder="อีเมล">
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label required">ที่อยู่</label>
-                        <div class="col-sm-9">
-                          <textarea class="form-control" id="customerAddress" rows="3" placeholder="ที่อยู่" required></textarea>
-                          <div class="invalid-feedback">กรุณาระบุที่อยู่</div>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label form-label">จังหวัด</label>
-                        <div class="col-sm-9">
-                          <select class="select2 form-select" id="province" data-placeholder="เลือกจังหวัด">
-                            <option value=""></option>
-                            <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-                            <option value="นนทบุรี">นนทบุรี</option>
-                            <option value="ปทุมธานี">ปทุมธานี</option>
-                            <option value="สมุทรปราการ">สมุทรปราการ</option>
-                            <option value="นครปฐม">นครปฐม</option>
-                            <!-- เพิ่มจังหวัดอื่นๆ -->
-                          </select>
-                        </div>
-                      </div>
-                      
-                      <div class="row mb-0">
-                        <label class="col-sm-3 col-form-label form-label">รหัสไปรษณีย์</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control" id="zipCode" placeholder="รหัสไปรษณีย์">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- รูปภาพ -->
-                  <div class="card card-form mt-4">
-                    <div class="card-header">
-                      <h5 class="card-title mb-0">รูปภาพและเอกสาร</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="mb-3">
-                        <h6 class="section-title">รูปภาพโครงการ</h6>
-                        <div class="dropzone" id="projectImages">
-                          <div class="dz-message needsclick">
-                            <i class="bx bx-image-add"></i>
-                            <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ</h5>
-                            <p class="text-muted">(สามารถอัปโหลดได้สูงสุด 5 รูป, ขนาดไม่เกิน 2MB ต่อรูป)</p>
+
+                  <form id="formAddProject" class="tab-content">
+                    <!-- ข้อมูลทั่วไป Tab -->
+                    <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+                      <div class="card-body">
+                        <h5 class="mb-4">ข้อมูลทั่วไปของโครงการ</h5>
+                        
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label for="projectName" class="form-label required-label">ชื่อโครงการ</label>
+                            <input type="text" class="form-control" id="projectName" placeholder="กรุณาระบุชื่อโครงการ" required>
                           </div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h6 class="section-title">เอกสารแนบ</h6>
-                        <div class="dropzone" id="projectDocuments">
-                          <div class="dz-message needsclick">
-                            <i class="bx bx-file"></i>
-                            <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดเอกสาร</h5>
-                            <p class="text-muted">(สามารถอัปโหลดได้หลายไฟล์, รองรับ PDF, DOCX, XLSX, ขนาดไม่เกิน 10MB ต่อไฟล์)</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- วัสดุและเครื่องมือ -->
-                  <div class="card card-form mt-4">
-                    <div class="card-header">
-                      <h5 class="card-title mb-0">วัสดุและเครื่องมือ</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <div class="col-12">
-                          <h6 class="section-title">เลือกวัสดุที่ใช้ในโครงการ</h6>
                           
-                          <div id="materialsList">
-                            <!-- วัสดุที่เลือกจะถูกเพิ่มที่นี่ -->
-                            <div class="material-item" data-id="1">
-                              <div class="row">
-                                <div class="col-md-5 mb-2 mb-md-0">
-                                  <select class="form-select form-select-sm material-select" required>
-                                    <option value="">เลือกวัสดุ</option>
-                                    <option value="M-0001" selected>ดินปลูกต้นไม้ (5 กระสอบ)</option>
-                                    <option value="M-0002">ปุ๋ยอินทรีย์ (30 กระสอบ)</option>
-                                    <option value="M-0003">ต้นไม้ประดับขนาดเล็ก (45 ต้น)</option>
-                                    <option value="M-0004">หินแกรนิตก้อนเล็ก (120 กก.)</option>
-                                    <option value="M-0005">หญ้าเทียม (50 ตร.ม.)</option>
-                                  </select>
+                          <div class="col-md-6">
+                            <label for="projectId" class="form-label">รหัสโครงการ</label>
+                            <input type="text" class="form-control" id="projectId" placeholder="รหัสจะถูกสร้างอัตโนมัติ" readonly>
+                            <small class="text-muted">รหัสโครงการจะถูกสร้างอัตโนมัติหลังจากบันทึก</small>
+                          </div>
+                          
+                          <div class="col-md-3">
+                            <label for="projectStartDate" class="form-label required-label">วันที่เริ่มโครงการ</label>
+                            <input type="text" class="form-control flatpickr-date" id="projectStartDate" placeholder="DD/MM/YYYY" required>
+                          </div>
+                          
+                          <div class="col-md-3">
+                            <label for="projectEndDate" class="form-label required-label">กำหนดส่งมอบงาน</label>
+                            <input type="text" class="form-control flatpickr-date" id="projectEndDate" placeholder="DD/MM/YYYY" required>
+                          </div>
+                          
+                          <div class="col-md-3">
+                            <label for="projectBudget" class="form-label required-label">งบประมาณ (บาท)</label>
+                            <input type="number" class="form-control" id="projectBudget" placeholder="0.00" step="0.01" min="0" required>
+                          </div>
+                          
+                          <div class="col-md-3">
+                            <label for="projectStatus" class="form-label required-label">สถานะโครงการ</label>
+                            <select class="form-select" id="projectStatus" required>
+                              <option value="" selected disabled>เลือกสถานะ</option>
+                              <option value="active">กำลังดำเนินการ</option>
+                              <option value="pending">รอการตรวจรับ</option>
+                              <option value="completed">เสร็จสิ้น</option>
+                              <option value="cancelled">ยกเลิก</option>
+                            </select>
+                          </div>
+                          
+                          <div class="col-12">
+                            <label for="projectDescription" class="form-label">รายละเอียดโครงการ</label>
+                            <textarea class="form-control" id="projectDescription" rows="5" placeholder="รายละเอียดของโครงการ กิจกรรมและขอบเขตงานที่จะทำ"></textarea>
+                          </div>
+                          
+                          <div class="col-md-6">
+                            <label for="projectManager" class="form-label required-label">ผู้จัดการโครงการ</label>
+                            <select class="form-select select2" id="projectManager" required>
+                              <option value="" selected disabled>เลือกผู้จัดการโครงการ</option>
+                              <option value="1">นายชัยณรงค์ สวนสวย</option>
+                              <option value="2">นางสาวสมหญิง รักษ์สวน</option>
+                              <option value="3">นายวิเชียร แข็งแรง</option>
+                              <option value="4">นายสมศักดิ์ เขียวขจี</option>
+                            </select>
+                          </div>
+                          
+                          <div class="col-md-6">
+                            <label for="projectTeam" class="form-label">ทีมงาน</label>
+                            <select class="form-select select2" id="projectTeam" multiple>
+                              <option value="5">นายสมชาย ใจดี</option>
+                              <option value="6">นายมานะ ตั้งใจ</option>
+                              <option value="7">นายสมปอง เรียบร้อย</option>
+                              <option value="8">นายสมนึก รักงาน</option>
+                              <option value="9">นายสมโชค โชคดี</option>
+                              <option value="10">นายสมหมาย ตั้งใจ</option>
+                            </select>
+                          </div>
+                          
+                          <div class="col-12">
+                            <label class="form-label">ประเภทงาน</label>
+                            <div class="row g-3">
+                              <div class="col-md-3 col-sm-6">
+                                <div class="form-check custom-option">
+                                  <input class="form-check-input" type="checkbox" value="garden" id="projectTypeGarden">
+                                  <label class="form-check-label" for="projectTypeGarden">
+                                    <span class="custom-option-icon">
+                                      <i class="bx bx-tree"></i>
+                                    </span>
+                                    <span class="custom-option-text">จัดสวน</span>
+                                  </label>
                                 </div>
-                                <div class="col-md-2 mb-2 mb-md-0">
-                                  <input type="number" class="form-control form-control-sm material-qty" placeholder="จำนวน" value="2" min="1" required>
+                              </div>
+                              
+                              <div class="col-md-3 col-sm-6">
+                                <div class="form-check custom-option">
+                                  <input class="form-check-input" type="checkbox" value="landscape" id="projectTypeLandscape">
+                                  <label class="form-check-label" for="projectTypeLandscape">
+                                    <span class="custom-option-icon">
+                                      <i class="bx bx-landscape"></i>
+                                    </span>
+                                    <span class="custom-option-text">ภูมิทัศน์</span>
+                                  </label>
                                 </div>
-                                <div class="col-md-2 mb-2 mb-md-0">
-                                  <select class="form-select form-select-sm material-unit">
-                                    <option value="กระสอบ" selected>กระสอบ</option>
-                                    <option value="ต้น">ต้น</option>
-                                    <option value="กก.">กก.</option>
-                                    <option value="ตร.ม.">ตร.ม.</option>
-                                  </select>
+                              </div>
+                              
+                              <div class="col-md-3 col-sm-6">
+                                <div class="form-check custom-option">
+                                  <input class="form-check-input" type="checkbox" value="construction" id="projectTypeConstruction">
+                                  <label class="form-check-label" for="projectTypeConstruction">
+                                    <span class="custom-option-icon">
+                                      <i class="bx bx-building-house"></i>
+                                    </span>
+                                    <span class="custom-option-text">ก่อสร้าง</span>
+                                  </label>
                                 </div>
-                                <div class="col-md-2 mb-2 mb-md-0">
-                                  <input type="number" class="form-control form-control-sm material-price" placeholder="ราคา/หน่วย" value="120" min="0">
-                                </div>
-                                <div class="col-md-1">
-                                  <span class="form-text material-total fw-semibold">240</span>
-                                </div>
-                                <div class="remove-item">
-                                  <i class="bx bx-x"></i>
+                              </div>
+                              
+                              <div class="col-md-3 col-sm-6">
+                                <div class="form-check custom-option">
+                                  <input class="form-check-input" type="checkbox" value="maintenance" id="projectTypeMaintenance">
+                                  <label class="form-check-label" for="projectTypeMaintenance">
+                                    <span class="custom-option-icon">
+                                      <i class="bx bx-wrench"></i>
+                                    </span>
+                                    <span class="custom-option-text">ดูแลรักษา</span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
-                            
-                            <div class="material-item" data-id="2">
-                              <div class="row">
-                                <div class="col-md-5 mb-2 mb-md-0">
-                                  <select class="form-select form-select-sm material-select" required>
-                                    <option value="">เลือกวัสดุ</option>
-                                    <option value="M-0001">ดินปลูกต้นไม้ (5 กระสอบ)</option>
-                                    <option value="M-0002">ปุ๋ยอินทรีย์ (30 กระสอบ)</option>
-                                    <option value="M-0003" selected>ต้นไม้ประดับขนาดเล็ก (45 ต้น)</option>
-                                    <option value="M-0004">หินแกรนิตก้อนเล็ก (120 กก.)</option>
-                                    <option value="M-0005">หญ้าเทียม (50 ตร.ม.)</option>
-                                  </select>
-                                </div>
-                                <div class="col-md-2 mb-2 mb-md-0">
-                                  <input type="number" class="form-control form-control-sm material-qty" placeholder="จำนวน" value="5" min="1" required>
-                                </div>
-                                <div class="col-md-2 mb-2 mb-md-0">
-                                  <select class="form-select form-select-sm material-unit">
-                                    <option value="กระสอบ">กระสอบ</option>
-                                    <option value="ต้น" selected>ต้น</option>
-                                    <option value="กก.">กก.</option>
-                                    <option value="ตร.ม.">ตร.ม.</option>
-                                  </select>
-                                </div>
-                                <div class="col-md-2 mb-2 mb-md-0">
-                                  <input type="number" class="form-control form-control-sm material-price" placeholder="ราคา/หน่วย" value="150" min="0">
-                                </div>
-                                <div class="col-md-1">
-                                  <span class="form-text material-total fw-semibold">750</span>
-                                </div>
-                                <div class="remove-item">
-                                  <i class="bx bx-x"></i>
+                          </div>
+                        </div>
+                        
+                        <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-outline-secondary me-2">ยกเลิก</button>
+                          <button type="button" class="btn btn-primary next-tab">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- ข้อมูลลูกค้า Tab -->
+                    <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                      <div class="card-body">
+                        <h5 class="mb-4">ข้อมูลลูกค้า</h5>
+                        
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label for="customerType" class="form-label required-label">ประเภทลูกค้า</label>
+                            <select class="form-select" id="customerType" required>
+                              <option value="" selected disabled>เลือกประเภทลูกค้า</option>
+                              <option value="personal">บุคคลธรรมดา</option>
+                              <option value="company">บริษัท/นิติบุคคล</option>
+                              <option value="government">หน่วยงานราชการ</option>
+                              <option value="organization">องค์กรอื่นๆ</option>
+                            </select>
+                          </div>
+                          
+                          <div class="col-md-6">
+                            <label for="customerId" class="form-label">รหัสลูกค้า</label>
+                            <div class="input-group">
+                              <select class="form-select" id="customerSelect">
+                                <option value="" selected>เลือกลูกค้าที่มีอยู่แล้ว</option>
+                                <option value="C0001">C0001 - สมชาย มีทรัพย์</option>
+                                <option value="C0002">C0002 - บริษัท ABC จำกัด</option>
+                                <option value="C0003">C0003 - สมหญิง รักสวย</option>
+                                <option value="C0004">C0004 - วิชัย มั่งมี</option>
+                                <option value="C0005">C0005 - เทศบาลเมือง X</option>
+                                <option value="C0006">C0006 - โรงเรียน XYZ</option>
+                              </select>
+                              <span class="input-group-text">หรือ</span>
+                              <button class="btn btn-outline-primary" type="button" id="newCustomerBtn">ลูกค้าใหม่</button>
+                            </div>
+                            <small class="text-muted">เลือกลูกค้าที่มีอยู่แล้ว หรือเพิ่มลูกค้าใหม่</small>
+                          </div>
+                          
+                          <div id="newCustomerForm" style="display: none;">
+                            <div class="row g-3 mt-1">
+                              <div class="col-md-6">
+                                <label for="customerName" class="form-label required-label">ชื่อลูกค้า</label>
+                                <input type="text" class="form-control" id="customerName" placeholder="ชื่อบุคคล หรือ ชื่อบริษัท">
+                              </div>
+                              
+                              <div class="col-md-6">
+                                <label for="customerContact" class="form-label required-label">ชื่อผู้ติดต่อ</label>
+                                <input type="text" class="form-control" id="customerContact" placeholder="ชื่อผู้ติดต่อหลัก">
+                              </div>
+                              
+                              <div class="col-md-6">
+                                <label for="customerPhone" class="form-label required-label">เบอร์โทรศัพท์</label>
+                                <input type="tel" class="form-control" id="customerPhone" placeholder="0xx-xxx-xxxx">
+                              </div>
+                              
+                              <div class="col-md-6">
+                                <label for="customerEmail" class="form-label">อีเมล</label>
+                                <input type="email" class="form-control" id="customerEmail" placeholder="example@email.com">
+                              </div>
+                              
+                              <div class="col-12">
+                                <label for="customerAddress" class="form-label required-label">ที่อยู่</label>
+                                <textarea class="form-control" id="customerAddress" rows="3" placeholder="ที่อยู่สำหรับออกเอกสาร"></textarea>
+                              </div>
+                              
+                              <div class="col-md-4">
+                                <label for="customerDistrict" class="form-label">อำเภอ/เขต</label>
+                                <input type="text" class="form-control" id="customerDistrict" placeholder="อำเภอ/เขต">
+                              </div>
+                              
+                              <div class="col-md-4">
+                                <label for="customerProvince" class="form-label">จังหวัด</label>
+                                <input type="text" class="form-control" id="customerProvince" placeholder="จังหวัด">
+                              </div>
+                              
+                              <div class="col-md-4">
+                                <label for="customerZipcode" class="form-label">รหัสไปรษณีย์</label>
+                                <input type="text" class="form-control" id="customerZipcode" placeholder="รหัสไปรษณีย์">
+                              </div>
+                              
+                              <div class="col-md-6">
+                                <label for="customerTaxId" class="form-label">เลขประจำตัวผู้เสียภาษี</label>
+                                <input type="text" class="form-control" id="customerTaxId" placeholder="เลขประจำตัวผู้เสียภาษี (ถ้ามี)">
+                              </div>
+                              
+                              <div class="col-md-6">
+                                <label for="customerLine" class="form-label">LINE ID</label>
+                                <div class="input-group">
+                                  <span class="input-group-text">@</span>
+                                  <input type="text" class="form-control" id="customerLine" placeholder="LINE ID (ถ้ามี)">
                                 </div>
                               </div>
                             </div>
                           </div>
                           
-                          <div class="text-end mt-3">
-                            <button type="button" class="btn btn-outline-primary btn-sm" id="addMaterialBtn">
-                              <i class="bx bx-plus me-1"></i> เพิ่มวัสดุ
-                            </button>
+                          <div class="col-12 mt-3">
+                            <label for="projectLocation" class="form-label required-label">สถานที่ดำเนินโครงการ</label>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" value="" id="sameAsCustomerAddress">
+                              <label class="form-check-label" for="sameAsCustomerAddress">
+                                ใช้ที่อยู่เดียวกับลูกค้า
+                              </label>
+                            </div>
+                            <textarea class="form-control" id="projectLocation" rows="3" placeholder="ที่อยู่/สถานที่ดำเนินโครงการ" required></textarea>
                           </div>
                           
-                          <div class="total-summary mt-3">
-                            <div class="row">
-                              <div class="col-md-8 col-9 text-end">
-                                <strong>รวมทั้งสิ้น:</strong>
+                          <div class="col-md-6">
+                            <label for="projectContactName" class="form-label">ชื่อผู้ประสานงานหน้างาน</label>
+                            <input type="text" class="form-control" id="projectContactName" placeholder="ชื่อผู้ประสานงานหน้างาน">
+                          </div>
+                          
+                          <div class="col-md-6">
+                            <label for="projectContactPhone" class="form-label">เบอร์โทรผู้ประสานงาน</label>
+                            <input type="tel" class="form-control" id="projectContactPhone" placeholder="0xx-xxx-xxxx">
+                          </div>
+                        </div>
+                        
+                        <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-outline-secondary prev-tab me-2"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary next-tab">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- ข้อมูลโครงการ Tab -->
+                    <div class="tab-pane fade" id="tab-3" role="tabpanel">
+                      <div class="card-body">
+                        <h5 class="mb-4">ข้อมูลโครงการและขั้นตอนการทำงาน</h5>
+                        
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <div class="card h-100">
+                              <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">ขั้นตอนการทำงาน</h6>
+                                <button type="button" class="btn btn-sm btn-primary" id="addStepBtn">
+                                  <i class="bx bx-plus"></i> เพิ่มขั้นตอน
+                                </button>
                               </div>
-                              <div class="col-md-4 col-3 text-end">
-                                <strong id="totalMaterialCost">990</strong> บาท
+                              <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="projectSteps">
+                                  <div class="list-group-item d-flex align-items-center px-3">
+                                    <div class="draggable-handle me-3">
+                                      <i class="bx bx-grid-vertical"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="step1">
+                                        <label class="form-check-label" for="step1">
+                                          <span class="badge bg-label-primary me-2">#1</span>
+                                          สำรวจพื้นที่และวางแผนงาน
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div class="step-actions">
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary edit-step">
+                                        <i class="bx bx-edit"></i>
+                                      </button>
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary delete-step">
+                                        <i class="bx bx-trash"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="list-group-item d-flex align-items-center px-3">
+                                    <div class="draggable-handle me-3">
+                                      <i class="bx bx-grid-vertical"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="step2">
+                                        <label class="form-check-label" for="step2">
+                                          <span class="badge bg-label-primary me-2">#2</span>
+                                          เตรียมพื้นที่และวัสดุอุปกรณ์
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div class="step-actions">
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary edit-step">
+                                        <i class="bx bx-edit"></i>
+                                      </button>
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary delete-step">
+                                        <i class="bx bx-trash"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="list-group-item d-flex align-items-center px-3">
+                                    <div class="draggable-handle me-3">
+                                      <i class="bx bx-grid-vertical"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="step3">
+                                        <label class="form-check-label" for="step3">
+                                          <span class="badge bg-label-primary me-2">#3</span>
+                                          จัดวางต้นไม้และองค์ประกอบ
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div class="step-actions">
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary edit-step">
+                                        <i class="bx bx-edit"></i>
+                                      </button>
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary delete-step">
+                                        <i class="bx bx-trash"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="list-group-item d-flex align-items-center px-3">
+                                    <div class="draggable-handle me-3">
+                                      <i class="bx bx-grid-vertical"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="step4">
+                                        <label class="form-check-label" for="step4">
+                                          <span class="badge bg-label-primary me-2">#4</span>
+                                          ติดตั้งระบบน้ำและแสงสว่าง
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div class="step-actions">
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary edit-step">
+                                        <i class="bx bx-edit"></i>
+                                      </button>
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary delete-step">
+                                        <i class="bx bx-trash"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="list-group-item d-flex align-items-center px-3">
+                                    <div class="draggable-handle me-3">
+                                      <i class="bx bx-grid-vertical"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                      <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="step5">
+                                        <label class="form-check-label" for="step5">
+                                          <span class="badge bg-label-primary me-2">#5</span>
+                                          ตรวจสอบคุณภาพและส่งมอบงาน
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div class="step-actions">
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary edit-step">
+                                        <i class="bx bx-edit"></i>
+                                      </button>
+                                      <button type="button" class="btn btn-sm btn-icon btn-text-secondary delete-step">
+                                        <i class="bx bx-trash"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-6">
+                            <div class="card h-100">
+                              <div class="card-header">
+                                <h6 class="mb-0">ไทม์ไลน์โครงการ</h6>
+                              </div>
+                              <div class="card-body">
+                                <div class="timeline">
+                                  <div class="timeline-item">
+                                    <div class="timeline-point"></div>
+                                    <div class="timeline-content">
+                                      <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0">เริ่มโครงการ</h6>
+                                        <span class="timeline-date">08/03/2568</span>
+                                      </div>
+                                      <p class="mb-0">สำรวจพื้นที่และวางแผนงาน</p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="timeline-item">
+                                    <div class="timeline-point"></div>
+                                    <div class="timeline-content">
+                                      <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0">เตรียมพื้นที่</h6>
+                                        <span class="timeline-date">10/03/2568 - 15/03/2568</span>
+                                      </div>
+                                      <p class="mb-0">เตรียมพื้นที่และวัสดุอุปกรณ์</p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="timeline-item">
+                                    <div class="timeline-point"></div>
+                                    <div class="timeline-content">
+                                      <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0">ดำเนินการหลัก</h6>
+                                        <span class="timeline-date">16/03/2568 - 30/03/2568</span>
+                                      </div>
+                                      <p class="mb-0">จัดวางต้นไม้และองค์ประกอบ</p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="timeline-item">
+                                    <div class="timeline-point"></div>
+                                    <div class="timeline-content">
+                                      <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0">งานระบบ</h6>
+                                        <span class="timeline-date">01/04/2568 - 03/04/2568</span>
+                                      </div>
+                                      <p class="mb-0">ติดตั้งระบบน้ำและแสงสว่าง</p>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="timeline-item">
+                                    <div class="timeline-point"></div>
+                                    <div class="timeline-content">
+                                      <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0">ส่งมอบงาน</h6>
+                                        <span class="timeline-date">05/04/2568</span>
+                                      </div>
+                                      <p class="mb-0">ตรวจสอบคุณภาพและส่งมอบงาน</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-12">
+                            <label for="projectNotes" class="form-label">หมายเหตุเพิ่มเติม</label>
+                            <textarea class="form-control" id="projectNotes" rows="3" placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับโครงการ"></textarea>
+                          </div>
+                        </div>
+                        
+                        <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-outline-secondary prev-tab me-2"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary next-tab">ถัดไป <i class="bx bx-chevron-right"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- วัสดุและอุปกรณ์ Tab -->
+                    <div class="tab-pane fade" id="tab-4" role="tabpanel">
+                      <div class="card-body">
+                        <h5 class="mb-4">วัสดุและอุปกรณ์ที่ใช้ในโครงการ</h5>
+                        
+                        <div class="row g-3">
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">รายการวัสดุที่ใช้</h6>
+                                <button type="button" class="btn btn-sm btn-primary" id="addMaterialBtn">
+                                  <i class="bx bx-plus"></i> เพิ่มวัสดุ
+                                </button>
+                              </div>
+                              <div class="card-body">
+                                <div class="table-responsive">
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th width="15%">รหัสวัสดุ</th>
+                                        <th width="30%">รายการ</th>
+                                        <th width="10%">จำนวน</th>
+                                        <th width="10%">หน่วย</th>
+                                        <th width="15%">ราคาต่อหน่วย</th>
+                                        <th width="15%">รวม</th>
+                                        <th width="5%">จัดการ</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="materialTableBody">
+                                      <tr>
+                                        <td>
+                                          <select class="form-select material-select">
+                                            <option value="" selected disabled>เลือกวัสดุ</option>
+                                            <option value="M-0001">M-0001 - ดินปลูกต้นไม้</option>
+                                            <option value="M-0003">M-0003 - ต้นไม้ประดับขนาดเล็ก</option>
+                                            <option value="M-0004">M-0004 - หินแกรนิตก้อนเล็ก</option>
+                                            <option value="M-0005">M-0005 - หญ้าเทียม</option>
+                                            <option value="M-0006">M-0006 - กระถางดินเผา 6"</option>
+                                            <option value="T-0007">T-0007 - ปูนซีเมนต์ตราช้าง</option>
+                                          </select>
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control material-name" value="ต้นไม้ประดับขนาดเล็ก" readonly>
+                                        </td>
+                                        <td>
+                                          <input type="number" class="form-control material-quantity" value="30" min="1">
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control material-unit" value="ต้น" readonly>
+                                        </td>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-text">฿</span>
+                                            <input type="number" class="form-control material-price" value="150" min="0" step="0.01">
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-text">฿</span>
+                                            <input type="text" class="form-control material-total" value="4,500" readonly>
+                                          </div>
+                                        </td>
+                                        <td class="text-center">
+                                          <button type="button" class="btn btn-sm btn-icon btn-text-danger delete-material">
+                                            <i class="bx bx-trash"></i>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <select class="form-select material-select">
+                                            <option value="" selected disabled>เลือกวัสดุ</option>
+                                            <option value="M-0001">M-0001 - ดินปลูกต้นไม้</option>
+                                            <option value="M-0003">M-0003 - ต้นไม้ประดับขนาดเล็ก</option>
+                                            <option value="M-0004">M-0004 - หินแกรนิตก้อนเล็ก</option>
+                                            <option value="M-0005" selected>M-0005 - หญ้าเทียม</option>
+                                            <option value="M-0006">M-0006 - กระถางดินเผา 6"</option>
+                                            <option value="T-0007">T-0007 - ปูนซีเมนต์ตราช้าง</option>
+                                          </select>
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control material-name" value="หญ้าเทียม" readonly>
+                                        </td>
+                                        <td>
+                                          <input type="number" class="form-control material-quantity" value="12" min="1">
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control material-unit" value="ตร.ม." readonly>
+                                        </td>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-text">฿</span>
+                                            <input type="number" class="form-control material-price" value="320" min="0" step="0.01">
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-text">฿</span>
+                                            <input type="text" class="form-control material-total" value="3,840" readonly>
+                                          </div>
+                                        </td>
+                                        <td class="text-center">
+                                          <button type="button" class="btn btn-sm btn-icon btn-text-danger delete-material">
+                                            <i class="bx bx-trash"></i>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th colspan="5" class="text-end">รวมมูลค่าวัสดุ</th>
+                                        <th>
+                                          <div class="input-group">
+                                            <span class="input-group-text">฿</span>
+                                            <input type="text" class="form-control" id="materialTotalPrice" value="8,340" readonly>
+                                          </div>
+                                        </th>
+                                        <th></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">เครื่องมือที่ใช้</h6>
+                                <button type="button" class="btn btn-sm btn-primary" id="addToolBtn">
+                                  <i class="bx bx-plus"></i> เพิ่มเครื่องมือ
+                                </button>
+                              </div>
+                              <div class="card-body">
+                                <div class="table-responsive">
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th width="15%">รหัสเครื่องมือ</th>
+                                        <th width="35%">รายการ</th>
+                                        <th width="10%">จำนวน</th>
+                                        <th width="15%">วันที่เบิก</th>
+                                        <th width="15%">กำหนดคืน</th>
+                                        <th width="10%">จัดการ</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="toolTableBody">
+                                      <tr>
+                                        <td>
+                                          <select class="form-select tool-select">
+                                            <option value="" selected disabled>เลือกเครื่องมือ</option>
+                                            <option value="T-001" selected>T-001 - เครื่องตัดหญ้า</option>
+                                            <option value="T-002">T-002 - เครื่องเจาะดิน</option>
+                                            <option value="T-003">T-003 - เครื่องตัดแต่งกิ่ง</option>
+                                            <option value="T-004">T-004 - เครื่องพ่นยา</option>
+                                            <option value="T-005">T-005 - รถเข็น</option>
+                                          </select>
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control tool-name" value="เครื่องตัดหญ้า" readonly>
+                                        </td>
+                                        <td>
+                                          <input type="number" class="form-control tool-quantity" value="1" min="1">
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control flatpickr-date tool-borrow-date" placeholder="วันที่เบิก" value="08/03/2568">
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control flatpickr-date tool-return-date" placeholder="กำหนดคืน" value="15/03/2568">
+                                        </td>
+                                        <td class="text-center">
+                                          <button type="button" class="btn btn-sm btn-icon btn-text-danger delete-tool">
+                                            <i class="bx bx-trash"></i>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <select class="form-select tool-select">
+                                            <option value="" selected disabled>เลือกเครื่องมือ</option>
+                                            <option value="T-001">T-001 - เครื่องตัดหญ้า</option>
+                                            <option value="T-002">T-002 - เครื่องเจาะดิน</option>
+                                            <option value="T-003" selected>T-003 - เครื่องตัดแต่งกิ่ง</option>
+                                            <option value="T-004">T-004 - เครื่องพ่นยา</option>
+                                            <option value="T-005">T-005 - รถเข็น</option>
+                                          </select>
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control tool-name" value="เครื่องตัดแต่งกิ่ง" readonly>
+                                        </td>
+                                        <td>
+                                          <input type="number" class="form-control tool-quantity" value="2" min="1">
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control flatpickr-date tool-borrow-date" placeholder="วันที่เบิก" value="08/03/2568">
+                                        </td>
+                                        <td>
+                                          <input type="text" class="form-control flatpickr-date tool-return-date" placeholder="กำหนดคืน" value="20/03/2568">
+                                        </td>
+                                        <td class="text-center">
+                                          <button type="button" class="btn btn-sm btn-icon btn-text-danger delete-tool">
+                                            <i class="bx bx-trash"></i>
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">งบประมาณโครงการ</h6>
+                              </div>
+                              <div class="card-body">
+                                <div class="row g-3">
+                                  <div class="col-md-6">
+                                    <label for="materialCost" class="form-label">ค่าวัสดุ (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="text" class="form-control" id="materialCost" value="8,340" readonly>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="laborCost" class="form-label">ค่าแรง (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="number" class="form-control" id="laborCost" value="15000" min="0" step="0.01">
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="equipmentCost" class="form-label">ค่าเครื่องมืออุปกรณ์ (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="number" class="form-control" id="equipmentCost" value="5000" min="0" step="0.01">
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="otherCost" class="form-label">ค่าใช้จ่ายอื่นๆ (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="number" class="form-control" id="otherCost" value="3000" min="0" step="0.01">
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="totalCost" class="form-label">ต้นทุนรวม (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="text" class="form-control" id="totalCost" value="31,340" readonly>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="projectProfit" class="form-label">กำไรโครงการ (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="text" class="form-control" id="projectProfit" value="13,660" readonly>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="projectProfitPercent" class="form-label">เปอร์เซ็นต์กำไร (%)</label>
+                                    <div class="input-group">
+                                      <input type="text" class="form-control" id="projectProfitPercent" value="30.36" readonly>
+                                      <span class="input-group-text">%</span>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-md-6">
+                                    <label for="totalBudget" class="form-label">งบประมาณรวมทั้งสิ้น (บาท)</label>
+                                    <div class="input-group">
+                                      <span class="input-group-text">฿</span>
+                                      <input type="text" class="form-control" id="totalBudget" value="45,000" readonly>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col-12">
-                          <h6 class="section-title">เลือกเครื่องมือที่ใช้ในโครงการ</h6>
-                          <select class="select2 form-select" id="projectTools" multiple data-placeholder="เลือกเครื่องมือที่ต้องใช้">
-                            <option value="T-0001">เครื่องตัดหญ้า #001</option>
-                            <option value="T-0002">เครื่องตัดแต่งกิ่ง #002</option>
-                            <option value="T-0003">เครื่องฉีดน้ำแรงดันสูง #001</option>
-                            <option value="T-0004">เครื่องพ่นยา #001</option>
-                            <option value="T-0005">เครื่องผสมปูน #001</option>
-                            <option value="T-0006">เครื่องเจาะดิน #001</option>
-                            <option value="T-0007">เลื่อยยนต์ #001</option>
-                          </select>
+                        
+                        <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-outline-secondary prev-tab me-2"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary next-tab">ถัดไป <i class="bx bx-chevron-right"></i></button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                
-                <!-- สรุปข้อมูลและสถานะ -->
-                <div class="col-xl-4 col-md-5">
-                  <div class="card sticky-md-top" style="top: 5rem;">
-                    <div class="card-header">
-                      <h5 class="card-title mb-0">สรุปข้อมูลโครงการ</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="mb-3">
-                        <label class="form-label">สถานะโครงการ</label>
-                        <select class="form-select" id="projectStatus">
-                          <option value="new">โครงการใหม่</option>
-                          <option value="planning">วางแผนงาน</option>
-                          <option value="in_progress">กำลังดำเนินการ</option>
-                          <option value="pending">รอการตรวจรับ</option>
-                          <option value="completed">เสร็จสิ้น</option>
-                          <option value="cancelled">ยกเลิก</option>
-                        </select>
-                      </div>
-                      
-                      <div class="mb-3">
-                        <label class="form-label">ประเภทโครงการ</label>
-                        <select class="form-select" id="projectType">
-                          <option value="garden">จัดสวน</option>
-                          <option value="landscape">ปรับภูมิทัศน์</option>
-                          <option value="maintenance">ดูแลรักษา</option>
-                          <option value="renovation">ปรับปรุงสวนเดิม</option>
-                          <option value="other">อื่นๆ</option>
-                        </select>
-                      </div>
-                      
-                      <div class="mb-3">
-                        <label class="form-label">ความสำคัญ</label>
-                        <select class="form-select" id="projectPriority">
-                          <option value="low">ต่ำ</option>
-                          <option value="medium" selected>ปานกลาง</option>
-                          <option value="high">สูง</option>
-                          <option value="urgent">เร่งด่วน</option>
-                        </select>
-                      </div>
-                      
-                      <div class="mb-3">
-                        <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" id="sendNotification" checked>
-                          <label class="form-check-label" for="sendNotification">แจ้งเตือนทีมงาน</label>
+                    
+                    <!-- รูปภาพและเอกสาร Tab -->
+                    <div class="tab-pane fade" id="tab-5" role="tabpanel">
+                      <div class="card-body">
+                        <h5 class="mb-4">รูปภาพและเอกสาร</h5>
+                        
+                        <div class="row g-3">
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header">
+                                <h6 class="mb-0">รูปภาพโครงการ</h6>
+                              </div>
+                              <div class="card-body">
+                                <div class="dropzone" id="projectImageDropzone">
+                                  <div class="dz-message">
+                                    <div class="dropzone-icon">
+                                      <i class="bx bx-upload"></i>
+                                    </div>
+                                    <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ</h5>
+                                    <p class="text-muted mb-0">อัปโหลดรูปภาพแบบแปลน หรือภาพตัวอย่างโครงการ</p>
+                                    <p class="text-muted mb-0">รองรับไฟล์ .jpg, .jpeg, .png ขนาดไม่เกิน 5MB</p>
+                                  </div>
+                                </div>
+                                
+                                <div class="d-flex flex-wrap mt-3" id="previewImages">
+                                  <div class="position-relative me-2 mb-2">
+                                    <img src="assets/img/projects/plan1.jpg" class="preview-image" alt="แบบแปลนโครงการ">
+                                    <button type="button" class="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 delete-image">
+                                      <i class="bx bx-x"></i>
+                                    </button>
+                                  </div>
+                                  <div class="position-relative me-2 mb-2">
+                                    <img src="assets/img/projects/garden1.jpg" class="preview-image" alt="ตัวอย่างสวน">
+                                    <button type="button" class="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 delete-image">
+                                      <i class="bx bx-x"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-12">
+                            <div class="card">
+                              <div class="card-header">
+                                <h6 class="mb-0">เอกสารโครงการ</h6>
+                              </div>
+                              <div class="card-body">
+                                <div class="dropzone" id="projectFileDropzone">
+                                  <div class="dz-message">
+                                    <div class="dropzone-icon">
+                                      <i class="bx bx-file"></i>
+                                    </div>
+                                    <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดเอกสาร</h5>
+                                    <p class="text-muted mb-0">อัปโหลดเอกสารสัญญา, ใบเสนอราคา, หรือเอกสารที่เกี่ยวข้อง</p>
+                                    <p class="text-muted mb-0">รองรับไฟล์ .pdf, .doc, .docx, .xls, .xlsx ขนาดไม่เกิน 10MB</p>
+                                  </div>
+                                </div>
+                                
+                                <div class="table-responsive mt-3">
+                                  <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th width="40%">ชื่อไฟล์</th>
+                                        <th width="15%">ประเภท</th>
+                                        <th width="15%">ขนาด</th>
+                                        <th width="20%">วันที่อัปโหลด</th>
+                                        <th width="10%">จัดการ</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="fileTableBody">
+                                      <tr>
+                                        <td>
+                                          <div class="d-flex align-items-center">
+                                            <i class="bx bxs-file-pdf text-danger me-2" style="font-size: 1.5rem;"></i>
+                                            <div>
+                                              <p class="mb-0 fw-semibold">ใบเสนอราคา.pdf</p>
+                                              <small class="text-muted">อัปโหลดโดย: บุญชัย ผู้จัดการ</small>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td>PDF</td>
+                                        <td>1.2 MB</td>
+                                        <td>07/03/2568</td>
+                                        <td>
+                                          <div class="d-flex">
+                                            <button type="button" class="btn btn-sm btn-icon btn-text-secondary me-1" title="ดูเอกสาร">
+                                              <i class="bx bx-show"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-icon btn-text-danger" title="ลบเอกสาร">
+                                              <i class="bx bx-trash"></i>
+                                            </button>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="d-flex align-items-center">
+                                            <i class="bx bxs-file-doc text-primary me-2" style="font-size: 1.5rem;"></i>
+                                            <div>
+                                              <p class="mb-0 fw-semibold">สัญญาจ้าง.docx</p>
+                                              <small class="text-muted">อัปโหลดโดย: บุญชัย ผู้จัดการ</small>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td>Word</td>
+                                        <td>0.8 MB</td>
+                                        <td>07/03/2568</td>
+                                        <td>
+                                          <div class="d-flex">
+                                            <button type="button" class="btn btn-sm btn-icon btn-text-secondary me-1" title="ดูเอกสาร">
+                                              <i class="bx bx-show"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-icon btn-text-danger" title="ลบเอกสาร">
+                                              <i class="bx bx-trash"></i>
+                                            </button>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-12">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="termsCheck">
+                              <label class="form-check-label" for="termsCheck">
+                                ฉันได้ตรวจสอบข้อมูลทั้งหมดและยืนยันว่าข้อมูลถูกต้อง
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="mt-4 text-end">
+                          <button type="button" class="btn btn-outline-secondary prev-tab me-2"><i class="bx bx-chevron-left"></i> ย้อนกลับ</button>
+                          <button type="button" class="btn btn-primary me-2" id="saveAsDraftBtn">
+                            <i class="bx bx-save me-1"></i> บันทึกเป็นแบบร่าง
+                          </button>
+                          <button type="submit" class="btn btn-success" id="saveProjectBtn">
+                            <i class="bx bx-check-circle me-1"></i> บันทึกโครงการ
+                          </button>
                         </div>
                       </div>
-                      
-                      <div class="mb-4">
-                        <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" id="createWorkOrder">
-                          <label class="form-check-label" for="createWorkOrder">สร้างใบสั่งงานอัตโนมัติ</label>
-                        </div>
-                      </div>
-                      
-                      <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">บันทึกโครงการ</button>
-                        <button type="button" class="btn btn-outline-secondary">ยกเลิก</button>
-                      </div>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
           <!-- / Content -->
 
@@ -980,3 +1635,732 @@
   </div>
   <!-- / Layout wrapper -->
 
+  <!-- Add Step Modal -->
+  <div class="modal fade" id="addStepModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">เพิ่มขั้นตอนการทำงาน</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="stepName" class="form-label">ชื่อขั้นตอน</label>
+            <input type="text" class="form-control" id="stepName" placeholder="ระบุชื่อขั้นตอนการทำงาน">
+          </div>
+          <div class="mb-3">
+            <label for="stepDuration" class="form-label">ระยะเวลา (วัน)</label>
+            <input type="number" class="form-control" id="stepDuration" min="1" value="1">
+          </div>
+          <div class="mb-3">
+            <label for="stepDescription" class="form-label">รายละเอียด</label>
+            <textarea class="form-control" id="stepDescription" rows="3" placeholder="รายละเอียดของขั้นตอนการทำงาน"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="confirmAddStepBtn">เพิ่มขั้นตอน</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Step Modal -->
+  <div class="modal fade" id="editStepModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">แก้ไขขั้นตอนการทำงาน</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="editStepName" class="form-label">ชื่อขั้นตอน</label>
+            <input type="text" class="form-control" id="editStepName" placeholder="ระบุชื่อขั้นตอนการทำงาน">
+          </div>
+          <div class="mb-3">
+            <label for="editStepDuration" class="form-label">ระยะเวลา (วัน)</label>
+            <input type="number" class="form-control" id="editStepDuration" min="1" value="1">
+          </div>
+          <div class="mb-3">
+            <label for="editStepDescription" class="form-label">รายละเอียด</label>
+            <textarea class="form-control" id="editStepDescription" rows="3" placeholder="รายละเอียดของขั้นตอนการทำงาน"></textarea>
+          </div>
+          <input type="hidden" id="editStepIndex">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="confirmEditStepBtn">บันทึกการแก้ไข</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Material Modal -->
+  <div class="modal fade" id="addMaterialModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">เพิ่มวัสดุ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="materialId" class="form-label">รหัสวัสดุ</label>
+            <select class="form-select" id="materialId">
+              <option value="" selected disabled>เลือกวัสดุ</option>
+              <option value="M-0001">M-0001 - ดินปลูกต้นไม้</option>
+              <option value="M-0003">M-0003 - ต้นไม้ประดับขนาดเล็ก</option>
+              <option value="M-0004">M-0004 - หินแกรนิตก้อนเล็ก</option>
+              <option value="M-0005">M-0005 - หญ้าเทียม</option>
+              <option value="M-0006">M-0006 - กระถางดินเผา 6"</option>
+              <option value="T-0007">T-0007 - ปูนซีเมนต์ตราช้าง</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="materialAddQuantity" class="form-label">จำนวน</label>
+            <input type="number" class="form-control" id="materialAddQuantity" min="1" value="1">
+          </div>
+          <div class="mb-3">
+            <label for="materialAddPrice" class="form-label">ราคาต่อหน่วย (บาท)</label>
+            <div class="input-group">
+              <span class="input-group-text">฿</span>
+              <input type="number" class="form-control" id="materialAddPrice" min="0" step="0.01" value="0">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="confirmAddMaterialBtn">เพิ่มวัสดุ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Tool Modal -->
+  <div class="modal fade" id="addToolModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">เพิ่มเครื่องมือ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="toolId" class="form-label">รหัสเครื่องมือ</label>
+            <select class="form-select" id="toolId">
+              <option value="" selected disabled>เลือกเครื่องมือ</option>
+              <option value="T-001">T-001 - เครื่องตัดหญ้า</option>
+              <option value="T-002">T-002 - เครื่องเจาะดิน</option>
+              <option value="T-003">T-003 - เครื่องตัดแต่งกิ่ง</option>
+              <option value="T-004">T-004 - เครื่องพ่นยา</option>
+              <option value="T-005">T-005 - รถเข็น</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="toolAddQuantity" class="form-label">จำนวน</label>
+            <input type="number" class="form-control" id="toolAddQuantity" min="1" value="1">
+          </div>
+          <div class="mb-3">
+            <label for="toolBorrowDate" class="form-label">วันที่เบิก</label>
+            <input type="text" class="form-control flatpickr-date" id="toolBorrowDate" placeholder="DD/MM/YYYY">
+          </div>
+          <div class="mb-3">
+            <label for="toolReturnDate" class="form-label">กำหนดคืน</label>
+            <input type="text" class="form-control flatpickr-date" id="toolReturnDate" placeholder="DD/MM/YYYY">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="confirmAddToolBtn">เพิ่มเครื่องมือ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Alert Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header bg-success">
+          <h5 class="modal-title text-white">สำเร็จ</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
+          <h5>บันทึกโครงการสำเร็จ</h5>
+          <p class="mb-0">โครงการใหม่ถูกสร้างเรียบร้อยแล้ว</p>
+          <p id="successProjectId" class="fw-bold mt-2">รหัสโครงการ: P-2568-001</p>
+        </div>
+        <div class="modal-footer">
+          <a href="project-list.html" class="btn btn-outline-secondary">ไปยังรายการโครงการ</a>
+          <a href="project-progress.html" class="btn btn-success">ดูความคืบหน้าโครงการ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="../assets/vendor/libs/select2/select2.js"></script>
+  <script src="../assets/vendor/libs/dropzone/dropzone.js"></script>
+  <script src="../assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize flatpickr date pickers
+      const flatpickrDate = document.querySelectorAll('.flatpickr-date');
+      flatpickrDate.forEach(dateInput => {
+        flatpickr(dateInput, {
+          dateFormat: "d/m/Y",
+          locale: {
+            firstDayOfWeek: 1
+          }
+        });
+      });
+      
+      // Initialize Select2
+      $('.select2').select2({
+        placeholder: "เลือกรายการ",
+        allowClear: true
+      });
+      
+      // Initialize Dropzone for project images
+      const projectImageDropzone = new Dropzone("#projectImageDropzone", {
+        url: "/api/upload-project-image", // ใส่ URL สำหรับการอัปโหลดภาพ
+        paramName: "file",
+        maxFilesize: 5, // MB
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ",
+        dictRemoveFile: "ลบไฟล์",
+        dictMaxFilesExceeded: "ไม่สามารถอัปโหลดไฟล์เพิ่มได้",
+        dictFileTooBig: "ไฟล์มีขนาดใหญ่เกินไป ({{filesize}}MB). ขนาดไฟล์สูงสุดคือ {{maxFilesize}}MB",
+        dictInvalidFileType: "ไม่สามารถอัปโหลดไฟล์ประเภทนี้ได้"
+      });
+      
+      // Initialize Dropzone for project files
+      const projectFileDropzone = new Dropzone("#projectFileDropzone", {
+        url: "/api/upload-project-file", // ใส่ URL สำหรับการอัปโหลดไฟล์
+        paramName: "file",
+        maxFilesize: 10, // MB
+        acceptedFiles: ".pdf,.doc,.docx,.xls,.xlsx",
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดเอกสาร",
+        dictRemoveFile: "ลบไฟล์",
+        dictMaxFilesExceeded: "ไม่สามารถอัปโหลดไฟล์เพิ่มได้",
+        dictFileTooBig: "ไฟล์มีขนาดใหญ่เกินไป ({{filesize}}MB). ขนาดไฟล์สูงสุดคือ {{maxFilesize}}MB",
+        dictInvalidFileType: "ไม่สามารถอัปโหลดไฟล์ประเภทนี้ได้"
+      });
+      
+      // Initialize Sortable for project steps
+      new Sortable(document.getElementById('projectSteps'), {
+        handle: '.draggable-handle',
+        animation: 150,
+        onEnd: function() {
+          // เรียงลำดับหมายเลขขั้นตอนใหม่
+          updateStepNumbers();
+        }
+      });
+      
+      // Custom option selection
+      const customOptions = document.querySelectorAll('.custom-option');
+      customOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          const checkbox = this.querySelector('input[type="checkbox"]');
+          if (checkbox.checked) {
+            checkbox.checked = false;
+            this.classList.remove('selected');
+          } else {
+            checkbox.checked = true;
+            this.classList.add('selected');
+          }
+        });
+      });
+      
+      // Show/hide new customer form
+      document.getElementById('newCustomerBtn').addEventListener('click', function() {
+        const newCustomerForm = document.getElementById('newCustomerForm');
+        newCustomerForm.style.display = newCustomerForm.style.display === 'none' ? 'block' : 'none';
+      });
+      
+      // Same as customer address checkbox
+      document.getElementById('sameAsCustomerAddress').addEventListener('change', function() {
+        if (this.checked) {
+          const customerAddress = document.getElementById('customerAddress').value;
+          document.getElementById('projectLocation').value = customerAddress;
+        } else {
+          document.getElementById('projectLocation').value = '';
+        }
+      });
+      
+      // Add step button
+      document.getElementById('addStepBtn').addEventListener('click', function() {
+        $('#addStepModal').modal('show');
+      });
+      
+      // Confirm add step
+      document.getElementById('confirmAddStepBtn').addEventListener('click', function() {
+        const stepName = document.getElementById('stepName').value;
+        if (stepName.trim() === '') {
+          alert('กรุณาระบุชื่อขั้นตอน');
+          return;
+        }
+        
+        const stepsList = document.getElementById('projectSteps');
+        const stepsCount = stepsList.querySelectorAll('.list-group-item').length;
+        const newStepNumber = stepsCount + 1;
+        
+        const stepItem = document.createElement('div');
+        stepItem.className = 'list-group-item d-flex align-items-center px-3';
+        stepItem.innerHTML = `
+          <div class="draggable-handle me-3">
+            <i class="bx bx-grid-vertical"></i>
+          </div>
+          <div class="flex-grow-1">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="step${newStepNumber}">
+              <label class="form-check-label" for="step${newStepNumber}">
+                <span class="badge bg-label-primary me-2">#${newStepNumber}</span>
+                ${stepName}
+              </label>
+            </div>
+          </div>
+          <div class="step-actions">
+            <button type="button" class="btn btn-sm btn-icon btn-text-secondary edit-step">
+              <i class="bx bx-edit"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-icon btn-text-secondary delete-step">
+              <i class="bx bx-trash"></i>
+            </button>
+          </div>
+        `;
+        
+        stepsList.appendChild(stepItem);
+        
+        // Bind edit and delete events
+        bindStepEvents();
+        
+        // Reset form and close modal
+        document.getElementById('stepName').value = '';
+        document.getElementById('stepDuration').value = '1';
+        document.getElementById('stepDescription').value = '';
+        $('#addStepModal').modal('hide');
+      });
+      
+      // Bind step events (edit, delete)
+      function bindStepEvents() {
+        // Edit step
+        document.querySelectorAll('.edit-step').forEach((btn, index) => {
+          btn.addEventListener('click', function() {
+            const stepItem = this.closest('.list-group-item');
+            const stepLabel = stepItem.querySelector('.form-check-label');
+            const stepName = stepLabel.textContent.trim().replace(/^#\d+\s+/, '');
+            
+            document.getElementById('editStepName').value = stepName;
+            document.getElementById('editStepDuration').value = '1';
+            document.getElementById('editStepDescription').value = '';
+            document.getElementById('editStepIndex').value = index;
+            
+            $('#editStepModal').modal('show');
+          });
+        });
+        
+        // Delete step
+        document.querySelectorAll('.delete-step').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (confirm('คุณต้องการลบขั้นตอนนี้ใช่หรือไม่?')) {
+              const stepItem = this.closest('.list-group-item');
+              stepItem.remove();
+              updateStepNumbers();
+            }
+          });
+        });
+      }
+      
+      // Confirm edit step
+      document.getElementById('confirmEditStepBtn').addEventListener('click', function() {
+        const stepName = document.getElementById('editStepName').value;
+        if (stepName.trim() === '') {
+          alert('กรุณาระบุชื่อขั้นตอน');
+          return;
+        }
+        
+        const index = document.getElementById('editStepIndex').value;
+        const stepItems = document.querySelectorAll('#projectSteps .list-group-item');
+        const stepLabel = stepItems[index].querySelector('.form-check-label');
+        const badgeNumber = stepLabel.querySelector('.badge').textContent;
+        
+        stepLabel.innerHTML = `
+          <span class="badge bg-label-primary me-2">${badgeNumber}</span>
+          ${stepName}
+        `;
+        
+        // Reset form and close modal
+        $('#editStepModal').modal('hide');
+      });
+      
+      // Update step numbers
+      function updateStepNumbers() {
+        const stepItems = document.querySelectorAll('#projectSteps .list-group-item');
+        stepItems.forEach((item, index) => {
+          const badge = item.querySelector('.badge');
+          badge.textContent = `#${index + 1}`;
+        });
+      }
+      
+      // Add material button
+      document.getElementById('addMaterialBtn').addEventListener('click', function() {
+        $('#addMaterialModal').modal('show');
+      });
+      
+      // Confirm add material
+      document.getElementById('confirmAddMaterialBtn').addEventListener('click', function() {
+        const materialId = document.getElementById('materialId').value;
+        if (!materialId) {
+          alert('กรุณาเลือกวัสดุ');
+          return;
+        }
+        
+        const materialName = document.getElementById('materialId').options[document.getElementById('materialId').selectedIndex].text.split(' - ')[1];
+        const quantity = document.getElementById('materialAddQuantity').value;
+        const price = document.getElementById('materialAddPrice').value;
+        const total = (quantity * price).toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+        
+        const materialTableBody = document.getElementById('materialTableBody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+          <td>
+            <select class="form-select material-select">
+              <option value="" disabled>เลือกวัสดุ</option>
+              <option value="M-0001" ${materialId === 'M-0001' ? 'selected' : ''}>M-0001 - ดินปลูกต้นไม้</option>
+              <option value="M-0003" ${materialId === 'M-0003' ? 'selected' : ''}>M-0003 - ต้นไม้ประดับขนาดเล็ก</option>
+              <option value="M-0004" ${materialId === 'M-0004' ? 'selected' : ''}>M-0004 - หินแกรนิตก้อนเล็ก</option>
+              <option value="M-0005" ${materialId === 'M-0005' ? 'selected' : ''}>M-0005 - หญ้าเทียม</option>
+              <option value="M-0006" ${materialId === 'M-0006' ? 'selected' : ''}>M-0006 - กระถางดินเผา 6"</option>
+              <option value="T-0007" ${materialId === 'T-0007' ? 'selected' : ''}>T-0007 - ปูนซีเมนต์ตราช้าง</option>
+            </select>
+          </td>
+          <td>
+            <input type="text" class="form-control material-name" value="${materialName}" readonly>
+          </td>
+          <td>
+            <input type="number" class="form-control material-quantity" value="${quantity}" min="1">
+          </td>
+          <td>
+            <input type="text" class="form-control material-unit" value="ชิ้น" readonly>
+          </td>
+          <td>
+            <div class="input-group">
+              <span class="input-group-text">฿</span>
+              <input type="number" class="form-control material-price" value="${price}" min="0" step="0.01">
+            </div>
+          </td>
+          <td>
+            <div class="input-group">
+              <span class="input-group-text">฿</span>
+              <input type="text" class="form-control material-total" value="${total}" readonly>
+            </div>
+          </td>
+          <td class="text-center">
+            <button type="button" class="btn btn-sm btn-icon btn-text-danger delete-material">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        `;
+        
+        materialTableBody.appendChild(newRow);
+        
+        // Bind material events
+        bindMaterialEvents();
+        
+        // Update total price
+        updateMaterialTotalPrice();
+        
+        // Reset form and close modal
+        document.getElementById('materialId').value = '';
+        document.getElementById('materialAddQuantity').value = '1';
+        document.getElementById('materialAddPrice').value = '0';
+        $('#addMaterialModal').modal('hide');
+      });
+      
+      // Bind material events
+      function bindMaterialEvents() {
+        // Delete material
+        document.querySelectorAll('.delete-material').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (confirm('คุณต้องการลบวัสดุนี้ใช่หรือไม่?')) {
+              const row = this.closest('tr');
+              row.remove();
+              updateMaterialTotalPrice();
+            }
+          });
+        });
+        
+        // Update total when quantity or price changes
+        document.querySelectorAll('.material-quantity, .material-price').forEach(input => {
+          input.addEventListener('change', function() {
+            const row = this.closest('tr');
+            const quantity = parseFloat(row.querySelector('.material-quantity').value);
+            const price = parseFloat(row.querySelector('.material-price').value);
+            const totalInput = row.querySelector('.material-total');
+            const total = (quantity * price).toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+            totalInput.value = total;
+            
+            updateMaterialTotalPrice();
+          });
+        });
+      }
+      
+      // Update material total price
+      function updateMaterialTotalPrice() {
+        let totalPrice = 0;
+        document.querySelectorAll('.material-total').forEach(input => {
+          totalPrice += parseFloat(input.value.replace(/,/g, '')) || 0;
+        });
+        
+        document.getElementById('materialTotalPrice').value = totalPrice.toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+        document.getElementById('materialCost').value = totalPrice.toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+        
+        updateProjectBudget();
+      }
+      
+      // Add tool button
+      document.getElementById('addToolBtn').addEventListener('click', function() {
+        $('#addToolModal').modal('show');
+      });
+      
+      // Confirm add tool
+      document.getElementById('confirmAddToolBtn').addEventListener('click', function() {
+        const toolId = document.getElementById('toolId').value;
+        if (!toolId) {
+          alert('กรุณาเลือกเครื่องมือ');
+          return;
+        }
+        
+        const toolName = document.getElementById('toolId').options[document.getElementById('toolId').selectedIndex].text.split(' - ')[1];
+        const quantity = document.getElementById('toolAddQuantity').value;
+        const borrowDate = document.getElementById('toolBorrowDate').value;
+        const returnDate = document.getElementById('toolReturnDate').value;
+        
+        const toolTableBody = document.getElementById('toolTableBody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+          <td>
+            <select class="form-select tool-select">
+              <option value="" disabled>เลือกเครื่องมือ</option>
+              <option value="T-001" ${toolId === 'T-001' ? 'selected' : ''}>T-001 - เครื่องตัดหญ้า</option>
+              <option value="T-002" ${toolId === 'T-002' ? 'selected' : ''}>T-002 - เครื่องเจาะดิน</option>
+              <option value="T-003" ${toolId === 'T-003' ? 'selected' : ''}>T-003 - เครื่องตัดแต่งกิ่ง</option>
+              <option value="T-004" ${toolId === 'T-004' ? 'selected' : ''}>T-004 - เครื่องพ่นยา</option>
+              <option value="T-005" ${toolId === 'T-005' ? 'selected' : ''}>T-005 - รถเข็น</option>
+            </select>
+          </td>
+          <td>
+            <input type="text" class="form-control tool-name" value="${toolName}" readonly>
+          </td>
+          <td>
+            <input type="number" class="form-control tool-quantity" value="${quantity}" min="1">
+          </td>
+          <td>
+            <input type="text" class="form-control flatpickr-date tool-borrow-date" placeholder="วันที่เบิก" value="${borrowDate}">
+          </td>
+          <td>
+            <input type="text" class="form-control flatpickr-date tool-return-date" placeholder="กำหนดคืน" value="${returnDate}">
+          </td>
+          <td class="text-center">
+            <button type="button" class="btn btn-sm btn-icon btn-text-danger delete-tool">
+              <i class="bx bx-trash"></i>
+            </button>
+          </td>
+        `;
+        
+        toolTableBody.appendChild(newRow);
+        
+        // Initialize flatpickr for new row
+        const newDateInputs = newRow.querySelectorAll('.flatpickr-date');
+        newDateInputs.forEach(dateInput => {
+          flatpickr(dateInput, {
+            dateFormat: "d/m/Y",
+            locale: {
+              firstDayOfWeek: 1
+            }
+          });
+        });
+        
+        // Bind tool events
+        bindToolEvents();
+        
+        // Reset form and close modal
+        document.getElementById('toolId').value = '';
+        document.getElementById('toolAddQuantity').value = '1';
+        document.getElementById('toolBorrowDate').value = '';
+        document.getElementById('toolReturnDate').value = '';
+        $('#addToolModal').modal('hide');
+      });
+      
+      // Bind tool events
+      function bindToolEvents() {
+        // Delete tool
+        document.querySelectorAll('.delete-tool').forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (confirm('คุณต้องการลบเครื่องมือนี้ใช่หรือไม่?')) {
+              const row = this.closest('tr');
+              row.remove();
+            }
+          });
+        });
+      }
+      
+      // Update project budget
+      function updateProjectBudget() {
+        const materialCost = parseFloat(document.getElementById('materialCost').value.replace(/,/g, '')) || 0;
+        const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+        const equipmentCost = parseFloat(document.getElementById('equipmentCost').value) || 0;
+        const otherCost = parseFloat(document.getElementById('otherCost').value) || 0;
+        
+        const totalCost = materialCost + laborCost + equipmentCost + otherCost;
+        document.getElementById('totalCost').value = totalCost.toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+        
+        const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
+        const profit = budget - totalCost;
+        document.getElementById('projectProfit').value = profit.toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+        
+        const profitPercent = budget > 0 ? (profit / budget) * 100 : 0;
+        document.getElementById('projectProfitPercent').value = profitPercent.toFixed(2);
+        
+        document.getElementById('totalBudget').value = budget.toLocaleString('th-TH', {maximumFractionDigits: 2, minimumFractionDigits: 2});
+      }
+      
+      // Budget calculation events
+      document.getElementById('laborCost').addEventListener('change', updateProjectBudget);
+      document.getElementById('equipmentCost').addEventListener('change', updateProjectBudget);
+      document.getElementById('otherCost').addEventListener('change', updateProjectBudget);
+      document.getElementById('projectBudget').addEventListener('change', updateProjectBudget);
+      
+      // Delete image button
+      document.querySelectorAll('.delete-image').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (confirm('คุณต้องการลบรูปภาพนี้ใช่หรือไม่?')) {
+            const imageWrapper = this.closest('.position-relative');
+            imageWrapper.remove();
+          }
+        });
+      });
+      
+      // Tab navigation
+      document.querySelectorAll('.next-tab').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const activeTab = document.querySelector('.tab-pane.active');
+          const activeTabButton = document.querySelector('.nav-link.active');
+          const nextTab = activeTab.nextElementSibling;
+          const nextTabId = nextTab.id;
+          const nextTabButton = document.querySelector(`[data-bs-target="#${nextTabId}"]`);
+          
+          activeTabButton.classList.remove('active');
+          activeTabButton.setAttribute('aria-selected', 'false');
+          activeTab.classList.remove('show', 'active');
+          
+          nextTabButton.classList.add('active');
+          nextTabButton.setAttribute('aria-selected', 'true');
+          nextTab.classList.add('show', 'active');
+        });
+      });
+      
+      document.querySelectorAll('.prev-tab').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const activeTab = document.querySelector('.tab-pane.active');
+          const activeTabButton = document.querySelector('.nav-link.active');
+          const prevTab = activeTab.previousElementSibling;
+          const prevTabId = prevTab.id;
+          const prevTabButton = document.querySelector(`[data-bs-target="#${prevTabId}"]`);
+          
+          activeTabButton.classList.remove('active');
+          activeTabButton.setAttribute('aria-selected', 'false');
+          activeTab.classList.remove('show', 'active');
+          
+          prevTabButton.classList.add('active');
+          prevTabButton.setAttribute('aria-selected', 'true');
+          prevTab.classList.add('show', 'active');
+        });
+      });
+      
+      // Form submit
+      document.getElementById('formAddProject').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Check required fields
+        const requiredFields = document.querySelectorAll('[required]');
+        let allValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value) {
+            field.classList.add('is-invalid');
+            allValid = false;
+          } else {
+            field.classList.remove('is-invalid');
+          }
+        });
+        
+        if (!allValid) {
+          Swal.fire({
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: 'กรุณากรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบถ้วน',
+            icon: 'error',
+            confirmButtonText: 'ตกลง',
+            confirmButtonColor: '#28a745'
+          });
+          return;
+        }
+        
+        // Check terms
+        const termsCheck = document.getElementById('termsCheck');
+        if (!termsCheck.checked) {
+          Swal.fire({
+            title: 'กรุณายืนยันข้อมูล',
+            text: 'กรุณาทำเครื่องหมายในช่องยืนยันข้อมูลถูกต้อง',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง',
+            confirmButtonColor: '#28a745'
+          });
+          return;
+        }
+        
+        // Show success modal
+        $('#successModal').modal('show');
+      });
+      
+      // Save as draft button
+      document.getElementById('saveAsDraftBtn').addEventListener('click', function() {
+        Swal.fire({
+          title: 'บันทึกแบบร่างสำเร็จ',
+          text: 'บันทึกข้อมูลโครงการเป็นแบบร่างเรียบร้อยแล้ว',
+          icon: 'success',
+          confirmButtonText: 'ตกลง',
+          confirmButtonColor: '#28a745'
+        });
+      });
+      
+      // Initial binding of events
+      bindStepEvents();
+      bindMaterialEvents();
+      bindToolEvents();
+    });
+  </script>
+</body>
+</html>
