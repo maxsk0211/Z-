@@ -18,18 +18,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Core CSS -->
-  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
-  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+  <link rel="stylesheet" href="../assets/css/core.css">
+  <link rel="stylesheet" href="../assets/css/theme-default.css">
   <link rel="stylesheet" href="../assets/css/demo.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
 
   <!-- Vendors CSS -->
-  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/flatpickr/flatpickr.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/select2/select2.css">
-  <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs5/2.4.1/responsive.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  
   <!-- Page CSS -->
   <style>
     :root {
@@ -218,6 +217,15 @@
       object-fit: cover;
       border-radius: 0.25rem;
     }
+    
+    .lot-badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.375rem;
+      background-color: var(--bg-light);
+      color: var(--text-primary);
+      margin-right: 0.5rem;
+    }
   </style>
 </head>
 
@@ -306,6 +314,11 @@
               <li class="menu-item">
                 <a href="material-add.html" class="menu-link">
                   <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="stock-receipt.html" class="menu-link">
+                  <div data-i18n="รับเข้าสต็อก">รับเข้าสต็อก</div>
                 </a>
               </li>
             </ul>
@@ -409,6 +422,11 @@
               <li class="menu-item">
                 <a href="report-executive.html" class="menu-link">
                   <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-stock-value.html" class="menu-link">
+                  <div data-i18n="รายงานมูลค่าคงคลัง">รายงานมูลค่าคงคลัง</div>
                 </a>
               </li>
             </ul>
@@ -605,7 +623,7 @@
                 <div class="tab-pane fade show active" id="table-view" role="tabpanel">
                   <div class="card-body">
                     <div class="row mb-4">
-                      <div class="col-md-6 col-12 mb-3 mb-md-0">
+                      <div class="col-md-4 col-12 mb-3 mb-md-0">
                         <div class="d-flex flex-wrap">
                           <div class="filter-item active">ทั้งหมด</div>
                           <div class="filter-item">พร้อมใช้</div>
@@ -613,12 +631,17 @@
                           <div class="filter-item">หมดสต็อก</div>
                         </div>
                       </div>
-                      <div class="col-md-6 col-12 text-md-end">
-                        <div class="d-flex justify-content-md-end">
+                      <div class="col-md-8 col-12 text-md-end">
+                        <div class="d-flex justify-content-md-end mb-2">
                           <div class="me-2 flex-grow-1 flex-md-grow-0" style="max-width: 250px;">
                             <input type="text" class="search-input" placeholder="ค้นหาวัสดุ...">
                           </div>
-                          <a href="material-add.html" class="btn btn-primary">+ เพิ่มวัสดุใหม่</a>
+                          <a href="stock-receipt.html" class="btn btn-success me-2">
+                            <i class="bx bx-package me-1"></i> รับสินค้าเข้าคลัง
+                          </a>
+                          <a href="material-add.html" class="btn btn-primary">
+                            <i class="bx bx-plus me-1"></i> เพิ่มวัสดุใหม่
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -634,9 +657,10 @@
                             <th>หมวดหมู่</th>
                             <th>จำนวนคงเหลือ</th>
                             <th>หน่วยนับ</th>
-                            <th>ราคาต่อหน่วย</th>
+                            <th>ราคาล่าสุด</th>
+                            <th>ต้นทุนเฉลี่ย</th>
+                            <th>มูลค่าคงคลัง</th>
                             <th>สถานะ</th>
-                            <th>ปรับปรุงล่าสุด</th>
                             <th>การจัดการ</th>
                           </tr>
                         </thead>
@@ -648,11 +672,12 @@
                             <td><span class="fw-medium">M-0001</span></td>
                             <td>ดินปลูกต้นไม้</td>
                             <td><span class="category-badge category-materials">วัสดุ</span></td>
-                            <td>8</td>
+                            <td>18</td>
                             <td>ถุง</td>
-                            <td>฿120.00</td>
+                            <td>฿150.00</td>
+                            <td>฿122.22</td>
+                            <td>฿2,200.00</td>
                             <td><span class="badge bg-label-warning">ใกล้หมด</span></td>
-                            <td>08/03/2568</td>
                             <td>
                               <div class="d-inline-block">
                                 <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="M-0001">
@@ -671,17 +696,18 @@
                             <td>
                               <img src="../assets/img/materials/plant_small.jpg" class="material-thumbnail" alt="ต้นไม้ประดับขนาดเล็ก">
                             </td>
-                            <td><span class="fw-medium">M-0003</span></td>
+                            <td><span class="fw-medium">P-0003</span></td>
                             <td>ต้นไม้ประดับขนาดเล็ก</td>
                             <td><span class="category-badge category-plants">ต้นไม้</span></td>
                             <td>45</td>
                             <td>ต้น</td>
                             <td>฿150.00</td>
+                            <td>฿150.00</td>
+                            <td>฿6,750.00</td>
                             <td><span class="badge bg-label-success">พร้อมใช้</span></td>
-                            <td>05/03/2568</td>
                             <td>
                               <div class="d-inline-block">
-                                <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="M-0003">
+                                <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="P-0003">
                                   <i class="bx bx-show"></i>
                                 </button>
                                 <button type="button" class="material-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
@@ -703,37 +729,12 @@
                             <td>0</td>
                             <td>กก.</td>
                             <td>฿45.00</td>
+                            <td>฿45.00</td>
+                            <td>฿0.00</td>
                             <td><span class="badge bg-label-danger">หมดสต็อก</span></td>
-                            <td>04/03/2568</td>
                             <td>
                               <div class="d-inline-block">
                                 <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="M-0004">
-                                  <i class="bx bx-show"></i>
-                                </button>
-                                <button type="button" class="material-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                  <i class="bx bx-edit"></i>
-                                </button>
-                                <button type="button" class="material-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
-                                  <i class="bx bx-trash"></i>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img src="../assets/img/materials/artificial_grass.jpg" class="material-thumbnail" alt="หญ้าเทียม">
-                            </td>
-                            <td><span class="fw-medium">M-0005</span></td>
-                            <td>หญ้าเทียม</td>
-                            <td><span class="category-badge category-plants">ต้นไม้</span></td>
-                            <td>24</td>
-                            <td>ตร.ม.</td>
-                            <td>฿320.00</td>
-                            <td><span class="badge bg-label-success">พร้อมใช้</span></td>
-                            <td>02/03/2568</td>
-                            <td>
-                              <div class="d-inline-block">
-                                <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="M-0005">
                                   <i class="bx bx-show"></i>
                                 </button>
                                 <button type="button" class="material-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
@@ -755,63 +756,12 @@
                             <td>35</td>
                             <td>ใบ</td>
                             <td>฿85.00</td>
+                            <td>฿78.50</td>
+                            <td>฿2,747.50</td>
                             <td><span class="badge bg-label-success">พร้อมใช้</span></td>
-                            <td>01/03/2568</td>
                             <td>
                               <div class="d-inline-block">
                                 <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="M-0006">
-                                  <i class="bx bx-show"></i>
-                                </button>
-                                <button type="button" class="material-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                  <i class="bx bx-edit"></i>
-                                </button>
-                                <button type="button" class="material-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
-                                  <i class="bx bx-trash"></i>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img src="../assets/img/materials/cement.jpg" class="material-thumbnail" alt="ปูนซีเมนต์ตราช้าง">
-                            </td>
-                            <td><span class="fw-medium">T-0007</span></td>
-                            <td>ปูนซีเมนต์ตราช้าง</td>
-                            <td><span class="category-badge category-materials">วัสดุ</span></td>
-                            <td>28</td>
-                            <td>ถุง</td>
-                            <td>฿150.00</td>
-                            <td><span class="badge bg-label-success">พร้อมใช้</span></td>
-                            <td>01/03/2568</td>
-                            <td>
-                              <div class="d-inline-block">
-                                <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="T-0007">
-                                  <i class="bx bx-show"></i>
-                                </button>
-                                <button type="button" class="material-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                  <i class="bx bx-edit"></i>
-                                </button>
-                                <button type="button" class="material-action-btn delete" data-bs-toggle="tooltip" data-bs-placement="top" title="ลบ">
-                                  <i class="bx bx-trash"></i>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img src="../assets/img/materials/fertilizer.jpg" class="material-thumbnail" alt="ปุ๋ยอินทรีย์">
-                            </td>
-                            <td><span class="fw-medium">M-0008</span></td>
-                            <td>ปุ๋ยอินทรีย์</td>
-                            <td><span class="category-badge category-chemicals">ปุ๋ย/เคมี</span></td>
-                            <td>15</td>
-                            <td>ถุง</td>
-                            <td>฿220.00</td>
-                            <td><span class="badge bg-label-success">พร้อมใช้</span></td>
-                            <td>28/02/2568</td>
-                            <td>
-                              <div class="d-inline-block">
-                                <button type="button" class="material-action-btn view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" data-material-id="M-0008">
                                   <i class="bx bx-show"></i>
                                 </button>
                                 <button type="button" class="material-action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
@@ -833,7 +783,7 @@
                 <div class="tab-pane fade" id="card-view" role="tabpanel">
                   <div class="card-body">
                     <div class="row mb-4">
-                      <div class="col-md-6 col-12 mb-3 mb-md-0">
+                      <div class="col-md-4 col-12 mb-3 mb-md-0">
                         <div class="d-flex flex-wrap">
                           <div class="filter-item active">ทั้งหมด</div>
                           <div class="filter-item">พร้อมใช้</div>
@@ -841,12 +791,17 @@
                           <div class="filter-item">หมดสต็อก</div>
                         </div>
                       </div>
-                      <div class="col-md-6 col-12 text-md-end">
+                      <div class="col-md-8 col-12 text-md-end">
                         <div class="d-flex justify-content-md-end">
                           <div class="me-2 flex-grow-1 flex-md-grow-0" style="max-width: 250px;">
                             <input type="text" class="search-input" placeholder="ค้นหาวัสดุ...">
                           </div>
-                          <a href="material-add.html" class="btn btn-primary">+ เพิ่มวัสดุใหม่</a>
+                          <a href="stock-receipt.html" class="btn btn-success me-2">
+                            <i class="bx bx-package me-1"></i> รับสินค้าเข้าคลัง
+                          </a>
+                          <a href="material-add.html" class="btn btn-primary">
+                            <i class="bx bx-plus me-1"></i> เพิ่มวัสดุใหม่
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -864,19 +819,28 @@
                             </div>
                             <h5 class="card-title mb-0">ดินปลูกต้นไม้</h5>
                             <p class="text-muted small mb-2">หมวดหมู่: <span class="category-badge category-materials">วัสดุ</span></p>
-                            <div class="d-flex justify-content-between mb-2">
+                            <div class="d-flex justify-content-between mb-1">
                               <div class="text-muted">จำนวนคงเหลือ:</div>
-                              <div class="fw-semibold">8 ถุง</div>
+                              <div class="fw-semibold">18 ถุง</div>
                             </div>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">ราคาต่อหน่วย:</div>
-                              <div class="fw-semibold">฿120.00</div>
+                            <div class="d-flex justify-content-between mb-1">
+                              <div class="text-muted">ราคาล่าสุด:</div>
+                              <div class="fw-semibold">฿150.00</div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                              <div class="text-muted">ต้นทุนเฉลี่ย:</div>
+                              <div class="fw-semibold">฿122.22</div>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
-                              <div class="text-muted">ปรับปรุงล่าสุด:</div>
-                              <div class="text-muted">08/03/2568</div>
+                              <div class="text-muted">มูลค่าคงคลัง:</div>
+                              <div class="fw-semibold">฿2,200.00</div>
                             </div>
                             <hr>
+                            <div class="mb-2">
+                              <span class="lot-badge">LOT-001: 0 ถุง</span>
+                              <span class="lot-badge">LOT-002: 13 ถุง</span>
+                              <span class="lot-badge">LOT-003: 5 ถุง</span>
+                            </div>
                             <div class="d-flex justify-content-end">
                               <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="M-0001">ดูรายละเอียด</button>
                               <button type="button" class="btn btn-sm btn-outline-secondary">แก้ไข</button>
@@ -892,25 +856,32 @@
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-success">พร้อมใช้</span>
-                              <span class="text-muted small">M-0003</span>
+                              <span class="text-muted small">P-0003</span>
                             </div>
                             <h5 class="card-title mb-0">ต้นไม้ประดับขนาดเล็ก</h5>
                             <p class="text-muted small mb-2">หมวดหมู่: <span class="category-badge category-plants">ต้นไม้</span></p>
-                            <div class="d-flex justify-content-between mb-2">
+                            <div class="d-flex justify-content-between mb-1">
                               <div class="text-muted">จำนวนคงเหลือ:</div>
                               <div class="fw-semibold">45 ต้น</div>
                             </div>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">ราคาต่อหน่วย:</div>
+                            <div class="d-flex justify-content-between mb-1">
+                              <div class="text-muted">ราคาล่าสุด:</div>
+                              <div class="fw-semibold">฿150.00</div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                              <div class="text-muted">ต้นทุนเฉลี่ย:</div>
                               <div class="fw-semibold">฿150.00</div>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
-                              <div class="text-muted">ปรับปรุงล่าสุด:</div>
-                              <div class="text-muted">05/03/2568</div>
+                              <div class="text-muted">มูลค่าคงคลัง:</div>
+                              <div class="fw-semibold">฿6,750.00</div>
                             </div>
                             <hr>
+                            <div class="mb-2">
+                              <span class="lot-badge">LOT-001: 45 ต้น</span>
+                            </div>
                             <div class="d-flex justify-content-end">
-                              <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="M-0003">ดูรายละเอียด</button>
+                              <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="P-0003">ดูรายละเอียด</button>
                               <button type="button" class="btn btn-sm btn-outline-secondary">แก้ไข</button>
                             </div>
                           </div>
@@ -928,117 +899,28 @@
                             </div>
                             <h5 class="card-title mb-0">หินแกรนิตก้อนเล็ก</h5>
                             <p class="text-muted small mb-2">หมวดหมู่: <span class="category-badge category-decorations">ตกแต่ง</span></p>
-                            <div class="d-flex justify-content-between mb-2">
+                            <div class="d-flex justify-content-between mb-1">
                               <div class="text-muted">จำนวนคงเหลือ:</div>
                               <div class="fw-semibold">0 กก.</div>
                             </div>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">ราคาต่อหน่วย:</div>
+                            <div class="d-flex justify-content-between mb-1">
+                              <div class="text-muted">ราคาล่าสุด:</div>
+                              <div class="fw-semibold">฿45.00</div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                              <div class="text-muted">ต้นทุนเฉลี่ย:</div>
                               <div class="fw-semibold">฿45.00</div>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
-                              <div class="text-muted">ปรับปรุงล่าสุด:</div>
-                              <div class="text-muted">04/03/2568</div>
+                              <div class="text-muted">มูลค่าคงคลัง:</div>
+                              <div class="fw-semibold">฿0.00</div>
                             </div>
                             <hr>
+                            <div class="mb-2">
+                              <span class="lot-badge">ไม่มีล็อตคงเหลือ</span>
+                            </div>
                             <div class="d-flex justify-content-end">
                               <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="M-0004">ดูรายละเอียด</button>
-                              <button type="button" class="btn btn-sm btn-outline-secondary">แก้ไข</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Card 4 -->
-                      <div class="col-lg-4 col-md-6 col-12 mb-4">
-                        <div class="card material-card h-100">
-                          <img class="card-img-top material-image" src="../assets/img/materials/artificial_grass.jpg" alt="หญ้าเทียม">
-                          <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                              <span class="badge bg-label-success">พร้อมใช้</span>
-                              <span class="text-muted small">M-0005</span>
-                            </div>
-                            <h5 class="card-title mb-0">หญ้าเทียม</h5>
-                            <p class="text-muted small mb-2">หมวดหมู่: <span class="category-badge category-plants">ต้นไม้</span></p>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">จำนวนคงเหลือ:</div>
-                              <div class="fw-semibold">24 ตร.ม.</div>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">ราคาต่อหน่วย:</div>
-                              <div class="fw-semibold">฿320.00</div>
-                            </div>
-                            <div class="d-flex justify-content-between mb-3">
-                              <div class="text-muted">ปรับปรุงล่าสุด:</div>
-                              <div class="text-muted">02/03/2568</div>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-end">
-                              <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="M-0005">ดูรายละเอียด</button>
-                              <button type="button" class="btn btn-sm btn-outline-secondary">แก้ไข</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Card 5 -->
-                      <div class="col-lg-4 col-md-6 col-12 mb-4">
-                        <div class="card material-card h-100">
-                          <img class="card-img-top material-image" src="../assets/img/materials/pot.jpg" alt="กระถางดินเผา 6 นิ้ว">
-                          <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                              <span class="badge bg-label-success">พร้อมใช้</span>
-                              <span class="text-muted small">M-0006</span>
-                            </div>
-                            <h5 class="card-title mb-0">กระถางดินเผา 6"</h5>
-                            <p class="text-muted small mb-2">หมวดหมู่: <span class="category-badge category-decorations">ตกแต่ง</span></p>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">จำนวนคงเหลือ:</div>
-                              <div class="fw-semibold">35 ใบ</div>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">ราคาต่อหน่วย:</div>
-                              <div class="fw-semibold">฿85.00</div>
-                            </div>
-                            <div class="d-flex justify-content-between mb-3">
-                              <div class="text-muted">ปรับปรุงล่าสุด:</div>
-                              <div class="text-muted">01/03/2568</div>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-end">
-                              <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="M-0006">ดูรายละเอียด</button>
-                              <button type="button" class="btn btn-sm btn-outline-secondary">แก้ไข</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Card 6 -->
-                      <div class="col-lg-4 col-md-6 col-12 mb-4">
-                        <div class="card material-card h-100">
-                          <img class="card-img-top material-image" src="../assets/img/materials/cement.jpg" alt="ปูนซีเมนต์ตราช้าง">
-                          <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                              <span class="badge bg-label-success">พร้อมใช้</span>
-                              <span class="text-muted small">T-0007</span>
-                            </div>
-                            <h5 class="card-title mb-0">ปูนซีเมนต์ตราช้าง</h5>
-                            <p class="text-muted small mb-2">หมวดหมู่: <span class="category-badge category-materials">วัสดุ</span></p>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">จำนวนคงเหลือ:</div>
-                              <div class="fw-semibold">28 ถุง</div>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                              <div class="text-muted">ราคาต่อหน่วย:</div>
-                              <div class="fw-semibold">฿150.00</div>
-                            </div>
-                            <div class="d-flex justify-content-between mb-3">
-                              <div class="text-muted">ปรับปรุงล่าสุด:</div>
-                              <div class="text-muted">01/03/2568</div>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-end">
-                              <button type="button" class="btn btn-sm btn-outline-primary me-2 view-btn" data-material-id="T-0007">ดูรายละเอียด</button>
                               <button type="button" class="btn btn-sm btn-outline-secondary">แก้ไข</button>
                             </div>
                           </div>
@@ -1085,7 +967,7 @@
 
   <!-- Material Detail Modal -->
   <div class="modal fade" id="materialDetailModal" tabindex="-1" aria-labelledby="materialDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title" id="materialDetailModalLabel">รายละเอียดวัสดุ</h5>
@@ -1093,56 +975,141 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-5 mb-4 mb-md-0">
+            <div class="col-md-4 mb-4 mb-md-0">
               <img src="../assets/img/materials/soil.jpg" class="img-fluid rounded" alt="ดินปลูกต้นไม้" id="modal-material-image">
+              <div class="mt-3">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">รหัสวัสดุ:</span>
+                  <span class="fw-bold" id="modal-material-id">M-0001</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">หมวดหมู่:</span>
+                  <span id="modal-material-category"><span class="category-badge category-materials">วัสดุ</span></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">จุดสั่งซื้อ:</span>
+                  <span id="modal-material-reorder-point">10 ถุง</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">สถานที่จัดเก็บ:</span>
+                  <span id="modal-material-location">ชั้น A-3 คลังสินค้าหลัก</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">ซัพพลายเออร์:</span>
+                  <span id="modal-material-supplier">บริษัท กรีนการ์เด้น จำกัด</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">ระยะเวลานำเข้า:</span>
+                  <span id="modal-material-lead-time">3 วัน</span>
+                </div>
+              </div>
             </div>
-            <div class="col-md-7">
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">รหัสวัสดุ</div>
-                  <div class="fw-bold" id="modal-material-id">M-0001</div>
+            <div class="col-md-8">
+              <h5 class="mb-3" id="modal-material-name">ดินปลูกต้นไม้</h5>
+              
+              <div class="card mb-3">
+                <div class="card-header">
+                  <h6 class="mb-0">ข้อมูลสต็อก</h6>
                 </div>
-                <div class="col-md-8">
-                  <div class="text-muted mb-1">ชื่อวัสดุ</div>
-                  <div class="fw-bold" id="modal-material-name">ดินปลูกต้นไม้</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">จำนวนคงเหลือรวม:</span>
+                        <span class="fw-bold" id="modal-material-quantity">18 ถุง</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">ราคาล่าสุด:</span>
+                        <span id="modal-material-price">฿150.00</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">ต้นทุนเฉลี่ย:</span>
+                        <span id="modal-material-avg-cost">฿122.22</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">มูลค่าคงคลัง:</span>
+                        <span class="fw-bold" id="modal-material-total-value">฿2,200.00</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="alert alert-warning py-2">
+                        <div class="d-flex align-items-center">
+                          <i class="bx bx-info-circle me-2"></i>
+                          <span>จำนวนคงเหลือต่ำกว่าจุดสั่งซื้อ</span>
+                        </div>
+                      </div>
+                      <div id="modal-material-status"><span class="badge bg-label-warning">ใกล้หมด</span></div>
+                      <small class="text-muted d-block mt-2">ปรับปรุงล่าสุด: <span id="modal-material-last-update">08/03/2568</span></small>
+                    </div>
+                  </div>
                 </div>
               </div>
               
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">หมวดหมู่</div>
-                  <div id="modal-material-category"><span class="category-badge category-materials">วัสดุ</span></div>
+              <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0">รายละเอียดสต็อกตามล็อต (FIFO)</h6>
                 </div>
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">จำนวนคงเหลือ</div>
-                  <div id="modal-material-quantity">8 ถุง</div>
-                </div>
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">สถานะ</div>
-                  <div id="modal-material-status"><span class="badge bg-label-warning">ใกล้หมด</span></div>
-                </div>
-              </div>
-              
-              <div class="row mb-3">
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">ราคาต่อหน่วย</div>
-                  <div id="modal-material-price">฿120.00</div>
-                </div>
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">จุดสั่งซื้อ</div>
-                  <div id="modal-material-reorder-point">10 ถุง</div>
-                </div>
-                <div class="col-md-4">
-                  <div class="text-muted mb-1">ปรับปรุงล่าสุด</div>
-                  <div id="modal-material-last-update">08/03/2568</div>
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>ล็อตที่</th>
+                          <th>วันที่รับ</th>
+                          <th>จำนวนรับ</th>
+                          <th>คงเหลือ</th>
+                          <th>ราคา/หน่วย</th>
+                          <th>มูลค่าคงเหลือ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lot-table-body">
+                        <tr>
+                          <td>LOT-001</td>
+                          <td>01/01/2568</td>
+                          <td>10</td>
+                          <td>0</td>
+                          <td>฿100.00</td>
+                          <td>฿0.00</td>
+                        </tr>
+                        <tr>
+                          <td>LOT-002</td>
+                          <td>15/02/2568</td>
+                          <td>15</td>
+                          <td>13</td>
+                          <td>฿120.00</td>
+                          <td>฿1,560.00</td>
+                        </tr>
+                        <tr>
+                          <td>LOT-003</td>
+                          <td>10/03/2568</td>
+                          <td>5</td>
+                          <td>5</td>
+                          <td>฿150.00</td>
+                          <td>฿750.00</td>
+                        </tr>
+                        <tr class="table-light">
+                          <td colspan="3" class="text-end fw-bold">รวม:</td>
+                          <td class="fw-bold">18</td>
+                          <td></td>
+                          <td class="fw-bold">฿2,310.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
               
               <div class="row mb-3">
                 <div class="col-12">
-                  <div class="text-muted mb-1">รายละเอียด</div>
-                  <div id="modal-material-description">
-                    ดินปลูกต้นไม้คุณภาพดี ผสมธาตุอาหารที่จำเป็นสำหรับการเจริญเติบโตของพืช เหมาะสำหรับต้นไม้ประดับทั่วไป ขนาดบรรจุ 10 กิโลกรัมต่อถุง
+                  <div class="card">
+                    <div class="card-header">
+                      <h6 class="mb-0">รายละเอียด</h6>
+                    </div>
+                    <div class="card-body">
+                      <p id="modal-material-description">
+                        ดินปลูกต้นไม้คุณภาพดี ผสมธาตุอาหารที่จำเป็นสำหรับการเจริญเติบโตของพืช เหมาะสำหรับต้นไม้ประดับทั่วไป ขนาดบรรจุ 10 กิโลกรัมต่อถุง
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1151,67 +1118,140 @@
           
           <hr>
           
-          <h6 class="mb-3">ประวัติการเบิก-รับ</h6>
-          <div class="table-responsive">
-            <table class="table table-sm table-bordered">
-              <thead>
-                <tr>
-                  <th>วันที่</th>
-                  <th>ประเภท</th>
-                  <th>จำนวน</th>
-                  <th>โครงการ</th>
-                  <th>ผู้เบิก/รับ</th>
-                  <th>หมายเหตุ</th>
-                </tr>
-              </thead>
-              <tbody id="history-table-body">
-                <tr>
-                  <td>08/03/2568</td>
-                  <td><span class="badge bg-label-danger">เบิก</span></td>
-                  <td>2 ถุง</td>
-                  <td>P-2567-001 สวนหย่อมบ้านคุณสมชาย</td>
-                  <td>นายชัยณรงค์ สวนสวย</td>
-                  <td>เบิกไปใช้สำหรับปลูกต้นไม้เพิ่มเติม</td>
-                </tr>
-                <tr>
-                  <td>05/03/2568</td>
-                  <td><span class="badge bg-label-success">รับ</span></td>
-                  <td>10 ถุง</td>
-                  <td>-</td>
-                  <td>นางสาวสมหญิง รักษ์สวน</td>
-                  <td>รับสินค้าจากซัพพลายเออร์</td>
-                </tr>
-                <tr>
-                  <td>01/03/2568</td>
-                  <td><span class="badge bg-label-danger">เบิก</span></td>
-                  <td>5 ถุง</td>
-                  <td>P-2567-002 ปรับปรุงภูมิทัศน์บริษัท ABC</td>
-                  <td>นายวิเชียร แข็งแรง</td>
-                  <td>-</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          <h6 class="mb-3 mt-4">สถิติการใช้งาน</h6>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="card h-100">
-                <div class="card-header">
-                  <h6 class="mb-0">การเบิกรายเดือน</h6>
-                </div>
-                <div class="card-body">
-                  <div id="material-usage-chart" style="min-height: 250px;"></div>
-                </div>
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-history" type="button" role="tab">ประวัติการเบิก-รับ</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-price-history" type="button" role="tab">ประวัติราคา</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-analysis" type="button" role="tab">การวิเคราะห์</button>
+            </li>
+          </ul>
+          <div class="tab-content pt-2">
+            <div class="tab-pane fade show active" id="tab-history" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>วันที่</th>
+                      <th>เลขที่เอกสาร</th>
+                      <th>ประเภท</th>
+                      <th>จำนวน</th>
+                      <th>โครงการ</th>
+                      <th>ผู้เบิก/รับ</th>
+                      <th>หมายเหตุ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-table-body">
+                    <tr>
+                      <td>15/03/2568</td>
+                      <td>OUT-20250315-001</td>
+                      <td><span class="badge bg-label-danger">เบิก</span></td>
+                      <td>12 ถุง</td>
+                      <td>P-2567-001 สวนหย่อมบ้านคุณสมชาย</td>
+                      <td>นายชัยณรงค์ สวนสวย</td>
+                      <td>เบิกไปใช้สำหรับปลูกต้นไม้เพิ่มเติม</td>
+                    </tr>
+                    <tr>
+                      <td>10/03/2568</td>
+                      <td>REC-20250310-003</td>
+                      <td><span class="badge bg-label-success">รับ</span></td>
+                      <td>5 ถุง</td>
+                      <td>-</td>
+                      <td>นางสาวสมหญิง รักษ์สวน</td>
+                      <td>รับสินค้าจากซัพพลายเออร์ INV-5678</td>
+                    </tr>
+                    <tr>
+                      <td>15/02/2568</td>
+                      <td>REC-20250215-002</td>
+                      <td><span class="badge bg-label-success">รับ</span></td>
+                      <td>15 ถุง</td>
+                      <td>-</td>
+                      <td>นางสาวสมหญิง รักษ์สวน</td>
+                      <td>รับสินค้าจากซัพพลายเออร์ INV-3456</td>
+                    </tr>
+                    <tr>
+                      <td>01/01/2568</td>
+                      <td>REC-20250101-001</td>
+                      <td><span class="badge bg-label-success">รับ</span></td>
+                      <td>10 ถุง</td>
+                      <td>-</td>
+                      <td>นายวิเชียร แข็งแรง</td>
+                      <td>รับสินค้าจากซัพพลายเออร์ INV-1234</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="card h-100">
-                <div class="card-header">
-                  <h6 class="mb-0">โครงการที่ใช้มากที่สุด</h6>
+            <div class="tab-pane fade" id="tab-price-history" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>วันที่</th>
+                      <th>เลขที่เอกสาร</th>
+                      <th>จำนวน</th>
+                      <th>ราคา/หน่วย</th>
+                      <th>ซัพพลายเออร์</th>
+                      <th>ผู้รับ</th>
+                      <th>หมายเหตุ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>10/03/2568</td>
+                      <td>REC-20250310-003</td>
+                      <td>5 ถุง</td>
+                      <td>฿150.00</td>
+                      <td>บริษัท กรีนการ์เด้น จำกัด</td>
+                      <td>นางสาวสมหญิง รักษ์สวน</td>
+                      <td>ราคาปรับขึ้นเนื่องจากต้นทุนเพิ่ม</td>
+                    </tr>
+                    <tr>
+                      <td>15/02/2568</td>
+                      <td>REC-20250215-002</td>
+                      <td>15 ถุง</td>
+                      <td>฿120.00</td>
+                      <td>ร้านต้นไม้นานาพันธุ์</td>
+                      <td>นางสาวสมหญิง รักษ์สวน</td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>01/01/2568</td>
+                      <td>REC-20250101-001</td>
+                      <td>10 ถุง</td>
+                      <td>฿100.00</td>
+                      <td>บริษัท กรีนการ์เด้น จำกัด</td>
+                      <td>นายวิเชียร แข็งแรง</td>
+                      <td>ราคาปกติ</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="tab-analysis" role="tabpanel">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card h-100">
+                    <div class="card-header">
+                      <h6 class="mb-0">การเบิกรายเดือน</h6>
+                    </div>
+                    <div class="card-body">
+                      <div id="material-usage-chart" style="min-height: 250px;"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-body pb-0">
-                  <div id="projects-usage-chart" style="min-height: 250px;"></div>
+                <div class="col-md-6">
+                  <div class="card h-100">
+                    <div class="card-header">
+                      <h6 class="mb-0">แนวโน้มราคา</h6>
+                    </div>
+                    <div class="card-body">
+                      <div id="price-trend-chart" style="min-height: 250px;"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1287,52 +1327,43 @@
       });
     }
   
-    // Material data
+    // Material data with FIFO lots
     const materialsData = [
       {
         id: 'M-0001',
         name: 'ดินปลูกต้นไม้',
         category: 'วัสดุ',
         categoryClass: 'category-materials',
-        quantity: 8,
+        quantity: 18,
         unit: 'ถุง',
-        price: 120.00,
+        latestPrice: 150.00,
+        avgCost: 122.22,
+        totalValue: 2200.00,
         status: 'ใกล้หมด',
         statusClass: 'bg-label-warning',
         lastUpdate: '08/03/2568',
         reorderPoint: 10,
         description: 'ดินปลูกต้นไม้คุณภาพดี ผสมธาตุอาหารที่จำเป็นสำหรับการเจริญเติบโตของพืช เหมาะสำหรับต้นไม้ประดับทั่วไป ขนาดบรรจุ 10 กิโลกรัมต่อถุง',
-        image: '../assets/img/materials/soil.jpg'
-      },
-      {
-        id: 'M-0003',
-        name: 'ต้นไม้ประดับขนาดเล็ก',
-        category: 'ต้นไม้',
-        categoryClass: 'category-plants',
-        quantity: 45,
-        unit: 'ต้น',
-        price: 150.00,
-        status: 'พร้อมใช้',
-        statusClass: 'bg-label-success',
-        lastUpdate: '05/03/2568',
-        reorderPoint: 20,
-        description: 'ต้นไม้ประดับขนาดเล็ก เหมาะสำหรับตกแต่งภายในและภายนอกอาคาร มีความสูงประมาณ 20-30 ซม. ทนต่อสภาพแวดล้อมได้ดี ดูแลรักษาง่าย',
-        image: '../assets/img/materials/plant_small.jpg'
-      },
-      {
-        id: 'M-0004',
-        name: 'หินแกรนิตก้อนเล็ก',
-        category: 'ตกแต่ง',
-        categoryClass: 'category-decorations',
-        quantity: 0,
-        unit: 'กก.',
-        price: 45.00,
-        status: 'หมดสต็อก',
-        statusClass: 'bg-label-danger',
-        lastUpdate: '04/03/2568',
-        reorderPoint: 50,
-        description: 'หินแกรนิตก้อนเล็กสำหรับตกแต่งสวน มีขนาดประมาณ 1-2 ซม. มีหลากหลายสี เหมาะสำหรับตกแต่งทางเดินในสวน หรือรอบๆ ต้นไม้',
-        image: '../assets/img/materials/granite.jpg'
+        location: 'ชั้น A-3 คลังสินค้าหลัก',
+        supplier: 'บริษัท กรีนการ์เด้น จำกัด',
+        leadTime: 3,
+        image: '../assets/img/materials/soil.jpg',
+        lots: [
+          { id: 'LOT-001', date: '01/01/2568', originalQty: 10, remainingQty: 0, price: 100.00 },
+          { id: 'LOT-002', date: '15/02/2568', originalQty: 15, remainingQty: 13, price: 120.00 },
+          { id: 'LOT-003', date: '10/03/2568', originalQty: 5, remainingQty: 5, price: 150.00 }
+        ],
+        history: [
+          { date: '15/03/2568', docId: 'OUT-20250315-001', type: 'เบิก', typeClass: 'bg-label-danger', qty: 12, unit: 'ถุง', project: 'P-2567-001 สวนหย่อมบ้านคุณสมชาย', person: 'นายชัยณรงค์ สวนสวย', note: 'เบิกไปใช้สำหรับปลูกต้นไม้เพิ่มเติม' },
+          { date: '10/03/2568', docId: 'REC-20250310-003', type: 'รับ', typeClass: 'bg-label-success', qty: 5, unit: 'ถุง', project: '-', person: 'นางสาวสมหญิง รักษ์สวน', note: 'รับสินค้าจากซัพพลายเออร์ INV-5678' },
+          { date: '15/02/2568', docId: 'REC-20250215-002', type: 'รับ', typeClass: 'bg-label-success', qty: 15, unit: 'ถุง', project: '-', person: 'นางสาวสมหญิง รักษ์สวน', note: 'รับสินค้าจากซัพพลายเออร์ INV-3456' },
+          { date: '01/01/2568', docId: 'REC-20250101-001', type: 'รับ', typeClass: 'bg-label-success', qty: 10, unit: 'ถุง', project: '-', person: 'นายวิเชียร แข็งแรง', note: 'รับสินค้าจากซัพพลายเออร์ INV-1234' }
+        ],
+        priceHistory: [
+          { date: '10/03/2568', docId: 'REC-20250310-003', qty: 5, price: 150.00, supplier: 'บริษัท กรีนการ์เด้น จำกัด', person: 'นางสาวสมหญิง รักษ์สวน', note: 'ราคาปรับขึ้นเนื่องจากต้นทุนเพิ่ม' },
+          { date: '15/02/2568', docId: 'REC-20250215-002', qty: 15, price: 120.00, supplier: 'ร้านต้นไม้นานาพันธุ์', person: 'นางสาวสมหญิง รักษ์สวน', note: '-' },
+          { date: '01/01/2568', docId: 'REC-20250101-001', qty: 10, price: 100.00, supplier: 'บริษัท กรีนการ์เด้น จำกัด', person: 'นายวิเชียร แข็งแรง', note: 'ราคาปกติ' }
+        ]
       }
     ];
 
@@ -1380,36 +1411,48 @@
       const monthlyUsageChart = new ApexCharts(document.querySelector("#material-usage-chart"), monthlyUsageOptions);
       monthlyUsageChart.render();
 
-      // Projects usage chart
-      const projectsUsageOptions = {
-        series: [40, 30, 20, 10],
+      // Price trend chart
+      const priceTrendOptions = {
+        series: [{
+          name: 'ราคาต่อหน่วย (บาท)',
+          data: [100, 120, 150]
+        }],
         chart: {
-          type: 'pie',
+          type: 'line',
           height: 250,
           toolbar: {
             show: false
           }
         },
-        labels: ['สวนหย่อมบ้านคุณสมชาย', 'ปรับปรุงภูมิทัศน์บริษัท ABC', 'สวนหลังบ้านคุณสมหญิง', 'อื่นๆ'],
-        colors: ['#28a745', '#42a5f5', '#ffa726', '#ec407a'],
-        legend: {
-          position: 'bottom'
+        stroke: {
+          curve: 'straight',
+          width: 3
         },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              height: 200
-            },
-            legend: {
-              position: 'bottom'
+        markers: {
+          size: 5
+        },
+        xaxis: {
+          categories: ['ม.ค. 68', 'ก.พ. 68', 'มี.ค. 68']
+        },
+        yaxis: {
+          min: 90,
+          max: 160,
+          title: {
+            text: 'ราคา (บาท)'
+          }
+        },
+        colors: ['#42a5f5'],
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return "฿" + val.toFixed(2)
             }
           }
-        }]
+        }
       };
 
-      const projectsUsageChart = new ApexCharts(document.querySelector("#projects-usage-chart"), projectsUsageOptions);
-      projectsUsageChart.render();
+      const priceTrendChart = new ApexCharts(document.querySelector("#price-trend-chart"), priceTrendOptions);
+      priceTrendChart.render();
     }
 
     // Initialize DataTable
@@ -1438,7 +1481,7 @@
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50],
         columnDefs: [
-          { orderable: false, targets: [0, 9] }
+          { orderable: false, targets: [0, 10] }
         ]
       });
       
@@ -1455,9 +1498,9 @@
         const filterValue = $(this).text();
         
         if (filterValue === 'ทั้งหมด') {
-          materialTable.column(7).search('').draw();
+          materialTable.column(9).search('').draw();
         } else {
-          materialTable.column(7).search(filterValue).draw();
+          materialTable.column(9).search(filterValue).draw();
         }
       });
       
@@ -1509,11 +1552,26 @@
     // Show material details in modal
     function showMaterialDetails(materialId) {
       const material = materialsData.find(m => m.id === materialId) || 
-                      { id: materialId, name: 'วัสดุตัวอย่าง', category: 'วัสดุ', 
-                       categoryClass: 'category-materials', quantity: 0, unit: 'ชิ้น',
-                       price: 0, status: 'พร้อมใช้', statusClass: 'bg-label-success', 
-                       lastUpdate: '01/01/2568', reorderPoint: 0, 
-                       description: 'ไม่มีรายละเอียด', image: '../assets/img/materials/default.jpg' };
+                      { 
+                        id: materialId, 
+                        name: 'วัสดุตัวอย่าง', 
+                        category: 'วัสดุ', 
+                        categoryClass: 'category-materials', 
+                        quantity: 0, 
+                        unit: 'ชิ้น',
+                        latestPrice: 0,
+                        avgCost: 0,
+                        totalValue: 0,
+                        status: 'พร้อมใช้', 
+                        statusClass: 'bg-label-success', 
+                        lastUpdate: '01/01/2568', 
+                        reorderPoint: 0, 
+                        description: 'ไม่มีรายละเอียด', 
+                        image: '../assets/img/materials/default.jpg',
+                        lots: [],
+                        history: [],
+                        priceHistory: []
+                      };
       
       // Fill the modal with material details
       $('#modal-material-id').text(material.id);
@@ -1521,19 +1579,55 @@
       $('#modal-material-category').html(`<span class="category-badge ${material.categoryClass}">${material.category}</span>`);
       $('#modal-material-quantity').text(`${material.quantity} ${material.unit}`);
       $('#modal-material-status').html(`<span class="badge ${material.statusClass}">${material.status}</span>`);
-      $('#modal-material-price').text(`฿${material.price.toFixed(2)}`);
+      $('#modal-material-price').text(`฿${material.latestPrice.toFixed(2)}`);
+      $('#modal-material-avg-cost').text(`฿${material.avgCost.toFixed(2)}`);
+      $('#modal-material-total-value').text(`฿${material.totalValue.toFixed(2)}`);
       $('#modal-material-reorder-point').text(`${material.reorderPoint} ${material.unit}`);
       $('#modal-material-last-update').text(material.lastUpdate);
       $('#modal-material-description').text(material.description);
       $('#modal-material-image').attr('src', material.image);
       $('#modal-material-image').attr('alt', material.name);
+      $('#modal-material-location').text(material.location || '-');
+      $('#modal-material-supplier').text(material.supplier || '-');
+      $('#modal-material-lead-time').text(`${material.leadTime || '-'} วัน`);
       
-      // Initialize charts
-      initializeCharts();
+      // Fill lot table
+      const lotTableBody = $('#lot-table-body');
+      lotTableBody.empty();
       
-      // Show the modal
-      $('#materialDetailModal').modal('show');
-    }
-  </script>
-</body>
-</html>
+      let totalRemainingQty = 0;
+      let totalValue = 0;
+      
+      if (material.lots && material.lots.length > 0) {
+        material.lots.forEach(lot => {
+          const lotValue = lot.remainingQty * lot.price;
+          totalRemainingQty += lot.remainingQty;
+          totalValue += lotValue;
+          
+          lotTableBody.append(`
+            <tr>
+              <td>${lot.id}</td>
+              <td>${lot.date}</td>
+              <td>${lot.originalQty}</td>
+              <td>${lot.remainingQty}</td>
+              <td>฿${lot.price.toFixed(2)}</td>
+              <td>฿${lotValue.toFixed(2)}</td>
+            </tr>
+          `);
+        });
+        
+        lotTableBody.append(`
+          <tr class="table-light">
+            <td colspan="3" class="text-end fw-bold">รวม:</td>
+            <td class="fw-bold">${totalRemainingQty}</td>
+            <td></td>
+            <td class="fw-bold">฿${totalValue.toFixed(2)}</td>
+          </tr>
+        `);
+      } else {
+        lotTableBody.append(`
+          <tr>
+            <td colspan="6" class="text-center">ไม่มีข้อมูลล็อต</td>
+          </tr>
+          <tr class="table-light">
+            <t
