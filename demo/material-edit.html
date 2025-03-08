@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="th" class="light-style layout-navbar-fixed layout-menu-fixed">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>แก้ไขข้อมูลวัสดุ | ระบบจัดสวนครบวงจร</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/css/core.css">
+  <link rel="stylesheet" href="../assets/css/theme-default.css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  
+  <!-- Page CSS -->
+  <style>
+    :root {
+      --primary: #28a745;
+      --primary-light: #e9fff0;
+      --warning: #ffa726;
+      --warning-light: #ffedcc;
+      --danger: #ec407a;
+      --danger-light: #ffe8e8;
+      --info: #42a5f5;
+      --info-light: #e3f2fd;
+      --text-primary: #566a7f;
+      --text-secondary: #99a0ac;
+      --bg-light: #f5f6fa;
+    }
+    
+    /* แก้ไขการแสดงผลเมนู */
+    .menu-sub {
+      display: none; /* ค่าเริ่มต้นซ่อนเมนูย่อย */
+    }
+    
+    .menu-item.active.open > .menu-sub,
+    .menu-sub.show {
+      display: block !important; /* แสดงเมนูย่อยเมื่อ active หรือมี class show */
+    }
+    
+    .section-heading {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-heading::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
+    }
+    
+    .form-control, .form-select {
+      border-radius: 0.375rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid #dce1e8;
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .required-label:after {
+      content: " *";
+      color: var(--danger);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+      border-radius: 0.75rem;
+      border: none;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
+      margin-bottom: 1.5rem;
+    }
+    
+    .custom-option {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .custom-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .custom-option.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .custom-option-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.375rem;
+      margin-right: 1rem;
+      color: var(--text-primary);
+      background-color: rgba(40, 167, 69, 0.16);
+    }
+    
+    .custom-option.selected .custom-option-icon {
+      color: white;
+      background-color: var(--primary);
+    }
+    
+    .dropzone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      border: 2px dashed #dce1e8;
+      border-radius: 0.375rem;
+      background-color: #fafbfc;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .dropzone:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .dropzone-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .preview-image {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 0.375rem;
+      border: 1px solid #dce1e8;
+      margin-bottom: 1rem;
+    }
+    
+    .input-group-text {
+      background-color: #f5f6fa;
+      border-color: #dce1e8;
+    }
+    
+    .form-label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #e7e7e8;
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+    
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+    
+    .timeline-point {
+      position: absolute;
+      left: -2rem;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: var(--primary);
+      transform: translateX(50%);
+      z-index: 1;
+    }
+    
+    .timeline-content {
+      padding: 1rem;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.08);
+    }
+    
+    .timeline-date {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .category-badge {
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 500;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+    }
+
+    .category-plants {
+      background-color: #4CAF50;
+    }
+
+    .category-tools {
+      background-color: #2196F3;
+    }
+
+    .category-materials {
+      background-color: #FF9800;
+    }
+
+    .category-decorations {
+      background-color: #9C27B0;
+    }
+
+    .category-chemicals {
+      background-color: #F44336;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      
+      <!-- Menu -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="dashboard.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1">
+                <polygon points="7.5 2 7.5 5 4.5 5 4.5 22 17 22 17 19 22 19 22 5 17 5 17 2" fill="#28a745" />
+                <polygon points="13 15 10 12 13 9 16 12" fill="#28a745" opacity="0.7" />
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-2">Green Gardens</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto sidebar-toggle">
+            <i class="bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="bx bx-x d-block d-xl-none bx-sm"></i>
+          </a>
+        </div>
+
+        <div class="menu-divider mt-0"></div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="dashboard.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="หน้าหลัก">หน้าหลัก</div>
+            </a>
+          </li>
+
+          <!-- โครงการลูกค้า -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการโครงการลูกค้า</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-layout"></i>
+              <div data-i18n="โครงการ">โครงการ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="project-list.html" class="menu-link">
+                  <div data-i18n="รายการโครงการ">รายการโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มโครงการใหม่">เพิ่มโครงการใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="project-progress.html" class="menu-link">
+                  <div data-i18n="ติดตามความคืบหน้า">ติดตามความคืบหน้า</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- วัสดุ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการวัสดุและเครื่องมือ</span>
+          </li>
+
+          <li class="menu-item active open">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div data-i18n="วัสดุทั่วไป">วัสดุทั่วไป</div>
+            </a>
+            <ul class="menu-sub" style="display: block;">
+              <li class="menu-item">
+                <a href="material-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="material-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <div data-i18n="วัสดุเครื่องมือช่าง">วัสดุเครื่องมือช่าง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="construction-list.html" class="menu-link">
+                  <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="construction-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มวัสดุใหม่">เพิ่มวัสดุใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-wrench"></i>
+              <div data-i18n="เครื่องมือช่าง">เครื่องมือช่าง</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="tools-list.html" class="menu-link">
+                  <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="tools-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มเครื่องมือใหม่">เพิ่มเครื่องมือใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="menu-item">
+            <a href="inventory-withdraw.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-transfer"></i>
+              <div data-i18n="เบิก-คืนวัสดุ">เบิก-คืนวัสดุ</div>
+            </a>
+          </li>
+
+          <!-- รถ -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">จัดการยานพาหนะ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-car"></i>
+              <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="vehicle-list.html" class="menu-link">
+                  <div data-i18n="รายการรถ">รายการรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มรถใหม่">เพิ่มรถใหม่</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="vehicle-repair.html" class="menu-link">
+                  <div data-i18n="บันทึกการซ่อม">บันทึกการซ่อม</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- รายงาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">รายงาน</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-line-chart"></i>
+              <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="report-projects.html" class="menu-link">
+                  <div data-i18n="รายงานโครงการ">รายงานโครงการ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-vehicle-cost.html" class="menu-link">
+                  <div data-i18n="รายงานค่าใช้จ่ายรถ">รายงานค่าใช้จ่ายรถ</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="report-executive.html" class="menu-link">
+                  <div data-i18n="รายงานสำหรับผู้บริหาร">รายงานสำหรับผู้บริหาร</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ผู้ใช้งาน -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">ระบบจัดการ</span>
+          </li>
+
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="user-list.html" class="menu-link">
+                  <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="user-add.html" class="menu-link">
+                  <div data-i18n="เพิ่มผู้ใช้ใหม่">เพิ่มผู้ใช้ใหม่</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item navbar-search-wrapper mb-0">
+                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                  <i class="bx bx-search-alt bx-sm"></i>
+                  <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
+                </a>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- Notification -->
+              <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <a class="nav-link dropdown-toggle hide-arrow position-relative" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <i class="bx bx-bell bx-sm"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0 dropdown-menu-notification">
+                  <li class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                      <h5 class="text-body mb-0 me-auto">การแจ้งเตือน</h5>
+                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i class="bx fs-4 bx-envelope-open"></i></a>
+                    </div>
+                  </li>
+                  <li class="dropdown-notifications-list scrollable-container">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar bg-light-danger">
+                              <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-package"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">วัสดุใกล้หมด</h6>
+                            <p class="mb-0">ดินปลูกต้นไม้ เหลือน้อยกว่า 10 ถุง</p>
+                            <small class="text-muted">1 ชั่วโมงที่แล้ว</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-warning"><i class="bx bx-error"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">วัสดุหมด</h6>
+                            <p class="mb-0">หินแกรนิตก้อนเล็ก หมดสต็อก</p>
+                            <small class="text-muted">เมื่อวานนี้</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="dropdown-menu-footer border-top p-2">
+                    <a href="javascript:void(0);" class="btn btn-primary d-flex justify-content-center">
+                      ดูการแจ้งเตือนทั้งหมด
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ Notification -->
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">บุญชัย ผู้จัดการ</span>
+                          <small class="text-muted">ผู้บริหาร</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account-settings.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">ข้อมูลส่วนตัว</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="login.html">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">ออกจากระบบ</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4">
+              <span class="text-muted fw-light">จัดการวัสดุ /</span> แก้ไขข้อมูลวัสดุ
+            </h4>
+
+            <!-- Horizontal Form -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">แก้ไขข้อมูลวัสดุ</h5>
+                    <small class="text-muted float-end">แก้ไขล่าสุด: 08/03/2568</small>
+                  </div>
+                  <div class="card-body">
+                    <form id="editMaterialForm">
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="row">
+                            <div class="col-md-12 mb-3">
+                              <label for="materialId" class="form-label">รหัสวัสดุ</label>
+                              <input type="text" class="form-control" id="materialId" value="M-0001" readonly>
+                              <small class="text-muted">รหัสวัสดุไม่สามารถเปลี่ยนแปลงได้</small>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                              <label for="materialName" class="form-label required-label">ชื่อวัสดุ</label>
+                              <input type="text" class="form-control" id="materialName" value="ดินปลูกต้นไม้" placeholder="ระบุชื่อวัสดุ" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                              <label for="materialCategory" class="form-label required-label">หมวดหมู่</label>
+                              <select class="form-select" id="materialCategory" required>
+                                <option value="" disabled>เลือกหมวดหมู่</option>
+                                <option value="materials" selected>วัสดุ</option>
+                                <option value="plants">ต้นไม้</option>
+                                <option value="decorations">ตกแต่ง</option>
+                                <option value="tools">เครื่องมือ</option>
+                                <option value="chemicals">ปุ๋ย/เคมี</option>
+                              </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="materialQuantity" class="form-label required-label">จำนวนคงเหลือ</label>
+                              <input type="number" class="form-control" id="materialQuantity" value="8" min="0" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="materialUnit" class="form-label required-label">หน่วยนับ</label>
+                              <input type="text" class="form-control" id="materialUnit" value="ถุง" placeholder="ระบุหน่วยนับ" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="materialPrice" class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
+                              <div class="input-group">
+                                <span class="input-group-text">฿</span>
+                                <input type="number" class="form-control" id="materialPrice" value="120" min="0" step="0.01" required>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="materialReorderPoint" class="form-label required-label">จุดสั่งซื้อ</label>
+                              <input type="number" class="form-control" id="materialReorderPoint" value="10" min="0" required>
+                              <small class="text-muted">จำนวนต่ำสุดที่ต้องการแจ้งเตือนให้สั่งซื้อ</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">รูปภาพวัสดุ</label>
+                          <div class="text-center mb-3">
+                            <img src="../assets/img/materials/soil.jpg" id="materialPreviewImage" class="preview-image" alt="ดินปลูกต้นไม้">
+                          </div>
+                          <div class="dropzone" id="materialImageDropzone">
+                            <div class="dz-message">
+                              <div class="dropzone-icon">
+                                <i class="bx bx-upload"></i>
+                              </div>
+                              <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพใหม่</h5>
+                              <p class="text-muted mb-0">รองรับไฟล์ .jpg, .jpeg, .png ขนาดไม่เกิน 5MB</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="row mb-4">
+                        <div class="col-md-12 mb-3">
+                          <label for="materialDescription" class="form-label">รายละเอียด</label>
+                          <textarea class="form-control" id="materialDescription" rows="4" placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับวัสดุ">ดินปลูกต้นไม้คุณภาพดี ผสมธาตุอาหารที่จำเป็นสำหรับการเจริญเติบโตของพืช เหมาะสำหรับต้นไม้ประดับทั่วไป ขนาดบรรจุ 10 กิโลกรัมต่อถุง</textarea>
+                        </div>
+                      </div>
+                      
+                      <div class="row mb-4">
+                        <div class="col-md-12">
+                          <h6 class="section-heading">ข้อมูลเพิ่มเติม</h6>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="materialLocation" class="form-label">สถานที่จัดเก็บ</label>
+                          <input type="text" class="form-control" id="materialLocation" value="ชั้น A-3 คลังสินค้าหลัก" placeholder="ระบุสถานที่จัดเก็บ">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="materialBarcode" class="form-label">บาร์โค้ด</label>
+                          <input type="text" class="form-control" id="materialBarcode" value="8851234567890" placeholder="ระบุบาร์โค้ด (ถ้ามี)">
+                        </div>
+                      </div>
+                      
+                      <div class="row mb-4">
+                        <div class="col-md-12">
+                          <h6 class="section-heading">ข้อมูลซัพพลายเออร์</h6>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="supplierName" class="form-label">ชื่อซัพพลายเออร์</label>
+                          <input type="text" class="form-control" id="supplierName" value="บริษัท กรีนการ์เด้น จำกัด" placeholder="ระบุชื่อซัพพลายเออร์">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="supplierContact" class="form-label">ข้อมูลติดต่อ</label>
+                          <input type="text" class="form-control" id="supplierContact" value="02-123-4567, sales@greengarden.co.th" placeholder="ระบุข้อมูลติดต่อ">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="lastOrderDate" class="form-label">วันที่สั่งซื้อล่าสุด</label>
+                          <input type="text" class="form-control flatpickr-date" id="lastOrderDate" value="05/03/2568" placeholder="DD/MM/YYYY">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="leadTime" class="form-label">ระยะเวลานำเข้า (วัน)</label>
+                          <input type="number" class="form-control" id="leadTime" value="3" min="1" placeholder="ระบุจำนวนวัน">
+                          <small class="text-muted">ระยะเวลาตั้งแต่สั่งซื้อจนได้รับสินค้า</small>
+                        </div>
+                      </div>
+                      
+                      <div class="row mb-4">
+                        <div class="col-md-12">
+                          <h6 class="section-heading">ประวัติการแก้ไข</h6>
+                          <div class="timeline">
+                            <div class="timeline-item">
+                              <div class="timeline-point"></div>
+                              <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="fw-semibold">บุญชัย ผู้จัดการ</span>
+                                  <span class="timeline-date">08/03/2568 10:30</span>
+                                </div>
+                                <p class="mb-0">แก้ไขจำนวนคงเหลือจาก 10 เป็น 8 ถุง</p>
+                              </div>
+                            </div>
+                            <div class="timeline-item">
+                              <div class="timeline-point"></div>
+                              <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="fw-semibold">สมหญิง รักษ์สวน</span>
+                                  <span class="timeline-date">05/03/2568 14:15</span>
+                                </div>
+                                <p class="mb-0">นำเข้าวัสดุใหม่ 10 ถุง</p>
+                              </div>
+                            </div>
+                            <div class="timeline-item">
+                              <div class="timeline-point"></div>
+                              <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="fw-semibold">วิเชียร แข็งแรง</span>
+                                  <span class="timeline-date">01/03/2568 09:45</span>
+                                </div>
+                                <p class="mb-0">เพิ่มข้อมูลซัพพลายเออร์</p>
+                              </div>
+                            </div>
+                            <div class="timeline-item">
+                              <div class="timeline-point"></div>
+                              <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                  <span class="fw-semibold">บุญชัย ผู้จัดการ</span>
+                                  <span class="timeline-date">20/02/2568 13:20</span>
+                                </div>
+                                <p class="mb-0">สร้างรายการวัสดุใหม่</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-12 text-end">
+                          <a href="material-list.html" class="btn btn-outline-secondary me-2">ยกเลิก</a>
+                          <button type="button" class="btn btn-warning me-2" id="adjustQtyBtn">ปรับปรุงจำนวน</button>
+                          <button type="submit" class="btn btn-primary" id="saveChangesBtn">บันทึกการแก้ไข</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบจัดสวนครบวงจร v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Adjust Quantity Modal -->
+  <div class="modal fade" id="adjustQuantityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">ปรับปรุงจำนวนวัสดุ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="adjustType" class="form-label">ประเภทการปรับปรุง</label>
+            <select class="form-select" id="adjustType">
+              <option value="add" selected>เพิ่มจำนวน (รับเข้า)</option>
+              <option value="subtract">ลดจำนวน (ตัดจำหน่าย)</option>
+              <option value="set">กำหนดจำนวนใหม่ (นับสต็อก)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="adjustQuantity" class="form-label">จำนวนที่ต้องการปรับ</label>
+            <input type="number" class="form-control" id="adjustQuantity" min="1" value="1">
+          </div>
+          <div class="mb-3">
+            <label for="adjustReason" class="form-label">เหตุผล</label>
+            <textarea class="form-control" id="adjustReason" rows="3" placeholder="ระบุเหตุผลในการปรับปรุงจำนวน"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="adjustProject" class="form-label">โครงการที่เกี่ยวข้อง (ถ้ามี)</label>
+            <select class="form-select" id="adjustProject">
+              <option value="" selected>-- ไม่มีโครงการที่เกี่ยวข้อง --</option>
+              <option value="P-2567-001">P-2567-001 - สวนหย่อมบ้านคุณสมชาย</option>
+              <option value="P-2567-002">P-2567-002 - ปรับปรุงภูมิทัศน์บริษัท ABC</option>
+              <option value="P-2567-003">P-2567-003 - สวนหลังบ้านคุณสมหญิง</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="confirmAdjustBtn">ยืนยันการปรับปรุง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Alert Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header bg-success">
+          <h5 class="modal-title text-white">สำเร็จ</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
+          <h5>บันทึกข้อมูลสำเร็จ</h5>
+          <p class="mb-0">ข้อมูลวัสดุถูกปรับปรุงเรียบร้อยแล้ว</p>
+        </div>
+        <div class="modal-footer">
+          <a href="material-list.html" class="btn btn-outline-secondary">กลับสู่รายการวัสดุ</a>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">ตกลง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    // แก้ไขการแสดงผลเมนู
+    function initializeMenu() {
+      // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
+      const menuToggles = document.querySelectorAll('.menu-toggle');
+      menuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          const menuItem = this.closest('.menu-item');
+          const menuSub = menuItem.querySelector('.menu-sub');
+          
+          // Toggle active และ open classes
+          menuItem.classList.toggle('active');
+          menuItem.classList.toggle('open');
+          
+          // แสดง/ซ่อนเมนูย่อย
+          if (menuSub.style.display === 'block') {
+            menuSub.style.display = 'none';
+          } else {
+            menuSub.style.display = 'block';
+          }
+        });
+      });
+    }
+    
+    // Initialize page components
+    document.addEventListener('DOMContentLoaded', function() {
+      // เรียกใช้ฟังก์ชันจัดการเมนู
+      initializeMenu();
+      
+      // Initialize Flatpickr for date input
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        locale: {
+          firstDayOfWeek: 1
+        }
+      });
+      
+      // Initialize Dropzone for material image
+      const materialImageDropzone = new Dropzone("#materialImageDropzone", {
+        url: "/api/upload-material-image", // API URL สำหรับการอัปโหลดรูปภาพ
+        maxFiles: 1,
+        maxFilesize: 5, // 5MB
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ",
+        dictRemoveFile: "ลบไฟล์",
+        init: function() {
+          this.on("addedfile", function(file) {
+            // แสดงรูปภาพที่อัปโหลดใหม่ใน preview
+            if (file.type.startsWith('image/')) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                document.getElementById('materialPreviewImage').src = e.target.result;
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+      });
+      
+      // Adjust Quantity Button Event
+      document.getElementById('adjustQtyBtn').addEventListener('click', function() {
+        $('#adjustQuantityModal').modal('show');
+      });
+      
+      // Confirm Adjust Button Event
+      document.getElementById('confirmAdjustBtn').addEventListener('click', function() {
+        const adjustType = document.getElementById('adjustType').value;
+        const adjustQuantity = parseInt(document.getElementById('adjustQuantity').value);
+        let currentQuantity = parseInt(document.getElementById('materialQuantity').value);
+        let newQuantity = currentQuantity;
+        
+        // คำนวณจำนวนใหม่
+        if (adjustType === 'add') {
+          newQuantity = currentQuantity + adjustQuantity;
+        } else if (adjustType === 'subtract') {
+          newQuantity = Math.max(0, currentQuantity - adjustQuantity);
+        } else if (adjustType === 'set') {
+          newQuantity = adjustQuantity;
+        }
+        
+        // อัปเดตจำนวนในฟอร์ม
+        document.getElementById('materialQuantity').value = newQuantity;
+        
+        // ปิด Modal
+        $('#adjustQuantityModal').modal('hide');
+        
+        // แสดงข้อความแจ้งเตือนว่าปรับปรุงจำนวนเรียบร้อยแล้ว
+        alert(`ปรับปรุงจำนวนวัสดุเรียบร้อยแล้ว จากเดิม ${currentQuantity} เป็น ${newQuantity} ${document.getElementById('materialUnit').value}`);
+        
+        // เพิ่มประวัติการแก้ไขใหม่ในช่อง Timeline
+        const timeline = document.querySelector('.timeline');
+        const newTimelineItem = document.createElement('div');
+        newTimelineItem.className = 'timeline-item';
+        newTimelineItem.innerHTML = `
+          <div class="timeline-point"></div>
+          <div class="timeline-content">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="fw-semibold">บุญชัย ผู้จัดการ</span>
+              <span class="timeline-date">${getCurrentDateTime()}</span>
+            </div>
+            <p class="mb-0">ปรับปรุงจำนวนคงเหลือจาก ${currentQuantity} เป็น ${newQuantity} ${document.getElementById('materialUnit').value} (${getAdjustTypeText(adjustType)})</p>
+          </div>
+        `;
+        
+        // เพิ่ม timeline item ใหม่ไว้ด้านบนสุด
+        timeline.insertBefore(newTimelineItem, timeline.firstChild);
+      });
+      
+      // Helper function to get adjust type text
+      function getAdjustTypeText(adjustType) {
+        switch(adjustType) {
+          case 'add':
+            return 'รับเข้า';
+          case 'subtract':
+            return 'ตัดจำหน่าย';
+          case 'set':
+            return 'นับสต็อก';
+          default:
+            return '';
+        }
+      }
+      
+      // Helper function to get current date and time
+      function getCurrentDateTime() {
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear() + 543; // แปลงเป็น พ.ศ.
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      }
+      
+      // Form Submit Event
+      document.getElementById('editMaterialForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // ตรวจสอบข้อมูลก่อนบันทึก
+        const requiredFields = [
+          { id: 'materialName', label: 'ชื่อวัสดุ' },
+          { id: 'materialCategory', label: 'หมวดหมู่' },
+          { id: 'materialQuantity', label: 'จำนวนคงเหลือ' },
+          { id: 'materialUnit', label: 'หน่วยนับ' },
+          { id: 'materialPrice', label: 'ราคาต่อหน่วย' },
+          { id: 'materialReorderPoint', label: 'จุดสั่งซื้อ' }
+        ];
+        
+        let isValid = true;
+        let errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน:';
+        
+        requiredFields.forEach(field => {
+          const element = document.getElementById(field.id);
+          if (!element.value.trim()) {
+            isValid = false;
+            errorMessage += `\n- ${field.label}`;
+            element.classList.add('is-invalid');
+          } else {
+            element.classList.remove('is-invalid');
+          }
+        });
+        
+        if (!isValid) {
+          alert(errorMessage);
+          return;
+        }
+        
+        // ส่งข้อมูลไปยัง API (ในตัวอย่างนี้จะแสดง Modal สำเร็จแทน)
+        $('#successModal').modal('show');
+      });
+    });
+  </script>
+</body>
+</html>
