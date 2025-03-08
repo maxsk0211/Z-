@@ -18,15 +18,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Core CSS -->
-  <link rel="stylesheet" href="../assets/css/core.css">
-  <link rel="stylesheet" href="../assets/css/theme-default.css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/core.css" class="template-customizer-core-css">
+  <link rel="stylesheet" href="../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
   <link rel="stylesheet" href="../assets/css/demo.css">
-  <link rel="stylesheet" href="../assets/css/responsive.css">
 
   <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="../assets/vendor/libs/typeahead-js/typeahead.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs5/2.4.1/responsive.bootstrap5.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   
   <!-- Page CSS -->
@@ -55,6 +55,50 @@
       display: block !important; /* แสดงเมนูย่อยเมื่อ active หรือมี class show */
     }
     
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-primary);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+      border-radius: 0.75rem;
+      border: none;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-heading {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-heading::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: 4px;
+    }
+    
+    .form-control, .form-select {
+      border-radius: 0.375rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid #dce1e8;
+      font-size: 0.9375rem;
+      transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+    
     .project-status {
       width: 10px;
       height: 10px;
@@ -64,19 +108,19 @@
     }
     
     .status-active {
-      background-color: #28a745;
+      background-color: var(--primary);
     }
     
     .status-pending {
-      background-color: #ffa726;
+      background-color: var(--warning);
     }
     
     .status-completed {
-      background-color: #42a5f5;
+      background-color: var(--info);
     }
     
     .status-cancelled {
-      background-color: #ec407a;
+      background-color: var(--danger);
     }
     
     .project-image {
@@ -111,9 +155,9 @@
     }
     
     .filter-item:hover, .filter-item.active {
-      background-color: #e9fff0;
-      border-color: #28a745;
-      color: #28a745;
+      background-color: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
     }
     
     .search-input {
@@ -122,15 +166,15 @@
       font-size: 0.9375rem;
       font-weight: 400;
       line-height: 1.5;
-      color: #566a7f;
+      color: var(--text-primary);
       background-color: #fff;
-      border: 1px solid #e0e0e0;
+      border: 1px solid #dce1e8;
       border-radius: 0.375rem;
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
     
     .search-input:focus {
-      border-color: #28a745;
+      border-color: var(--primary);
       outline: 0;
       box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
     }
@@ -142,7 +186,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 0.375rem;
-      color: #566a7f;
+      color: var(--text-primary);
       background-color: transparent;
       border: none;
       cursor: pointer;
@@ -151,15 +195,15 @@
     
     .project-action-btn:hover {
       background-color: #f5f6fa;
-      color: #28a745;
+      color: var(--primary);
     }
     
     .project-action-btn.edit:hover {
-      color: #ffa726;
+      color: var(--warning);
     }
     
     .project-action-btn.delete:hover {
-      color: #ec407a;
+      color: var(--danger);
     }
     
     .dt-buttons {
@@ -172,8 +216,8 @@
       font-weight: 400;
       line-height: 1.5;
       color: #fff;
-      background-color: #28a745;
-      border: 1px solid #28a745;
+      background-color: var(--primary);
+      border: 1px solid var(--primary);
       border-radius: 0.375rem;
       transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
@@ -181,6 +225,145 @@
     .dt-button:hover {
       background-color: #218838;
       border-color: #1e7e34;
+    }
+    
+    .required-label:after {
+      content: " *";
+      color: var(--danger);
+    }
+    
+    .input-group-text {
+      background-color: #f5f6fa;
+      border-color: #dce1e8;
+    }
+    
+    .form-label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #e7e7e8;
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+    
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+    
+    .timeline-point {
+      position: absolute;
+      left: -2rem;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background-color: var(--primary);
+      transform: translateX(50%);
+      z-index: 1;
+    }
+    
+    .timeline-content {
+      padding: 1rem;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.08);
+    }
+    
+    .timeline-date {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .custom-option {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .custom-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .custom-option.selected {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .custom-option-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.375rem;
+      margin-right: 1rem;
+      color: var(--text-primary);
+      background-color: rgba(40, 167, 69, 0.16);
+    }
+    
+    .custom-option.selected .custom-option-icon {
+      color: white;
+      background-color: var(--primary);
+    }
+    
+    .task-item {
+      display: flex;
+      padding: 0.75rem 1rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    
+    .task-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .material-item {
+      padding: 0.75rem;
+      border: 1px solid #dce1e8;
+      border-radius: 0.375rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    
+    .material-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    /* เพิ่มเติมสำหรับการพิมพ์ */
+    @media print {
+      .layout-menu, .layout-navbar, .content-footer, .filter-buttons, .card-header button, .project-action-btn, .layout-overlay {
+        display: none !important;
+      }
+      
+      .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+      }
+      
+      .content-wrapper {
+        margin-left: 0 !important;
+      }
     }
   </style>
 </head>
@@ -261,7 +444,7 @@
               <i class="menu-icon tf-icons bx bx-package"></i>
               <div data-i18n="วัสดุทั่วไป">วัสดุทั่วไป</div>
             </a>
-            <ul class="menu-sub" style="display: block;">
+            <ul class="menu-sub">
               <li class="menu-item">
                 <a href="material-list.html" class="menu-link">
                   <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
@@ -280,7 +463,7 @@
               <i class="menu-icon tf-icons bx bx-cube-alt"></i>
               <div data-i18n="วัสดุเครื่องมือช่าง">วัสดุเครื่องมือช่าง</div>
             </a>
-            <ul class="menu-sub" style="display: block;">
+            <ul class="menu-sub">
               <li class="menu-item">
                 <a href="construction-list.html" class="menu-link">
                   <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
@@ -299,7 +482,7 @@
               <i class="menu-icon tf-icons bx bx-wrench"></i>
               <div data-i18n="เครื่องมือช่าง">เครื่องมือช่าง</div>
             </a>
-            <ul class="menu-sub" style="display: block;">
+            <ul class="menu-sub">
               <li class="menu-item">
                 <a href="tools-list.html" class="menu-link">
                   <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
@@ -330,7 +513,7 @@
               <i class="menu-icon tf-icons bx bx-car"></i>
               <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
             </a>
-            <ul class="menu-sub" style="display: block;">
+            <ul class="menu-sub">
               <li class="menu-item">
                 <a href="vehicle-list.html" class="menu-link">
                   <div data-i18n="รายการรถ">รายการรถ</div>
@@ -359,7 +542,7 @@
               <i class="menu-icon tf-icons bx bx-line-chart"></i>
               <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
             </a>
-            <ul class="menu-sub" style="display: block;">
+            <ul class="menu-sub">
               <li class="menu-item">
                 <a href="report-projects.html" class="menu-link">
                   <div data-i18n="รายงานโครงการ">รายงานโครงการ</div>
@@ -388,7 +571,7 @@
               <i class="menu-icon tf-icons bx bx-user"></i>
               <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
             </a>
-            <ul class="menu-sub" style="display: block;">
+            <ul class="menu-sub">
               <li class="menu-item">
                 <a href="user-list.html" class="menu-link">
                   <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
@@ -546,6 +729,82 @@
             <h4 class="fw-bold py-3 mb-4">
               <span class="text-muted fw-light">จัดการโครงการ /</span> รายการโครงการ
             </h4>
+            
+            <!-- Advanced Filter Card -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">ตัวกรองขั้นสูง</h5>
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                  <i class="bx bx-filter-alt me-1"></i> แสดง/ซ่อน ตัวกรอง
+                </button>
+              </div>
+              <div class="collapse" id="filterCollapse">
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-3">
+                      <label for="filterProjectDate" class="form-label">วันที่</label>
+                      <select class="form-select" id="filterProjectDate">
+                        <option value="" selected>ทั้งหมด</option>
+                        <option value="current-month">เดือนปัจจุบัน</option>
+                        <option value="last-month">เดือนที่แล้ว</option>
+                        <option value="current-year">ปีปัจจุบัน</option>
+                        <option value="custom">กำหนดเอง</option>
+                      </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                      <label for="filterProjectManager" class="form-label">ผู้จัดการโครงการ</label>
+                      <select class="form-select" id="filterProjectManager">
+                        <option value="" selected>ทั้งหมด</option>
+                        <option value="1">นายชัยณรงค์ สวนสวย</option>
+                        <option value="2">นางสาวสมหญิง รักษ์สวน</option>
+                        <option value="3">นายวิเชียร แข็งแรง</option>
+                      </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                      <label for="filterProjectType" class="form-label">ประเภทงาน</label>
+                      <select class="form-select" id="filterProjectType">
+                        <option value="" selected>ทั้งหมด</option>
+                        <option value="garden">จัดสวน</option>
+                        <option value="landscape">ภูมิทัศน์</option>
+                        <option value="construction">ก่อสร้าง</option>
+                        <option value="maintenance">ดูแลรักษา</option>
+                      </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                      <label for="filterProjectBudget" class="form-label">งบประมาณ</label>
+                      <select class="form-select" id="filterProjectBudget">
+                        <option value="" selected>ทั้งหมด</option>
+                        <option value="0-50000">ต่ำกว่า 50,000 บาท</option>
+                        <option value="50000-100000">50,000 - 100,000 บาท</option>
+                        <option value="100000-200000">100,000 - 200,000 บาท</option>
+                        <option value="200000+">มากกว่า 200,000 บาท</option>
+                      </select>
+                    </div>
+                    
+                    <div class="col-12 d-flex justify-content-end">
+                      <button type="button" class="btn btn-secondary me-2" id="resetFilterBtn">รีเซ็ต</button>
+                      <button type="button" class="btn btn-primary" id="applyFilterBtn">ค้นหา</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Export Buttons -->
+            <div class="d-flex flex-wrap gap-2 mb-3 filter-buttons">
+              <button type="button" class="btn btn-outline-success" id="exportExcelBtn">
+                <i class="bx bx-file me-1"></i> ส่งออก Excel
+              </button>
+              <button type="button" class="btn btn-outline-danger" id="exportPdfBtn">
+                <i class="bx bx-file-pdf me-1"></i> ส่งออก PDF
+              </button>
+              <button type="button" class="btn btn-outline-primary" id="printBtn">
+                <i class="bx bx-printer me-1"></i> พิมพ์
+              </button>
+            </div>
 
             <!-- Project List Tabs -->
             <div class="card">
@@ -1307,17 +1566,22 @@
   </div>
 
   <!-- Core JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
 
   <!-- Vendors JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive/2.4.1/dataTables.responsive.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs5/2.4.1/responsive.bootstrap5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons/2.4.1/dataTables.buttons.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons-bs5/2.4.1/buttons.bootstrap5.min.js"></script>
+  <script src="../assets/vendor/libs/datatables/jquery.dataTables.js"></script>
+  <script src="../assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+  <script src="../assets/vendor/libs/datatables-responsive/datatables.responsive.js"></script>
+  <script src="../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js"></script>
+  <script src="../assets/vendor/libs/datatables-buttons/datatables-buttons.js"></script>
+  <script src="../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <!-- Main JS -->
   <script src="../assets/js/main.js"></script>
@@ -1507,14 +1771,117 @@
       tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
       });
+      
+      // Advanced filter
+      $('#applyFilterBtn').on('click', function() {
+        const projectDate = $('#filterProjectDate').val();
+        const projectManager = $('#filterProjectManager').val();
+        const projectType = $('#filterProjectType').val();
+        const projectBudget = $('#filterProjectBudget').val();
+        
+        // ที่นี่จะต้องเขียนโค้ดสำหรับกรองข้อมูลตามค่าที่เลือก
+        // ในตัวอย่างนี้จะแสดงแค่การเตือนว่าได้ทำการค้นหาแล้ว
+        console.log('กรองตาม:', { projectDate, projectManager, projectType, projectBudget });
+        alert('ค้นหาโครงการตามเงื่อนไขที่กำหนด');
+        
+        // สามารถเพิ่มโค้ดสำหรับการกรองข้อมูลจริงได้ที่นี่
+        // ตัวอย่างการกรองแบบง่ายๆ
+        if (projectManager) {
+          projectTable.column(7).search(projectManager === '1' ? 'นายชัยณรงค์' : (projectManager === '2' ? 'นางสาวสมหญิง' : 'นายวิเชียร')).draw();
+        }
+      });
+      
+      // Reset filter
+      $('#resetFilterBtn').on('click', function() {
+        $('#filterProjectDate').val('');
+        $('#filterProjectManager').val('');
+        $('#filterProjectType').val('');
+        $('#filterProjectBudget').val('');
+        
+        // รีเซ็ตการค้นหาในตาราง
+        projectTable.search('').columns().search('').draw();
+      });
+      
+      // Export to Excel button
+      $('#exportExcelBtn').on('click', function() {
+        const today = new Date().toLocaleDateString('th-TH');
+        const data = [];
+        
+        // เตรียมข้อมูลสำหรับส่งออก
+        $('#projectTable tbody tr').each(function() {
+          const row = $(this);
+          const columns = row.find('td');
+          
+          data.push({
+            'รหัสโครงการ': $(columns[0]).text(),
+            'ชื่อโครงการ': $(columns[1]).text(),
+            'ลูกค้า': $(columns[2]).text(),
+            'วันที่เริ่ม': $(columns[3]).text(),
+            'กำหนดเสร็จ': $(columns[4]).text(),
+            'สถานะ': $(columns[5]).text().trim(),
+            'ความคืบหน้า': $(columns[6]).find('small').text(),
+            'ผู้รับผิดชอบ': $(columns[7]).text()
+          });
+        });
+        
+        // ในตัวอย่างนี้จะแสดงแค่การเตือนว่าได้ส่งออกแล้ว
+        // จริงๆ แล้วจะต้องเขียนโค้ดสำหรับส่งออกไฟล์ Excel โดยใช้ไลบรารีอย่าง SheetJS
+        console.log('ส่งออกข้อมูล:', data);
+        alert('ส่งออกข้อมูลเป็นไฟล์ Excel เรียบร้อยแล้ว');
+      });
+      
+      // Export to PDF button
+      $('#exportPdfBtn').on('click', function() {
+        // ในตัวอย่างนี้จะแสดงแค่การเตือนว่าได้ส่งออกแล้ว
+        // จริงๆ แล้วจะต้องเขียนโค้ดสำหรับส่งออกไฟล์ PDF โดยใช้ไลบรารีอย่าง jsPDF
+        alert('ส่งออกข้อมูลเป็นไฟล์ PDF เรียบร้อยแล้ว');
+      });
+      
+      // Print button
+      $('#printBtn').on('click', function() {
+        window.print();
+      });
+      
+      // Card view filter
+      $(document).on('click', '#card-view .filter-item', function() {
+        $('#card-view .filter-item').removeClass('active');
+        $(this).addClass('active');
+        
+        const filterValue = $(this).text();
+        
+        if (filterValue === 'ทั้งหมด') {
+          $('.project-card').parent().show();
+        } else {
+          $('.project-card').parent().hide();
+          $(`.project-card:has(.badge:contains('${filterValue}'))`).parent().show();
+        }
+      });
+      
+      // Card view search
+      $('#card-view .search-input').on('keyup', function() {
+        const searchValue = $(this).val().toLowerCase();
+        
+        if (searchValue === '') {
+          $('.project-card').parent().show();
+        } else {
+          $('.project-card').each(function() {
+            const cardText = $(this).text().toLowerCase();
+            if (cardText.includes(searchValue)) {
+              $(this).parent().show();
+            } else {
+              $(this).parent().hide();
+            }
+          });
+        }
+      });
     });
     
     // Show project details in modal
     function showProjectDetails(projectId) {
       const project = projectsData.find(p => p.id === projectId) || 
-                      { id: projectId, name: 'โครงการตัวอย่าง', customer: 'ลูกค้าตัวอย่าง', 
-                       startDate: '01/01/2568', endDate: '30/01/2568', status: 'กำลังดำเนินการ', 
-                       statusClass: 'bg-primary', progress: 50 };
+                     { id: projectId, name: 'โครงการตัวอย่าง', customer: 'ลูกค้าตัวอย่าง', 
+                      startDate: '01/01/2568', endDate: '30/01/2568', status: 'กำลังดำเนินการ', 
+                      statusClass: 'bg-primary', progress: 50 };
       
       // Fill the modal with project details
       $('#modal-project-id').text(project.id);
@@ -1552,6 +1919,3 @@
       // Show the modal
       $('#projectDetailModal').modal('show');
     }
-  </script>
-</body>
-</html>
