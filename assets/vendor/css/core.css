@@ -30782,3 +30782,369 @@ a.bg-vimeo:hover, a.bg-vimeo:focus {
 .footer.bg-lighter hr {
   border-color: rgba(59, 64, 86, 0.076235098);
 }
+/* responsive.css - CSS สำหรับการแสดงผลบนอุปกรณ์หลายขนาด */
+
+/* สำหรับอุปกรณ์ขนาดใหญ่ (Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .layout-menu-fixed .layout-page {
+    padding-left: 240px;
+  }
+
+  .layout-menu-fixed.layout-menu-collapsed .layout-page {
+    padding-left: 80px;
+  }
+
+  .layout-menu {
+    width: 240px;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .layout-menu-collapsed .layout-menu {
+    width: 80px;
+  }
+
+  .layout-menu-collapsed .app-brand-text,
+  .layout-menu-collapsed .menu-header-text,
+  .layout-menu-collapsed .menu-item .menu-link div {
+    display: none;
+  }
+
+  .layout-menu-collapsed .menu-icon {
+    margin-right: 0;
+  }
+
+  .layout-menu-collapsed .menu-item .menu-toggle::after {
+    display: none;
+  }
+
+  .layout-menu-collapsed .menu-sub {
+    display: none !important;
+  }
+}
+
+/* สำหรับอุปกรณ์ขนาดกลาง (Tablets, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .layout-page {
+    padding-left: 0 !important;
+  }
+
+  .layout-menu {
+    transform: translateX(-100%);
+    width: 240px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .layout-menu-expanded .layout-menu {
+    transform: translateX(0);
+  }
+
+  .layout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: rgba(67, 89, 113, 0.5);
+    display: none;
+  }
+
+  .layout-menu-expanded .layout-overlay {
+    display: block;
+  }
+
+  .card-stats-row {
+    margin-bottom: 1rem;
+  }
+
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* สำหรับอุปกรณ์ขนาดเล็ก (Landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .layout-page {
+    padding-left: 0 !important;
+  }
+
+  .layout-menu {
+    transform: translateX(-100%);
+    width: 240px;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1050;
+  }
+
+  .layout-menu-expanded .layout-menu {
+    transform: translateX(0);
+  }
+
+  .layout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1040;
+    background-color: rgba(67, 89, 113, 0.5);
+    display: none;
+  }
+
+  .layout-menu-expanded .layout-overlay {
+    display: block;
+  }
+
+  .welcome-bg {
+    background-image: none !important;
+  }
+
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+
+  .quick-action-btn {
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .table-responsive {
+    min-height: .01%;
+    overflow-x: auto;
+  }
+}
+
+/* สำหรับอุปกรณ์ขนาดเล็กมาก (Portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .layout-page {
+    padding-left: 0 !important;
+  }
+
+  .layout-menu {
+    transform: translateX(-100%);
+    width: 240px;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1050;
+  }
+
+  .layout-menu-expanded .layout-menu {
+    transform: translateX(0);
+  }
+
+  .layout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1040;
+    background-color: rgba(67, 89, 113, 0.5);
+    display: none;
+  }
+
+  .layout-menu-expanded .layout-overlay {
+    display: block;
+  }
+
+  .welcome-bg {
+    background-image: none !important;
+  }
+
+  .card-header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .card-header > .dropdown,
+  .card-header > .btn-group,
+  .card-header > .btn {
+    margin-top: 0.5rem;
+  }
+
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+
+  .quick-action-btn {
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .avatar-stats {
+    height: 40px;
+    width: 40px;
+  }
+
+  .table-responsive {
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #ddd;
+  }
+
+  .navbar-nav-right {
+    margin-left: 0;
+  }
+
+  .dropdown-menu-notification {
+    max-width: 300px;
+  }
+
+  .dropdown-menu-notification .dropdown-item {
+    padding: 0.75rem;
+  }
+
+  .progress {
+    height: 8px;
+  }
+
+  .content-wrapper {
+    padding-top: 0.5rem;
+  }
+
+  .container-xxl {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* ปรับปรุงการแสดงผลของตารางในอุปกรณ์ขนาดเล็ก */
+@media (max-width: 767.98px) {
+  .table thead {
+    display: none;
+  }
+
+  .table tbody tr {
+    display: block;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.5rem 0;
+  }
+
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    position: relative;
+    text-align: right;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .table tbody td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    float: left;
+    text-align: left;
+  }
+
+  .table tbody td:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: transparent !important;
+  }
+
+  .table-hover tbody td:hover {
+    background-color: rgba(40, 167, 69, 0.04);
+  }
+}
+
+/* ปรับปรุงรูปแบบการ์ดบนอุปกรณ์เคลื่อนที่ */
+@media (max-width: 767.98px) {
+  .card {
+    border-radius: 0.5rem;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .stats-card .card-body {
+    padding: 1rem;
+  }
+
+  .stats-card h5.card-title {
+    font-size: 0.875rem;
+  }
+
+  .stats-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .stats-card .badge {
+    font-size: 0.7rem;
+  }
+
+  .quick-action-btn i {
+    font-size: 1.5rem;
+  }
+}
+
+/* ปรับปรุงการแสดงผลส่วน Navbar บนอุปกรณ์เคลื่อนที่ */
+@media (max-width: 767.98px) {
+  .app-brand-text {
+    font-size: 1rem;
+  }
+
+  .layout-navbar {
+    height: auto;
+    min-height: 60px;
+  }
+
+  .navbar-nav-right {
+    flex-direction: row !important;
+  }
+
+  .navbar-nav .nav-item {
+    margin-left: 0.25rem;
+  }
+
+  .dropdown-toggle::after {
+    display: none;
+  }
+}
+
+/* ปรับการแสดงผล Modal บนอุปกรณ์เคลื่อนที่ */
+@media (max-width: 767.98px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+    margin: 0.25rem 0;
+  }
+}
+
+/* ปรับปรุง apexcharts บนอุปกรณ์เคลื่อนที่ */
+@media (max-width: 767.98px) {
+  .apexcharts-canvas {
+    max-width: 100%;
+  }
+
+  .apexcharts-legend {
+    position: relative !important;
+    margin-top: 1rem !important;
+  }
+
+  .apexcharts-tooltip {
+    max-width: 300px;
+  }
+}
