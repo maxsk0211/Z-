@@ -1630,4 +1630,46 @@
             <td colspan="6" class="text-center">ไม่มีข้อมูลล็อต</td>
           </tr>
           <tr class="table-light">
-            <t
+            <td colspan="3" class="text-end fw-bold">รวม:</td>
+            <td class="fw-bold">0</td>
+            <td></td>
+            <td class="fw-bold">฿0.00</td>
+          </tr>
+        `);
+      }
+      
+      // Fill history table
+      const historyTableBody = $('#history-table-body');
+      historyTableBody.empty();
+      
+      if (material.history && material.history.length > 0) {
+        material.history.forEach(item => {
+          historyTableBody.append(`
+            <tr>
+              <td>${item.date}</td>
+              <td>${item.docId}</td>
+              <td><span class="badge ${item.typeClass}">${item.type}</span></td>
+              <td>${item.qty} ${item.unit}</td>
+              <td>${item.project}</td>
+              <td>${item.person}</td>
+              <td>${item.note}</td>
+            </tr>
+          `);
+        });
+      } else {
+        historyTableBody.append(`
+          <tr>
+            <td colspan="7" class="text-center">ไม่มีประวัติการเบิก-รับ</td>
+          </tr>
+        `);
+      }
+      
+      // Initialize charts
+      initializeCharts();
+      
+      // Show the modal
+      $('#materialDetailModal').modal('show');
+    }
+  </script>
+</body>
+</html>
