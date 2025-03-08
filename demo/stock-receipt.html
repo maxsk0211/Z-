@@ -99,7 +99,7 @@
       box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.12);
       margin-bottom: 1.5rem;
     }
-    
+
     .input-group-text {
       background-color: #f5f6fa;
       border-color: #dce1e8;
@@ -110,78 +110,37 @@
       font-weight: 500;
     }
     
-    .material-item {
-      background-color: #fff;
-      border: 1px solid #e7e7e8;
-      border-radius: 0.375rem;
+    .item-row {
       padding: 1rem;
+      border-radius: 0.375rem;
+      background-color: var(--bg-light);
       margin-bottom: 1rem;
+      position: relative;
     }
     
-    .material-item.selected {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
+    .remove-item {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+      color: var(--danger);
+      font-size: 1.25rem;
+    }
+    
+    .table-totals td {
+      border: none;
+    }
+    
+    .table-totals tr:last-child {
+      font-weight: bold;
+      font-size: 1.1rem;
     }
     
     .material-thumbnail {
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       object-fit: cover;
       border-radius: 0.25rem;
-    }
-    
-    .line-item {
-      position: relative;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid #e7e7e8;
-      border-radius: 0.375rem;
-      background-color: #fff;
-    }
-    
-    .line-item:hover {
-      background-color: #f8f9fa;
-    }
-    
-    .remove-item-btn {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      font-size: 1.1rem;
-      color: var(--danger);
-      cursor: pointer;
-      width: 2rem;
-      height: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: all 0.2s ease;
-    }
-    
-    .remove-item-btn:hover {
-      background-color: var(--danger-light);
-    }
-    
-    .total-section {
-      background-color: #f8f9fa;
-      border-radius: 0.375rem;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .btn-add-item {
-      width: 100%;
-      border-style: dashed;
-      border-width: 2px;
-      background-color: #f8f9fa;
-      color: var(--primary);
-      transition: all 0.2s ease;
-    }
-    
-    .btn-add-item:hover {
-      background-color: var(--primary-light);
-      border-color: var(--primary);
     }
     
     .category-badge {
@@ -214,6 +173,32 @@
 
     .category-chemicals {
       background-color: #F44336;
+    }
+    
+    .selected-material-info {
+      background-color: var(--primary-light);
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    
+    .material-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .status-available {
+      background-color: #28a745;
+    }
+    
+    .status-low {
+      background-color: #ffa726;
+    }
+    
+    .status-out {
+      background-color: #ec407a;
     }
   </style>
 </head>
@@ -590,209 +575,256 @@
               <span class="text-muted fw-light">จัดการวัสดุ /</span> รับสินค้าเข้าคลัง
             </h4>
 
-            <!-- Stock Receipt Form -->
-            <div class="card">
-              <div class="card-header">
-                <h5 class="mb-0">รับสินค้าเข้าคลัง</h5>
-              </div>
-              <div class="card-body">
-                <form id="stockReceiptForm">
-                  <div class="row mb-4">
-                    <div class="col-md-6 mb-3">
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label for="receiptNumber" class="form-label required-label">เลขที่เอกสาร</label>
-                          <div class="input-group">
-                            <span class="input-group-text">REC-</span>
-                            <input type="text" class="form-control" id="receiptNumber" value="20250309-001" required readonly>
-                          </div>
-                          <small class="text-muted">รหัสถูกสร้างอัตโนมัติ</small>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="receiptDate" class="form-label required-label">วันที่รับสินค้า</label>
-                          <input type="text" class="form-control flatpickr-date" id="receiptDate" value="09/03/2568" required>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12 mb-3">
-                          <label for="supplierSelect" class="form-label required-label">ซัพพลายเออร์</label>
-                          <select class="form-select" id="supplierSelect" required>
-                            <option value="" disabled>-- เลือกซัพพลายเออร์ --</option>
-                            <option value="1" selected>บริษัท กรีนการ์เด้น จำกัด</option>
-                            <option value="2">บริษัท ไทยวัสดุภัณฑ์ จำกัด</option>
-                            <option value="3">ร้านต้นไม้นานาพันธุ์</option>
-                            <option value="4">บริษัท เครื่องมือช่างไทย จำกัด</option>
-                            <option value="new">+ เพิ่มซัพพลายเออร์ใหม่</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label for="invoiceNumber" class="form-label">เลขที่ใบแจ้งหนี้</label>
-                          <input type="text" class="form-control" id="invoiceNumber" placeholder="เลขที่อ้างอิงจากซัพพลายเออร์">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="receivedBy" class="form-label required-label">ผู้รับสินค้า</label>
-                          <select class="form-select" id="receivedBy" required>
-                            <option value="" disabled>-- เลือกพนักงาน --</option>
-                            <option value="1" selected>นางสาวสมหญิง รักษ์สวน</option>
-                            <option value="2">นายชัยณรงค์ สวนสวย</option>
-                            <option value="3">นายวิเชียร แข็งแรง</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="notes" class="form-label">หมายเหตุ</label>
-                      <textarea class="form-control" id="notes" rows="7" placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับการรับสินค้า"></textarea>
-                    </div>
+            <!-- Receipt Form -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">รับสินค้าเข้าคลัง (Stock Receipt)</h5>
+                    <span class="badge bg-label-success">เลขที่เอกสาร: REC-20250310-003</span>
                   </div>
+                  <div class="card-body">
+                    <form id="stockReceiptForm">
+                      <div class="row mb-4">
+                        <div class="col-md-6 col-12">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="receiptDate" class="form-label required-label">วันที่รับสินค้า</label>
+                              <input type="text" class="form-control flatpickr-date" id="receiptDate" value="10/03/2568" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="invoiceNumber" class="form-label">เลขที่ใบแจ้งหนี้/ใบส่งสินค้า</label>
+                              <input type="text" class="form-control" id="invoiceNumber" placeholder="ระบุเลขที่เอกสารอ้างอิง">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                              <label for="supplierSelect" class="form-label required-label">ซัพพลายเออร์</label>
+                              <select class="form-select" id="supplierSelect" required>
+                                <option value="" disabled>-- เลือกซัพพลายเออร์ --</option>
+                                <option value="1" selected>บริษัท กรีนการ์เด้น จำกัด</option>
+                                <option value="2">บริษัท ไทยวัสดุภัณฑ์ จำกัด</option>
+                                <option value="3">ร้านต้นไม้นานาพันธุ์</option>
+                                <option value="4">บริษัท เครื่องมือช่างไทย จำกัด</option>
+                                <option value="new">+ เพิ่มซัพพลายเออร์ใหม่</option>
+                              </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                              <label for="receiverSelect" class="form-label required-label">ผู้รับสินค้า</label>
+                              <select class="form-select" id="receiverSelect" required>
+                                <option value="" disabled>-- เลือกผู้รับสินค้า --</option>
+                                <option value="1">นายบุญชัย ผู้จัดการ</option>
+                                <option value="2" selected>นางสาวสมหญิง รักษ์สวน</option>
+                                <option value="3">นายชัยณรงค์ สวนสวย</option>
+                                <option value="4">นายวิเชียร แข็งแรง</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="poNumber" class="form-label">เลขที่ใบสั่งซื้อ</label>
+                              <input type="text" class="form-control" id="poNumber" placeholder="ระบุเลขที่ PO (ถ้ามี)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="deliveryNumber" class="form-label">เลขที่ใบส่งของ</label>
+                              <input type="text" class="form-control" id="deliveryNumber" placeholder="ระบุเลขที่ใบส่งของ">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                              <label for="notes" class="form-label">หมายเหตุ</label>
+                              <textarea class="form-control" id="notes" rows="4" placeholder="ระบุหมายเหตุเพิ่มเติม (ถ้ามี)"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                  <hr>
+                      <h6 class="mb-3 section-heading">รายการสินค้า</h6>
 
-                  <h6 class="section-heading mb-3">รายการสินค้าที่รับ</h6>
-                  
-                  <div id="lineItemsContainer">
-                    <!-- Line Item 1 -->
-                    <div class="line-item" data-item-id="1">
-                      <span class="remove-item-btn"><i class="bx bx-x"></i></span>
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label required-label">เลือกวัสดุ</label>
-                          <select class="form-select item-select" required>
-                            <option value="" disabled>-- เลือกวัสดุ --</option>
-                            <option value="M-0001" selected>M-0001 - ดินปลูกต้นไม้ (8 ถุง)</option>
-                            <option value="P-0003">P-0003 - ต้นไม้ประดับขนาดเล็ก (45 ต้น)</option>
-                            <option value="M-0004">M-0004 - หินแกรนิตก้อนเล็ก (0 กก.)</option>
-                            <option value="M-0006">M-0006 - กระถางดินเผา 6" (35 ใบ)</option>
-                          </select>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                          <label class="form-label required-label">จำนวนรับ</label>
-                          <div class="input-group">
-                            <input type="number" class="form-control item-quantity" value="10" min="1" required>
-                            <span class="input-group-text item-unit">ถุง</span>
+                      <!-- เพิ่มรายการสินค้า -->
+                      <div class="mb-3">
+                        <div class="row">
+                          <div class="col-md-5 mb-3 mb-md-0">
+                            <select class="form-select" id="materialSelect">
+                              <option value="" selected>-- เลือกวัสดุที่ต้องการรับเข้า --</option>
+                              <option value="M-0001">M-0001 - ดินปลูกต้นไม้</option>
+                              <option value="P-0003">P-0003 - ต้นไม้ประดับขนาดเล็ก</option>
+                              <option value="M-0004">M-0004 - หินแกรนิตก้อนเล็ก</option>
+                              <option value="M-0006">M-0006 - กระถางดินเผา 6"</option>
+                            </select>
+                          </div>
+                          <div class="col-md-7">
+                            <button type="button" class="btn btn-primary" id="addItemBtn">
+                              <i class="bx bx-plus me-1"></i> เพิ่มรายการ
+                            </button>
                           </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                          <label class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
-                          <div class="input-group">
-                            <span class="input-group-text">฿</span>
-                            <input type="number" class="form-control item-price" value="150.00" min="0" step="0.01" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4 mb-3">
-                          <label class="form-label">สถานที่จัดเก็บ</label>
-                          <input type="text" class="form-control item-location" value="ชั้น A-3 คลังสินค้าหลัก">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label class="form-label">รหัสล็อต</label>
-                          <input type="text" class="form-control item-lot" value="LOT-20250309-001" readonly>
-                          <small class="text-muted">รหัสถูกสร้างอัตโนมัติ</small>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label class="form-label">มูลค่ารวม (บาท)</label>
-                          <div class="input-group">
-                            <span class="input-group-text">฿</span>
-                            <input type="text" class="form-control item-total" value="1,500.00" readonly>
+                        <div id="selectedMaterialInfo" class="selected-material-info mt-2" style="display: none;">
+                          <div class="row">
+                            <div class="col-md-8">
+                              <div class="d-flex align-items-center mb-2">
+                                <img id="selectedMaterialImage" src="" class="material-thumbnail me-2" alt="">
+                                <div>
+                                  <strong id="selectedMaterialName"></strong>
+                                  <div><small id="selectedMaterialCategory"></small></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                              <div class="d-flex flex-column">
+                                <span>คงเหลือปัจจุบัน: <span id="selectedMaterialQty"></span></span>
+                                <span>ราคาล่าสุด: <span id="selectedMaterialPrice"></span></span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <label class="form-label">หมายเหตุรายการ</label>
-                          <input type="text" class="form-control item-note" placeholder="รายละเอียดเพิ่มเติมของรายการนี้">
-                        </div>
-                      </div>
-                    </div>
 
-                    <!-- Line Item 2 -->
-                    <div class="line-item" data-item-id="2">
-                      <span class="remove-item-btn"><i class="bx bx-x"></i></span>
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label class="form-label required-label">เลือกวัสดุ</label>
-                          <select class="form-select item-select" required>
-                            <option value="" disabled>-- เลือกวัสดุ --</option>
-                            <option value="M-0001">M-0001 - ดินปลูกต้นไม้ (8 ถุง)</option>
-                            <option value="P-0003">P-0003 - ต้นไม้ประดับขนาดเล็ก (45 ต้น)</option>
-                            <option value="M-0004" selected>M-0004 - หินแกรนิตก้อนเล็ก (0 กก.)</option>
-                            <option value="M-0006">M-0006 - กระถางดินเผา 6" (35 ใบ)</option>
-                          </select>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                          <label class="form-label required-label">จำนวนรับ</label>
-                          <div class="input-group">
-                            <input type="number" class="form-control item-quantity" value="50" min="1" required>
-                            <span class="input-group-text item-unit">กก.</span>
+                      <!-- รายการสินค้าที่เพิ่มแล้ว -->
+                      <div id="itemsContainer">
+                        <!-- Item 1 -->
+                        <div class="item-row" data-item-id="M-0001">
+                          <span class="remove-item"><i class="bx bx-x"></i></span>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="d-flex align-items-center mb-3">
+                                <img src="../assets/img/materials/soil.jpg" class="material-thumbnail me-2" alt="ดินปลูกต้นไม้">
+                                <div>
+                                  <strong>ดินปลูกต้นไม้</strong>
+                                  <div class="small text-muted">M-0001</div>
+                                  <span class="category-badge category-materials">วัสดุ</span>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                  <label class="form-label required-label">จำนวนรับ</label>
+                                  <div class="input-group">
+                                    <input type="number" class="form-control item-quantity" value="5" min="1" required>
+                                    <span class="input-group-text">ถุง</span>
+                                  </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                  <label class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">฿</span>
+                                    <input type="number" class="form-control item-price" value="150" min="0" step="0.01" required>
+                                  </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                  <label class="form-label">มูลค่ารวม (บาท)</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">฿</span>
+                                    <input type="text" class="form-control item-total" value="750.00" readonly>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="row">
+                                <div class="col-md-6 mb-3">
+                                  <label class="form-label">รหัสล็อต</label>
+                                  <input type="text" class="form-control" value="LOT-003" readonly>
+                                  <small class="text-muted">สร้างอัตโนมัติตามวันที่</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label class="form-label">สถานที่จัดเก็บ</label>
+                                  <input type="text" class="form-control" value="ชั้น A-3 คลังสินค้าหลัก">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                  <label class="form-label">หมายเหตุ</label>
+                                  <textarea class="form-control" rows="1" placeholder="ระบุหมายเหตุสำหรับรายการนี้"></textarea>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                          <label class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
-                          <div class="input-group">
-                            <span class="input-group-text">฿</span>
-                            <input type="number" class="form-control item-price" value="45.00" min="0" step="0.01" required>
+
+                        <!-- Item 2 -->
+                        <div class="item-row" data-item-id="M-0004">
+                          <span class="remove-item"><i class="bx bx-x"></i></span>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="d-flex align-items-center mb-3">
+                                <img src="../assets/img/materials/granite.jpg" class="material-thumbnail me-2" alt="หินแกรนิตก้อนเล็ก">
+                                <div>
+                                  <strong>หินแกรนิตก้อนเล็ก</strong>
+                                  <div class="small text-muted">M-0004</div>
+                                  <span class="category-badge category-decorations">ตกแต่ง</span>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                  <label class="form-label required-label">จำนวนรับ</label>
+                                  <div class="input-group">
+                                    <input type="number" class="form-control item-quantity" value="10" min="1" required>
+                                    <span class="input-group-text">กก.</span>
+                                  </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                  <label class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">฿</span>
+                                    <input type="number" class="form-control item-price" value="45" min="0" step="0.01" required>
+                                  </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                                  <label class="form-label">มูลค่ารวม (บาท)</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">฿</span>
+                                    <input type="text" class="form-control item-total" value="450.00" readonly>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="row">
+                                <div class="col-md-6 mb-3">
+                                  <label class="form-label">รหัสล็อต</label>
+                                  <input type="text" class="form-control" value="LOT-002" readonly>
+                                  <small class="text-muted">สร้างอัตโนมัติตามวันที่</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label class="form-label">สถานที่จัดเก็บ</label>
+                                  <input type="text" class="form-control" value="โกดัง B ชั้น 2">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                  <label class="form-label">หมายเหตุ</label>
+                                  <textarea class="form-control" rows="1" placeholder="ระบุหมายเหตุสำหรับรายการนี้">สต็อกใหม่หลังจากหมด</textarea>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
+
+                      <!-- มูลค่ารวม -->
                       <div class="row">
-                        <div class="col-md-4 mb-3">
-                          <label class="form-label">สถานที่จัดเก็บ</label>
-                          <input type="text" class="form-control item-location" value="ชั้น B-1 คลังสินค้าหลัก">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label class="form-label">รหัสล็อต</label>
-                          <input type="text" class="form-control item-lot" value="LOT-20250309-002" readonly>
-                          <small class="text-muted">รหัสถูกสร้างอัตโนมัติ</small>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label class="form-label">มูลค่ารวม (บาท)</label>
-                          <div class="input-group">
-                            <span class="input-group-text">฿</span>
-                            <input type="text" class="form-control item-total" value="2,250.00" readonly>
-                          </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                          <table class="table table-totals">
+                            <tr>
+                              <td class="text-end">จำนวนรายการ:</td>
+                              <td class="text-end" style="width: 150px;">2 รายการ</td>
+                            </tr>
+                            <tr>
+                              <td class="text-end">มูลค่าสินค้ารวม:</td>
+                              <td class="text-end">฿1,200.00</td>
+                            </tr>
+                          </table>
                         </div>
                       </div>
+
                       <div class="row">
-                        <div class="col-md-12">
-                          <label class="form-label">หมายเหตุรายการ</label>
-                          <input type="text" class="form-control item-note" placeholder="รายละเอียดเพิ่มเติมของรายการนี้">
+                        <div class="col-12 text-end">
+                          <a href="material-list.html" class="btn btn-outline-secondary me-2">ยกเลิก</a>
+                          <button type="submit" class="btn btn-success" id="saveReceiptBtn">
+                            <i class="bx bx-check-circle me-1"></i> บันทึกการรับเข้า
+                          </button>
                         </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
-
-                  <button type="button" id="addItemBtn" class="btn btn-add-item mb-4">
-                    <i class="bx bx-plus me-1"></i> เพิ่มรายการ
-                  </button>
-
-                  <div class="total-section">
-                    <div class="row">
-                      <div class="col-md-8"></div>
-                      <div class="col-md-4">
-                        <div class="d-flex justify-content-between mb-2">
-                          <span class="text-muted">จำนวนรายการ:</span>
-                          <span id="totalItems">2 รายการ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                          <span class="text-muted">มูลค่ารวม:</span>
-                          <span id="totalValue">฿3,750.00</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row mt-4">
-                    <div class="col-12 text-end">
-                      <a href="material-list.html" class="btn btn-outline-secondary me-2">ยกเลิก</a>
-                      <button type="submit" class="btn btn-success">
-                        <i class="bx bx-check-circle me-1"></i> บันทึกการรับสินค้า
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
@@ -838,28 +870,26 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-12 mb-3">
-              <label for="newSupplierName" class="form-label required-label">ชื่อซัพพลายเออร์</label>
-              <input type="text" class="form-control" id="newSupplierName" placeholder="ระบุชื่อบริษัทหรือร้านค้า" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="newSupplierContact" class="form-label">ข้อมูลติดต่อ</label>
-              <input type="text" class="form-control" id="newSupplierContact" placeholder="ระบุหมายเลขโทรศัพท์ หรืออีเมล">
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="newSupplierTaxId" class="form-label">เลขประจำตัวผู้เสียภาษี</label>
-              <input type="text" class="form-control" id="newSupplierTaxId" placeholder="เลขประจำตัวผู้เสียภาษี">
-            </div>
-            <div class="col-md-12 mb-3">
-              <label for="newSupplierAddress" class="form-label">ที่อยู่</label>
-              <textarea class="form-control" id="newSupplierAddress" rows="3" placeholder="ระบุที่อยู่ซัพพลายเออร์"></textarea>
-            </div>
+          <div class="mb-3">
+            <label for="newSupplierName" class="form-label required-label">ชื่อซัพพลายเออร์</label>
+            <input type="text" class="form-control" id="newSupplierName" placeholder="ระบุชื่อบริษัทหรือร้านค้า" required>
+          </div>
+          <div class="mb-3">
+            <label for="newSupplierContact" class="form-label">ข้อมูลติดต่อ</label>
+            <input type="text" class="form-control" id="newSupplierContact" placeholder="ระบุหมายเลขโทรศัพท์ หรืออีเมล">
+          </div>
+          <div class="mb-3">
+            <label for="newSupplierAddress" class="form-label">ที่อยู่</label>
+            <textarea class="form-control" id="newSupplierAddress" rows="3" placeholder="ระบุที่อยู่ซัพพลายเออร์"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="newSupplierTax" class="form-label">เลขประจำตัวผู้เสียภาษี</label>
+            <input type="text" class="form-control" id="newSupplierTax" placeholder="ระบุเลขประจำตัวผู้เสียภาษี (ถ้ามี)">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-          <button type="button" class="btn btn-primary" id="saveNewSupplierBtn">บันทึกซัพพลายเออร์</button>
+          <button type="button" class="btn btn-primary" id="saveNewSupplierBtn">บันทึกข้อมูล</button>
         </div>
       </div>
     </div>
@@ -876,12 +906,12 @@
         <div class="modal-body text-center">
           <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
           <h5>บันทึกข้อมูลสำเร็จ</h5>
-          <p class="mb-2">รับสินค้าเข้าคลังเรียบร้อยแล้ว</p>
-          <p class="fw-bold" id="receiptNumberDisplay">เลขที่เอกสาร: REC-20250309-001</p>
+          <p class="mb-2">บันทึกการรับสินค้าเข้าคลังเรียบร้อยแล้ว</p>
+          <p class="fw-bold" id="newReceiptId">เลขที่เอกสาร: REC-20250310-003</p>
         </div>
         <div class="modal-footer">
-          <a href="material-list.html" class="btn btn-outline-secondary">กลับสู่รายการวัสดุ</a>
-          <a href="stock-receipt.html" class="btn btn-success">บันทึกรายการใหม่</a>
+          <a href="material-list.html" class="btn btn-outline-secondary">ไปยังรายการวัสดุ</a>
+          <a href="stock-receipt.html" class="btn btn-success">รับสินค้าเข้าคลังอีกครั้ง</a>
         </div>
       </div>
     </div>
@@ -901,6 +931,54 @@
 
   <!-- Page JS -->
   <script>
+    // Materials data
+    const materialsData = [
+      {
+        id: 'M-0001',
+        name: 'ดินปลูกต้นไม้',
+        category: 'วัสดุ',
+        categoryClass: 'category-materials',
+        quantity: 18,
+        unit: 'ถุง',
+        latestPrice: 150.00,
+        avgCost: 122.22,
+        image: '../assets/img/materials/soil.jpg'
+      },
+      {
+        id: 'P-0003',
+        name: 'ต้นไม้ประดับขนาดเล็ก',
+        category: 'ต้นไม้',
+        categoryClass: 'category-plants',
+        quantity: 45,
+        unit: 'ต้น',
+        latestPrice: 150.00,
+        avgCost: 150.00,
+        image: '../assets/img/materials/plant_small.jpg'
+      },
+      {
+        id: 'M-0004',
+        name: 'หินแกรนิตก้อนเล็ก',
+        category: 'ตกแต่ง',
+        categoryClass: 'category-decorations',
+        quantity: 0,
+        unit: 'กก.',
+        latestPrice: 45.00,
+        avgCost: 45.00,
+        image: '../assets/img/materials/granite.jpg'
+      },
+      {
+        id: 'M-0006',
+        name: 'กระถางดินเผา 6"',
+        category: 'ตกแต่ง',
+        categoryClass: 'category-decorations',
+        quantity: 35,
+        unit: 'ใบ',
+        latestPrice: 85.00,
+        avgCost: 78.50,
+        image: '../assets/img/materials/pot.jpg'
+      }
+    ];
+    
     // แก้ไขการแสดงผลเมนู
     function initializeMenu() {
       // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
@@ -924,17 +1002,9 @@
         });
       });
     }
-    
-    // Material data for demo
-    const materialsData = [
-      { id: 'M-0001', name: 'ดินปลูกต้นไม้', quantity: 8, unit: 'ถุง', price: 150.00, location: 'ชั้น A-3 คลังสินค้าหลัก' },
-      { id: 'P-0003', name: 'ต้นไม้ประดับขนาดเล็ก', quantity: 45, unit: 'ต้น', price: 150.00, location: 'โซน B คลังสินค้าหลัก' },
-      { id: 'M-0004', name: 'หินแกรนิตก้อนเล็ก', quantity: 0, unit: 'กก.', price: 45.00, location: 'ชั้น B-1 คลังสินค้าหลัก' },
-      { id: 'M-0006', name: 'กระถางดินเผา 6"', quantity: 35, unit: 'ใบ', price: 85.00, location: 'ชั้น C-2 คลังสินค้าหลัก' }
-    ];
-    
-    // Initialize page and set up event handlers
-    document.addEventListener('DOMContentLoaded', function() {
+
+    // Initialize page components
+    $(document).ready(function() {
       // เรียกใช้ฟังก์ชันจัดการเมนู
       initializeMenu();
       
@@ -946,245 +1016,219 @@
         }
       });
       
-      // Initialize Select2 for dropdown with search
-      $('.form-select').select2({
+      // Initialize Select2 for dropdown
+      $('select').select2({
         width: '100%'
       });
       
-      // Update line item when item selection changes
-      $(document).on('change', '.item-select', function() {
-        const selectedValue = $(this).val();
-        const lineItem = $(this).closest('.line-item');
-        
-        // Find the selected material data
-        const material = materialsData.find(m => m.id === selectedValue);
-        
-        if (material) {
-          // Update unit display
-          lineItem.find('.item-unit').text(material.unit);
-          
-          // Set default price and location
-          lineItem.find('.item-price').val(material.price.toFixed(2));
-          lineItem.find('.item-location').val(material.location);
-          
-          // Generate lot ID (simplified for demo)
-          updateLotId(lineItem);
-          
-          // Calculate total value
-          updateItemTotal(lineItem);
-        }
-      });
-      
-      // Update total when quantity or price changes
-      $(document).on('input', '.item-quantity, .item-price', function() {
-        const lineItem = $(this).closest('.line-item');
-        updateItemTotal(lineItem);
-      });
-      
-      // Remove line item
-      $(document).on('click', '.remove-item-btn', function() {
-        const lineItem = $(this).closest('.line-item');
-        
-        // Don't remove if it's the only line item
-        if ($('.line-item').length > 1) {
-          lineItem.remove();
-          updateTotals();
-        } else {
-          alert('ต้องมีอย่างน้อย 1 รายการ');
-        }
-      });
-      
-      // Add new line item
-      $('#addItemBtn').on('click', function() {
-        const currentItems = $('.line-item').length;
-        const newItemId = currentItems + 1;
-        const lotId = `LOT-${$('#receiptDate').val().split('/').reverse().join('')}-${String(newItemId).padStart(3, '0')}`;
-        
-        const newLineItem = `
-          <div class="line-item" data-item-id="${newItemId}">
-            <span class="remove-item-btn"><i class="bx bx-x"></i></span>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label required-label">เลือกวัสดุ</label>
-                <select class="form-select item-select" required>
-                  <option value="" selected disabled>-- เลือกวัสดุ --</option>
-                  <option value="M-0001">M-0001 - ดินปลูกต้นไม้ (8 ถุง)</option>
-                  <option value="P-0003">P-0003 - ต้นไม้ประดับขนาดเล็ก (45 ต้น)</option>
-                  <option value="M-0004">M-0004 - หินแกรนิตก้อนเล็ก (0 กก.)</option>
-                  <option value="M-0006">M-0006 - กระถางดินเผา 6" (35 ใบ)</option>
-                </select>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-label required-label">จำนวนรับ</label>
-                <div class="input-group">
-                  <input type="number" class="form-control item-quantity" value="1" min="1" required>
-                  <span class="input-group-text item-unit">ชิ้น</span>
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
-                <div class="input-group">
-                  <span class="input-group-text">฿</span>
-                  <input type="number" class="form-control item-price" value="0.00" min="0" step="0.01" required>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label class="form-label">สถานที่จัดเก็บ</label>
-                <input type="text" class="form-control item-location" placeholder="ระบุสถานที่จัดเก็บ">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label">รหัสล็อต</label>
-                <input type="text" class="form-control item-lot" value="${lotId}" readonly>
-                <small class="text-muted">รหัสถูกสร้างอัตโนมัติ</small>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label">มูลค่ารวม (บาท)</label>
-                <div class="input-group">
-                  <span class="input-group-text">฿</span>
-                  <input type="text" class="form-control item-total" value="0.00" readonly>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <label class="form-label">หมายเหตุรายการ</label>
-                <input type="text" class="form-control item-note" placeholder="รายละเอียดเพิ่มเติมของรายการนี้">
-              </div>
-            </div>
-          </div>
-        `;
-        
-        $('#lineItemsContainer').append(newLineItem);
-        
-        // Initialize new select2
-        $('.item-select').select2({
-          width: '100%'
-        });
-        
-        updateTotals();
-      });
-      
-      // Handle supplier selection
+      // Handle supplier select change
       $('#supplierSelect').on('change', function() {
         if ($(this).val() === 'new') {
+          // Show the add supplier modal
           $('#addSupplierModal').modal('show');
-          // Reset selection
-          $(this).val('1').trigger('change');
+          // Reset the supplier select
+          setTimeout(() => {
+            $(this).val('1').trigger('change');
+          }, 100);
         }
       });
       
-      // Save new supplier
+      // Handle save new supplier button
       $('#saveNewSupplierBtn').on('click', function() {
         const supplierName = $('#newSupplierName').val().trim();
-        
         if (!supplierName) {
           alert('กรุณาระบุชื่อซัพพลายเออร์');
           return;
         }
         
-        // Here we would normally add the supplier to the database
-        // For demo, we'll just add it to the dropdown
-        const newOption = new Option(`${supplierName} (เพิ่มใหม่)`, 'new-supplier', true, true);
-        $('#supplierSelect').append(newOption).trigger('change');
-        
-        // Close the modal
+        // ในตัวอย่างนี้เราจะแค่ปิด modal และแสดงข้อความว่าเพิ่มแล้ว
+        // ในระบบจริงคุณจะต้องบันทึกข้อมูลลง database
         $('#addSupplierModal').modal('hide');
+        
+        // แสดงข้อความว่าเพิ่มสำเร็จ
+        alert(`เพิ่มซัพพลายเออร์ "${supplierName}" เรียบร้อยแล้ว`);
       });
       
-      // Form submission
-      $('#stockReceiptForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        // Validate form data
-        let isValid = true;
-        
-        // Check required fields in header
-        const requiredHeaderFields = ['receiptDate', 'supplierSelect', 'receivedBy'];
-        requiredHeaderFields.forEach(field => {
-          const element = document.getElementById(field);
-          if (!element.value) {
-            isValid = false;
-            element.classList.add('is-invalid');
-          } else {
-            element.classList.remove('is-invalid');
+      // Handle material select change
+      $('#materialSelect').on('change', function() {
+        const materialId = $(this).val();
+        if (materialId) {
+          // Show material info
+          const material = materialsData.find(m => m.id === materialId);
+          if (material) {
+            $('#selectedMaterialName').text(material.name);
+            $('#selectedMaterialCategory').html(`<span class="category-badge ${material.categoryClass}">${material.category}</span>`);
+            $('#selectedMaterialQty').text(`${material.quantity} ${material.unit}`);
+            $('#selectedMaterialPrice').text(`฿${material.latestPrice.toFixed(2)}`);
+            $('#selectedMaterialImage').attr('src', material.image);
+            $('#selectedMaterialInfo').show();
           }
-        });
-        
-        // Check each line item
-        $('.line-item').each(function() {
-          const itemSelect = $(this).find('.item-select');
-          const itemQuantity = $(this).find('.item-quantity');
-          const itemPrice = $(this).find('.item-price');
-          
-          if (!itemSelect.val()) {
-            isValid = false;
-            itemSelect.addClass('is-invalid');
-          } else {
-            itemSelect.removeClass('is-invalid');
-          }
-          
-          if (!itemQuantity.val() || parseFloat(itemQuantity.val()) <= 0) {
-            isValid = false;
-            itemQuantity.addClass('is-invalid');
-          } else {
-            itemQuantity.removeClass('is-invalid');
-          }
-          
-          if (!itemPrice.val() || parseFloat(itemPrice.val()) < 0) {
-            isValid = false;
-            itemPrice.addClass('is-invalid');
-          } else {
-            itemPrice.removeClass('is-invalid');
-          }
-        });
-        
-        if (!isValid) {
-          alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        } else {
+          // Hide material info
+          $('#selectedMaterialInfo').hide();
+        }
+      });
+      
+      // Add item button click
+      $('#addItemBtn').on('click', function() {
+        const materialId = $('#materialSelect').val();
+        if (!materialId) {
+          alert('กรุณาเลือกวัสดุที่ต้องการรับเข้า');
           return;
         }
         
+        // Check if item already exists
+        if ($(`.item-row[data-item-id="${materialId}"]`).length > 0) {
+          alert('วัสดุนี้ถูกเพิ่มในรายการแล้ว');
+          return;
+        }
+        
+        const material = materialsData.find(m => m.id === materialId);
+        if (material) {
+          // Generate lot ID based on date
+          const today = new Date();
+          const lotId = `LOT-${String(today.getFullYear()).slice(-2)}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+          
+          // Create new item row
+          const newItemHtml = `
+            <div class="item-row" data-item-id="${material.id}">
+              <span class="remove-item"><i class="bx bx-x"></i></span>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center mb-3">
+                    <img src="${material.image}" class="material-thumbnail me-2" alt="${material.name}">
+                    <div>
+                      <strong>${material.name}</strong>
+                      <div class="small text-muted">${material.id}</div>
+                      <span class="category-badge ${material.categoryClass}">${material.category}</span>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                      <label class="form-label required-label">จำนวนรับ</label>
+                      <div class="input-group">
+                        <input type="number" class="form-control item-quantity" value="1" min="1" required>
+                        <span class="input-group-text">${material.unit}</span>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                      <label class="form-label required-label">ราคาต่อหน่วย (บาท)</label>
+                      <div class="input-group">
+                        <span class="input-group-text">฿</span>
+                        <input type="number" class="form-control item-price" value="${material.latestPrice}" min="0" step="0.01" required>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
+                      <label class="form-label">มูลค่ารวม (บาท)</label>
+                      <div class="input-group">
+                        <span class="input-group-text">฿</span>
+                        <input type="text" class="form-control item-total" value="${material.latestPrice.toFixed(2)}" readonly>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">รหัสล็อต</label>
+                      <input type="text" class="form-control" value="${lotId}" readonly>
+                      <small class="text-muted">สร้างอัตโนมัติตามวันที่</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">สถานที่จัดเก็บ</label>
+                      <input type="text" class="form-control" value="ชั้น A-3 คลังสินค้าหลัก">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label class="form-label">หมายเหตุ</label>
+                      <textarea class="form-control" rows="1" placeholder="ระบุหมายเหตุสำหรับรายการนี้"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Add new item to the container
+          $('#itemsContainer').append(newItemHtml);
+          
+          // Reset material select
+          $('#materialSelect').val('').trigger('change');
+          
+          // Update totals
+          updateTotals();
+        }
+      });
+      
+      // Remove item button click
+      $(document).on('click', '.remove-item', function() {
+        $(this).closest('.item-row').remove();
+        updateTotals();
+      });
+      
+      // Update total when quantity or price changes
+      $(document).on('input', '.item-quantity, .item-price', function() {
+        const row = $(this).closest('.item-row');
+        const quantity = parseFloat(row.find('.item-quantity').val()) || 0;
+        const price = parseFloat(row.find('.item-price').val()) || 0;
+        const total = quantity * price;
+        
+        row.find('.item-total').val(total.toFixed(2));
+        
+        updateTotals();
+      });
+      
+      // Form submit
+      $('#stockReceiptForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Check if there are items
+        if ($('.item-row').length === 0) {
+          alert('กรุณาเพิ่มวัสดุที่ต้องการรับเข้าอย่างน้อย 1 รายการ');
+          return;
+        }
+        
+        // Check required fields
+        let isValid = true;
+        
+        // Check receipt date
+        if (!$('#receiptDate').val()) {
+          alert('กรุณาระบุวันที่รับสินค้า');
+          isValid = false;
+        }
+        
+        // Check supplier
+        if (!$('#supplierSelect').val()) {
+          alert('กรุณาเลือกซัพพลายเออร์');
+          isValid = false;
+        }
+        
+        // Check receiver
+        if (!$('#receiverSelect').val()) {
+          alert('กรุณาเลือกผู้รับสินค้า');
+          isValid = false;
+        }
+        
+        if (!isValid) return;
+        
         // Show success modal
-        $('#receiptNumberDisplay').text(`เลขที่เอกสาร: REC-${$('#receiptNumber').val()}`);
         $('#successModal').modal('show');
       });
       
-      // Helper functions
-      function updateItemTotal(lineItem) {
-        const quantity = parseFloat(lineItem.find('.item-quantity').val()) || 0;
-        const price = parseFloat(lineItem.find('.item-price').val()) || 0;
-        const total = quantity * price;
-        
-        lineItem.find('.item-total').val(formatCurrency(total));
-        
-        updateTotals();
-      }
-      
-      function updateLotId(lineItem) {
-        const itemId = lineItem.data('item-id');
-        const dateParts = $('#receiptDate').val().split('/');
-        const dateFormatted = `${dateParts[2]}${dateParts[1]}${dateParts[0]}`;
-        const lotId = `LOT-${dateFormatted}-${String(itemId).padStart(3, '0')}`;
-        
-        lineItem.find('.item-lot').val(lotId);
-      }
-      
+      // Helper function to update totals
       function updateTotals() {
-        let totalItems = $('.line-item').length;
-        let totalValue = 0;
+        const rows = $('.item-row');
+        const itemCount = rows.length;
+        let totalAmount = 0;
         
-        $('.item-total').each(function() {
-          const value = $(this).val().replace(/[^\d.-]/g, '');
-          totalValue += parseFloat(value) || 0;
+        rows.each(function() {
+          const total = parseFloat($(this).find('.item-total').val()) || 0;
+          totalAmount += total;
         });
         
-        $('#totalItems').text(`${totalItems} รายการ`);
-        $('#totalValue').text(`฿${formatCurrency(totalValue)}`);
-      }
-      
-      function formatCurrency(value) {
-        return new Intl.NumberFormat('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+        // Update total display
+        $('.table-totals tr:first-child td:last-child').text(`${itemCount} รายการ`);
+        $('.table-totals tr:last-child td:last-child').text(`฿${totalAmount.toFixed(2)}`);
       }
     });
   </script>
