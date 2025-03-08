@@ -6,7 +6,7 @@
   <title>รายการโครงการ | ระบบจัดสวนครบวงจร</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,10 +18,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Core CSS -->
-  <link rel="stylesheet" href="assets/css/core.css">
-  <link rel="stylesheet" href="assets/css/theme-default.css">
-  <link rel="stylesheet" href="assets/css/demo.css">
-  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/core.css">
+  <link rel="stylesheet" href="../assets/css/theme-default.css">
+  <link rel="stylesheet" href="../assets/css/demo.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
 
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css">
@@ -31,6 +31,30 @@
   
   <!-- Page CSS -->
   <style>
+    :root {
+      --primary: #28a745;
+      --primary-light: #e9fff0;
+      --warning: #ffa726;
+      --warning-light: #ffedcc;
+      --danger: #ec407a;
+      --danger-light: #ffe8e8;
+      --info: #42a5f5;
+      --info-light: #e3f2fd;
+      --text-primary: #566a7f;
+      --text-secondary: #99a0ac;
+      --bg-light: #f5f6fa;
+    }
+    
+    /* แก้ไขการแสดงผลเมนู */
+    .menu-sub {
+      display: none; /* ค่าเริ่มต้นซ่อนเมนูย่อย */
+    }
+    
+    .menu-item.active.open > .menu-sub,
+    .menu-sub.show {
+      display: block !important; /* แสดงเมนูย่อยเมื่อ active หรือมี class show */
+    }
+    
     .project-status {
       width: 10px;
       height: 10px;
@@ -208,7 +232,7 @@
               <i class="menu-icon tf-icons bx bx-layout"></i>
               <div data-i18n="โครงการ">โครงการ</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item active">
                 <a href="project-list.html" class="menu-link">
                   <div data-i18n="รายการโครงการ">รายการโครงการ</div>
@@ -237,7 +261,7 @@
               <i class="menu-icon tf-icons bx bx-package"></i>
               <div data-i18n="วัสดุทั่วไป">วัสดุทั่วไป</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item">
                 <a href="material-list.html" class="menu-link">
                   <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
@@ -256,7 +280,7 @@
               <i class="menu-icon tf-icons bx bx-cube-alt"></i>
               <div data-i18n="วัสดุเครื่องมือช่าง">วัสดุเครื่องมือช่าง</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item">
                 <a href="construction-list.html" class="menu-link">
                   <div data-i18n="รายการวัสดุ">รายการวัสดุ</div>
@@ -275,7 +299,7 @@
               <i class="menu-icon tf-icons bx bx-wrench"></i>
               <div data-i18n="เครื่องมือช่าง">เครื่องมือช่าง</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item">
                 <a href="tools-list.html" class="menu-link">
                   <div data-i18n="รายการเครื่องมือ">รายการเครื่องมือ</div>
@@ -306,7 +330,7 @@
               <i class="menu-icon tf-icons bx bx-car"></i>
               <div data-i18n="ยานพาหนะ">ยานพาหนะ</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item">
                 <a href="vehicle-list.html" class="menu-link">
                   <div data-i18n="รายการรถ">รายการรถ</div>
@@ -335,7 +359,7 @@
               <i class="menu-icon tf-icons bx bx-line-chart"></i>
               <div data-i18n="รายงานต่างๆ">รายงานต่างๆ</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item">
                 <a href="report-projects.html" class="menu-link">
                   <div data-i18n="รายงานโครงการ">รายงานโครงการ</div>
@@ -364,7 +388,7 @@
               <i class="menu-icon tf-icons bx bx-user"></i>
               <div data-i18n="ผู้ใช้งาน">ผู้ใช้งาน</div>
             </a>
-            <ul class="menu-sub">
+            <ul class="menu-sub" style="display: block;">
               <li class="menu-item">
                 <a href="user-list.html" class="menu-link">
                   <div data-i18n="รายชื่อผู้ใช้">รายชื่อผู้ใช้</div>
@@ -470,7 +494,7 @@
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="assets/img/avatars/1.png" alt class="rounded-circle">
+                    <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -479,7 +503,7 @@
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="assets/img/avatars/1.png" alt class="rounded-circle">
+                            <img src="../assets/img/avatars/1.png" alt class="rounded-circle">
                           </div>
                         </div>
                         <div class="flex-grow-1">
@@ -795,7 +819,7 @@
                       <!-- Card 1 -->
                       <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card project-card h-100">
-                          <img class="card-img-top project-image" src="assets/img/projects/garden1.jpg" alt="สวนหย่อมบ้านคุณสมชาย">
+                          <img class="card-img-top project-image" src="../assets/img/projects/garden1.jpg" alt="สวนหย่อมบ้านคุณสมชาย">
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-primary">กำลังดำเนินการ</span>
@@ -837,7 +861,7 @@
                       <!-- Card 2 -->
                       <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card project-card h-100">
-                          <img class="card-img-top project-image" src="assets/img/projects/landscape1.jpg" alt="ปรับปรุงภูมิทัศน์บริษัท ABC">
+                          <img class="card-img-top project-image" src="../assets/img/projects/landscape1.jpg" alt="ปรับปรุงภูมิทัศน์บริษัท ABC">
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-primary">กำลังดำเนินการ</span>
@@ -879,7 +903,7 @@
                       <!-- Card 3 -->
                       <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card project-card h-100">
-                          <img class="card-img-top project-image" src="assets/img/projects/garden2.jpg" alt="สวนหลังบ้านคุณสมหญิง">
+                          <img class="card-img-top project-image" src="../assets/img/projects/garden2.jpg" alt="สวนหลังบ้านคุณสมหญิง">
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-warning">รอการตรวจรับ</span>
@@ -921,7 +945,7 @@
                       <!-- Card 4 -->
                       <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card project-card h-100">
-                          <img class="card-img-top project-image" src="assets/img/projects/garden3.jpg" alt="จัดสวนหน้าบ้านคุณวิชัย">
+                          <img class="card-img-top project-image" src="../assets/img/projects/garden3.jpg" alt="จัดสวนหน้าบ้านคุณวิชัย">
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-success">เสร็จสิ้น</span>
@@ -963,7 +987,7 @@
                       <!-- Card 5 -->
                       <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card project-card h-100">
-                          <img class="card-img-top project-image" src="assets/img/projects/park1.jpg" alt="โครงการสวนสาธารณะ ซอย 5">
+                          <img class="card-img-top project-image" src="../assets/img/projects/park1.jpg" alt="โครงการสวนสาธารณะ ซอย 5">
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-success">เสร็จสิ้น</span>
@@ -1005,7 +1029,7 @@
                       <!-- Card 6 -->
                       <div class="col-lg-4 col-md-6 col-12 mb-4">
                         <div class="card project-card h-100">
-                          <img class="card-img-top project-image" src="assets/img/projects/school1.jpg" alt="จัดสวนหย่อมโรงเรียน XYZ">
+                          <img class="card-img-top project-image" src="../assets/img/projects/school1.jpg" alt="จัดสวนหย่อมโรงเรียน XYZ">
                           <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                               <span class="badge bg-label-success">เสร็จสิ้น</span>
@@ -1296,10 +1320,34 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons-bs5/2.4.1/buttons.bootstrap5.min.js"></script>
 
   <!-- Main JS -->
-  <script src="assets/js/main.js"></script>
+  <script src="../assets/js/main.js"></script>
 
   <!-- Page JS -->
   <script>
+    // แก้ไขการแสดงผลเมนู
+    function initializeMenu() {
+      // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
+      const menuToggles = document.querySelectorAll('.menu-toggle');
+      menuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          const menuItem = this.closest('.menu-item');
+          const menuSub = menuItem.querySelector('.menu-sub');
+          
+          // Toggle active และ open classes
+          menuItem.classList.toggle('active');
+          menuItem.classList.toggle('open');
+          
+          // แสดง/ซ่อนเมนูย่อย
+          if (menuSub.style.display === 'block') {
+            menuSub.style.display = 'none';
+          } else {
+            menuSub.style.display = 'block';
+          }
+        });
+      });
+    }
+  
     // Project data
     const projectsData = [
       {
@@ -1369,6 +1417,9 @@
 
     // Initialize DataTable
     $(document).ready(function() {
+      // เรียกใช้ฟังก์ชันจัดการเมนู
+      initializeMenu();
+      
       // Initialize DataTable
       const projectTable = $('#projectTable').DataTable({
         dom: '<"d-flex justify-content-between align-items-center mb-3"<"d-flex align-items-center"l><"d-flex flex-wrap"f>>t<"d-flex justify-content-between"ip>',
