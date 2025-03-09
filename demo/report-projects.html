@@ -2718,6 +2718,23 @@
 <script src="../assets/THSarabunNew Bold-bold.js"></script>
   <!-- Page JS -->
   <script>
+
+    function exportToPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // เพิ่มฟอนต์ไทย
+  doc.addFileToVFS('THSarabunNew.ttf', thSarabunBase64);
+  doc.addFont('THSarabunNew.ttf', 'THSarabunNew', 'normal');
+  
+  // ใช้ฟอนต์
+  doc.setFont('THSarabunNew');
+  doc.setFontSize(16);
+  doc.text('ทดสอบภาษาไทย', 20, 20);
+  
+  // บันทึกหรือแสดง PDF
+  doc.save('thai-report.pdf');
+}
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize Flatpickr for date inputs
   flatpickr(".flatpickr-date", {
