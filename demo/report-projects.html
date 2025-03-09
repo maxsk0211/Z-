@@ -2868,6 +2868,567 @@ function initializeCharts() {
 setTimeout(initializeCharts, 500);
 
     
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+// ฟังก์ชันสำหรับสร้าง PDF ของโครงการ
+function generateProjectPDF(projectId) {
+  // ตรวจสอบว่ามีการโหลด jsPDF แล้วหรือไม่
+  if (typeof jspdf === 'undefined') {
+    console.error('jsPDF library is not loaded');
+    alert('ไม่สามารถสร้าง PDF ได้ กรุณาโหลดหน้านี้ใหม่');
+    return;
+  }
+  
+  // สร้างเอกสาร PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+
+  // ค้นหาข้อมูลโครงการจาก projectId
+  // ในตัวอย่างนี้เราจะใช้ข้อมูลจำลอง
+  const projectData = getProjectData(projectId);
+  
+  if (!projectData) {
+    alert('ไม่พบข้อมูลโครงการ');
+    return;
+  }
+  
+  // ====== สร้างเอกสาร PDF ======
+  
+  // 1. หัวเอกสาร
+  addPDFHeader(doc, projectData);
+  
+  // 2. ข้อมูลโครงการ
+  addProjectInfo(doc, projectData);
+  
+  // 3. สรุปการเงิน
+  addFinancialSummary(doc, projectData);
+  
+  // 4. รายการวัสดุที่ใช้
+  addMaterialList(doc, projectData);
+  
+  // 5. ความคืบหน้าโครงการ
+  addProjectProgress(doc, projectData);
+  
+  // 6. เพิ่มหมายเลขหน้า
+  addPageNumbers(doc);
+  
+  // แสดงตัวอย่าง PDF ใน Modal
+  showPDFPreview(doc, projectData.name);
+  
+  return doc; // ส่งคืนอ็อบเจ็กต์ PDF เพื่อใช้งานต่อ
+}
+
+// เพิ่มส่วนหัวเอกสาร
+function addPDFHeader(doc, projectData) {
+  // เพิ่มโลโก้ (สมมติว่ามีรูปโลโก้)
+  // ในโค้ดที่สมบูรณ์ คุณควรโหลดรูปโลโก้จริง
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.rect(15, 15, 10, 10, 'F');
+  
+  // เพิ่มชื่อบริษัท
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('Green Gardens', 105, 20, { align: 'center' });
+  
+  // เพิ่มวันที่พิมพ์รายงาน
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`วันที่พิมพ์: ${dateStr}`, 195, 20, { align: 'right' });
+  
+  // เพิ่มชื่อรายงาน
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('รายงานโครงการ', 105, 30, { align: 'center' });
+  
+  // เส้นคั่น
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
+  doc.line(15, 35, 195, 35);
+}
+
+// เพิ่มข้อมูลโครงการ
+function addProjectInfo(doc, projectData) {
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('ข้อมูลโครงการ', 15, 45);
+  
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  
+  // ข้อมูลพื้นฐานโครงการ
+  const startY = 55;
+  const lineHeight = 7;
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('รหัสโครงการ:', 15, startY);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.id, 50, startY);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('ชื่อโครงการ:', 15, startY + lineHeight);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.name, 50, startY + lineHeight);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('ลูกค้า:', 15, startY + lineHeight * 2);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.customer, 50, startY + lineHeight * 2);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('วันที่เริ่ม:', 15, startY + lineHeight * 3);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.startDate, 50, startY + lineHeight * 3);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('กำหนดเสร็จ:', 15, startY + lineHeight * 4);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.endDate, 50, startY + lineHeight * 4);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('สถานะ:', 115, startY);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.status, 150, startY);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('ความคืบหน้า:', 115, startY + lineHeight);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`${projectData.progress}%`, 150, startY + lineHeight);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('ผู้รับผิดชอบ:', 115, startY + lineHeight * 2);
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.owner, 150, startY + lineHeight * 2);
+  
+  // เส้นคั่น
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
+  doc.line(15, startY + lineHeight * 5, 195, startY + lineHeight * 5);
+}
+
+// เพิ่มสรุปการเงิน
+function addFinancialSummary(doc, projectData) {
+  const startY = 95;
+  const lineHeight = 7;
+  
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('สรุปการเงิน', 15, startY);
+  
+  doc.setFontSize(11);
+  
+  // สร้างตารางสรุปการเงิน
+  const financialData = [
+    ['รายการ', 'จำนวนเงิน (บาท)'],
+    ['ราคาโครงการทั้งหมด', projectData.budget.toLocaleString()],
+    ['มูลค่าวัสดุที่เบิก', projectData.materialCost.toLocaleString()],
+    ['มูลค่าวัสดุที่คืน', projectData.materialReturnCost.toLocaleString()],
+    ['มูลค่าวัสดุสุทธิ', projectData.materialNetCost.toLocaleString()],
+    ['สัดส่วนต้นทุนวัสดุ', `${projectData.materialCostRatio}%`],
+    ['ต้นทุนวัสดุต่อพื้นที่', `${projectData.costPerArea} บาท/ตร.ม.`]
+  ];
+  
+  // วาดตาราง
+  doc.autoTable({
+    startY: startY + 5,
+    head: [financialData[0]],
+    body: financialData.slice(1),
+    theme: 'grid',
+    headStyles: {
+      fillColor: [40, 167, 69], // สีเขียว
+      textColor: [255, 255, 255],
+      fontStyle: 'bold'
+    },
+    styles: {
+      fontSize: 10,
+      cellPadding: 3
+    },
+    columnStyles: {
+      0: { cellWidth: 100 },
+      1: { cellWidth: 60, halign: 'right' }
+    },
+    margin: { left: 15, right: 15 }
+  });
+}
+
+// เพิ่มรายการวัสดุที่ใช้
+function addMaterialList(doc, projectData) {
+  const startY = doc.lastAutoTable.finalY + 15;
+  
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('รายการวัสดุที่ใช้', 15, startY);
+  
+  doc.setFontSize(11);
+  
+  // สร้างตารางรายการวัสดุ
+  const header = [['ลำดับ', 'รายการ', 'จำนวนเบิกจริง', 'จำนวนคืนจริง', 'รวมใช้จริง', 'ราคาต่อหน่วย', 'รวมจำนวนเงินสุทธิ']];
+  
+  // สร้างข้อมูลจำลอง
+  let materialRows = [];
+  if (projectData.materials && projectData.materials.length > 0) {
+    materialRows = projectData.materials.map((item, index) => [
+      (index + 1).toString(),
+      item.name,
+      `${item.quantityWithdrawn} ${item.unit}`,
+      item.quantityReturned ? `${item.quantityReturned} ${item.unit}` : '-',
+      `${item.quantityUsed} ${item.unit}`,
+      item.unitPrice.toLocaleString(),
+      item.totalCost.toLocaleString()
+    ]);
+  }
+  
+  // เพิ่มแถวรวม
+  materialRows.push([
+    '', 'รวมทั้งสิ้น', '', '', '', '', 
+    projectData.materialNetCost.toLocaleString()
+  ]);
+  
+  // วาดตาราง
+  doc.autoTable({
+    startY: startY + 5,
+    head: header,
+    body: materialRows,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [40, 167, 69], // สีเขียว
+      textColor: [255, 255, 255],
+      fontStyle: 'bold'
+    },
+    styles: {
+      fontSize: 9,
+      cellPadding: 2
+    },
+    columnStyles: {
+      0: { cellWidth: 10, halign: 'center' },
+      2: { cellWidth: 25, halign: 'center' },
+      3: { cellWidth: 25, halign: 'center' },
+      4: { cellWidth: 25, halign: 'center' },
+      5: { cellWidth: 25, halign: 'right' },
+      6: { cellWidth: 35, halign: 'right' }
+    },
+    margin: { left: 15, right: 15 },
+    didParseCell: function(data) {
+      // จัดรูปแบบแถวสุดท้าย (รวมทั้งสิ้น)
+      if (data.row.index === materialRows.length - 1) {
+        data.cell.styles.fontStyle = 'bold';
+        if (data.column.index === 0) {
+          data.cell.colSpan = 6;
+          data.cell.styles.halign = 'right';
+          data.cell.text = ['รวมทั้งสิ้น'];
+        }
+      }
+    }
+  });
+  
+  // หากตารางยาวเกินหน้า ให้เพิ่มหน้าใหม่
+  if (doc.lastAutoTable.finalY > 250) {
+    doc.addPage();
+  }
+}
+
+// เพิ่มความคืบหน้าโครงการ
+function addProjectProgress(doc, projectData) {
+  const startY = doc.lastAutoTable.finalY + 15;
+  
+  // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
+  if (startY > 230) {
+    doc.addPage();
+    startY = 20;
+  }
+  
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('ความคืบหน้าโครงการ', 15, startY);
+  
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('ไทม์ไลน์โครงการ', 15, startY + 10);
+  
+  // สร้างตารางไทม์ไลน์
+  const timelineHeader = [['วันที่', 'กิจกรรม', 'รายละเอียด']];
+  
+  // สร้างข้อมูลจำลอง
+  let timelineRows = [];
+  if (projectData.timeline && projectData.timeline.length > 0) {
+    timelineRows = projectData.timeline.map(item => [
+      item.date,
+      item.title,
+      item.description
+    ]);
+  }
+  
+  // วาดตาราง
+  doc.autoTable({
+    startY: startY + 15,
+    head: timelineHeader,
+    body: timelineRows,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [40, 167, 69], // สีเขียว
+      textColor: [255, 255, 255],
+      fontStyle: 'bold'
+    },
+    styles: {
+      fontSize: 9,
+      cellPadding: 3
+    },
+    columnStyles: {
+      0: { cellWidth: 25 },
+      1: { cellWidth: 40 }
+    },
+    margin: { left: 15, right: 15 }
+  });
+  
+  // เพิ่มข้อมูลสรุปหมวดหมู่วัสดุ
+  if (doc.lastAutoTable.finalY + 60 > 280) {
+    doc.addPage();
+    drawMaterialCategoryChart(doc, 20, projectData);
+  } else {
+    drawMaterialCategoryChart(doc, doc.lastAutoTable.finalY + 15, projectData);
+  }
+}
+
+// วาดกราฟสรุปหมวดหมู่วัสดุ (แบบจำลอง)
+function drawMaterialCategoryChart(doc, startY, projectData) {
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('สัดส่วนหมวดหมู่วัสดุ', 15, startY);
+  
+  // สร้างข้อมูลจำลองสำหรับแสดงกราฟวงกลม
+  const categories = [
+    { name: 'วัสดุทั่วไป', value: 52.0, color: [40, 167, 69] },
+    { name: 'วัสดุเครื่องมือช่าง', value: 39.7, color: [66, 165, 245] },
+    { name: 'เครื่องมือช่าง', value: 8.3, color: [255, 167, 38] }
+  ];
+  
+  // วาดกราฟวงกลมอย่างง่าย
+  const centerX = 50;
+  const centerY = startY + 45;
+  const radius = 30;
+  
+  let startAngle = 0;
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+    const endAngle = startAngle + (category.value / 100) * 2 * Math.PI;
+    
+    // วาดส่วนของวงกลม
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.5);
+    
+    // วาดเส้นโค้ง
+    doc.circle(centerX, centerY, radius, 'S');
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    
+    // แสดงคำอธิบาย
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    doc.rect(100, startY + 30 + i * 10, 5, 5, 'F');
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text(`${category.name}: ${category.value}%`, 110, startY + 34 + i * 10);
+    
+    startAngle = endAngle;
+  }
+}
+
+// เพิ่มหมายเลขหน้า
+function addPageNumbers(doc) {
+  const pageCount = doc.internal.getNumberOfPages();
+  
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`หน้า ${i} จาก ${pageCount}`, 105, 290, { align: 'center' });
+  }
+}
+
+// แสดงตัวอย่าง PDF ใน Modal
+function showPDFPreview(doc, projectName) {
+  // สร้าง data URL ของ PDF
+  const pdfDataUri = doc.output('datauristring');
+  
+  // สร้างหรือปรับปรุง Modal
+  let previewModal = document.getElementById('pdfPreviewModal');
+  
+  if (!previewModal) {
+    // สร้าง Modal ใหม่
+    const modalHtml = `
+      <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title">ตัวอย่างรายงาน: ${projectName}</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 d-flex justify-content-center">
+              <iframe id="pdfPreviewFrame" src="" style="width:100%; height:calc(100vh - 200px);" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="includeDetailedMaterials" checked>
+                <label class="form-check-label" for="includeDetailedMaterials">
+                  รวมรายละเอียดวัสดุทั้งหมด
+                </label>
+              </div>
+              <div>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ปิด</button>
+                <button type="button" class="btn btn-primary" id="downloadPdfBtn">
+                  <i class="bx bx-download me-1"></i> ดาวน์โหลด PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    previewModal = document.getElementById('pdfPreviewModal');
+    
+    // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
+    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+      const includeDetails = document.getElementById('includeDetailedMaterials').checked;
+      
+      // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
+      const downloadDoc = regeneratePDF(projectName, includeDetails);
+      
+      // ดาวน์โหลด PDF
+      downloadDoc.save(`รายงานโครงการ_${projectName}.pdf`);
+    });
+  } else {
+    // อัพเดทชื่อโครงการในหัวข้อ Modal
+    previewModal.querySelector('.modal-title').textContent = `ตัวอย่างรายงาน: ${projectName}`;
+  }
+  
+  // อัพเดท src ของ iframe
+  const previewFrame = document.getElementById('pdfPreviewFrame');
+  previewFrame.src = pdfDataUri;
+  
+  // แสดง Modal
+  const bsModal = new bootstrap.Modal(previewModal);
+  bsModal.show();
+}
+
+// สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
+function regeneratePDF(projectName, includeDetails) {
+  // ในตัวอย่างนี้ เราจะส่งคืน PDF เดิม
+  // แต่ในการใช้งานจริง คุณควรสร้าง PDF ใหม่ตามตัวเลือกที่เลือก
+  const projectId = document.getElementById('modal-project-id').textContent;
+  return generateProjectPDF(projectId);
+}
+
+// ฟังก์ชันสมมติสำหรับดึงข้อมูลโครงการ
+function getProjectData(projectId) {
+  // ในการใช้งานจริง คุณควรดึงข้อมูลจากฐานข้อมูลหรือ API
+  // แต่ในตัวอย่างนี้ เราจะใช้ข้อมูลจำลอง
+  
+  // ข้อมูลจำลองสำหรับ P-2568-001
+  if (projectId === 'P-2568-001') {
+    return {
+      id: 'P-2568-001',
+      name: 'สวนหย่อมบ้านคุณสมชาย',
+      customer: 'สมชาย มีทรัพย์',
+      startDate: '05/03/2568',
+      endDate: '05/04/2568',
+      status: 'กำลังดำเนินการ',
+      progress: 60,
+      owner: 'นายชัยณรงค์ สวนสวย',
+      budget: 80000,
+      materialCost: 4402.59,
+      materialReturnCost: 1766.27,
+      materialNetCost: 2636.32,
+      materialCostRatio: 3.29,
+      costPerArea: 263.63,
+      materials: [
+        { name: 'สีโปว๊ ขนาด 0.5 กก.', quantityWithdrawn: 1, unit: 'ถัง', quantityReturned: 0, quantityUsed: 1, unitPrice: 38.75, totalCost: 38.75 },
+        { name: 'ทินเนอร์ขวดแก้ว', quantityWithdrawn: 2, unit: 'ขวด', quantityReturned: 0, quantityUsed: 2, unitPrice: 29.00, totalCost: 58.00 },
+        { name: 'ใบตัดปูน 4 นิ้ว', quantityWithdrawn: 3, unit: 'ใบ', quantityReturned: 0, quantityUsed: 3, unitPrice: 88.00, totalCost: 264.00 },
+        { name: 'ใบตัดเหล็ก 4 นิ้ว', quantityWithdrawn: 3, unit: 'ใบ', quantityReturned: 1, quantityUsed: 2, unitPrice: 10.17, totalCost: 20.34 },
+        { name: 'แปรงทาสีรองพื้น และสีจริง 2 นิ้ว', quantityWithdrawn: 2, unit: 'อัน', quantityReturned: 1, quantityUsed: 1, unitPrice: 18.55, totalCost: 18.55 }
+      ],
+      timeline: [
+        { date: '15/03/2568', title: 'เริ่มโครงการ', description: 'ประชุมกับลูกค้าและเตรียมพื้นที่' },
+        { date: '20/03/2568', title: 'เริ่มงานขุดและปรับพื้นที่', description: 'เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ' },
+        { date: '28/03/2568', title: 'ตรวจสอบความคืบหน้า', description: 'ความคืบหน้า 45% และคืนวัสดุบางส่วน' },
+        { date: '02/04/2568', title: 'เบิกวัสดุงวดที่ 2', description: 'เบิกวัสดุเพิ่มเติม 15 รายการ' }
+      ]
+    };
+  }
+  
+  // ข้อมูลจำลองสำหรับโครงการอื่นๆ (ย่อ)
+  return {
+    id: projectId,
+    name: 'โครงการตัวอย่าง',
+    customer: 'ลูกค้าตัวอย่าง',
+    startDate: '01/01/2568',
+    endDate: '31/01/2568',
+    status: 'กำลังดำเนินการ',
+    progress: 50,
+    owner: 'ผู้รับผิดชอบตัวอย่าง',
+    budget: 50000,
+    materialCost: 2500,
+    materialReturnCost: 500,
+    materialNetCost: 2000,
+    materialCostRatio: 4.00,
+    costPerArea: 200,
+    materials: [
+      { name: 'วัสดุตัวอย่าง 1', quantityWithdrawn: 5, unit: 'ชิ้น', quantityReturned: 1, quantityUsed: 4, unitPrice: 100, totalCost: 400 },
+      { name: 'วัสดุตัวอย่าง 2', quantityWithdrawn: 10, unit: 'ชิ้น', quantityReturned: 2, quantityUsed: 8, unitPrice: 200, totalCost: 1600 }
+    ],
+    timeline: [
+      { date: '01/01/2568', title: 'เริ่มโครงการ', description: 'เริ่มต้นโครงการ' },
+      { date: '15/01/2568', title: 'ตรวจสอบความคืบหน้า', description: 'ความคืบหน้า 50%' }
+    ]
+  };
+}
+
+// อัพเดทฟังก์ชัน exportProjectData เพื่อใช้ generateProjectPDF
+function exportProjectData(projectId) {
+  console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+  
+  // สร้าง PDF
+  generateProjectPDF(projectId);
+}
+
+// อัพเดทฟังก์ชัน printProjectReport เพื่อสั่งพิมพ์ PDF โดยตรง
+function printProjectReport(projectId) {
+  console.log('พิมพ์รายงานโครงการ: ' + projectId);
+  
+  // สร้าง PDF
+  const doc = generateProjectPDF(projectId);
+  
+  // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+  const pdfDataUri = doc.output('datauristring');
+  const printWindow = window.open(pdfDataUri);
+  
+  // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+  printWindow.addEventListener('load', function() {
+    setTimeout(function() {
+      printWindow.print();
+    }, 500);
+  });
+}
+
+
   </script>
 </body>
 </html>
