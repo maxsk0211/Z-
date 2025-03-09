@@ -5316,6 +5316,40 @@ function showPDFPreview(doc, projectName) {
     };
   }
 }
+// เพิ่มฟังก์ชันนี้ที่ท้ายไฟล์ (ก่อน </body>)
+function exportThaiReport(projectId) {
+  // ดึงข้อมูลโครงการ
+  var projectData = getProjectData(projectId);
+  // สร้างหน้าต่างใหม่
+  var reportWindow = window.open('', '_blank');
+  // จัดรูปแบบ HTML
+  reportWindow.document.write('<html><head><title>รายงานโครงการ</title>');
+  reportWindow.document.write('<style>body{font-family:sans-serif;padding:20px}');
+  reportWindow.document.write('h1,h2{color:#28a745}');
+  reportWindow.document.write('table{width:100%;border-collapse:collapse}');
+  reportWindow.document.write('th,td{border:1px solid #ddd;padding:8px}');
+  reportWindow.document.write('th{background:#28a745;color:white}');
+  reportWindow.document.write('button{background:#28a745;color:white;border:none;padding:10px;margin:10px 5px;cursor:pointer}');
+  reportWindow.document.write('</style></head><body>');
+  
+  // เพิ่มเนื้อหารายงาน
+  reportWindow.document.write('<h1>รายงานโครงการ</h1>');
+  reportWindow.document.write('<div><strong>รหัส:</strong> ' + projectData.id + '</div>');
+  reportWindow.document.write('<div><strong>ชื่อโครงการ:</strong> ' + projectData.name + '</div>');
+  reportWindow.document.write('<div><strong>ลูกค้า:</strong> ' + projectData.customer + '</div>');
+  reportWindow.document.write('<div><strong>สถานะ:</strong> ' + projectData.status + '</div>');
+  
+  // เพิ่มข้อมูลเพิ่มเติมตามที่ต้องการ
+  
+  // ปุ่มพิมพ์
+  reportWindow.document.write('<div style="text-align:center;margin-top:20px">');
+  reportWindow.document.write('<button onclick="window.print()">พิมพ์รายงาน</button>');
+  reportWindow.document.write('<button onclick="window.close()" style="background:#666">ปิด</button>');
+  reportWindow.document.write('</div>');
+  
+  reportWindow.document.write('</body></html>');
+  reportWindow.document.close();
+}
 
   </script>
 </body>
