@@ -5340,7 +5340,7 @@ function exportThaiReport(projectId) {
   reportWindow.document.write('<div><strong>รหัส:</strong> ' + projectData.id + '</div>');
   reportWindow.document.write('<div><strong>ชื่อโครงการ:</strong> ' + projectData.name + '</div>');
   reportWindow.document.write('<div><strong>ลูกค้า:</strong> ' + projectData.customer + '</div>');
-  reportWindow.document.write('<div><strong>สถานะ:</strong> ' + projectData.status + '</div>');
+  reportWindow.document.write('<div><strong>สถานะ:</strong> ' + projectData.materialCost.toLocaleString()  + '</div>');
   
   // เพิ่มข้อมูลเพิ่มเติมตามที่ต้องการ
     // สรุปการเงิน (เหมือนกับฟังก์ชัน exportProjectData)
