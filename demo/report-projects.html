@@ -4075,6 +4075,7 @@ function createSimpleDemoPDF(projectId) {
 }
 
 // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
+// แก้ไขก่อนการสร้าง PDF ใน exportProjectData หรือ printProjectReport
 window.exportProjectData = function(projectId) {
   console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
   
@@ -4082,22 +4083,34 @@ window.exportProjectData = function(projectId) {
   const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
   loadingModal.show();
   
-  // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
   setTimeout(function() {
     try {
-      // สร้าง PDF แบบข้อมูลครบถ้วน
-      const doc = createThaiPDF(projectId);
+      // สร้าง PDF ด้วยวิธีแก้ไขปัญหาภาษาไทย
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // แก้ไขตรงนี้: ใช้ doc.text แทน drawThaiText และไม่พยายามใช้ font ไทย
+      const projectData = getProjectData(projectId);
+      
+      // ตั้งค่า font ปกติ
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(16);
+      
+      // แสดงชื่อเป็นภาษาอังกฤษแทน (ที่จำเป็นต้องแสดง)
+      doc.text("Green Gardens - Project Report", 105, 20, { align: "center" });
+      doc.setFontSize(12);
+      doc.text(`Project ID: ${projectData.id}`, 20, 40);
+      doc.text(`Project Name: ${projectData.name}`, 20, 50);
+      doc.text(`Customer: ${projectData.customer}`, 20, 60);
+      doc.text(`Date: ${projectData.startDate} - ${projectData.endDate}`, 20, 70);
+      doc.text(`Status: ${projectData.status}`, 20, 80);
+      doc.text(`Progress: ${projectData.progress}%`, 20, 90);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
       
       // แสดงตัวอย่าง PDF
-      let projectName = "";
-      if (projectId === "P-2568-001") projectName = "สวนหย่อมบ้านคุณเบียร์";
-      else if (projectId === "P-2568-002") projectName = "ปรับปรุงภูมิทัศน์บริษัท ABC";
-      else if (projectId === "P-2568-003") projectName = "สวนหลังบ้านคุณสมหญิง";
-      else projectName = "โครงการ " + projectId;
-      
+      let projectName = projectData.name;
       showPDFPreview(doc, projectName);
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
