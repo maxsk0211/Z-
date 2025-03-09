@@ -5091,7 +5091,181 @@ function printProjectReport(projectId) {
     }, 500);
   });
 }
-
+function createThaiPDF(projectId) {
+  // สร้างเอกสาร PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // ข้อมูลโครงการ
+  const projectData = getProjectData(projectId);
+  
+  /* ===============================
+    แทนที่จะพยายามใช้ font ไทย ให้ใช้การสร้าง HTML และแปลงเป็น PDF แทน
+    =============================*/
+  
+  // สร้าง div ชั่วคราวสำหรับเก็บข้อมูล HTML
+  const tempDiv = document.createElement('div');
+  tempDiv.style.position = 'absolute';
+  tempDiv.style.left = '-9999px';
+  tempDiv.style.top = '-9999px';
+  
+  // สร้าง HTML สำหรับรายงาน
+  tempDiv.innerHTML = `
+    <div style="font-family: 'Sarabun', 'THSarabunNew', sans-serif; width: 800px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="color: #28a745;">Green Gardens</h1>
+        <div>
+          <h2>รายงานโครงการ</h2>
+          <p>วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH')}</p>
+        </div>
+      </div>
+      <hr style="margin: 10px 0; border: 1px solid #ddd;">
+      
+      <h2>ข้อมูลโครงการ</h2>
+      <div style="display: flex; margin-bottom: 20px;">
+        <div style="width: 50%;">
+          <p><strong>รหัสโครงการ:</strong> ${projectData.id}</p>
+          <p><strong>ชื่อโครงการ:</strong> ${projectData.name}</p>
+          <p><strong>ลูกค้า:</strong> ${projectData.customer}</p>
+          <p><strong>ที่อยู่:</strong> ${projectData.address}</p>
+          <p><strong>ผู้รับผิดชอบ:</strong> ${projectData.owner}</p>
+        </div>
+        <div style="width: 50%;">
+          <p><strong>วันที่เริ่ม:</strong> ${projectData.startDate}</p>
+          <p><strong>กำหนดเสร็จ:</strong> ${projectData.endDate}</p>
+          <p><strong>สถานะ:</strong> ${projectData.status}</p>
+          <p><strong>ความคืบหน้า:</strong> ${projectData.progress}%</p>
+          <p><strong>พื้นที่ทั้งหมด:</strong> ${projectData.area} ตร.ม.</p>
+        </div>
+      </div>
+      
+      <h2>สรุปการเงิน</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr style="background-color: #28a745; color: white;">
+          <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">รายการ</th>
+          <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">จำนวนเงิน (บาท)</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">งบประมาณโครงการทั้งหมด</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.budget.toLocaleString()}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+          <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุที่เบิก</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialCost.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุที่คืน</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialReturnCost.toLocaleString()}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2; font-weight: bold;">
+          <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุสุทธิ</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialNetCost.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">สัดส่วนต้นทุนวัสดุ</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialCostRatio.toFixed(2)}%</td>
+        </tr>
+      </table>
+      
+      <h2>รายการวัสดุที่ใช้</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr style="background-color: #28a745; color: white;">
+          <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">ลำดับ</th>
+          <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">รายการ</th>
+          <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">จำนวนเบิกจริง</th>
+          <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">จำนวนคืนจริง</th>
+          <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">รวมใช้จริง</th>
+          <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">ราคา/หน่วย</th>
+          <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">รวมเงินสุทธิ</th>
+        </tr>
+        ${projectData.materials.slice(0, 5).map((material, index) => `
+          <tr ${index % 2 === 1 ? 'style="background-color: #f2f2f2;"' : ''}>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">${index + 1}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${material.name}</td>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">${material.quantityWithdrawn} ${material.unit}</td>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">${material.quantityReturned ? material.quantityReturned + ' ' + material.unit : '-'}</td>
+            <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">${material.quantityUsed} ${material.unit}</td>
+            <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">${material.unitPrice.toLocaleString()}</td>
+            <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">${material.totalCost.toLocaleString()}</td>
+          </tr>
+        `).join('')}
+        <tr style="background-color: #e0e0e0; font-weight: bold;">
+          <td colspan="6" style="padding: 8px; text-align: right; border: 1px solid #ddd;">รวมทั้งสิ้น</td>
+          <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">${projectData.materialNetCost.toLocaleString()}</td>
+        </tr>
+      </table>
+      
+      <div style="margin-top: 20px; text-align: right; font-size: 12px; color: #666;">
+        <p>รายงานนี้สร้างโดยระบบจัดสวนครบวงจร Green Gardens © ${new Date().getFullYear()}</p>
+      </div>
+    </div>
+  `;
+  
+  // เพิ่ม div ไปยัง body
+  document.body.appendChild(tempDiv);
+  
+  // ใช้ html2canvas เพื่อแปลง HTML เป็นรูปภาพ
+  // (ต้องเพิ่ม html2canvas ก่อน)
+  if (typeof html2canvas === 'undefined') {
+    // ถ้าไม่มี html2canvas ให้ใช้วิธีดั้งเดิม
+    doc.text("Green Gardens - Project Report", 105, 20, { align: "center" });
+    doc.text("* Note: PDF with Thai language requires html2canvas library", 105, 30, { align: "center" });
+    doc.text(`Project ID: ${projectData.id}`, 20, 50);
+    doc.text(`Project Name: ${projectData.name}`, 20, 60);
+    
+    // ลบ div ชั่วคราว
+    document.body.removeChild(tempDiv);
+    
+    return doc;
+  }
+  
+  // เพิ่ม script สำหรับ html2canvas ที่จะใช้
+  const script = document.createElement('script');
+  script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+  script.onload = function() {
+    html2canvas(tempDiv, { scale: 2, logging: false }).then(canvas => {
+      // แปลง canvas เป็นรูปภาพและเพิ่มไปยัง PDF
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      
+      // สร้าง PDF ใหม่ด้วยขนาดที่ถูกต้อง
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const pdfHeight = doc.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      
+      doc.addImage(imgData, 'JPEG', imgX, 0, imgWidth * ratio, imgHeight * ratio);
+      
+      // ลบ div ชั่วคราว
+      document.body.removeChild(tempDiv);
+      
+      // ลบ script เมื่อเสร็จสิ้น
+      document.head.removeChild(script);
+      
+      // แสดงตัวอย่าง PDF
+      const projectName = projectData.name;
+      showPDFPreview(doc, projectName);
+    });
+  };
+  script.onerror = function() {
+    alert('ไม่สามารถโหลด html2canvas ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต');
+    
+    // ลบ div ชั่วคราว
+    document.body.removeChild(tempDiv);
+    
+    // สร้าง PDF แบบง่ายๆ แทน
+    doc.text("Green Gardens - Project Report", 105, 20, { align: "center" });
+    doc.text("* Cannot load html2canvas library", 105, 30, { align: "center" });
+    doc.text(`Project ID: ${projectData.id}`, 20, 50);
+    doc.text(`Project Name: ${projectData.name}`, 20, 60);
+    
+    showPDFPreview(doc, projectData.name);
+  };
+  document.head.appendChild(script);
+  
+  return doc;
+}
 
   </script>
 </body>
