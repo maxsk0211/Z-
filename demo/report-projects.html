@@ -5559,7 +5559,7 @@ function exportThaiReport(projectId) {
   htmlContent += '</div>';
   
   // แก้ไขส่วนนี้! แทนที่จะใช้ </script> โดยตรง เราจะแยกมันออก
-  htmlContent += '<' + 'script>';
+  htmlContent += '<script>';
   htmlContent += 'window.onload = function() {';
   htmlContent += '  setTimeout(function() {';
   htmlContent += '    alert("คลิกที่ปุ่ม \'พิมพ์รายงาน\' และเลือก \'บันทึกเป็น PDF\' ในหน้าต่างพิมพ์");';
