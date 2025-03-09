@@ -1867,6 +1867,8 @@
   <!-- Page JS -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      console.log("DOM fully loaded");
+      
       // Initialize Flatpickr for date inputs
       flatpickr(".flatpickr-date", {
         dateFormat: "d/m/Y",
@@ -1881,6 +1883,21 @@
       // Initialize tooltips
       const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
       const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+      
+      // เพิ่ม click handlers แบบตรงไปตรงมาให้กับปุ่มคืนวัสดุ
+      document.querySelectorAll('.return-items').forEach(btn => {
+        console.log("Setting up initial return button:", btn);
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const transactionId = this.getAttribute('data-id');
+          console.log("Initial click on return button:", transactionId);
+          
+          // ถ้าอยู่ในโหมดคืนวัสดุ ให้แสดงฟอร์มการคืน
+          if (document.getElementById('returnMode').style.display === 'block') {
+            handleReturnButtonClick(transactionId);
+          }
+        });
+      });
       
       // แก้ไขการแสดงผลเมนู
       function initializeMenu() {
@@ -1924,12 +1941,33 @@
         
         // เปลี่ยน class ของปุ่ม
         const submitBtn = document.getElementById('submitBtn');
-        submitBtn.classList.remove('btn-primary');
-        submitBtn.classList.add('btn-warning');
-        submitBtn.innerHTML = '<i class="bx bx-check-circle me-1"></i> บันทึกการเบิก';
+        if (submitBtn) {
+          submitBtn.classList.remove('btn-primary');
+          submitBtn.classList.add('btn-warning');
+          submitBtn.innerHTML = '<i class="bx bx-check-circle me-1"></i> บันทึกการเบิก';
+        }
         
         // รีเซ็ตฟอร์ม
         resetForm();
+        
+        // รีเซ็ตโมดอลให้กลับเป็นแบบเดิม
+        const modalTitle = document.querySelector('#successModal .modal-title');
+        if (modalTitle) modalTitle.textContent = 'สำเร็จ';
+        
+        const modalIcon = document.querySelector('#successModal .bx');
+        if (modalIcon) {
+          modalIcon.classList.remove('bx-log-in-circle');
+          modalIcon.classList.add('bx-check-circle');
+        }
+        
+        const modalBody = document.querySelector('#successModal .modal-body p');
+        if (modalBody) modalBody.textContent = 'บันทึกรายการเบิก-คืนวัสดุเรียบร้อยแล้ว';
+        
+        const viewBtn = document.getElementById('viewReceiptBtn');
+        if (viewBtn) viewBtn.textContent = 'ดูใบเบิก-คืน';
+        
+        const newBtn = document.getElementById('addNewTransactionBtn');
+        if (newBtn) newBtn.textContent = 'สร้างรายการใหม่';
       });
       
       document.getElementById('returnCard').addEventListener('click', function() {
@@ -2249,6 +2287,8 @@
       
       // เมื่อเปลี่ยนประเภทรายการเป็น "คืน" ให้แสดงข้อมูลแตกต่างกัน
       document.getElementById('returnCard').addEventListener('click', function() {
+        console.log("คลิกปุ่มโหมดคืนวัสดุ");
+        
         // ซ่อนโหมดเบิกวัสดุ แสดงโหมดคืนวัสดุ
         document.getElementById('withdrawMode').style.display = 'none';
         document.getElementById('returnMode').style.display = 'block';
@@ -2268,7 +2308,21 @@
         resetForm();
         
         // เริ่มต้นแสดงรายการที่ยังไม่ได้คืน
-        initReturnMode();
+        setTimeout(function() {
+          // ใช้ setTimeout เพื่อให้แน่ใจว่า DOM ได้รับการอัพเดทก่อน
+          initReturnMode();
+          
+          // เพิ่ม event listeners สำหรับฟอร์มการคืนวัสดุและปุ่มยกเลิก
+          addReturnFormListener();
+          addCancelReturnButtonListener();
+          
+          // วิธีที่ 3: ใช้ onclick attribute โดยตรง
+          document.querySelectorAll('.return-items').forEach(btn => {
+            console.log("Direct onclick assignment for button:", btn);
+            // ใช้ attribute โดยตรง
+            btn.setAttribute('onclick', "handleReturnButtonClick(this.getAttribute('data-id'))");
+          });
+        }, 100);
       });
     });
   </script>
