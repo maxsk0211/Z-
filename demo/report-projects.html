@@ -4817,27 +4817,34 @@ function createLogo(doc) {
 }
 
 function drawThaiText(doc, text, x, y, fontSize, fontWeight = 'normal', align = 'left', color = '#000000') {
-  doc.setFontSize(fontSize);
-  
-  // ตั้งค่าสีข้อความ
-  if (color === '#FFFFFF') {
-    doc.setTextColor(255, 255, 255);
-  } else {
-    doc.setTextColor(0, 0, 0);
-  }
-  
-  // ตั้งค่าความหนาของข้อความ
-  doc.setFont('THSarabunNew', fontWeight);
-  
-  // จัดตำแหน่งข้อความ
-  if (align === 'center') {
-    doc.text(text, x, y, { align: 'center' });
-  } else if (align === 'right') {
-    doc.text(text, x, y, { align: 'right' });
-  } else {
-    doc.text(text, x, y);
-  }
-}
+   // ในการใช้งานจริง คุณควรโหลดฟอนต์ไทยเข้าใน jsPDF
+   // แต่ในที่นี้เพื่อเป็นการสาธิต เราจะจำลองการแสดงข้อความภาษาไทย
+   
+   doc.setFontSize(fontSize);
+   
+   // ตั้งค่าสีข้อความ
+   if (color === '#FFFFFF') {
+     doc.setTextColor(255, 255, 255);
+   } else {
+     doc.setTextColor(0, 0, 0);
+   }
+   
+   // ตั้งค่าความหนาของข้อความ
+   if (fontWeight === 'bold') {
+     doc.setFont('helvetica', 'bold');
+   } else {
+     doc.setFont('helvetica', 'normal');
+   }
+   
+   // จัดตำแหน่งข้อความ
+   if (align === 'center') {
+     doc.text(text, x, y, { align: 'center' });
+   } else if (align === 'right') {
+     doc.text(text, x, y, { align: 'right' });
+   } else {
+     doc.text(text, x, y);
+   }
+ }
 
 // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
 function regeneratePDF(projectName, includeDetails) {
