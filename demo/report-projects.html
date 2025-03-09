@@ -3130,9 +3130,25 @@ function addFinancialSummary(doc, projectData) {
   
   doc.setFontSize(11);
   
-  // สร้างตารางสรุปการเงิน
+  // วาดตารางแบบพื้นฐาน
+  const tableX = 15;
+  let tableY = startY + 7;
+  const colWidth1 = 100;
+  const colWidth2 = 60;
+  const rowHeight = 8;
+  
+  // สร้างหัวตาราง
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.setDrawColor(40, 167, 69);
+  doc.rect(tableX, tableY, colWidth1 + colWidth2, rowHeight, 'FD');
+  
+  doc.setTextColor(255, 255, 255); // สีขาว
+  doc.setFont('helvetica', 'bold');
+  doc.text('รายการ', tableX + 3, tableY + 5.5);
+  doc.text('จำนวนเงิน (บาท)', tableX + colWidth1 + colWidth2 - 3, tableY + 5.5, { align: 'right' });
+  
+  // สร้างข้อมูลตาราง
   const financialData = [
-    ['รายการ', 'จำนวนเงิน (บาท)'],
     ['ราคาโครงการทั้งหมด', projectData.budget.toLocaleString()],
     ['มูลค่าวัสดุที่เบิก', projectData.materialCost.toLocaleString()],
     ['มูลค่าวัสดุที่คืน', projectData.materialReturnCost.toLocaleString()],
@@ -3141,103 +3157,176 @@ function addFinancialSummary(doc, projectData) {
     ['ต้นทุนวัสดุต่อพื้นที่', `${projectData.costPerArea} บาท/ตร.ม.`]
   ];
   
-  // วาดตาราง
-  doc.autoTable({
-    startY: startY + 5,
-    head: [financialData[0]],
-    body: financialData.slice(1),
-    theme: 'grid',
-    headStyles: {
-      fillColor: [40, 167, 69], // สีเขียว
-      textColor: [255, 255, 255],
-      fontStyle: 'bold'
-    },
-    styles: {
-      fontSize: 10,
-      cellPadding: 3
-    },
-    columnStyles: {
-      0: { cellWidth: 100 },
-      1: { cellWidth: 60, halign: 'right' }
-    },
-    margin: { left: 15, right: 15 }
-  });
+  // เริ่มวาดข้อมูล
+  doc.setTextColor(0, 0, 0); // สีดำ
+  doc.setFont('helvetica', 'normal');
+  
+  let altRow = false;
+  for (let i = 0; i < financialData.length; i++) {
+    tableY += rowHeight;
+    
+    // สีพื้นแถวสลับ
+    if (altRow) {
+      doc.setFillColor(245, 245, 245);
+      doc.rect(tableX, tableY, colWidth1 + colWidth2, rowHeight, 'F');
+    }
+    altRow = !altRow;
+    
+    // วาดเส้นกรอบ
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(tableX, tableY, colWidth1 + colWidth2, rowHeight);
+    doc.line(tableX + colWidth1, tableY, tableX + colWidth1, tableY + rowHeight);
+    
+    // ข้อความ
+    doc.text(financialData[i][0], tableX + 3, tableY + 5.5);
+    doc.text(financialData[i][1], tableX + colWidth1 + colWidth2 - 3, tableY + 5.5, { align: 'right' });
+  }
+  
+  // บันทึกตำแหน่งสุดท้ายของตารางเพื่อใช้ในฟังก์ชันอื่น
+  doc.lastTableEndY = tableY + rowHeight;
 }
 
 // เพิ่มรายการวัสดุที่ใช้
 function addMaterialList(doc, projectData) {
-  const startY = doc.lastAutoTable.finalY + 15;
+  const startY = doc.lastTableEndY + 15;
   
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.text('รายการวัสดุที่ใช้', 15, startY);
   
-  doc.setFontSize(11);
+  doc.setFontSize(10);
   
-  // สร้างตารางรายการวัสดุ
-  const header = [['ลำดับ', 'รายการ', 'จำนวนเบิกจริง', 'จำนวนคืนจริง', 'รวมใช้จริง', 'ราคาต่อหน่วย', 'รวมจำนวนเงินสุทธิ']];
+  // วาดตารางแบบพื้นฐาน
+  const tableX = 15;
+  let tableY = startY + 7;
+  const tableWidth = 180;
+  const rowHeight = 10;
   
-  // สร้างข้อมูลจำลอง
-  let materialRows = [];
-  if (projectData.materials && projectData.materials.length > 0) {
-    materialRows = projectData.materials.map((item, index) => [
-      (index + 1).toString(),
-      item.name,
-      `${item.quantityWithdrawn} ${item.unit}`,
-      item.quantityReturned ? `${item.quantityReturned} ${item.unit}` : '-',
-      `${item.quantityUsed} ${item.unit}`,
-      item.unitPrice.toLocaleString(),
-      item.totalCost.toLocaleString()
-    ]);
+  // กำหนดความกว้างของแต่ละคอลัมน์
+  const colWidths = [10, 50, 25, 25, 25, 25, 30]; // รวมกันเท่ากับ tableWidth
+  
+  // สร้างหัวตาราง
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.setDrawColor(40, 167, 69);
+  doc.rect(tableX, tableY, tableWidth, rowHeight, 'FD');
+  
+  doc.setTextColor(255, 255, 255); // สีขาว
+  doc.setFont('helvetica', 'bold');
+  
+  const headers = ['ลำดับ', 'รายการ', 'จำนวนเบิกจริง', 'จำนวนคืนจริง', 'รวมใช้จริง', 'ราคา/หน่วย', 'รวมเงินสุทธิ'];
+  
+  let xPos = tableX;
+  for (let i = 0; i < headers.length; i++) {
+    const align = i === 0 ? 'center' : (i >= 5 ? 'right' : 'left');
+    const textX = align === 'center' ? xPos + colWidths[i] / 2 : 
+                 (align === 'right' ? xPos + colWidths[i] - 2 : xPos + 2);
+    doc.text(headers[i], textX, tableY + 6.5, { align: align });
+    xPos += colWidths[i];
   }
   
-  // เพิ่มแถวรวม
-  materialRows.push([
-    '', 'รวมทั้งสิ้น', '', '', '', '', 
-    projectData.materialNetCost.toLocaleString()
-  ]);
-  
-  // วาดตาราง
-  doc.autoTable({
-    startY: startY + 5,
-    head: header,
-    body: materialRows,
-    theme: 'grid',
-    headStyles: {
-      fillColor: [40, 167, 69], // สีเขียว
-      textColor: [255, 255, 255],
-      fontStyle: 'bold'
-    },
-    styles: {
-      fontSize: 9,
-      cellPadding: 2
-    },
-    columnStyles: {
-      0: { cellWidth: 10, halign: 'center' },
-      2: { cellWidth: 25, halign: 'center' },
-      3: { cellWidth: 25, halign: 'center' },
-      4: { cellWidth: 25, halign: 'center' },
-      5: { cellWidth: 25, halign: 'right' },
-      6: { cellWidth: 35, halign: 'right' }
-    },
-    margin: { left: 15, right: 15 },
-    didParseCell: function(data) {
-      // จัดรูปแบบแถวสุดท้าย (รวมทั้งสิ้น)
-      if (data.row.index === materialRows.length - 1) {
-        data.cell.styles.fontStyle = 'bold';
-        if (data.column.index === 0) {
-          data.cell.colSpan = 6;
-          data.cell.styles.halign = 'right';
-          data.cell.text = ['รวมทั้งสิ้น'];
+  // ตรวจสอบว่ามีข้อมูลวัสดุหรือไม่
+  if (!projectData.materials || projectData.materials.length === 0) {
+    tableY += rowHeight;
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(tableX, tableY, tableWidth, rowHeight);
+    doc.text('-- ไม่มีข้อมูลวัสดุ --', tableX + tableWidth / 2, tableY + 6.5, { align: 'center' });
+    tableY += rowHeight;
+  } else {
+    // วาดข้อมูลวัสดุ
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    
+    let altRow = false;
+    for (let i = 0; i < projectData.materials.length; i++) {
+      const material = projectData.materials[i];
+      tableY += rowHeight;
+      
+      // ตรวจสอบว่าต้องเพิ่มหน้าใหม่หรือไม่
+      if (tableY > 270) {
+        doc.addPage();
+        tableY = 20;
+        
+        // วาดหัวตารางใหม่
+        doc.setFillColor(40, 167, 69);
+        doc.setDrawColor(40, 167, 69);
+        doc.rect(tableX, tableY, tableWidth, rowHeight, 'FD');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        
+        xPos = tableX;
+        for (let j = 0; j < headers.length; j++) {
+          const align = j === 0 ? 'center' : (j >= 5 ? 'right' : 'left');
+          const textX = align === 'center' ? xPos + colWidths[j] / 2 : 
+                       (align === 'right' ? xPos + colWidths[j] - 2 : xPos + 2);
+          doc.text(headers[j], textX, tableY + 6.5, { align: align });
+          xPos += colWidths[j];
         }
+        
+        tableY += rowHeight;
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'normal');
+      }
+      
+      // สีพื้นแถวสลับ
+      if (altRow) {
+        doc.setFillColor(245, 245, 245);
+        doc.rect(tableX, tableY, tableWidth, rowHeight, 'F');
+      }
+      altRow = !altRow;
+      
+      // วาดเส้นกรอบ
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(tableX, tableY, tableWidth, rowHeight);
+      
+      // วาดเส้นแบ่งคอลัมน์
+      xPos = tableX;
+      for (let j = 0; j < colWidths.length - 1; j++) {
+        xPos += colWidths[j];
+        doc.line(xPos, tableY, xPos, tableY + rowHeight);
+      }
+      
+      // เพิ่มข้อมูลในแถว
+      xPos = tableX;
+      const rowData = [
+        (i + 1).toString(),
+        material.name,
+        `${material.quantityWithdrawn} ${material.unit}`,
+        material.quantityReturned ? `${material.quantityReturned} ${material.unit}` : '-',
+        `${material.quantityUsed} ${material.unit}`,
+        material.unitPrice.toLocaleString(),
+        material.totalCost.toLocaleString()
+      ];
+      
+      for (let j = 0; j < rowData.length; j++) {
+        const align = j === 0 ? 'center' : (j >= 5 ? 'right' : 'left');
+        const textX = align === 'center' ? xPos + colWidths[j] / 2 : 
+                     (align === 'right' ? xPos + colWidths[j] - 2 : xPos + 2);
+        doc.text(rowData[j], textX, tableY + 6.5, { align: align });
+        xPos += colWidths[j];
       }
     }
-  });
-  
-  // หากตารางยาวเกินหน้า ให้เพิ่มหน้าใหม่
-  if (doc.lastAutoTable.finalY > 250) {
-    doc.addPage();
+    
+    // เพิ่มแถวรวม
+    tableY += rowHeight;
+    doc.setFillColor(230, 230, 230);
+    doc.rect(tableX, tableY, tableWidth, rowHeight, 'F');
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(tableX, tableY, tableWidth, rowHeight);
+    
+    // เส้นแบ่งคอลัมน์สุดท้าย
+    xPos = tableX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + colWidths[4] + colWidths[5];
+    doc.line(xPos, tableY, xPos, tableY + rowHeight);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.text('รวมทั้งสิ้น', xPos - 5, tableY + 6.5, { align: 'right' });
+    doc.text(projectData.materialNetCost.toLocaleString(), tableX + tableWidth - 2, tableY + 6.5, { align: 'right' });
   }
+  
+  // บันทึกตำแหน่งสุดท้ายของตารางเพื่อใช้ในฟังก์ชันอื่น
+  doc.lastTableEndY = tableY + rowHeight;
 }
 
 // เพิ่มความคืบหน้าโครงการ
