@@ -2713,7 +2713,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-  
+
   <!-- Page JS -->
   <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -4846,39 +4846,7 @@ function regeneratePDF(projectName, includeDetails) {
   const projectId = document.getElementById('modal-project-id').textContent;
   return generateProjectPDF(projectId);
 }
-
-function createThaiPDFWithFont(projectId) {
-  // สร้างเอกสาร PDF
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  
-  // โหลดฟอนต์ไทย
-  doc.addFont('../assets/fonts/THSarabunNew.ttf', 'THSarabunNew', 'normal');
-  doc.addFont('../assets/fonts/THSarabunNew Bold.ttf', 'THSarabunNew', 'bold');
-  
-  // ตั้งค่าฟอนต์เริ่มต้นเป็นฟอนต์ไทย
-  doc.setFont('THSarabunNew');
-  
-  // เพิ่มหัวเอกสาร
-  createLogo(doc);
-  
-  // ข้อมูลโครงการ (ใช้ฟังก์ชัน getProjectData ที่มีอยู่)
-  const projectData = getProjectData(projectId);
-  
-  // ตัวอย่างการใช้ฟอนต์ไทย
-  doc.setFont('THSarabunNew', 'bold');
-  doc.setFontSize(18);
-  doc.text("Green Gardens - รายงานโครงการ", 30, 22);
-  
-  doc.setFont('THSarabunNew', 'normal');
-  doc.setFontSize(14);
-  doc.text("รายงานโครงการ: " + projectData.name, 195, 22, { align: "right" });
-  
-  // เพิ่มเนื้อหารายงานทั้งหมด...
-  // (ใช้ doc.text แทน drawThaiText)
-  
-  return doc;
-}
+\
 
 // ฟังก์ชันสมมติสำหรับดึงข้อมูลโครงการ
 function getProjectData(projectId) {
