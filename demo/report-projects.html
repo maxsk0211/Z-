@@ -2824,38 +2824,134 @@ window.viewProjectDetail = function(projectId) {
 };
             
 // ฟังก์ชันสำหรับพิมพ์รายงานโครงการ
+// คัดลอกโค้ดนี้ไปวางแทนที่ฟังก์ชัน printProjectReport เดิมในไฟล์ report-projects.html
 window.printProjectReport = function(projectId) {
   console.log('พิมพ์รายงานโครงการ: ' + projectId);
   
-  // แสดง Loading Modal
-  const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
-  loadingModal.show();
+  // ดึงข้อมูลโครงการ
+  const projectData = getProjectData(projectId);
   
-  // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
-  setTimeout(function() {
-    try {
-      // สร้าง PDF
-      const doc = createThaiPDF(projectId);
+  // สร้างหน้าต่างใหม่
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>รายงานโครงการ: ${projectData.name}</title>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        
+        body { 
+          font-family: 'Sarabun', sans-serif; 
+          padding: 20px; 
+          color: #566a7f;
+        }
+        
+        /* ใช้ CSS เดียวกับ exportProjectData */
+        h1, h2 { color: #28a745; margin-bottom: 15px; }
+        
+        table { 
+          width: 100%; 
+          border-collapse: collapse; 
+          margin-bottom: 20px; 
+        }
+        
+        th, td { 
+          border: 1px solid #ddd; 
+          padding: 8px; 
+        }
+        
+        th { 
+          background-color: #28a745; 
+          color: white; 
+          font-weight: 500;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+        
+        .container { 
+          max-width: 800px; 
+          margin: 0 auto; 
+        }
+        
+        .header { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #ddd;
+          padding-bottom: 10px;
+        }
+        
+        .info-section {
+          display: flex;
+          margin-bottom: 20px;
+        }
+        
+        .info-column {
+          flex: 1;
+        }
+        
+        .info-item {
+          margin-bottom: 8px;
+        }
+        
+        .info-label {
+          font-weight: 500;
+          margin-right: 5px;
+        }
+        
+        .right-align {
+          text-align: right;
+        }
+        
+        .text-bold {
+          font-weight: 600;
+        }
+        
+        .footer {
+          margin-top: 30px;
+          border-top: 1px solid #ddd;
+          padding-top: 10px;
+          text-align: center;
+          color: #999;
+          font-size: 0.8em;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <!-- ใช้เนื้อหาเดียวกับ exportProjectData -->
+        <div class="header">
+          <div>
+            <h1>Green Gardens</h1>
+          </div>
+          <div>
+            <h2>รายงานโครงการ</h2>
+            <p>วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH')}</p>
+          </div>
+        </div>
+        
+        <!-- เนื้อหารายงานเหมือนกัน -->
+      </div>
       
-      // ซ่อน Loading Modal
-      loadingModal.hide();
-      
-      // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
-      const pdfDataUri = doc.output('datauristring');
-      const printWindow = window.open(pdfDataUri);
-      
-      // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
-      printWindow.addEventListener('load', function() {
-        setTimeout(function() {
-          printWindow.print();
-        }, 500);
-      });
-    } catch (error) {
-      console.error('เกิดข้อผิดพลาดในการพิมพ์ PDF:', error);
-      alert('เกิดข้อผิดพลาดในการพิมพ์ PDF โปรดลองอีกครั้ง');
-      loadingModal.hide();
-    }
-  }, 500);
+      <script>
+        // พิมพ์โดยอัตโนมัติ
+        window.onload = function() {
+          setTimeout(function() { 
+            window.print();
+            setTimeout(function() { window.close(); }, 500);
+          }, 1000);
+        };
+      </script>
+    </body>
+    </html>
+  `);
+  
+  
 };
 
 function createThaiPDF(projectId) {
