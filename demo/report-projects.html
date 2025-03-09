@@ -2837,16 +2837,20 @@ window.printProjectReport = function(projectId) {
       // ซ่อน Loading Modal
       loadingModal.hide();
       
-      // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
-      const pdfDataUri = doc.output('datauristring');
-      const printWindow = window.open(pdfDataUri);
-      
-      // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
-      printWindow.addEventListener('load', function() {
-        setTimeout(function() {
-          printWindow.print();
-        }, 500);
-      });
+      if (doc) {
+        // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+        const pdfDataUri = doc.output('datauristring');
+        const printWindow = window.open(pdfDataUri);
+        
+        // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+        printWindow.addEventListener('load', function() {
+          setTimeout(function() {
+            printWindow.print();
+          }, 500);
+        });
+      } else {
+        alert('ไม่สามารถสร้าง PDF ได้ โปรดลองอีกครั้ง');
+      }
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการพิมพ์ PDF:', error);
       alert('เกิดข้อผิดพลาดในการพิมพ์ PDF โปรดลองอีกครั้ง');
@@ -2872,9 +2876,27 @@ window.exportProjectData = function(projectId) {
       // ซ่อน Loading Modal
       loadingModal.hide();
       
-      // แสดงตัวอย่าง PDF
-      const projectName = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(2)`).textContent.trim();
-      showPDFPreview(doc, projectName);
+      if (doc) {
+        // หาชื่อโครงการจาก DOM ด้วยวิธีพื้นฐาน
+        let projectName = projectId; // ค่าเริ่มต้น
+        const rows = document.querySelectorAll('#projectsTable tbody tr');
+        
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          const idCell = row.querySelector('td:first-child span.fw-medium');
+          
+          if (idCell && idCell.textContent === projectId) {
+            projectName = row.querySelector('td:nth-child(2)').textContent.trim();
+            break;
+          }
+        }
+        
+        // แสดงตัวอย่าง PDF
+        showPDFPreview(doc, projectName);
+      } else {
+        alert('ไม่สามารถสร้าง PDF ได้ โปรดลองอีกครั้ง');
+        loadingModal.hide();
+      }
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
       alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
@@ -2977,12 +2999,34 @@ function generateProjectPDF(projectId) {
     format: 'a4'
   });
 
-  // ค้นหาข้อมูลโครงการจาก DOM
-  const projectName = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(2)`).textContent.trim();
-  const projectCustomer = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(3)`).textContent.trim();
-  const projectStartDate = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(4)`).textContent.trim();
-  const projectEndDate = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(5)`).textContent.trim();
-  const projectMaterialCost = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(7)`).textContent.trim();
+  // ค้นหาข้อมูลโครงการจาก DOM ด้วยวิธีพื้นฐาน
+  // หา row ที่มี projectId
+  let projectRow = null;
+  const rows = document.querySelectorAll('#projectsTable tbody tr');
+  
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const idCell = row.querySelector('td:first-child span.fw-medium');
+    
+    if (idCell && idCell.textContent === projectId) {
+      projectRow = row;
+      break;
+    }
+  }
+  
+  if (!projectRow) {
+    console.error('ไม่พบข้อมูลโครงการ ID:', projectId);
+    return;
+  }
+  
+  // ดึงข้อมูลจาก row ที่พบ
+  const cells = projectRow.querySelectorAll('td');
+  const projectName = cells[1].textContent.trim();
+  const projectCustomer = cells[2].textContent.trim();
+  const projectStartDate = cells[3].textContent.trim();
+  const projectEndDate = cells[4].textContent.trim();
+  const projectStatus = cells[5].querySelector('.badge').textContent.trim();
+  const projectMaterialCost = cells[6].textContent.trim();
   
   // ====== สร้างเอกสาร PDF ======
   
@@ -3024,22 +3068,31 @@ function generateProjectPDF(projectId) {
   doc.text(`Customer: ${projectCustomer}`, 15, startY + lineHeight * 2);
   doc.text(`Start Date: ${projectStartDate}`, 15, startY + lineHeight * 3);
   doc.text(`End Date: ${projectEndDate}`, 15, startY + lineHeight * 4);
-  doc.text(`Material Cost: ${projectMaterialCost}`, 15, startY + lineHeight * 5);
+  doc.text(`Status: ${projectStatus}`, 15, startY + lineHeight * 5);
+  doc.text(`Material Cost: ${projectMaterialCost}`, 15, startY + lineHeight * 6);
 
   // เส้นคั่น
-  doc.line(15, startY + lineHeight * 6, 195, startY + lineHeight * 6);
+  doc.line(15, startY + lineHeight * 7, 195, startY + lineHeight * 7);
   
-  // 3. แสดงรูปภาพตัวอย่าง (สร้างลายน้ำมุมโครงการ)
+  // 3. สรุปรายงาน (แบบง่าย)
+  doc.setFontSize(14);
+  doc.text('Project Summary', 15, startY + lineHeight * 8 + 5);
+  
+  doc.setFontSize(11);
+  doc.text('This is a demonstration report that shows basic project information.', 15, startY + lineHeight * 9 + 5);
+  doc.text('For a complete report in Thai language, a Thai font must be implemented.', 15, startY + lineHeight * 10 + 5);
+  
+  // 4. แสดงรูปภาพตัวอย่าง (สร้างลายน้ำมุมโครงการ)
   doc.setFontSize(72);
   doc.setTextColor(230, 230, 230);
   doc.text('DEMO', 105, 160, { align: 'center' });
   
-  // 4. เพิ่มหมายเลขหน้า
+  // 5. เพิ่มหมายเลขหน้า
   doc.setFontSize(9);
   doc.setTextColor(0, 0, 0);
   doc.text(`Page 1 of 1`, 105, 290, { align: 'center' });
   
-  // 5. เพิ่มข้อความแนะนำที่ด้านล่าง
+  // 6. เพิ่มข้อความแนะนำที่ด้านล่าง
   doc.setFontSize(10);
   doc.text('This is a demonstration report. For a complete report with Thai language support,', 105, 280, { align: 'center' });
   doc.text('please implement a Thai font in the PDF generation system.', 105, 285, { align: 'center' });
