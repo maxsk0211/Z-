@@ -2832,32 +2832,93 @@ window.printProjectReport = function(projectId) {
   setTimeout(function() {
     try {
       // สร้าง PDF
-      const doc = generateProjectPDF(projectId);
+      const doc = createSimpleDemoPDF(projectId);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
       
-      if (doc) {
-        // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
-        const pdfDataUri = doc.output('datauristring');
-        const printWindow = window.open(pdfDataUri);
-        
-        // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
-        printWindow.addEventListener('load', function() {
-          setTimeout(function() {
-            printWindow.print();
-          }, 500);
-        });
-      } else {
-        alert('ไม่สามารถสร้าง PDF ได้ โปรดลองอีกครั้ง');
-      }
+      // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+      const pdfDataUri = doc.output('datauristring');
+      const printWindow = window.open(pdfDataUri);
+      
+      // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+      printWindow.addEventListener('load', function() {
+        setTimeout(function() {
+          printWindow.print();
+        }, 500);
+      });
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการพิมพ์ PDF:', error);
       alert('เกิดข้อผิดพลาดในการพิมพ์ PDF โปรดลองอีกครั้ง');
       loadingModal.hide();
     }
-  }, 100);
+  }, 500);
 };
+
+// สร้าง PDF แบบง่ายที่สุดสำหรับ Demo
+function createSimpleDemoPDF(projectId) {
+  // สร้างเอกสาร PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // ข้อมูลจำลองอย่างง่าย (ไม่สนใจข้อมูลจริง)
+  const projectData = {
+    id: projectId,
+    name: "Project Garden Demo",
+    customer: "Customer Example Co., Ltd.",
+    startDate: "01/01/2025",
+    endDate: "31/01/2025",
+    status: "In Progress",
+    progress: "60%",
+    materialCost: "12,345.00"
+  };
+  
+  // หัวเอกสาร
+  doc.setFontSize(22);
+  doc.text("PROJECT REPORT", 105, 20, { align: "center" });
+  
+  // เส้นคั่น
+  doc.setLineWidth(0.5);
+  doc.line(20, 25, 190, 25);
+  
+  // ข้อมูลโครงการ
+  doc.setFontSize(12);
+  doc.text("Project ID: " + projectData.id, 20, 40);
+  doc.text("Project Name: " + projectData.name, 20, 50);
+  doc.text("Customer: " + projectData.customer, 20, 60);
+  doc.text("Duration: " + projectData.startDate + " - " + projectData.endDate, 20, 70);
+  doc.text("Status: " + projectData.status + " (" + projectData.progress + ")", 20, 80);
+  doc.text("Material Cost: " + projectData.materialCost + " THB", 20, 90);
+  
+  // รูปประกอบง่ายๆ
+  // วงกลม
+  doc.setDrawColor(0);
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.circle(105, 130, 30, 'FD');
+  
+  doc.setFillColor(255, 255, 255); // สีขาว
+  doc.circle(105, 130, 20, 'FD');
+  
+  // DEMO watermark
+  doc.setFontSize(60);
+  doc.setTextColor(200, 200, 200);
+  doc.text("DEMO", 105, 180, { align: "center" });
+  
+  // แสดงวันที่ออกรายงาน
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  const today = new Date();
+  doc.text("Generated on: " + today.toLocaleDateString(), 20, 230);
+  
+  // แสดงหมายเลขหน้า
+  doc.text("Page 1/1", 180, 230);
+  
+  // ข้อความด้านล่าง
+  doc.setFontSize(8);
+  doc.text("This is a demonstration PDF report. In a real implementation, this report would contain actual project data.", 105, 280, { align: "center" });
+  
+  return doc;
+}
 
 // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
 window.exportProjectData = function(projectId) {
@@ -2870,39 +2931,20 @@ window.exportProjectData = function(projectId) {
   // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
   setTimeout(function() {
     try {
-      // สร้าง PDF
-      const doc = generateProjectPDF(projectId);
+      // สร้าง PDF แบบง่ายที่สุด
+      const doc = createSimpleDemoPDF(projectId);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
       
-      if (doc) {
-        // หาชื่อโครงการจาก DOM ด้วยวิธีพื้นฐาน
-        let projectName = projectId; // ค่าเริ่มต้น
-        const rows = document.querySelectorAll('#projectsTable tbody tr');
-        
-        for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          const idCell = row.querySelector('td:first-child span.fw-medium');
-          
-          if (idCell && idCell.textContent === projectId) {
-            projectName = row.querySelector('td:nth-child(2)').textContent.trim();
-            break;
-          }
-        }
-        
-        // แสดงตัวอย่าง PDF
-        showPDFPreview(doc, projectName);
-      } else {
-        alert('ไม่สามารถสร้าง PDF ได้ โปรดลองอีกครั้ง');
-        loadingModal.hide();
-      }
+      // แสดงตัวอย่าง PDF
+      showPDFPreview(doc, "Project " + projectId);
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
       alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
       loadingModal.hide();
     }
-  }, 100);
+  }, 500);
 };
 
 // ปุ่มรีเซ็ตตัวกรอง
@@ -3589,7 +3631,7 @@ function showPDFPreview(doc, projectName) {
   // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
   document.getElementById('downloadPdfBtn').onclick = function() {
     // ดาวน์โหลด PDF
-    doc.save(`Project_Report_${projectName.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`Report_${projectName.replace(/\s+/g, '_')}.pdf`);
   };
   
   // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
