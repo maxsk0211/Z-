@@ -5320,36 +5320,253 @@ function showPDFPreview(doc, projectName) {
   }
 }
 // เพิ่มฟังก์ชันนี้ที่ท้ายไฟล์ (ก่อน </body>)
+// เพิ่มฟังก์ชันนี้ที่ท้ายไฟล์ (ก่อน </body>)
 function exportThaiReport(projectId) {
   // ดึงข้อมูลโครงการ
   var projectData = getProjectData(projectId);
   // สร้างหน้าต่างใหม่
   var reportWindow = window.open('', '_blank');
   // จัดรูปแบบ HTML
-  reportWindow.document.write('<html><head><title>รายงานโครงการ</title>');
-  reportWindow.document.write('<style>body{font-family:sans-serif;padding:20px}');
-  reportWindow.document.write('h1,h2{color:#28a745}');
-  reportWindow.document.write('table{width:100%;border-collapse:collapse}');
+  reportWindow.document.write('<html><head><title>รายงานโครงการ: ' + projectData.name + '</title>');
+  reportWindow.document.write('<style>');
+  reportWindow.document.write('body{font-family:sans-serif;padding:20px;color:#566a7f}');
+  reportWindow.document.write('h1,h2,h3{color:#28a745;margin-top:20px}');
+  reportWindow.document.write('h3{border-left:4px solid #28a745;padding-left:10px;margin-top:25px}');
+  reportWindow.document.write('table{width:100%;border-collapse:collapse;margin-bottom:15px}');
   reportWindow.document.write('th,td{border:1px solid #ddd;padding:8px}');
-  reportWindow.document.write('th{background:#28a745;color:white}');
-  reportWindow.document.write('button{background:#28a745;color:white;border:none;padding:10px;margin:10px 5px;cursor:pointer}');
+  reportWindow.document.write('th{background:#28a745;color:white;font-weight:500}');
+  reportWindow.document.write('tr:nth-child(even){background-color:#f8f9fa}');
+  reportWindow.document.write('.header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:20px}');
+  reportWindow.document.write('.right-align{text-align:right}');
+  reportWindow.document.write('.center-align{text-align:center}');
+  reportWindow.document.write('.category-header{background-color:#e9f7ef;font-weight:bold}');
+  reportWindow.document.write('.total-row{background-color:#e0e0e0;font-weight:bold}');
+  reportWindow.document.write('.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}');
+  reportWindow.document.write('.info-section{margin-bottom:10px}');
+  reportWindow.document.write('.info-label{font-weight:bold;margin-right:5px}');
+  reportWindow.document.write('.progress-bar{background-color:#f0f0f0;height:12px;border-radius:6px;margin-top:5px}');
+  reportWindow.document.write('.progress-value{background-color:#28a745;height:12px;border-radius:6px}');
+  reportWindow.document.write('button{background:#28a745;color:white;border:none;padding:10px 20px;margin:10px 5px;cursor:pointer;border-radius:4px}');
+  reportWindow.document.write('button:hover{background:#218838}');
+  reportWindow.document.write('button.secondary{background:#6c757d}');
+  reportWindow.document.write('button.secondary:hover{background:#5a6268}');
+  reportWindow.document.write('footer{margin-top:30px;border-top:1px solid #eee;padding-top:10px;text-align:center;color:#999;font-size:12px}');
+  reportWindow.document.write('@media print{.no-print{display:none} body{padding:0} button{display:none}}');
   reportWindow.document.write('</style></head><body>');
   
-  // เพิ่มเนื้อหารายงาน
-  reportWindow.document.write('<h1>รายงานโครงการ</h1>');
-  reportWindow.document.write('<div><strong>รหัส:</strong> ' + projectData.id + '</div>');
-  reportWindow.document.write('<div><strong>ชื่อโครงการ:</strong> ' + projectData.name + '</div>');
-  reportWindow.document.write('<div><strong>ลูกค้า:</strong> ' + projectData.customer + '</div>');
-  reportWindow.document.write('<div><strong>สถานะ:</strong> ' + projectData.status + '</div>');
-  
-  // เพิ่มข้อมูลเพิ่มเติมตามที่ต้องการ
-  
-  
-  // ปุ่มพิมพ์
-  reportWindow.document.write('<div style="text-align:center;margin-top:20px">');
-  reportWindow.document.write('<button onclick="window.print()">พิมพ์รายงาน</button>');
-  reportWindow.document.write('<button onclick="window.close()" style="background:#666">ปิด</button>');
+  // ส่วนหัวรายงาน
+  reportWindow.document.write('<div class="header">');
+  reportWindow.document.write('<div><h1>Green Gardens</h1></div>');
+  reportWindow.document.write('<div><h2>รายงานโครงการ</h2><p>วันที่พิมพ์: ' + new Date().toLocaleDateString() + '</p></div>');
   reportWindow.document.write('</div>');
+  
+  // ข้อมูลโครงการหลัก
+  reportWindow.document.write('<h2>ข้อมูลโครงการ</h2>');
+  reportWindow.document.write('<div class="info-grid">');
+  reportWindow.document.write('<div class="info-section">');
+  reportWindow.document.write('<div><span class="info-label">รหัสโครงการ:</span> ' + projectData.id + '</div>');
+  reportWindow.document.write('<div><span class="info-label">ชื่อโครงการ:</span> ' + projectData.name + '</div>');
+  reportWindow.document.write('<div><span class="info-label">ลูกค้า:</span> ' + projectData.customer + '</div>');
+  reportWindow.document.write('<div><span class="info-label">ที่อยู่:</span> ' + projectData.address + '</div>');
+  reportWindow.document.write('<div><span class="info-label">ผู้รับผิดชอบ:</span> ' + projectData.owner + '</div>');
+  reportWindow.document.write('</div>');
+  
+  reportWindow.document.write('<div class="info-section">');
+  reportWindow.document.write('<div><span class="info-label">วันที่เริ่ม:</span> ' + projectData.startDate + '</div>');
+  reportWindow.document.write('<div><span class="info-label">กำหนดเสร็จ:</span> ' + projectData.endDate + '</div>');
+  reportWindow.document.write('<div><span class="info-label">สถานะ:</span> ' + projectData.status + '</div>');
+  reportWindow.document.write('<div><span class="info-label">ความคืบหน้า:</span> ' + projectData.progress + '%</div>');
+  reportWindow.document.write('<div class="progress-bar"><div class="progress-value" style="width:' + projectData.progress + '%"></div></div>');
+  reportWindow.document.write('<div><span class="info-label">พื้นที่ทั้งหมด:</span> ' + projectData.area + ' ตร.ม.</div>');
+  reportWindow.document.write('</div>');
+  reportWindow.document.write('</div>');
+  
+  // สรุปการเงิน
+  reportWindow.document.write('<h2>สรุปการเงิน</h2>');
+  reportWindow.document.write('<table>');
+  reportWindow.document.write('<tr><th style="width:70%">รายการ</th><th>จำนวนเงิน (บาท)</th></tr>');
+  reportWindow.document.write('<tr><td>งบประมาณโครงการทั้งหมด</td><td class="right-align">' + projectData.budget.toLocaleString() + '</td></tr>');
+  reportWindow.document.write('<tr><td>มูลค่าวัสดุที่เบิก</td><td class="right-align">' + projectData.materialCost.toLocaleString() + '</td></tr>');
+  reportWindow.document.write('<tr><td>มูลค่าวัสดุที่คืน</td><td class="right-align">' + projectData.materialReturnCost.toLocaleString() + '</td></tr>');
+  reportWindow.document.write('<tr><td><strong>มูลค่าวัสดุสุทธิ</strong></td><td class="right-align"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td></tr>');
+  reportWindow.document.write('<tr><td>สัดส่วนต้นทุนวัสดุ</td><td class="right-align">' + projectData.materialCostRatio.toFixed(2) + '%</td></tr>');
+  reportWindow.document.write('<tr><td>ค่าแรงทั้งหมด</td><td class="right-align">' + projectData.laborCost.toLocaleString() + '</td></tr>');
+  reportWindow.document.write('<tr><td>ค่าใช้จ่ายอื่นๆ</td><td class="right-align">' + projectData.otherCost.toLocaleString() + '</td></tr>');
+  reportWindow.document.write('<tr><td><strong>ต้นทุนรวมทั้งสิ้น</strong></td><td class="right-align"><strong>' + projectData.totalCost.toLocaleString() + '</strong></td></tr>');
+  reportWindow.document.write('<tr><td><strong>กำไรขั้นต้น</strong></td><td class="right-align"><strong>' + projectData.grossProfit.toLocaleString() + '</strong></td></tr>');
+  reportWindow.document.write('<tr><td>ต้นทุนวัสดุต่อพื้นที่</td><td class="right-align">' + projectData.costPerArea.toFixed(2) + ' บาท/ตร.ม.</td></tr>');
+  reportWindow.document.write('</table>');
+  
+  // รายการวัสดุที่ใช้ (แยกตามประเภท)
+  reportWindow.document.write('<h2>รายการวัสดุที่ใช้ (แยกตามประเภท)</h2>');
+  
+  // จัดกลุ่มวัสดุตามประเภท (ตัวอย่าง: วัสดุทั่วไป, วัสดุเครื่องมือช่าง, เครื่องมือช่าง)
+  var categories = {};
+  var categoryOrder = ['วัสดุทั่วไป', 'วัสดุเครื่องมือช่าง', 'เครื่องมือช่าง'];
+  
+  // ฟังก์ชันช่วยหาประเภทของวัสดุ (สมมติว่าเราจะคาดเดาประเภทจากชื่อ)
+  function getMaterialCategory(material) {
+    if (material.name.indexOf('เครื่อง') !== -1) {
+      return 'เครื่องมือช่าง';
+    } else if (material.name.indexOf('ตัด') !== -1 || material.name.indexOf('แปรง') !== -1) {
+      return 'วัสดุเครื่องมือช่าง';
+    } else {
+      return 'วัสดุทั่วไป';
+    }
+  }
+  
+  // จัดกลุ่มวัสดุตามประเภท
+  for (var i = 0; i < projectData.materials.length; i++) {
+    var material = projectData.materials[i];
+    var category = getMaterialCategory(material);
+    
+    if (!categories[category]) {
+      categories[category] = [];
+    }
+    categories[category].push(material);
+  }
+  
+  // สร้างตารางสำหรับแต่ละประเภท
+  reportWindow.document.write('<table>');
+  reportWindow.document.write('<tr>');
+  reportWindow.document.write('<th style="width:5%">ลำดับ</th>');
+  reportWindow.document.write('<th style="width:25%">รายการ</th>');
+  reportWindow.document.write('<th style="width:10%">หน่วย</th>');
+  reportWindow.document.write('<th style="width:12%">จำนวนเบิกจริง</th>');
+  reportWindow.document.write('<th style="width:12%">จำนวนคืนจริง</th>');
+  reportWindow.document.write('<th style="width:12%">รวมใช้จริง</th>');
+  reportWindow.document.write('<th style="width:12%">ราคา/หน่วย</th>');
+  reportWindow.document.write('<th style="width:12%">รวมเงินสุทธิ</th>');
+  reportWindow.document.write('</tr>');
+  
+  var totalIndex = 1;
+  var grandTotal = 0;
+  
+  // แสดงข้อมูลตามลำดับหมวดหมู่ที่กำหนด
+  for (var c = 0; c < categoryOrder.length; c++) {
+    var categoryName = categoryOrder[c];
+    var materials = categories[categoryName] || [];
+    
+    if (materials.length > 0) {
+      // หัวตารางของหมวดหมู่
+      reportWindow.document.write('<tr class="category-header">');
+      reportWindow.document.write('<td colspan="8">' + categoryName + ' (' + materials.length + ' รายการ)</td>');
+      reportWindow.document.write('</tr>');
+      
+      var categoryTotal = 0;
+      
+      // แสดงข้อมูลแต่ละรายการในหมวดหมู่
+      for (var m = 0; m < materials.length; m++) {
+        var mat = materials[m];
+        
+        reportWindow.document.write('<tr>');
+        reportWindow.document.write('<td class="center-align">' + totalIndex + '</td>');
+        reportWindow.document.write('<td>' + mat.name + '</td>');
+        reportWindow.document.write('<td class="center-align">' + mat.unit + '</td>');
+        reportWindow.document.write('<td class="center-align">' + mat.quantityWithdrawn + '</td>');
+        reportWindow.document.write('<td class="center-align">' + (mat.quantityReturned || '-') + '</td>');
+        reportWindow.document.write('<td class="center-align">' + mat.quantityUsed + '</td>');
+        reportWindow.document.write('<td class="right-align">' + mat.unitPrice.toLocaleString() + '</td>');
+        reportWindow.document.write('<td class="right-align">' + mat.totalCost.toLocaleString() + '</td>');
+        reportWindow.document.write('</tr>');
+        
+        categoryTotal += mat.totalCost;
+        totalIndex++;
+      }
+      
+      // แสดงรวมย่อยของหมวดหมู่
+      reportWindow.document.write('<tr>');
+      reportWindow.document.write('<td colspan="7" class="right-align"><strong>รวม' + categoryName + '</strong></td>');
+      reportWindow.document.write('<td class="right-align"><strong>' + categoryTotal.toLocaleString() + '</strong></td>');
+      reportWindow.document.write('</tr>');
+      
+      grandTotal += categoryTotal;
+    }
+  }
+  
+  // แสดงรวมทั้งหมด
+  reportWindow.document.write('<tr class="total-row">');
+  reportWindow.document.write('<td colspan="7" class="right-align"><strong>รวมทั้งสิ้น</strong></td>');
+  reportWindow.document.write('<td class="right-align"><strong>' + grandTotal.toLocaleString() + '</strong></td>');
+  reportWindow.document.write('</tr>');
+  reportWindow.document.write('</table>');
+  
+  // ข้อมูลไทม์ไลน์โครงการ (ถ้ามี)
+  if (projectData.timeline && projectData.timeline.length > 0) {
+    reportWindow.document.write('<h2>ไทม์ไลน์โครงการ</h2>');
+    reportWindow.document.write('<table>');
+    reportWindow.document.write('<tr>');
+    reportWindow.document.write('<th style="width:15%">วันที่</th>');
+    reportWindow.document.write('<th style="width:25%">กิจกรรม</th>');
+    reportWindow.document.write('<th>รายละเอียด</th>');
+    reportWindow.document.write('</tr>');
+    
+    for (var t = 0; t < projectData.timeline.length; t++) {
+      var timeline = projectData.timeline[t];
+      reportWindow.document.write('<tr>');
+      reportWindow.document.write('<td>' + timeline.date + '</td>');
+      reportWindow.document.write('<td>' + timeline.title + '</td>');
+      reportWindow.document.write('<td>' + timeline.description + '</td>');
+      reportWindow.document.write('</tr>');
+    }
+    
+    reportWindow.document.write('</table>');
+  }
+  
+  // ข้อมูลทีมงาน (ถ้ามี)
+  if (projectData.workforce && projectData.workforce.length > 0) {
+    reportWindow.document.write('<h3>กำลังคนที่ใช้</h3>');
+    reportWindow.document.write('<table>');
+    reportWindow.document.write('<tr>');
+    reportWindow.document.write('<th style="width:30%">ตำแหน่ง</th>');
+    reportWindow.document.write('<th style="width:15%">จำนวน (คน)</th>');
+    reportWindow.document.write('<th style="width:15%">จำนวนวันทำงาน</th>');
+    reportWindow.document.write('<th style="width:20%">ค่าแรง/วัน</th>');
+    reportWindow.document.write('<th style="width:20%">รวมค่าแรง</th>');
+    reportWindow.document.write('</tr>');
+    
+    var laborTotal = 0;
+    for (var w = 0; w < projectData.workforce.length; w++) {
+      var worker = projectData.workforce[w];
+      reportWindow.document.write('<tr>');
+      reportWindow.document.write('<td>' + worker.position + '</td>');
+      reportWindow.document.write('<td class="center-align">' + worker.count + '</td>');
+      reportWindow.document.write('<td class="center-align">' + worker.days + '</td>');
+      reportWindow.document.write('<td class="right-align">' + worker.ratePerDay.toLocaleString() + '</td>');
+      reportWindow.document.write('<td class="right-align">' + worker.totalCost.toLocaleString() + '</td>');
+      reportWindow.document.write('</tr>');
+      laborTotal += worker.totalCost;
+    }
+    
+    reportWindow.document.write('<tr class="total-row">');
+    reportWindow.document.write('<td colspan="4" class="right-align"><strong>รวมค่าแรงทั้งสิ้น</strong></td>');
+    reportWindow.document.write('<td class="right-align"><strong>' + laborTotal.toLocaleString() + '</strong></td>');
+    reportWindow.document.write('</tr>');
+    reportWindow.document.write('</table>');
+  }
+  
+  // เพิ่มข้อเสนอแนะหรือหมายเหตุ
+  reportWindow.document.write('<h3>หมายเหตุ</h3>');
+  reportWindow.document.write('<p>รายงานนี้แสดงรายละเอียดการใช้วัสดุและค่าใช้จ่ายของโครงการ เพื่อวัตถุประสงค์ในการวิเคราะห์ต้นทุนและประสิทธิภาพการดำเนินงาน</p>');
+  
+  // ข้อความส่วนท้าย
+  reportWindow.document.write('<footer>');
+  reportWindow.document.write('รายงานนี้สร้างโดยระบบจัดสวนครบวงจร Green Gardens © ' + new Date().getFullYear());
+  reportWindow.document.write('</footer>');
+  
+  // ปุ่มพิมพ์และปิด
+  reportWindow.document.write('<div class="no-print" style="text-align:center;margin-top:20px">');
+  reportWindow.document.write('<button onclick="window.print()">พิมพ์รายงาน</button>');
+  reportWindow.document.write('<button class="secondary" onclick="window.close()">ปิด</button>');
+  reportWindow.document.write('</div>');
+  
+  reportWindow.document.write('<script>');
+  reportWindow.document.write('document.addEventListener("DOMContentLoaded", function() {');
+  reportWindow.document.write('  setTimeout(function() {');
+  reportWindow.document.write('    alert("คลิกที่ปุ่ม \'พิมพ์รายงาน\' และเลือก \'บันทึกเป็น PDF\' ในหน้าต่างพิมพ์");');
+  reportWindow.document.write('  }, 1000);');
+  reportWindow.document.write('});');
+  reportWindow.document.write('</script>');
   
   reportWindow.document.write('</body></html>');
   reportWindow.document.close();
