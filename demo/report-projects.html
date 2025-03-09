@@ -2673,199 +2673,199 @@
   <!-- Page JS -->
   <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize Flatpickr for date inputs
-  flatpickr(".flatpickr-date", {
-    dateFormat: "d/m/Y"
-  });
-  
-  // Initialize Select2 for dropdowns
-  $('.form-select').select2({
-    width: '100%'
-  });
-  
-  // Initialize DataTables with correct configuration
-  $('#projectsTable').DataTable({
-    // Disable DataTables' automatic detection of columns
-    // This prevents the warning when we have complex table structures
-    autoWidth: false,
-    
-    // Properly handle collapsed rows
-    columnDefs: [
-      { orderable: false, targets: -1 } // Disable ordering on the last column (actions)
-    ],
-    
-    // The rest of your configuration
-    dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
-    language: {
-      search: "ค้นหา:",
-      lengthMenu: "แสดง _MENU_ รายการ",
-      zeroRecords: "ไม่พบข้อมูล",
-      info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
-      infoEmpty: "แสดง 0 ถึง 0 จาก 0 รายการ",
-      infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
-      paginate: {
-        first: "หน้าแรก",
-        last: "หน้าสุดท้าย",
-        next: "ถัดไป",
-        previous: "ก่อนหน้า"
-      }
-    },
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    ordering: true,
-    responsive: true,
-    
-    // Crucial fix: Handle collapse rows properly
-    // This prevents DataTables from trying to process hidden/collapsed rows
-    rowGroup: {
-      dataSrc: function(row) {
-        // Skip processing rows with class 'collapse'
-        if ($(row.node()).hasClass('collapse')) {
-          return '';
-        }
-        return '';
-      }
-    },
-    
-    // Initialize the table only when it's ready
-    initComplete: function() {
-      console.log('DataTable initialized successfully');
-    }
-  });
-  
-  // Initialize tooltips
-  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-  
-  // The rest of your JavaScript remains the same...
-});
-      // แก้ไขการแสดงผลเมนู
-      function initializeMenu() {
-        // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
-        const menuToggles = document.querySelectorAll('.menu-toggle');
-        menuToggles.forEach(toggle => {
-          toggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            const menuItem = this.closest('.menu-item');
-            const menuSub = menuItem.querySelector('.menu-sub');
-            
-            // Toggle active และ open classes
-            menuItem.classList.toggle('active');
-            menuItem.classList.toggle('open');
-            
-            // แสดง/ซ่อนเมนูย่อย
-            if (menuSub.style.display === 'block') {
-              menuSub.style.display = 'none';
-            } else {
-              menuSub.style.display = 'block';
-            }
-          });
+        // Initialize Flatpickr for date inputs
+        flatpickr(".flatpickr-date", {
+            dateFormat: "d/m/Y"
         });
-      }
-      
-      // เรียกใช้ฟังก์ชันจัดการเมนู
-      initializeMenu();
-      
-      // ฟังก์ชันสำหรับดูรายละเอียดโครงการ
-      window.viewProjectDetail = function(projectId) {
-        console.log('ดูรายละเอียดโครงการ: ' + projectId);
         
-        // แสดง Modal รายละเอียดโครงการ
-        $('#projectDetailModal').modal('show');
+        // Initialize Select2 for dropdowns
+        $('.form-select').select2({
+            width: '100%'
+        });
         
-        // ในระบบจริงควรโหลดข้อมูลจาก API ตาม projectId ที่ได้รับ
-        // ตัวอย่างนี้แสดงข้อมูลจำลองเท่านั้น
-      };
-      
-      // ฟังก์ชันสำหรับพิมพ์รายงานโครงการ
-      window.printProjectReport = function(projectId) {
-        console.log('พิมพ์รายงานโครงการ: ' + projectId);
+        // Initialize DataTables with correct configuration
+        $('#projectsTable').DataTable({
+            // Disable DataTables' automatic detection of columns
+            // This prevents the warning when we have complex table structures
+            autoWidth: false,
+            
+            // Properly handle collapsed rows
+            columnDefs: [
+            { orderable: false, targets: -1 } // Disable ordering on the last column (actions)
+            ],
+            
+            // The rest of your configuration
+            dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+            language: {
+            search: "ค้นหา:",
+            lengthMenu: "แสดง _MENU_ รายการ",
+            zeroRecords: "ไม่พบข้อมูล",
+            info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+            infoEmpty: "แสดง 0 ถึง 0 จาก 0 รายการ",
+            infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
+            paginate: {
+                first: "หน้าแรก",
+                last: "หน้าสุดท้าย",
+                next: "ถัดไป",
+                previous: "ก่อนหน้า"
+            }
+            },
+            pageLength: 5,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            responsive: true,
+            
+            // Crucial fix: Handle collapse rows properly
+            // This prevents DataTables from trying to process hidden/collapsed rows
+            rowGroup: {
+            dataSrc: function(row) {
+                // Skip processing rows with class 'collapse'
+                if ($(row.node()).hasClass('collapse')) {
+                return '';
+                }
+                return '';
+            }
+            },
+            
+            // Initialize the table only when it's ready
+            initComplete: function() {
+            console.log('DataTable initialized successfully');
+            }
+        });
         
-        // ในระบบจริงควรสร้างหน้าสำหรับพิมพ์และเรียกใช้ window.print()
-        alert('กำลังเตรียมพิมพ์รายงานสำหรับโครงการ: ' + projectId);
-      };
-      
-      // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
-      window.exportProjectData = function(projectId) {
-        console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+        // Initialize tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
         
-        // ในระบบจริงควรสร้างไฟล์ส่งออกตามรูปแบบที่ต้องการ (Excel, PDF, CSV)
-        alert('กำลังเตรียมไฟล์ส่งออกสำหรับโครงการ: ' + projectId);
-      };
-      
-      // ปุ่มรีเซ็ตตัวกรอง
-      document.getElementById('resetFilterBtn').addEventListener('click', function() {
-        document.getElementById('projectSearch').value = '';
-        document.getElementById('projectStatus').value = '';
-        document.getElementById('projectStartDate').value = '';
-        document.getElementById('projectEndDate').value = '';
-        
-        // รีเซ็ต Select2
-        $('#projectStatus').val('').trigger('change');
-      });
-      
-      // ปุ่มค้นหา
-      document.getElementById('searchBtn').addEventListener('click', function() {
-        // จำลองการค้นหา
-        alert('กำลังค้นหาโครงการตามเงื่อนไขที่กำหนด');
-      });
-      
-      // ปุ่มพิมพ์รายงาน (จาก Modal)
-      document.getElementById('printModalBtn').addEventListener('click', function() {
-        // จำลองการพิมพ์
-        alert('กำลังเตรียมพิมพ์รายละเอียดโครงการ');
-      });
-      
-      // ปุ่มส่งออกข้อมูล (จาก Modal)
-      document.getElementById('exportModalBtn').addEventListener('click', function() {
-        // จำลองการส่งออก
-        alert('กำลังเตรียมไฟล์ส่งออกรายละเอียดโครงการ');
-      });
-      
-      // ปุ่มอัพเดทการเปรียบเทียบ
-      document.getElementById('updateCompareBtn').addEventListener('click', function() {
-        // จำลองการอัพเดท
-        alert('กำลังอัพเดทข้อมูลการเปรียบเทียบ');
-      });
-      
-      // ปุ่มส่งออกผลการเปรียบเทียบ
-      document.getElementById('exportCompareBtn').addEventListener('click', function() {
-        // จำลองการส่งออก
-        alert('กำลังเตรียมไฟล์ส่งออกผลการเปรียบเทียบ');
-      });
-      
-      // ปุ่มพิมพ์ (จากหน้าหลัก)
-      document.getElementById('printReport').addEventListener('click', function() {
-        // จำลองการพิมพ์
-        alert('กำลังเตรียมพิมพ์รายงานโครงการทั้งหมด');
-      });
-      
-      // ปุ่มส่งออก PDF
-      document.getElementById('exportPDF').addEventListener('click', function() {
-        // จำลองการส่งออกเป็น PDF
-        alert('กำลังส่งออกรายงานในรูปแบบ PDF');
-      });
-      
-      // ปุ่มส่งออก Excel
-      document.getElementById('exportExcel').addEventListener('click', function() {
-        // จำลองการส่งออกเป็น Excel
-        alert('กำลังส่งออกรายงานในรูปแบบ Excel');
-      });
-      
-      // ปุ่มส่งออก CSV
-      document.getElementById('exportCSV').addEventListener('click', function() {
-        // จำลองการส่งออกเป็น CSV
-        alert('กำลังส่งออกรายงานในรูปแบบ CSV');
-      });
-      
-      // ฟังก์ชันสำหรับสร้างกราฟ
-      function initializeCharts() {
-        // ในระบบจริงควรสร้างกราฟด้วย ApexCharts หรือ Chart.js
-        console.log('Initialize charts');
-      }
-      
-      // เรียกใช้ฟังก์ชันสร้างกราฟ
-      setTimeout(initializeCharts, 500);
+        // The rest of your JavaScript remains the same...
+        });
+            // แก้ไขการแสดงผลเมนู
+            function initializeMenu() {
+                // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
+                const menuToggles = document.querySelectorAll('.menu-toggle');
+                menuToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const menuItem = this.closest('.menu-item');
+                    const menuSub = menuItem.querySelector('.menu-sub');
+                    
+                    // Toggle active และ open classes
+                    menuItem.classList.toggle('active');
+                    menuItem.classList.toggle('open');
+                    
+                    // แสดง/ซ่อนเมนูย่อย
+                    if (menuSub.style.display === 'block') {
+                    menuSub.style.display = 'none';
+                    } else {
+                    menuSub.style.display = 'block';
+                    }
+                });
+                });
+            }
+            
+            // เรียกใช้ฟังก์ชันจัดการเมนู
+            initializeMenu();
+            
+            // ฟังก์ชันสำหรับดูรายละเอียดโครงการ
+            window.viewProjectDetail = function(projectId) {
+                console.log('ดูรายละเอียดโครงการ: ' + projectId);
+                
+                // แสดง Modal รายละเอียดโครงการ
+                $('#projectDetailModal').modal('show');
+                
+                // ในระบบจริงควรโหลดข้อมูลจาก API ตาม projectId ที่ได้รับ
+                // ตัวอย่างนี้แสดงข้อมูลจำลองเท่านั้น
+            };
+            
+            // ฟังก์ชันสำหรับพิมพ์รายงานโครงการ
+            window.printProjectReport = function(projectId) {
+                console.log('พิมพ์รายงานโครงการ: ' + projectId);
+                
+                // ในระบบจริงควรสร้างหน้าสำหรับพิมพ์และเรียกใช้ window.print()
+                alert('กำลังเตรียมพิมพ์รายงานสำหรับโครงการ: ' + projectId);
+            };
+            
+            // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
+            window.exportProjectData = function(projectId) {
+                console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+                
+                // ในระบบจริงควรสร้างไฟล์ส่งออกตามรูปแบบที่ต้องการ (Excel, PDF, CSV)
+                alert('กำลังเตรียมไฟล์ส่งออกสำหรับโครงการ: ' + projectId);
+            };
+            
+            // ปุ่มรีเซ็ตตัวกรอง
+            document.getElementById('resetFilterBtn').addEventListener('click', function() {
+                document.getElementById('projectSearch').value = '';
+                document.getElementById('projectStatus').value = '';
+                document.getElementById('projectStartDate').value = '';
+                document.getElementById('projectEndDate').value = '';
+                
+                // รีเซ็ต Select2
+                $('#projectStatus').val('').trigger('change');
+            });
+            
+            // ปุ่มค้นหา
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                // จำลองการค้นหา
+                alert('กำลังค้นหาโครงการตามเงื่อนไขที่กำหนด');
+            });
+            
+            // ปุ่มพิมพ์รายงาน (จาก Modal)
+            document.getElementById('printModalBtn').addEventListener('click', function() {
+                // จำลองการพิมพ์
+                alert('กำลังเตรียมพิมพ์รายละเอียดโครงการ');
+            });
+            
+            // ปุ่มส่งออกข้อมูล (จาก Modal)
+            document.getElementById('exportModalBtn').addEventListener('click', function() {
+                // จำลองการส่งออก
+                alert('กำลังเตรียมไฟล์ส่งออกรายละเอียดโครงการ');
+            });
+            
+            // ปุ่มอัพเดทการเปรียบเทียบ
+            document.getElementById('updateCompareBtn').addEventListener('click', function() {
+                // จำลองการอัพเดท
+                alert('กำลังอัพเดทข้อมูลการเปรียบเทียบ');
+            });
+            
+            // ปุ่มส่งออกผลการเปรียบเทียบ
+            document.getElementById('exportCompareBtn').addEventListener('click', function() {
+                // จำลองการส่งออก
+                alert('กำลังเตรียมไฟล์ส่งออกผลการเปรียบเทียบ');
+            });
+            
+            // ปุ่มพิมพ์ (จากหน้าหลัก)
+            document.getElementById('printReport').addEventListener('click', function() {
+                // จำลองการพิมพ์
+                alert('กำลังเตรียมพิมพ์รายงานโครงการทั้งหมด');
+            });
+            
+            // ปุ่มส่งออก PDF
+            document.getElementById('exportPDF').addEventListener('click', function() {
+                // จำลองการส่งออกเป็น PDF
+                alert('กำลังส่งออกรายงานในรูปแบบ PDF');
+            });
+            
+            // ปุ่มส่งออก Excel
+            document.getElementById('exportExcel').addEventListener('click', function() {
+                // จำลองการส่งออกเป็น Excel
+                alert('กำลังส่งออกรายงานในรูปแบบ Excel');
+            });
+            
+            // ปุ่มส่งออก CSV
+            document.getElementById('exportCSV').addEventListener('click', function() {
+                // จำลองการส่งออกเป็น CSV
+                alert('กำลังส่งออกรายงานในรูปแบบ CSV');
+            });
+            
+            // ฟังก์ชันสำหรับสร้างกราฟ
+            function initializeCharts() {
+                // ในระบบจริงควรสร้างกราฟด้วย ApexCharts หรือ Chart.js
+                console.log('Initialize charts');
+            }
+            
+            // เรียกใช้ฟังก์ชันสร้างกราฟ
+            setTimeout(initializeCharts, 500);
     });
     
   </script>
