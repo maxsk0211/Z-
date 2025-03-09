@@ -2259,11 +2259,16 @@
         
         // เปลี่ยน class ของปุ่ม
         const submitBtn = document.getElementById('submitBtn');
-        submitBtn.classList.remove('btn-warning');
-        submitBtn.classList.add('btn-primary');
+        if (submitBtn) {
+          submitBtn.classList.remove('btn-warning');
+          submitBtn.classList.add('btn-primary');
+        }
         
         // รีเซ็ตฟอร์ม
         resetForm();
+        
+        // เริ่มต้นแสดงรายการที่ยังไม่ได้คืน
+        initReturnMode();
       });
     });
   </script>
