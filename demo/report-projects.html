@@ -2713,7 +2713,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-
+  
   <!-- Page JS -->
   <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -4809,42 +4809,35 @@ function showPDFPreview(doc, projectName) {
 }
 
 function createLogo(doc) {
-   doc.setFillColor(40, 167, 69); // สีเขียว
-   doc.rect(15, 15, 10, 10, 'F');
-   doc.setFillColor(40, 167, 69, 0.7); // สีเขียวเจือจาง
-   doc.setDrawColor(40, 167, 69);
-   doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
- }
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.rect(15, 15, 10, 10, 'F');
+  doc.setFillColor(40, 167, 69, 0.7); // สีเขียวเจือจาง
+  doc.setDrawColor(40, 167, 69);
+  doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
+}
 
 function drawThaiText(doc, text, x, y, fontSize, fontWeight = 'normal', align = 'left', color = '#000000') {
-   // ในการใช้งานจริง คุณควรโหลดฟอนต์ไทยเข้าใน jsPDF
-   // แต่ในที่นี้เพื่อเป็นการสาธิต เราจะจำลองการแสดงข้อความภาษาไทย
-   
-   doc.setFontSize(fontSize);
-   
-   // ตั้งค่าสีข้อความ
-   if (color === '#FFFFFF') {
-     doc.setTextColor(255, 255, 255);
-   } else {
-     doc.setTextColor(0, 0, 0);
-   }
-   
-   // ตั้งค่าความหนาของข้อความ
-   if (fontWeight === 'bold') {
-     doc.setFont('helvetica', 'bold');
-   } else {
-     doc.setFont('helvetica', 'normal');
-   }
-   
-   // จัดตำแหน่งข้อความ
-   if (align === 'center') {
-     doc.text(text, x, y, { align: 'center' });
-   } else if (align === 'right') {
-     doc.text(text, x, y, { align: 'right' });
-   } else {
-     doc.text(text, x, y);
-   }
- }
+  doc.setFontSize(fontSize);
+  
+  // ตั้งค่าสีข้อความ
+  if (color === '#FFFFFF') {
+    doc.setTextColor(255, 255, 255);
+  } else {
+    doc.setTextColor(0, 0, 0);
+  }
+  
+  // ตั้งค่าความหนาของข้อความ
+  doc.setFont('THSarabunNew', fontWeight);
+  
+  // จัดตำแหน่งข้อความ
+  if (align === 'center') {
+    doc.text(text, x, y, { align: 'center' });
+  } else if (align === 'right') {
+    doc.text(text, x, y, { align: 'right' });
+  } else {
+    doc.text(text, x, y);
+  }
+}
 
 // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
 function regeneratePDF(projectName, includeDetails) {
@@ -4853,7 +4846,39 @@ function regeneratePDF(projectName, includeDetails) {
   const projectId = document.getElementById('modal-project-id').textContent;
   return generateProjectPDF(projectId);
 }
-\
+
+function createThaiPDFWithFont(projectId) {
+  // สร้างเอกสาร PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // โหลดฟอนต์ไทย
+  doc.addFont('../assets/fonts/THSarabunNew.ttf', 'THSarabunNew', 'normal');
+  doc.addFont('../assets/fonts/THSarabunNew Bold.ttf', 'THSarabunNew', 'bold');
+  
+  // ตั้งค่าฟอนต์เริ่มต้นเป็นฟอนต์ไทย
+  doc.setFont('THSarabunNew');
+  
+  // เพิ่มหัวเอกสาร
+  createLogo(doc);
+  
+  // ข้อมูลโครงการ (ใช้ฟังก์ชัน getProjectData ที่มีอยู่)
+  const projectData = getProjectData(projectId);
+  
+  // ตัวอย่างการใช้ฟอนต์ไทย
+  doc.setFont('THSarabunNew', 'bold');
+  doc.setFontSize(18);
+  doc.text("Green Gardens - รายงานโครงการ", 30, 22);
+  
+  doc.setFont('THSarabunNew', 'normal');
+  doc.setFontSize(14);
+  doc.text("รายงานโครงการ: " + projectData.name, 195, 22, { align: "right" });
+  
+  // เพิ่มเนื้อหารายงานทั้งหมด...
+  // (ใช้ doc.text แทน drawThaiText)
+  
+  return doc;
+}
 
 // ฟังก์ชันสมมติสำหรับดึงข้อมูลโครงการ
 function getProjectData(projectId) {
