@@ -2867,6 +2867,428 @@ document.addEventListener('DOMContentLoaded', function() {
       // เรียกใช้ฟังก์ชันสร้างกราฟ
       setTimeout(initializeCharts, 500);
     });
+    // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการเป็น PDF
+window.exportProjectData = function(projectId) {
+  console.log('ส่งออกข้อมูลโครงการเป็น PDF: ' + projectId);
+  
+  // แสดง loading spinner หรือข้อความให้ผู้ใช้ทราบว่ากำลังสร้าง PDF
+  const loadingToast = showLoadingToast('กำลังสร้างไฟล์ PDF กรุณารอสักครู่...');
+  
+  // สร้างข้อมูลโครงการจำลอง (ในระบบจริงควรดึงข้อมูลจาก API)
+  const projectData = getProjectDataById(projectId);
+  
+  // Timeout เพื่อจำลองการโหลดข้อมูล
+  setTimeout(() => {
+    try {
+      // สร้าง PDF
+      generateProjectPDF(projectData);
+      
+      // ปิด loading toast
+      hideToast(loadingToast);
+      
+      // แสดงข้อความสำเร็จ
+      showSuccessToast('สร้างไฟล์ PDF สำเร็จ');
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
+      
+      // ปิด loading toast
+      hideToast(loadingToast);
+      
+      // แสดงข้อความผิดพลาด
+      showErrorToast('เกิดข้อผิดพลาดในการสร้าง PDF: ' + error.message);
+    }
+  }, 1000);
+};
+
+// ฟังก์ชันสำหรับสร้าง PDF จากข้อมูลโครงการ
+function generateProjectPDF(project) {
+  // เริ่มต้นสร้าง PDF ด้วย jsPDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // กำหนดสี
+  const primaryColor = [40, 167, 69]; // สีเขียวตาม theme
+  
+  // ข้อมูลหน้ากระดาษ
+  const pageWidth = doc.internal.pageSize.width;
+  const margin = 20;
+  const contentWidth = pageWidth - (margin * 2);
+  
+  // ตั้งค่าฟอนต์ - jsPDF รองรับภาษาไทยได้ไม่สมบูรณ์ในฟอนต์เริ่มต้น
+  // หากต้องการสนับสนุนภาษาไทยเต็มรูปแบบ ต้องโหลดฟอนต์เพิ่มเติม
+  doc.setFont("helvetica");
+  
+  // === หน้าปก ===
+  // หัวเอกสาร
+  doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.rect(0, 0, pageWidth, 40, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.text('รายงานโครงการ', pageWidth / 2, 25, { align: 'center' });
+  
+  // ชื่อบริษัท
+  doc.setFontSize(16);
+  doc.text('Green Gardens', margin, 50);
+  
+  // ข้อมูลโครงการ
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(18);
+  doc.text(project.name, pageWidth / 2, 70, { align: 'center' });
+  
+  doc.setFontSize(12);
+  doc.text(`รหัสโครงการ: ${project.id}`, margin, 85);
+  doc.text(`ลูกค้า: ${project.customer}`, margin, 95);
+  doc.text(`วันที่เริ่ม: ${project.startDate}`, margin, 105);
+  doc.text(`กำหนดเสร็จ: ${project.endDate}`, margin, 115);
+  doc.text(`สถานะ: ${project.status}`, margin, 125);
+  doc.text(`มูลค่าโครงการ: ${project.value.toLocaleString()} บาท`, margin, 135);
+  
+  // ข้อมูลวัสดุ
+  doc.setFontSize(14);
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.text('สรุปมูลค่าวัสดุ', margin, 155);
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12);
+  doc.text(`มูลค่าวัสดุที่เบิก: ${project.materialWithdrawn.toLocaleString()} บาท`, margin, 165);
+  doc.text(`มูลค่าวัสดุที่คืน: ${project.materialReturned.toLocaleString()} บาท`, margin, 175);
+  doc.text(`มูลค่าวัสดุสุทธิ: ${project.materialNet.toLocaleString()} บาท`, margin, 185);
+  doc.text(`สัดส่วนต้นทุนวัสดุ: ${project.materialRatio}% ของราคาโครงการ`, margin, 195);
+  
+  // ลายน้ำเวลาสร้างเอกสาร
+  doc.setFontSize(8);
+  doc.setTextColor(150, 150, 150);
+  const now = new Date();
+  doc.text(`สร้างเมื่อ: ${now.toLocaleString('th-TH')}`, pageWidth - margin, pageWidth - margin, { align: 'right' });
+  
+  // === หน้าที่ 2: รายการวัสดุ ===
+  doc.addPage();
+  
+  // หัวเอกสาร
+  doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.rect(0, 0, pageWidth, 20, 'F');
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(14);
+  doc.text('รายงานโครงการ: ' + project.name, pageWidth / 2, 15, { align: 'center' });
+  
+  // หัวข้อรายการวัสดุ
+  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+  doc.setFontSize(16);
+  doc.text('รายการวัสดุที่ใช้ในโครงการ', margin, 40);
+  
+  // สร้างตารางรายการวัสดุ
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+  
+  // หัวตาราง
+  const headers = ['ลำดับ', 'รายการ', 'จำนวนเบิก', 'จำนวนคืน', 'ใช้จริง', 'ราคา/หน่วย', 'รวมเงิน'];
+  const columnWidths = [15, 60, 25, 25, 25, 25, 25];
+  let startY = 50;
+  let startX = margin;
+  
+  // วาดหัวตาราง
+  doc.setFillColor(240, 240, 240);
+  doc.rect(startX, startY, contentWidth, 10, 'F');
+  
+  doc.setFontSize(10);
+  doc.setTextColor(0, 0, 0);
+  for (let i = 0; i < headers.length; i++) {
+    doc.text(headers[i], startX + 2, startY + 7);
+    startX += columnWidths[i];
+  }
+  
+  // วาดข้อมูลในตาราง
+  startY += 10;
+  let totalAmount = 0;
+  
+  for (let i = 0; i < project.materials.length; i++) {
+    const material = project.materials[i];
+    startX = margin;
+    
+    // สลับสีพื้นหลังในแต่ละแถว
+    if (i % 2 === 1) {
+      doc.setFillColor(248, 248, 248);
+      doc.rect(margin, startY, contentWidth, 10, 'F');
+    }
+    
+    doc.text((i + 1).toString(), startX + 2, startY + 7);
+    startX += columnWidths[0];
+    
+    doc.text(material.name, startX + 2, startY + 7);
+    startX += columnWidths[1];
+    
+    doc.text(material.withdrawn, startX + 2, startY + 7);
+    startX += columnWidths[2];
+    
+    doc.text(material.returned, startX + 2, startY + 7);
+    startX += columnWidths[3];
+    
+    doc.text(material.used, startX + 2, startY + 7);
+    startX += columnWidths[4];
+    
+    doc.text(material.price.toLocaleString(), startX + 2, startY + 7);
+    startX += columnWidths[5];
+    
+    doc.text(material.total.toLocaleString(), startX + 2, startY + 7);
+    
+    totalAmount += material.total;
+    startY += 10;
+    
+    // ตรวจสอบว่าต้องสร้างหน้าใหม่หรือไม่
+    if (startY > 270) {
+      doc.addPage();
+      
+      // หัวเอกสารหน้าใหม่
+      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      doc.rect(0, 0, pageWidth, 20, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.text('รายงานโครงการ: ' + project.name + ' (ต่อ)', pageWidth / 2, 15, { align: 'center' });
+      
+      // รีเซ็ตตำแหน่ง
+      startY = 30;
+      
+      // วาดหัวตารางใหม่
+      startX = margin;
+      doc.setFillColor(240, 240, 240);
+      doc.rect(startX, startY, contentWidth, 10, 'F');
+      
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      for (let j = 0; j < headers.length; j++) {
+        doc.text(headers[j], startX + 2, startY + 7);
+        startX += columnWidths[j];
+      }
+      
+      startY += 10;
+    }
+  }
+  
+  // สรุปยอดรวม
+  doc.setFillColor(240, 240, 240);
+  doc.rect(margin, startY, contentWidth, 10, 'F');
+  
+  doc.setFontSize(10);
+  doc.setTextColor(0, 0, 0);
+  doc.text('รวมทั้งสิ้น', margin + 2, startY + 7);
+  doc.text(totalAmount.toLocaleString() + ' บาท', pageWidth - margin - 30, startY + 7);
+  
+  // ท้ายเอกสาร
+  startY += 20;
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  doc.text('หมายเหตุ: เอกสารนี้เป็นเพียงตัวอย่างการส่งออกข้อมูลเท่านั้น', margin, startY);
+  
+  // บันทึกไฟล์ PDF
+  doc.save(`รายงานโครงการ-${project.id}.pdf`);
+}
+
+// ฟังก์ชันดึงข้อมูลโครงการตาม ID (จำลองข้อมูล)
+function getProjectDataById(projectId) {
+  // ในระบบจริงควรดึงข้อมูลจาก API หรือฐานข้อมูล
+  const projectsData = {
+    'P-2568-001': {
+      id: 'P-2568-001',
+      name: 'จัดสวนบ้านคุณเบียร์ Parkinson',
+      customer: 'คุณอริยคุณ (คุณเบียร์)',
+      startDate: '15/03/2568',
+      endDate: '15/04/2568',
+      status: 'กำลังดำเนินการ',
+      value: 80000,
+      materialWithdrawn: 4402.59,
+      materialReturned: 1766.27,
+      materialNet: 2636.32,
+      materialRatio: 3.29,
+      materials: [
+        { name: 'สีโปว๊ ขนาด 0.5 กก.', withdrawn: '1 ถัง', returned: '-', used: '1 ถัง', price: 38.75, total: 38.75 },
+        { name: 'ทินเนอร์ขวดแก้ว', withdrawn: '2 ขวด', returned: '-', used: '2 ขวด', price: 29.00, total: 58.00 },
+        { name: 'ใบตัดปูน 4 นิ้ว', withdrawn: '3 ใบ', returned: '-', used: '3 ใบ', price: 88.00, total: 264.00 },
+        { name: 'ใบตัดเหล็ก 4 นิ้ว', withdrawn: '3 ใบ', returned: '1 ใบ', used: '2 ใบ', price: 10.17, total: 20.34 },
+        { name: 'แปรงทาสีรองพื้น และสีจริง 2 นิ้ว', withdrawn: '2 อัน', returned: '1 อัน', used: '1 อัน', price: 18.55, total: 18.55 },
+        { name: 'แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว', withdrawn: '2 อัน', returned: '1 อัน', used: '1 อัน', price: 26.08, total: 26.08 },
+        { name: 'แปรงทาสีรองพื้น และสีจริง 3 นิ้ว', withdrawn: '2 อัน', returned: '1 อัน', used: '1 อัน', price: 34.78, total: 34.78 },
+        { name: 'แปรงวานิช 10 ซม.', withdrawn: '2 อัน', returned: '2 อัน', used: '0 อัน', price: 37.45, total: 0.00 },
+        { name: 'ลูกกลิ้งทาสี 4 นิ้ว (แบบเรียบ)', withdrawn: '3 อัน', returned: '3 อัน', used: '0 อัน', price: 10.90, total: 0.00 },
+        { name: 'สีรองพื้นปูนเก่า B-1900', withdrawn: '1 แกลลอน', returned: '-', used: '1 แกลลอน', price: 555.00, total: 555.00 },
+        { name: 'น้ำยาประสานทราย', withdrawn: '1 แกลลอน', returned: '0.5 แกลลอน', used: '0.5 แกลลอน', price: 1150.00, total: 575.00 }
+      ]
+    },
+    'P-2568-002': {
+      id: 'P-2568-002',
+      name: 'จัดสวนหมู่บ้านวิลล่า',
+      customer: 'บริษัท วิลล่าคอนโดมิเนียม จำกัด',
+      startDate: '01/02/2568',
+      endDate: '15/04/2568',
+      status: 'กำลังดำเนินการ',
+      value: 280000,
+      materialWithdrawn: 15230.40,
+      materialReturned: 5650.20,
+      materialNet: 9580.20,
+      materialRatio: 3.42,
+      materials: [
+        { name: 'ดินปลูกต้นไม้', withdrawn: '50 ถุง', returned: '5 ถุง', used: '45 ถุง', price: 35.00, total: 1575.00 },
+        { name: 'ปุ๋ยคอก', withdrawn: '30 กระสอบ', returned: '3 กระสอบ', used: '27 กระสอบ', price: 120.00, total: 3240.00 },
+        { name: 'ต้นไม้ประดับขนาดกลาง', withdrawn: '25 ต้น', returned: '-', used: '25 ต้น', price: 150.00, total: 3750.00 }
+      ]
+    },
+    'P-2568-003': {
+      id: 'P-2568-003',
+      name: 'ภูมิทัศน์โรงเรียนสตรี',
+      customer: 'โรงเรียนสตรีวิทยา',
+      startDate: '15/01/2568',
+      endDate: '15/03/2568',
+      status: 'เกินกำหนด',
+      value: 200000,
+      materialWithdrawn: 42560.80,
+      materialReturned: 13810.05,
+      materialNet: 28750.75,
+      materialRatio: 14.38,
+      materials: [
+        { name: 'หินแกรนิตก้อนเล็ก', withdrawn: '50 ถุง', returned: '-', used: '50 ถุง', price: 175.00, total: 8750.00 },
+        { name: 'ไม้กระถาง', withdrawn: '40 ต้น', returned: '-', used: '40 ต้น', price: 250.00, total: 10000.00 }
+      ]
+    }
+  };
+  
+  return projectsData[projectId] || projectsData['P-2568-001']; // ถ้าไม่พบข้อมูลให้ใช้ข้อมูลแรก
+}
+
+// ฟังก์ชันสำหรับแสดง Toast message
+function showLoadingToast(message) {
+  const toastContainer = getOrCreateToastContainer();
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast show';
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'assertive');
+  toast.setAttribute('aria-atomic', 'true');
+  
+  toast.innerHTML = `
+    <div class="toast-header">
+      <i class="bx bx-loader-alt bx-spin me-2"></i>
+      <strong class="me-auto">กำลังดำเนินการ</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">${message}</div>
+  `;
+  
+  toastContainer.appendChild(toast);
+  return toast;
+}
+
+function showSuccessToast(message) {
+  const toastContainer = getOrCreateToastContainer();
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast show';
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'assertive');
+  toast.setAttribute('aria-atomic', 'true');
+  
+  toast.innerHTML = `
+    <div class="toast-header bg-success text-white">
+      <i class="bx bx-check-circle me-2"></i>
+      <strong class="me-auto">สำเร็จ</strong>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">${message}</div>
+  `;
+  
+  toastContainer.appendChild(toast);
+  
+  // เก็บ toast ไว้ 3 วินาทีแล้วลบออก
+  setTimeout(() => {
+    hideToast(toast);
+  }, 3000);
+  
+  return toast;
+}
+
+function showErrorToast(message) {
+  const toastContainer = getOrCreateToastContainer();
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast show';
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'assertive');
+  toast.setAttribute('aria-atomic', 'true');
+  
+  toast.innerHTML = `
+    <div class="toast-header bg-danger text-white">
+      <i class="bx bx-error-circle me-2"></i>
+      <strong class="me-auto">ผิดพลาด</strong>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">${message}</div>
+  `;
+  
+  toastContainer.appendChild(toast);
+  
+  // เก็บ toast ไว้ 5 วินาทีแล้วลบออก
+  setTimeout(() => {
+    hideToast(toast);
+  }, 5000);
+  
+  return toast;
+}
+
+function hideToast(toast) {
+  if (toast && toast.parentNode) {
+    toast.classList.remove('show');
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
+  }
+}
+
+function getOrCreateToastContainer() {
+  let container = document.getElementById('toast-container');
+  
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container position-fixed top-0 end-0 p-3';
+    container.style.zIndex = '1050';
+    document.body.appendChild(container);
+  }
+  
+  return container;
+}
+
+// เพิ่ม CSS สำหรับ Toast
+function addToastStyles() {
+  const existingStyleElement = document.getElementById('toast-custom-styles');
+  if (existingStyleElement) return;
+  
+  const styleElement = document.createElement('style');
+  styleElement.id = 'toast-custom-styles';
+  styleElement.textContent = `
+    .toast {
+      min-width: 300px;
+      background-color: white;
+      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.45);
+      border: none;
+      border-radius: 0.5rem;
+    }
+    .toast-header {
+      border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+      padding: 0.75rem 1rem;
+    }
+    .toast-body {
+      padding: 0.75rem 1rem;
+    }
+  `;
+  
+  document.head.appendChild(styleElement);
+}
+
+// เรียกใช้เพื่อเพิ่ม CSS เมื่อหน้าเว็บโหลดเสร็จ
+document.addEventListener('DOMContentLoaded', addToastStyles);
   </script>
 </body>
 </html>
