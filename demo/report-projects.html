@@ -2840,16 +2840,54 @@ window.viewProjectDetail = function(projectId) {
 window.printProjectReport = function(projectId) {
     console.log('พิมพ์รายงานโครงการ: ' + projectId);
     
-    // ในระบบจริงควรสร้างหน้าสำหรับพิมพ์และเรียกใช้ window.print()
-    alert('กำลังเตรียมพิมพ์รายงานสำหรับโครงการ: ' + projectId);
-};
+    // แสดง Loading Modal
+    const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
+    loadingModal.show();
+    
+    // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
+    setTimeout(function() {
+        try {
+            // สร้าง PDF
+            const doc = generateProjectPDF(projectId);
+            
+            // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+            const pdfDataUri = doc.output('datauristring');
+            const printWindow = window.open(pdfDataUri);
+            
+            // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+            printWindow.addEventListener('load', function() {
+                setTimeout(function() {
+                    printWindow.print();
+                    loadingModal.hide();
+                }, 500);
+            });
+        } catch (error) {
+            console.error('เกิดข้อผิดพลาดในการพิมพ์ PDF:', error);
+            alert('เกิดข้อผิดพลาดในการพิมพ์ PDF โปรดลองอีกครั้ง');
+            loadingModal.hide();
+        }
+    }, 100);
+};;
 
 // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
 window.exportProjectData = function(projectId) {
     console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
     
-    // ในระบบจริงควรสร้างไฟล์ส่งออกตามรูปแบบที่ต้องการ (Excel, PDF, CSV)
-    alert('กำลังเตรียมไฟล์ส่งออกสำหรับโครงการ: ' + projectId);
+    // แสดง Loading Modal
+    const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
+    loadingModal.show();
+    
+    // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
+    setTimeout(function() {
+        try {
+            // สร้าง PDF
+            generateProjectPDF(projectId);
+        } catch (error) {
+            console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
+            alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
+            loadingModal.hide();
+        }
+    }, 100);
 };
 
 // ปุ่มรีเซ็ตตัวกรอง
