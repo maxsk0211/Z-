@@ -2832,7 +2832,7 @@ window.printProjectReport = function(projectId) {
   setTimeout(function() {
     try {
       // สร้าง PDF
-      const doc = createCompleteDemoPDF(projectId);
+      const doc = createThaiPDF(projectId);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
@@ -2854,6 +2854,676 @@ window.printProjectReport = function(projectId) {
     }
   }, 500);
 };
+
+function createThaiPDF(projectId) {
+  // สร้างเอกสาร PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // ข้อมูลจำลองครบถ้วน - รายละเอียดโครงการ
+  const projectData = getProjectData(projectId);
+  
+  /* =====================
+     1. หัวเอกสาร - HEADER
+     ===================== */
+  
+  // โลโก้ Green Gardens
+  createLogo(doc);
+  
+  // ชื่อบริษัทและชื่อรายงาน
+  drawThaiText(doc, "Green Gardens", 30, 22, 18, 'bold');
+  drawThaiText(doc, "รายงานโครงการ", 195, 22, 14, 'normal', 'right');
+  
+  // วันที่พิมพ์
+  const today = new Date();
+  const thaiDate = `วันที่พิมพ์: ${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()+543}`;
+  drawThaiText(doc, thaiDate, 195, 30, 10, 'normal', 'right');
+  
+  // เส้นคั่น
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(15, 35, 195, 35);
+  
+  /* ===========================
+     2. ข้อมูลโครงการ - PROJECT INFO
+     =========================== */
+  
+  drawThaiText(doc, "ข้อมูลโครงการ", 15, 45, 16, 'bold');
+  
+  // ด้านซ้าย
+  drawThaiText(doc, "รหัสโครงการ:", 15, 55, 11, 'bold');
+  drawThaiText(doc, "ชื่อโครงการ:", 15, 62, 11, 'bold');
+  drawThaiText(doc, "ลูกค้า:", 15, 69, 11, 'bold');
+  drawThaiText(doc, "ที่อยู่:", 15, 76, 11, 'bold');
+  drawThaiText(doc, "ผู้รับผิดชอบ:", 15, 83, 11, 'bold');
+  
+  drawThaiText(doc, projectData.id, 50, 55, 11, 'normal');
+  drawThaiText(doc, projectData.name, 50, 62, 11, 'normal');
+  drawThaiText(doc, projectData.customer, 50, 69, 11, 'normal');
+  drawThaiText(doc, projectData.address, 50, 76, 11, 'normal');
+  drawThaiText(doc, projectData.owner, 50, 83, 11, 'normal');
+  
+  // ด้านขวา
+  drawThaiText(doc, "วันที่เริ่ม:", 120, 55, 11, 'bold');
+  drawThaiText(doc, "กำหนดเสร็จ:", 120, 62, 11, 'bold');
+  drawThaiText(doc, "สถานะ:", 120, 69, 11, 'bold');
+  drawThaiText(doc, "ความคืบหน้า:", 120, 76, 11, 'bold');
+  drawThaiText(doc, "พื้นที่ทั้งหมด:", 120, 83, 11, 'bold');
+  
+  drawThaiText(doc, projectData.startDate, 160, 55, 11, 'normal');
+  drawThaiText(doc, projectData.endDate, 160, 62, 11, 'normal');
+  drawThaiText(doc, projectData.status, 160, 69, 11, 'normal');
+  
+  // Progress bar
+  drawThaiText(doc, `${projectData.progress}%`, 160, 76, 11, 'normal');
+  doc.setFillColor(230, 230, 230);
+  doc.roundedRect(170, 73, 20, 4, 1, 1, 'F');
+  doc.setFillColor(40, 167, 69);
+  doc.roundedRect(170, 73, 20 * (projectData.progress/100), 4, 1, 1, 'F');
+  
+  drawThaiText(doc, `${projectData.area} ตร.ม.`, 160, 83, 11, 'normal');
+  
+  // เส้นคั่น
+  doc.line(15, 90, 195, 90);
+  
+  /* ===========================
+     3. สรุปการเงิน - FINANCIAL SUMMARY
+     =========================== */
+  
+  drawThaiText(doc, "สรุปการเงิน", 15, 100, 16, 'bold');
+  
+  // สร้างตารางสรุปการเงิน
+  const financialTableY = 110;
+  
+  // หัวตาราง
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, financialTableY, 180, 8, 'F');
+  
+  drawThaiText(doc, "รายการ", 18, financialTableY + 5.5, 11, 'normal', 'left', '#FFFFFF');
+  drawThaiText(doc, "จำนวนเงิน (บาท)", 170, financialTableY + 5.5, 11, 'normal', 'right', '#FFFFFF');
+  
+  // ข้อมูลในตาราง
+  let currentY = financialTableY + 8;
+  
+  const financialRows = [
+    ["งบประมาณโครงการทั้งหมด", projectData.budget.toLocaleString()],
+    ["มูลค่าวัสดุที่เบิก", projectData.materialCost.toLocaleString()],
+    ["มูลค่าวัสดุที่คืน", projectData.materialReturnCost.toLocaleString()],
+    ["มูลค่าวัสดุสุทธิ", projectData.materialNetCost.toLocaleString()],
+    ["สัดส่วนต้นทุนวัสดุ", projectData.materialCostRatio.toFixed(2) + "%"],
+    ["ค่าแรงทั้งหมด", projectData.laborCost.toLocaleString()],
+    ["ค่าใช้จ่ายอื่นๆ", projectData.otherCost.toLocaleString()],
+    ["ต้นทุนรวมทั้งสิ้น", projectData.totalCost.toLocaleString()],
+    ["กำไรขั้นต้น", projectData.grossProfit.toLocaleString()],
+    ["ต้นทุนวัสดุต่อพื้นที่", projectData.costPerArea.toFixed(2) + " บาท/ตร.ม."]
+  ];
+  
+  let alternateRow = false;
+  for (let i = 0; i < financialRows.length; i++) {
+    const row = financialRows[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // ถ้าเป็นแถวที่ควรเน้น (มูลค่าวัสดุสุทธิ, ต้นทุนรวม, กำไรขั้นต้น)
+    let fontWeight = 'normal';
+    if (i === 3 || i === 7 || i === 8) {
+      fontWeight = 'bold';
+    }
+    
+    drawThaiText(doc, row[0], 18, currentY + 5.5, 11, fontWeight);
+    drawThaiText(doc, row[1], 170, currentY + 5.5, 11, fontWeight, 'right');
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  /* ===========================
+     4. รายการวัสดุ - MATERIAL LIST
+     =========================== */
+  
+  // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
+  if (currentY > 230) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 10;
+  }
+  
+  drawThaiText(doc, "รายการวัสดุที่ใช้", 15, currentY, 16, 'bold');
+  currentY += 10;
+  
+  // สร้างตารางรายการวัสดุ
+  const materialTableY = currentY;
+  
+  // หัวตาราง
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, materialTableY, 180, 8, 'F');
+  
+  const materialCols = [
+    { text: "ลำดับ", x: 18, width: 10 },
+    { text: "รายการ", x: 28, width: 60 },
+    { text: "จำนวนเบิกจริง", x: 88, width: 25, align: "center" },
+    { text: "จำนวนคืนจริง", x: 113, width: 25, align: "center" },
+    { text: "รวมใช้จริง", x: 138, width: 25, align: "center" },
+    { text: "ราคา/หน่วย", x: 163, width: 25, align: "center" },
+    { text: "รวมเงินสุทธิ", x: 188, width: 25, align: "right" }
+  ];
+  
+  for (let i = 0; i < materialCols.length; i++) {
+    const col = materialCols[i];
+    drawThaiText(doc, col.text, col.align === "center" ? col.x + col.width/2 : col.x, 
+                 materialTableY + 5.5, 9, 'normal', col.align, '#FFFFFF');
+  }
+  
+  // ข้อมูลในตาราง
+  currentY = materialTableY + 8;
+  
+  alternateRow = false;
+  for (let i = 0; i < projectData.materials.length; i++) {
+    const material = projectData.materials[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // เส้นแบ่งคอลัมน์
+    let xPos = 15;
+    for (const col of materialCols) {
+      xPos += col.width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // เพิ่มข้อมูลในแถว
+    drawThaiText(doc, (i + 1).toString(), materialCols[0].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, material.name, materialCols[1].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, `${material.quantityWithdrawn} ${material.unit}`, 
+                materialCols[2].x + materialCols[2].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, material.quantityReturned ? `${material.quantityReturned} ${material.unit}` : "-", 
+                materialCols[3].x + materialCols[3].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, `${material.quantityUsed} ${material.unit}`, 
+                materialCols[4].x + materialCols[4].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, material.unitPrice.toLocaleString(), 
+                materialCols[5].x + materialCols[5].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, material.totalCost.toLocaleString(), 
+                materialCols[6].x, currentY + 5.5, 9, 'normal', 'right');
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+    
+    // ถ้าข้อมูลเกินหน้า ให้ขึ้นหน้าใหม่
+    if (currentY > 260 && i < projectData.materials.length - 1) {
+      doc.addPage();
+      currentY = 20;
+      
+      // วาดหัวตารางใหม่
+      doc.setFillColor(40, 167, 69);
+      doc.rect(15, currentY, 180, 8, 'F');
+      
+      for (let j = 0; j < materialCols.length; j++) {
+        const col = materialCols[j];
+        drawThaiText(doc, col.text, col.align === "center" ? col.x + col.width/2 : col.x, 
+                     currentY + 5.5, 9, 'normal', col.align, '#FFFFFF');
+      }
+      
+      currentY += 8;
+      alternateRow = false;
+    }
+  }
+  
+  // แถวสรุป
+  doc.setFillColor(220, 220, 220);
+  doc.rect(15, currentY, 180, 8, 'F');
+  doc.rect(15, currentY, 180, 8);
+  
+  // เส้นแบ่งก่อนคอลัมน์รวม
+  doc.line(163, currentY, 163, currentY + 8);
+  
+  drawThaiText(doc, "รวมทั้งสิ้น", 160, currentY + 5.5, 9, 'bold', 'right');
+  drawThaiText(doc, projectData.materialNetCost.toLocaleString(), 188, currentY + 5.5, 9, 'bold', 'right');
+  
+  /* ===========================
+     5. กำลังคนและเครื่องมือ - WORKFORCE & TOOLS
+     =========================== */
+  
+  // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
+  if (currentY > 220) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 20;
+  }
+  
+  drawThaiText(doc, "กำลังคนและเครื่องมือที่ใช้", 15, currentY, 16, 'bold');
+  currentY += 10;
+  
+  // ตารางกำลังคน
+  drawThaiText(doc, "5.1 กำลังคน", 15, currentY, 12, 'bold');
+  currentY += 5;
+  
+  // หัวตาราง
+  const workforceTableY = currentY;
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, workforceTableY, 180, 8, 'F');
+  
+  const workforceCols = [
+    { text: "ตำแหน่ง", x: 18, width: 60 },
+    { text: "จำนวน (คน)", x: 78, width: 30, align: "center" },
+    { text: "จำนวนวันทำงาน", x: 108, width: 40, align: "center" },
+    { text: "ค่าแรง/วัน", x: 148, width: 30, align: "center" },
+    { text: "รวมค่าแรง", x: 178, width: 25, align: "right" }
+  ];
+  
+  for (let i = 0; i < workforceCols.length; i++) {
+    const col = workforceCols[i];
+    drawThaiText(doc, col.text, col.align === "center" ? col.x + col.width/2 : col.x, 
+                 workforceTableY + 5.5, 9, 'normal', col.align, '#FFFFFF');
+  }
+  
+  // ข้อมูลในตาราง
+  currentY = workforceTableY + 8;
+  
+  alternateRow = false;
+  for (let i = 0; i < projectData.workforce.length; i++) {
+    const worker = projectData.workforce[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // เส้นแบ่งคอลัมน์
+    let xPos = 15;
+    for (const col of workforceCols) {
+      xPos += col.width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // เพิ่มข้อมูลในแถว
+    drawThaiText(doc, worker.position, workforceCols[0].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, worker.count.toString(), 
+                workforceCols[1].x + workforceCols[1].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, worker.days.toString(), 
+                workforceCols[2].x + workforceCols[2].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, worker.ratePerDay.toLocaleString(), 
+                workforceCols[3].x + workforceCols[3].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, worker.totalCost.toLocaleString(), 
+                workforceCols[4].x, currentY + 5.5, 9, 'normal', 'right');
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  // แถวสรุป
+  doc.setFillColor(220, 220, 220);
+  doc.rect(15, currentY, 180, 8, 'F');
+  doc.rect(15, currentY, 180, 8);
+  
+  // เส้นแบ่งก่อนคอลัมน์รวม
+  doc.line(148, currentY, 148, currentY + 8);
+  
+  drawThaiText(doc, "รวมทั้งสิ้น", 145, currentY + 5.5, 9, 'bold', 'right');
+  drawThaiText(doc, projectData.laborCost.toLocaleString(), 178, currentY + 5.5, 9, 'bold', 'right');
+  
+  currentY += 15;
+  
+  // ตารางเครื่องมือ
+  drawThaiText(doc, "5.2 เครื่องมือที่ใช้", 15, currentY, 12, 'bold');
+  currentY += 5;
+  
+  // หัวตาราง
+  const toolsTableY = currentY;
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, toolsTableY, 180, 8, 'F');
+  
+  const toolsCols = [
+    { text: "ลำดับ", x: 18, width: 10 },
+    { text: "รายการเครื่องมือ", x: 28, width: 70 },
+    { text: "รหัส", x: 98, width: 30, align: "center" },
+    { text: "จำนวนวันใช้งาน", x: 128, width: 35, align: "center" },
+    { text: "สถานะปัจจุบัน", x: 163, width: 32, align: "center" }
+  ];
+  
+  for (let i = 0; i < toolsCols.length; i++) {
+    const col = toolsCols[i];
+    drawThaiText(doc, col.text, col.align === "center" ? col.x + col.width/2 : col.x, 
+                 toolsTableY + 5.5, 9, 'normal', col.align, '#FFFFFF');
+  }
+  
+  // ข้อมูลในตาราง
+  currentY = toolsTableY + 8;
+  
+  alternateRow = false;
+  for (let i = 0; i < projectData.tools.length; i++) {
+    const tool = projectData.tools[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // เส้นแบ่งคอลัมน์
+    let xPos = 15;
+    for (const col of toolsCols) {
+      xPos += col.width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // เพิ่มข้อมูลในแถว
+    drawThaiText(doc, (i + 1).toString(), toolsCols[0].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, tool.name, toolsCols[1].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, tool.code, 
+                toolsCols[2].x + toolsCols[2].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, tool.days.toString(), 
+                toolsCols[3].x + toolsCols[3].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, tool.status, 
+                toolsCols[4].x + toolsCols[4].width/2, currentY + 5.5, 9, 'normal', 'center');
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  /* ===========================
+     6. ไทม์ไลน์ - TIMELINE
+     =========================== */
+  
+  // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
+  if (currentY > 220) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 20;
+  }
+  
+  drawThaiText(doc, "ไทม์ไลน์โครงการ", 15, currentY, 16, 'bold');
+  currentY += 10;
+  
+  // สร้างตารางไทม์ไลน์
+  const timelineTableY = currentY;
+  
+  // หัวตาราง
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, timelineTableY, 180, 8, 'F');
+  
+  const timelineCols = [
+    { text: "วันที่", x: 18, width: 30 },
+    { text: "กิจกรรม", x: 48, width: 50 },
+    { text: "รายละเอียด", x: 98, width: 97 }
+  ];
+  
+  for (let i = 0; i < timelineCols.length; i++) {
+    const col = timelineCols[i];
+    drawThaiText(doc, col.text, col.x, timelineTableY + 5.5, 9, 'normal', 'left', '#FFFFFF');
+  }
+  
+  // ข้อมูลในตาราง
+  currentY = timelineTableY + 8;
+  
+  alternateRow = false;
+  for (let i = 0; i < projectData.timeline.length; i++) {
+    const timeline = projectData.timeline[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // เส้นแบ่งคอลัมน์
+    let xPos = 15;
+    for (let j = 0; j < timelineCols.length - 1; j++) {
+      xPos += timelineCols[j].width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // เพิ่มข้อมูลในแถว
+    drawThaiText(doc, timeline.date, timelineCols[0].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, timeline.title, timelineCols[1].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, timeline.description, timelineCols[2].x, currentY + 5.5, 9, 'normal');
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+    
+    // ถ้าข้อมูลเกินหน้า ให้ขึ้นหน้าใหม่
+    if (currentY > 260 && i < projectData.timeline.length - 1) {
+      doc.addPage();
+      currentY = 20;
+      
+      // วาดหัวตารางใหม่
+      doc.setFillColor(40, 167, 69);
+      doc.rect(15, currentY, 180, 8, 'F');
+      
+      for (let j = 0; j < timelineCols.length; j++) {
+        const col = timelineCols[j];
+        drawThaiText(doc, col.text, col.x, currentY + 5.5, 9, 'normal', 'left', '#FFFFFF');
+      }
+      
+      currentY += 8;
+      alternateRow = false;
+    }
+  }
+  
+  /* ===========================
+     7. หมวดหมู่วัสดุ - MATERIAL CATEGORIES
+     =========================== */
+  
+  // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
+  if (currentY > 220) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 20;
+  }
+  
+  drawThaiText(doc, "สัดส่วนหมวดหมู่วัสดุ", 15, currentY, 16, 'bold');
+  currentY += 15;
+  
+  // วาดกราฟวงกลมอย่างง่าย
+  const centerX = 60;
+  const centerY = currentY + 30;
+  const radius = 30;
+  
+  // วาดส่วนของวงกลม
+  let startAngle = 0;
+  for (let i = 0; i < projectData.categories.length; i++) {
+    const category = projectData.categories[i];
+    const angle = (category.value / 100) * Math.PI * 2;
+    const endAngle = startAngle + angle;
+    
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    
+    // แปลงจากพิกัดเชิงขั้วเป็นพิกัดคาร์ทีเซียน
+    const startX = centerX + Math.cos(startAngle) * radius;
+    const startY = centerY + Math.sin(startAngle) * radius;
+    const endX = centerX + Math.cos(endAngle) * radius;
+    const endY = centerY + Math.sin(endAngle) * radius;
+    
+    // วาดส่วนของพาย
+    const path = `M ${centerX} ${centerY} L ${startX} ${startY} A ${radius} ${radius} 0 ${angle > Math.PI ? 1 : 0} 1 ${endX} ${endY} Z`;
+    doc.path(path).fill();
+    
+    startAngle = endAngle;
+  }
+  
+  // คำอธิบายกราฟ
+  let legendY = currentY + 10;
+  for (let i = 0; i < projectData.categories.length; i++) {
+    const category = projectData.categories[i];
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    doc.rect(110, legendY, 10, 10, 'F');
+    
+    drawThaiText(doc, `${category.name}: ${category.value}%`, 125, legendY + 7, 10, 'normal');
+    
+    legendY += 15;
+  }
+  
+  /* ===========================
+     8. สรุปและเปรียบเทียบ - SUMMARY & COMPARISON
+     =========================== */
+  
+  // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
+  if (currentY > 220) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 70; // เพิ่มพื้นที่ว่างหลังกราฟ
+  }
+  
+  drawThaiText(doc, "การเปรียบเทียบกับโครงการอื่น", 15, currentY, 16, 'bold');
+  currentY += 10;
+  
+  // สร้างตารางเปรียบเทียบ
+  const compareTableY = currentY;
+  
+  // หัวตาราง
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, compareTableY, 180, 8, 'F');
+  
+  const compareCols = [
+    { text: "โครงการ", x: 18, width: 70 },
+    { text: "ราคาโครงการ", x: 88, width: 30, align: "center" },
+    { text: "ต้นทุนวัสดุ", x: 118, width: 25, align: "center" },
+    { text: "สัดส่วนต้นทุน", x: 143, width: 25, align: "center" },
+    { text: "อัตราการคืนวัสดุ", x: 168, width: 27, align: "center" }
+  ];
+  
+  for (let i = 0; i < compareCols.length; i++) {
+    const col = compareCols[i];
+    drawThaiText(doc, col.text, col.align === "center" ? col.x + col.width/2 : col.x, 
+                 compareTableY + 5.5, 9, 'normal', col.align, '#FFFFFF');
+  }
+  
+  // ข้อมูลในตาราง
+  currentY = compareTableY + 8;
+  
+  // โครงการปัจจุบัน (ทำไฮไลท์)
+  doc.setFillColor(220, 240, 220);
+  doc.rect(15, currentY, 180, 8, 'F');
+  doc.setDrawColor(200, 200, 200);
+  doc.rect(15, currentY, 180, 8);
+  
+  // เส้นแบ่งคอลัมน์
+  let xPos = 15;
+  for (let i = 0; i < compareCols.length - 1; i++) {
+    xPos += compareCols[i].width;
+    doc.line(xPos, currentY, xPos, currentY + 8);
+  }
+  
+  // เพิ่มข้อมูลในแถว
+  drawThaiText(doc, projectData.name, compareCols[0].x, currentY + 5.5, 9, 'bold');
+  drawThaiText(doc, projectData.budget.toLocaleString(), 
+             compareCols[1].x + compareCols[1].width/2, currentY + 5.5, 9, 'bold', 'center');
+  drawThaiText(doc, projectData.materialNetCost.toLocaleString(), 
+             compareCols[2].x + compareCols[2].width/2, currentY + 5.5, 9, 'bold', 'center');
+  drawThaiText(doc, projectData.materialCostRatio.toFixed(2) + "%", 
+             compareCols[3].x + compareCols[3].width/2, currentY + 5.5, 9, 'bold', 'center');
+  drawThaiText(doc, projectData.materialReturnRate.toFixed(2) + "%", 
+             compareCols[4].x + compareCols[4].width/2, currentY + 5.5, 9, 'bold', 'center');
+  
+  currentY += 8;
+  
+  // โครงการเปรียบเทียบอื่นๆ
+  alternateRow = false;
+  for (let i = 0; i < projectData.comparison.length; i++) {
+    const comp = projectData.comparison[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // เส้นแบ่งคอลัมน์
+    let xPos = 15;
+    for (let j = 0; j < compareCols.length - 1; j++) {
+      xPos += compareCols[j].width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // เพิ่มข้อมูลในแถว
+    drawThaiText(doc, comp.name, compareCols[0].x, currentY + 5.5, 9, 'normal');
+    drawThaiText(doc, comp.budget.toLocaleString(), 
+               compareCols[1].x + compareCols[1].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, comp.materialCost.toLocaleString(), 
+               compareCols[2].x + compareCols[2].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, comp.costRatio.toFixed(2) + "%", 
+               compareCols[3].x + compareCols[3].width/2, currentY + 5.5, 9, 'normal', 'center');
+    drawThaiText(doc, comp.returnRate.toFixed(2) + "%", 
+               compareCols[4].x + compareCols[4].width/2, currentY + 5.5, 9, 'normal', 'center');
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  // แถวค่าเฉลี่ย
+  doc.setFillColor(220, 220, 220);
+  doc.rect(15, currentY, 180, 8, 'F');
+  doc.rect(15, currentY, 180, 8);
+  
+  // เส้นแบ่งคอลัมน์
+  xPos = 15;
+  for (let i = 0; i < compareCols.length - 1; i++) {
+    xPos += compareCols[i].width;
+    doc.line(xPos, currentY, xPos, currentY + 8);
+  }
+  
+  // เพิ่มข้อมูลในแถว
+  drawThaiText(doc, "ค่าเฉลี่ยทุกโครงการ", compareCols[0].x, currentY + 5.5, 9, 'bold');
+  drawThaiText(doc, projectData.avgBudget.toLocaleString(), 
+             compareCols[1].x + compareCols[1].width/2, currentY + 5.5, 9, 'bold', 'center');
+  drawThaiText(doc, projectData.avgMaterialCost.toLocaleString(), 
+             compareCols[2].x + compareCols[2].width/2, currentY + 5.5, 9, 'bold', 'center');
+  drawThaiText(doc, projectData.avgCostRatio.toFixed(2) + "%", 
+             compareCols[3].x + compareCols[3].width/2, currentY + 5.5, 9, 'bold', 'center');
+  drawThaiText(doc, projectData.avgReturnRate.toFixed(2) + "%", 
+             compareCols[4].x + compareCols[4].width/2, currentY + 5.5, 9, 'bold', 'center');
+  
+  /* ===========================
+     9. FOOTER - ส่วนท้าย
+     =========================== */
+  
+  // ตั้งค่าการแสดงเลขหน้า
+  const totalPages = doc.internal.getNumberOfPages();
+  
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    
+    // เส้นคั่นส่วนท้าย
+    doc.setDrawColor(200, 200, 200);
+    doc.line(15, 275, 195, 275);
+    
+    // ข้อมูลส่วนท้าย
+    drawThaiText(doc, "Green Gardens Co., Ltd. - รายงานโครงการ", 15, 282, 9, 'normal');
+    drawThaiText(doc, `${projectData.id} - ${projectData.name}`, 105, 282, 9, 'normal', 'center');
+    drawThaiText(doc, `หน้า ${i} จาก ${totalPages}`, 195, 282, 9, 'normal', 'right');
+  }
+  
+  // เพิ่มหมายเหตุเกี่ยวกับฟอนต์ไทยที่หน้าแรก
+  doc.setPage(1);
+  doc.setFontSize(5);
+  doc.text("หมายเหตุ: ในรายงานตัวอย่างนี้ ตัวอักษรภาษาไทยถูกจำลองด้วยภาพ ในการใช้งานจริงควรเพิ่มฟอนต์ไทย (เช่น THSarabunNew) เข้าใน jsPDF", 15, 290);
+  
+  return doc;
+}
 
 function createCompleteDemoPDF(projectId) {
   // สร้างเอกสาร PDF
@@ -3415,13 +4085,19 @@ window.exportProjectData = function(projectId) {
   setTimeout(function() {
     try {
       // สร้าง PDF แบบข้อมูลครบถ้วน
-      const doc = createCompleteDemoPDF(projectId);
+      const doc = createThaiPDF(projectId);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
       
       // แสดงตัวอย่าง PDF
-      showPDFPreview(doc, "Project " + projectId);
+      let projectName = "";
+      if (projectId === "P-2568-001") projectName = "สวนหย่อมบ้านคุณเบียร์";
+      else if (projectId === "P-2568-002") projectName = "ปรับปรุงภูมิทัศน์บริษัท ABC";
+      else if (projectId === "P-2568-003") projectName = "สวนหลังบ้านคุณสมหญิง";
+      else projectName = "โครงการ " + projectId;
+      
+      showPDFPreview(doc, projectName);
     } catch (error) {
       console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
       alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
@@ -4105,7 +4781,7 @@ function showPDFPreview(doc, projectName) {
   previewFrame.src = pdfDataUri;
   
   // อัพเดทชื่อโครงการในหัวข้อ Modal
-  document.querySelector('#pdfPreviewModal .modal-title').textContent = `PDF Report Preview: ${projectName}`;
+  document.querySelector('#pdfPreviewModal .modal-title').textContent = `รายงานโครงการ: ${projectName}`;
   
   // แสดง Modal
   const bsModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
@@ -4114,7 +4790,7 @@ function showPDFPreview(doc, projectName) {
   // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
   document.getElementById('downloadPdfBtn').onclick = function() {
     // ดาวน์โหลด PDF
-    doc.save(`Project_Report_${projectName.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`รายงานโครงการ_${projectName.replace(/\s+/g, '_')}.pdf`);
   };
   
   // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
@@ -4131,6 +4807,44 @@ function showPDFPreview(doc, projectName) {
   };
 }
 
+function createLogo(doc) {
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.rect(15, 15, 10, 10, 'F');
+  doc.setFillColor(40, 167, 69, 0.7); // สีเขียวเจือจาง
+  doc.setDrawColor(40, 167, 69);
+  doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
+}
+
+function drawThaiText(doc, text, x, y, fontSize, fontWeight = 'normal', align = 'left', color = '#000000') {
+  // ในการใช้งานจริง คุณควรโหลดฟอนต์ไทยเข้าใน jsPDF
+  // แต่ในที่นี้เพื่อเป็นการสาธิต เราจะจำลองการแสดงข้อความภาษาไทย
+  
+  doc.setFontSize(fontSize);
+  
+  // ตั้งค่าสีข้อความ
+  if (color === '#FFFFFF') {
+    doc.setTextColor(255, 255, 255);
+  } else {
+    doc.setTextColor(0, 0, 0);
+  }
+  
+  // ตั้งค่าความหนาของข้อความ
+  if (fontWeight === 'bold') {
+    doc.setFont('helvetica', 'bold');
+  } else {
+    doc.setFont('helvetica', 'normal');
+  }
+  
+  // จัดตำแหน่งข้อความ
+  if (align === 'center') {
+    doc.text(text, x, y, { align: 'center' });
+  } else if (align === 'right') {
+    doc.text(text, x, y, { align: 'right' });
+  } else {
+    doc.text(text, x, y);
+  }
+}
+
 // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
 function regeneratePDF(projectName, includeDetails) {
   // ในตัวอย่างนี้ เราจะส่งคืน PDF เดิม
@@ -4140,68 +4854,186 @@ function regeneratePDF(projectName, includeDetails) {
 }
 
 // ฟังก์ชันสมมติสำหรับดึงข้อมูลโครงการ
-function getProjectData(projectId) {
-  // ในการใช้งานจริง คุณควรดึงข้อมูลจากฐานข้อมูลหรือ API
-  // แต่ในตัวอย่างนี้ เราจะใช้ข้อมูลจำลอง
+
+  // ในตัวอย่างนี้เราจะใช้ข้อมูลจำลอง
+  // ในการใช้งานจริงควรดึงข้อมูลจากฐานข้อมูล
   
-  // ข้อมูลจำลองสำหรับ P-2568-001
-  if (projectId === 'P-2568-001') {
-    return {
-      id: 'P-2568-001',
-      name: 'สวนหย่อมบ้านคุณสมชาย',
-      customer: 'สมชาย มีทรัพย์',
-      startDate: '05/03/2568',
-      endDate: '05/04/2568',
-      status: 'กำลังดำเนินการ',
+  let projectData = {
+    id: projectId,
+    materials: [],
+    timeline: [],
+    workforce: [],
+    tools: [],
+    categories: [],
+    comparison: []
+  };
+  
+  // ข้อมูลพื้นฐานโครงการ
+  if (projectId === "P-2568-001") {
+    projectData = {
+      ...projectData,
+      name: "สวนหย่อมบ้านคุณเบียร์ Parkinson",
+      customer: "คุณอริยคุณ (คุณเบียร์)",
+      address: "123/45 หมู่บ้านเพอร์เฟคเพลส ถ.รามคำแหง กรุงเทพฯ 10240",
+      startDate: "15/03/2568",
+      endDate: "15/04/2568",
+      status: "กำลังดำเนินการ",
       progress: 60,
-      owner: 'นายชัยณรงค์ สวนสวย',
+      area: 10,
+      owner: "นายชัยณรงค์ สวนสวย",
       budget: 80000,
       materialCost: 4402.59,
       materialReturnCost: 1766.27,
       materialNetCost: 2636.32,
+      laborCost: 20000,
+      otherCost: 5000,
+      totalCost: 27636.32,
+      grossProfit: 52363.68,
       materialCostRatio: 3.29,
-      costPerArea: 263.63,
-      materials: [
-        { name: 'สีโปว๊ ขนาด 0.5 กก.', quantityWithdrawn: 1, unit: 'ถัง', quantityReturned: 0, quantityUsed: 1, unitPrice: 38.75, totalCost: 38.75 },
-        { name: 'ทินเนอร์ขวดแก้ว', quantityWithdrawn: 2, unit: 'ขวด', quantityReturned: 0, quantityUsed: 2, unitPrice: 29.00, totalCost: 58.00 },
-        { name: 'ใบตัดปูน 4 นิ้ว', quantityWithdrawn: 3, unit: 'ใบ', quantityReturned: 0, quantityUsed: 3, unitPrice: 88.00, totalCost: 264.00 },
-        { name: 'ใบตัดเหล็ก 4 นิ้ว', quantityWithdrawn: 3, unit: 'ใบ', quantityReturned: 1, quantityUsed: 2, unitPrice: 10.17, totalCost: 20.34 },
-        { name: 'แปรงทาสีรองพื้น และสีจริง 2 นิ้ว', quantityWithdrawn: 2, unit: 'อัน', quantityReturned: 1, quantityUsed: 1, unitPrice: 18.55, totalCost: 18.55 }
-      ],
-      timeline: [
-        { date: '15/03/2568', title: 'เริ่มโครงการ', description: 'ประชุมกับลูกค้าและเตรียมพื้นที่' },
-        { date: '20/03/2568', title: 'เริ่มงานขุดและปรับพื้นที่', description: 'เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ' },
-        { date: '28/03/2568', title: 'ตรวจสอบความคืบหน้า', description: 'ความคืบหน้า 45% และคืนวัสดุบางส่วน' },
-        { date: '02/04/2568', title: 'เบิกวัสดุงวดที่ 2', description: 'เบิกวัสดุเพิ่มเติม 15 รายการ' }
-      ]
+      materialReturnRate: 40.12,
+      costPerArea: 263.63
+    };
+  } else if (projectId === "P-2568-002") {
+    projectData = {
+      ...projectData,
+      name: "ปรับปรุงภูมิทัศน์บริษัท ABC",
+      customer: "บริษัท ABC จำกัด",
+      address: "99 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ",
+      startDate: "10/02/2568",
+      endDate: "20/03/2568",
+      status: "กำลังดำเนินการ",
+      progress: 75,
+      area: 40,
+      owner: "นายชัยณรงค์ สวนสวย",
+      budget: 280000,
+      materialCost: 15230.40,
+      materialReturnCost: 5650.20,
+      materialNetCost: 9580.20,
+      laborCost: 80000,
+      otherCost: 25000,
+      totalCost: 114580.20,
+      grossProfit: 165419.80,
+      materialCostRatio: 3.42,
+      materialReturnRate: 37.10,
+      costPerArea: 239.51
+    };
+  } else if (projectId === "P-2568-003") {
+    projectData = {
+      ...projectData,
+      name: "สวนหลังบ้านคุณสมหญิง",
+      customer: "คุณสมหญิง รักสวย",
+      address: "56/7 หมู่บ้านสวนสวย ซ.ลาดพร้าว 101 กรุงเทพฯ",
+      startDate: "15/01/2568",
+      endDate: "15/02/2568",
+      status: "รอการตรวจรับ",
+      progress: 90,
+      area: 20,
+      owner: "นางสาวสมหญิง รักษ์สวน",
+      budget: 35000,
+      materialCost: 8246.75,
+      materialReturnCost: 2125.50,
+      materialNetCost: 6121.25,
+      laborCost: 12000,
+      otherCost: 3000,
+      totalCost: 21121.25,
+      grossProfit: 13878.75,
+      materialCostRatio: 17.49,
+      materialReturnRate: 25.77,
+      costPerArea: 306.06
+    };
+  } else {
+    projectData = {
+      ...projectData,
+      name: "โครงการตัวอย่าง",
+      customer: "ลูกค้าตัวอย่าง",
+      address: "ที่อยู่ตัวอย่าง",
+      startDate: "01/01/2568",
+      endDate: "31/01/2568",
+      status: "กำลังดำเนินการ",
+      progress: 50,
+      area: 10,
+      owner: "ผู้รับผิดชอบตัวอย่าง",
+      budget: 50000,
+      materialCost: 2500,
+      materialReturnCost: 500,
+      materialNetCost: 2000,
+      laborCost: 15000,
+      otherCost: 2000,
+      totalCost: 19000,
+      grossProfit: 31000,
+      materialCostRatio: 4.00,
+      materialReturnRate: 20.00,
+      costPerArea: 200
     };
   }
   
-  // ข้อมูลจำลองสำหรับโครงการอื่นๆ (ย่อ)
-  return {
-    id: projectId,
-    name: 'โครงการตัวอย่าง',
-    customer: 'ลูกค้าตัวอย่าง',
-    startDate: '01/01/2568',
-    endDate: '31/01/2568',
-    status: 'กำลังดำเนินการ',
-    progress: 50,
-    owner: 'ผู้รับผิดชอบตัวอย่าง',
-    budget: 50000,
-    materialCost: 2500,
-    materialReturnCost: 500,
-    materialNetCost: 2000,
-    materialCostRatio: 4.00,
-    costPerArea: 200,
-    materials: [
-      { name: 'วัสดุตัวอย่าง 1', quantityWithdrawn: 5, unit: 'ชิ้น', quantityReturned: 1, quantityUsed: 4, unitPrice: 100, totalCost: 400 },
-      { name: 'วัสดุตัวอย่าง 2', quantityWithdrawn: 10, unit: 'ชิ้น', quantityReturned: 2, quantityUsed: 8, unitPrice: 200, totalCost: 1600 }
-    ],
-    timeline: [
-      { date: '01/01/2568', title: 'เริ่มโครงการ', description: 'เริ่มต้นโครงการ' },
-      { date: '15/01/2568', title: 'ตรวจสอบความคืบหน้า', description: 'ความคืบหน้า 50%' }
-    ]
-  };
+  // ข้อมูลรายการวัสดุ
+  projectData.materials = [
+    { name: "ต้นไม้ประดับขนาดเล็ก", quantityWithdrawn: 30, unit: "ต้น", quantityReturned: 9, quantityUsed: 21, unitPrice: 150, totalCost: 3150 },
+    { name: "หินแกรนิตก้อนเล็ก", quantityWithdrawn: 75, unit: "กก.", quantityReturned: 41.25, quantityUsed: 33.75, unitPrice: 45, totalCost: 1518.75 },
+    { name: "หญ้าเทียม", quantityWithdrawn: 12, unit: "ตร.ม.", quantityReturned: 2, quantityUsed: 10, unitPrice: 320, totalCost: 3200 },
+    { name: "ปูนซีเมนต์ตราช้าง", quantityWithdrawn: 25, unit: "ถุง", quantityReturned: 5, quantityUsed: 20, unitPrice: 150, totalCost: 3000 },
+    { name: "น้ำยาประสานทราย", quantityWithdrawn: 1, unit: "แกลลอน", quantityReturned: 0.5, quantityUsed: 0.5, unitPrice: 1150, totalCost: 575 },
+    { name: "สีรองพื้นปูนเก่า B-1900", quantityWithdrawn: 1, unit: "แกลลอน", quantityReturned: 0, quantityUsed: 1, unitPrice: 555, totalCost: 555 },
+    { name: "สีโปว๊ ขนาด 0.5 กก.", quantityWithdrawn: 1, unit: "ถัง", quantityReturned: 0, quantityUsed: 1, unitPrice: 38.75, totalCost: 38.75 },
+    { name: "ทินเนอร์ขวดแก้ว", quantityWithdrawn: 2, unit: "ขวด", quantityReturned: 0, quantityUsed: 2, unitPrice: 29, totalCost: 58 },
+    { name: "ใบตัดปูน 4 นิ้ว", quantityWithdrawn: 3, unit: "ใบ", quantityReturned: 0, quantityUsed: 3, unitPrice: 88, totalCost: 264 },
+    { name: "ใบตัดเหล็ก 4 นิ้ว", quantityWithdrawn: 3, unit: "ใบ", quantityReturned: 1, quantityUsed: 2, unitPrice: 10.17, totalCost: 20.34 },
+    { name: "แปรงทาสีรองพื้น และสีจริง 2 นิ้ว", quantityWithdrawn: 2, unit: "อัน", quantityReturned: 1, quantityUsed: 1, unitPrice: 18.55, totalCost: 18.55 },
+    { name: "แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว", quantityWithdrawn: 2, unit: "อัน", quantityReturned: 1, quantityUsed: 1, unitPrice: 26.08, totalCost: 26.08 }
+  ];
+  
+  // ข้อมูลไทม์ไลน์
+  projectData.timeline = [
+    { date: "15/03/2568", title: "เริ่มโครงการ", description: "ประชุมกับลูกค้าและเตรียมพื้นที่" },
+    { date: "20/03/2568", title: "เริ่มงานขุดและปรับพื้นที่", description: "เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ" },
+    { date: "28/03/2568", title: "ตรวจสอบความคืบหน้า", description: "ความคืบหน้า 45% และคืนวัสดุบางส่วน" },
+    { date: "02/04/2568", title: "เบิกวัสดุงวดที่ 2", description: "เบิกวัสดุเพิ่มเติม 15 รายการ" },
+    { date: "05/04/2568", title: "ติดตั้งระบบน้ำ", description: "ติดตั้งระบบน้ำและตรวจสอบการทำงาน" },
+    { date: "08/04/2568", title: "ปลูกต้นไม้", description: "ปลูกต้นไม้ตามแบบที่วางไว้" },
+    { date: "10/04/2568", title: "ติดตั้งไฟส่องสว่าง", description: "ติดตั้งไฟส่องสว่างในสวน" },
+    { date: "15/04/2568", title: "ส่งมอบงาน", description: "ตรวจสอบคุณภาพและส่งมอบงาน" }
+  ];
+  
+  // ข้อมูลกำลังคน
+  projectData.workforce = [
+    { position: "ผู้จัดการโครงการ", count: 1, days: 5, ratePerDay: 1200, totalCost: 6000 },
+    { position: "หัวหน้าคนงาน", count: 1, days: 15, ratePerDay: 800, totalCost: 12000 },
+    { position: "คนงานทั่วไป", count: 3, days: 10, ratePerDay: 400, totalCost: 12000 },
+    { position: "ช่างไฟฟ้า", count: 1, days: 2, ratePerDay: 1000, totalCost: 2000 },
+    { position: "ช่างประปา", count: 1, days: 3, ratePerDay: 1000, totalCost: 3000 }
+  ];
+  
+  // ข้อมูลเครื่องมือ
+  projectData.tools = [
+    { name: "เครื่องตัดหญ้า", code: "TL-001", days: 2, status: "คืนแล้ว" },
+    { name: "สว่านไฟฟ้า", code: "TL-005", days: 5, status: "คืนแล้ว" },
+    { name: "เครื่องพ่นสี", code: "TL-008", days: 3, status: "คืนแล้ว" },
+    { name: "บันไดอลูมิเนียม", code: "TL-012", days: 10, status: "คืนแล้ว" },
+    { name: "เครื่องปั๊มน้ำ", code: "TL-015", days: 8, status: "คืนแล้ว" }
+  ];
+  
+  // ข้อมูลหมวดหมู่วัสดุ
+  projectData.categories = [
+    { name: "วัสดุทั่วไป", value: 52.0, color: [40, 167, 69] },
+    { name: "วัสดุเครื่องมือช่าง", value: 39.7, color: [66, 165, 245] },
+    { name: "เครื่องมือช่าง", value: 8.3, color: [255, 167, 38] }
+  ];
+  
+  // ข้อมูลการเปรียบเทียบ
+  projectData.comparison = [
+    { name: "โครงการสวนบ้านคุณสมชาย", budget: 120000, materialCost: 3840, costRatio: 3.20, returnRate: 35.75 },
+    { name: "โครงการสวนหมู่บ้านวิลล่า", budget: 280000, materialCost: 9520, costRatio: 3.40, returnRate: 42.30 },
+    { name: "โครงการภูมิทัศน์โรงเรียน", budget: 200000, materialCost: 28750, costRatio: 14.38, returnRate: 32.45 }
+  ];
+  
+  // ค่าเฉลี่ย
+  projectData.avgBudget = 152000;
+  projectData.avgMaterialCost = 4864;
+  projectData.avgCostRatio = 3.20;
+  projectData.avgReturnRate = 38.50;
+  
+  return projectData;
 }
 
 // อัพเดทฟังก์ชัน exportProjectData เพื่อใช้ generateProjectPDF
