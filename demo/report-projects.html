@@ -2672,73 +2672,44 @@
 
   <!-- Page JS -->
   <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize Flatpickr for date inputs
-  flatpickr(".flatpickr-date", {
-    dateFormat: "d/m/Y"
-  });
-  
-  // Initialize Select2 for dropdowns
-  $('.form-select').select2({
-    width: '100%'
-  });
-  
-  // Initialize DataTables with correct configuration
-  $('#projectsTable').DataTable({
-    // Disable DataTables' automatic detection of columns
-    // This prevents the warning when we have complex table structures
-    autoWidth: false,
-    
-    // Properly handle collapsed rows
-    columnDefs: [
-      { orderable: false, targets: -1 } // Disable ordering on the last column (actions)
-    ],
-    
-    // The rest of your configuration
-    dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
-    language: {
-      search: "ค้นหา:",
-      lengthMenu: "แสดง _MENU_ รายการ",
-      zeroRecords: "ไม่พบข้อมูล",
-      info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
-      infoEmpty: "แสดง 0 ถึง 0 จาก 0 รายการ",
-      infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
-      paginate: {
-        first: "หน้าแรก",
-        last: "หน้าสุดท้าย",
-        next: "ถัดไป",
-        previous: "ก่อนหน้า"
-      }
-    },
-    pageLength: 5,
-    lengthMenu: [5, 10, 25, 50, 100],
-    ordering: true,
-    responsive: true,
-    
-    // Crucial fix: Handle collapse rows properly
-    // This prevents DataTables from trying to process hidden/collapsed rows
-    rowGroup: {
-      dataSrc: function(row) {
-        // Skip processing rows with class 'collapse'
-        if ($(row.node()).hasClass('collapse')) {
-          return '';
-        }
-        return '';
-      }
-    },
-    
-    // Initialize the table only when it's ready
-    initComplete: function() {
-      console.log('DataTable initialized successfully');
-    }
-  });
-  
-  // Initialize tooltips
-  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-  
-  // The rest of your JavaScript remains the same...
-});
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Flatpickr for date inputs
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y"
+      });
+      
+      // Initialize Select2 for dropdowns
+      $('.form-select').select2({
+        width: '100%'
+      });
+      
+      // Initialize DataTables
+      $('#projectsTable').DataTable({
+        dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+        language: {
+          search: "ค้นหา:",
+          lengthMenu: "แสดง _MENU_ รายการ",
+          zeroRecords: "ไม่พบข้อมูล",
+          info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+          infoEmpty: "แสดง 0 ถึง 0 จาก 0 รายการ",
+          infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
+          paginate: {
+            first: "หน้าแรก",
+            last: "หน้าสุดท้าย",
+            next: "ถัดไป",
+            previous: "ก่อนหน้า"
+          }
+        },
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50, 100],
+        ordering: true,
+        responsive: true
+      });
+      
+      // Initialize tooltips
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+      
       // แก้ไขการแสดงผลเมนู
       function initializeMenu() {
         // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
