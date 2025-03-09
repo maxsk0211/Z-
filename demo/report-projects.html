@@ -2713,6 +2713,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+
   <!-- Page JS -->
   <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -3524,6 +3525,7 @@ function createThaiPDF(projectId) {
   
   return doc;
 }
+
 function createCompleteDemoPDF(projectId) {
   // สร้างเอกสาร PDF
   const { jsPDF } = window.jspdf;
@@ -4780,7 +4782,7 @@ function showPDFPreview(doc, projectName) {
   previewFrame.src = pdfDataUri;
   
   // อัพเดทชื่อโครงการในหัวข้อ Modal
-  document.querySelector('#pdfPreviewModal .modal-title').textContent = `PDF Report Preview: ${projectName}`;
+  document.querySelector('#pdfPreviewModal .modal-title').textContent = `รายงานโครงการ: ${projectName}`;
   
   // แสดง Modal
   const bsModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
@@ -4789,7 +4791,7 @@ function showPDFPreview(doc, projectName) {
   // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
   document.getElementById('downloadPdfBtn').onclick = function() {
     // ดาวน์โหลด PDF
-    doc.save(`Project_Report_${projectName.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`รายงานโครงการ_${projectName.replace(/\s+/g, '_')}.pdf`);
   };
   
   // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
@@ -4806,6 +4808,44 @@ function showPDFPreview(doc, projectName) {
   };
 }
 
+function createLogo(doc) {
+   doc.setFillColor(40, 167, 69); // สีเขียว
+   doc.rect(15, 15, 10, 10, 'F');
+   doc.setFillColor(40, 167, 69, 0.7); // สีเขียวเจือจาง
+   doc.setDrawColor(40, 167, 69);
+   doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
+ }
+
+function drawThaiText(doc, text, x, y, fontSize, fontWeight = 'normal', align = 'left', color = '#000000') {
+   // ในการใช้งานจริง คุณควรโหลดฟอนต์ไทยเข้าใน jsPDF
+   // แต่ในที่นี้เพื่อเป็นการสาธิต เราจะจำลองการแสดงข้อความภาษาไทย
+   
+   doc.setFontSize(fontSize);
+   
+   // ตั้งค่าสีข้อความ
+   if (color === '#FFFFFF') {
+     doc.setTextColor(255, 255, 255);
+   } else {
+     doc.setTextColor(0, 0, 0);
+   }
+   
+   // ตั้งค่าความหนาของข้อความ
+   if (fontWeight === 'bold') {
+     doc.setFont('helvetica', 'bold');
+   } else {
+     doc.setFont('helvetica', 'normal');
+   }
+   
+   // จัดตำแหน่งข้อความ
+   if (align === 'center') {
+     doc.text(text, x, y, { align: 'center' });
+   } else if (align === 'right') {
+     doc.text(text, x, y, { align: 'right' });
+   } else {
+     doc.text(text, x, y);
+   }
+ }
+
 // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
 function regeneratePDF(projectName, includeDetails) {
   // ในตัวอย่างนี้ เราจะส่งคืน PDF เดิม
@@ -4813,70 +4853,189 @@ function regeneratePDF(projectName, includeDetails) {
   const projectId = document.getElementById('modal-project-id').textContent;
   return generateProjectPDF(projectId);
 }
+\
 
 // ฟังก์ชันสมมติสำหรับดึงข้อมูลโครงการ
 function getProjectData(projectId) {
-  // ในการใช้งานจริง คุณควรดึงข้อมูลจากฐานข้อมูลหรือ API
-  // แต่ในตัวอย่างนี้ เราจะใช้ข้อมูลจำลอง
+  // ในตัวอย่างนี้เราจะใช้ข้อมูลจำลอง
+  // ในการใช้งานจริงควรดึงข้อมูลจากฐานข้อมูล
   
-  // ข้อมูลจำลองสำหรับ P-2568-001
-  if (projectId === 'P-2568-001') {
-    return {
-      id: 'P-2568-001',
-      name: 'สวนหย่อมบ้านคุณสมชาย',
-      customer: 'สมชาย มีทรัพย์',
-      startDate: '05/03/2568',
-      endDate: '05/04/2568',
-      status: 'กำลังดำเนินการ',
+  let projectData = {
+    id: projectId,
+    materials: [],
+    timeline: [],
+    workforce: [],
+    tools: [],
+    categories: [],
+    comparison: []
+  };
+  
+  // ข้อมูลพื้นฐานโครงการ
+  if (projectId === "P-2568-001") {
+    projectData = {
+      ...projectData,
+      name: "สวนหย่อมบ้านคุณเบียร์ Parkinson",
+      customer: "คุณอริยคุณ (คุณเบียร์)",
+      address: "123/45 หมู่บ้านเพอร์เฟคเพลส ถ.รามคำแหง กรุงเทพฯ 10240",
+      startDate: "15/03/2568",
+      endDate: "15/04/2568",
+      status: "กำลังดำเนินการ",
       progress: 60,
-      owner: 'นายชัยณรงค์ สวนสวย',
+      area: 10,
+      owner: "นายชัยณรงค์ สวนสวย",
       budget: 80000,
       materialCost: 4402.59,
       materialReturnCost: 1766.27,
       materialNetCost: 2636.32,
+      laborCost: 20000,
+      otherCost: 5000,
+      totalCost: 27636.32,
+      grossProfit: 52363.68,
       materialCostRatio: 3.29,
-      costPerArea: 263.63,
-      materials: [
-        { name: 'สีโปว๊ ขนาด 0.5 กก.', quantityWithdrawn: 1, unit: 'ถัง', quantityReturned: 0, quantityUsed: 1, unitPrice: 38.75, totalCost: 38.75 },
-        { name: 'ทินเนอร์ขวดแก้ว', quantityWithdrawn: 2, unit: 'ขวด', quantityReturned: 0, quantityUsed: 2, unitPrice: 29.00, totalCost: 58.00 },
-        { name: 'ใบตัดปูน 4 นิ้ว', quantityWithdrawn: 3, unit: 'ใบ', quantityReturned: 0, quantityUsed: 3, unitPrice: 88.00, totalCost: 264.00 },
-        { name: 'ใบตัดเหล็ก 4 นิ้ว', quantityWithdrawn: 3, unit: 'ใบ', quantityReturned: 1, quantityUsed: 2, unitPrice: 10.17, totalCost: 20.34 },
-        { name: 'แปรงทาสีรองพื้น และสีจริง 2 นิ้ว', quantityWithdrawn: 2, unit: 'อัน', quantityReturned: 1, quantityUsed: 1, unitPrice: 18.55, totalCost: 18.55 }
-      ],
-      timeline: [
-        { date: '15/03/2568', title: 'เริ่มโครงการ', description: 'ประชุมกับลูกค้าและเตรียมพื้นที่' },
-        { date: '20/03/2568', title: 'เริ่มงานขุดและปรับพื้นที่', description: 'เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ' },
-        { date: '28/03/2568', title: 'ตรวจสอบความคืบหน้า', description: 'ความคืบหน้า 45% และคืนวัสดุบางส่วน' },
-        { date: '02/04/2568', title: 'เบิกวัสดุงวดที่ 2', description: 'เบิกวัสดุเพิ่มเติม 15 รายการ' }
-      ]
+      materialReturnRate: 40.12,
+      costPerArea: 263.63
+    };
+  } else if (projectId === "P-2568-002") {
+    projectData = {
+      ...projectData,
+      name: "ปรับปรุงภูมิทัศน์บริษัท ABC",
+      customer: "บริษัท ABC จำกัด",
+      address: "99 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ",
+      startDate: "10/02/2568",
+      endDate: "20/03/2568",
+      status: "กำลังดำเนินการ",
+      progress: 75,
+      area: 40,
+      owner: "นายชัยณรงค์ สวนสวย",
+      budget: 280000,
+      materialCost: 15230.40,
+      materialReturnCost: 5650.20,
+      materialNetCost: 9580.20,
+      laborCost: 80000,
+      otherCost: 25000,
+      totalCost: 114580.20,
+      grossProfit: 165419.80,
+      materialCostRatio: 3.42,
+      materialReturnRate: 37.10,
+      costPerArea: 239.51
+    };
+  } else if (projectId === "P-2568-003") {
+    projectData = {
+      ...projectData,
+      name: "สวนหลังบ้านคุณสมหญิง",
+      customer: "คุณสมหญิง รักสวย",
+      address: "56/7 หมู่บ้านสวนสวย ซ.ลาดพร้าว 101 กรุงเทพฯ",
+      startDate: "15/01/2568",
+      endDate: "15/02/2568",
+      status: "รอการตรวจรับ",
+      progress: 90,
+      area: 20,
+      owner: "นางสาวสมหญิง รักษ์สวน",
+      budget: 35000,
+      materialCost: 8246.75,
+      materialReturnCost: 2125.50,
+      materialNetCost: 6121.25,
+      laborCost: 12000,
+      otherCost: 3000,
+      totalCost: 21121.25,
+      grossProfit: 13878.75,
+      materialCostRatio: 17.49,
+      materialReturnRate: 25.77,
+      costPerArea: 306.06
+    };
+  } else {
+    projectData = {
+      ...projectData,
+      name: "โครงการตัวอย่าง",
+      customer: "ลูกค้าตัวอย่าง",
+      address: "ที่อยู่ตัวอย่าง",
+      startDate: "01/01/2568",
+      endDate: "31/01/2568",
+      status: "กำลังดำเนินการ",
+      progress: 50,
+      area: 10,
+      owner: "ผู้รับผิดชอบตัวอย่าง",
+      budget: 50000,
+      materialCost: 2500,
+      materialReturnCost: 500,
+      materialNetCost: 2000,
+      laborCost: 15000,
+      otherCost: 2000,
+      totalCost: 19000,
+      grossProfit: 31000,
+      materialCostRatio: 4.00,
+      materialReturnRate: 20.00,
+      costPerArea: 200
     };
   }
   
-  // ข้อมูลจำลองสำหรับโครงการอื่นๆ (ย่อ)
-  return {
-    id: projectId,
-    name: 'โครงการตัวอย่าง',
-    customer: 'ลูกค้าตัวอย่าง',
-    startDate: '01/01/2568',
-    endDate: '31/01/2568',
-    status: 'กำลังดำเนินการ',
-    progress: 50,
-    owner: 'ผู้รับผิดชอบตัวอย่าง',
-    budget: 50000,
-    materialCost: 2500,
-    materialReturnCost: 500,
-    materialNetCost: 2000,
-    materialCostRatio: 4.00,
-    costPerArea: 200,
-    materials: [
-      { name: 'วัสดุตัวอย่าง 1', quantityWithdrawn: 5, unit: 'ชิ้น', quantityReturned: 1, quantityUsed: 4, unitPrice: 100, totalCost: 400 },
-      { name: 'วัสดุตัวอย่าง 2', quantityWithdrawn: 10, unit: 'ชิ้น', quantityReturned: 2, quantityUsed: 8, unitPrice: 200, totalCost: 1600 }
-    ],
-    timeline: [
-      { date: '01/01/2568', title: 'เริ่มโครงการ', description: 'เริ่มต้นโครงการ' },
-      { date: '15/01/2568', title: 'ตรวจสอบความคืบหน้า', description: 'ความคืบหน้า 50%' }
-    ]
-  };
+  // ข้อมูลรายการวัสดุ
+  projectData.materials = [
+    { name: "ต้นไม้ประดับขนาดเล็ก", quantityWithdrawn: 30, unit: "ต้น", quantityReturned: 9, quantityUsed: 21, unitPrice: 150, totalCost: 3150 },
+    { name: "หินแกรนิตก้อนเล็ก", quantityWithdrawn: 75, unit: "กก.", quantityReturned: 41.25, quantityUsed: 33.75, unitPrice: 45, totalCost: 1518.75 },
+    { name: "หญ้าเทียม", quantityWithdrawn: 12, unit: "ตร.ม.", quantityReturned: 2, quantityUsed: 10, unitPrice: 320, totalCost: 3200 },
+    { name: "ปูนซีเมนต์ตราช้าง", quantityWithdrawn: 25, unit: "ถุง", quantityReturned: 5, quantityUsed: 20, unitPrice: 150, totalCost: 3000 },
+    { name: "น้ำยาประสานทราย", quantityWithdrawn: 1, unit: "แกลลอน", quantityReturned: 0.5, quantityUsed: 0.5, unitPrice: 1150, totalCost: 575 },
+    { name: "สีรองพื้นปูนเก่า B-1900", quantityWithdrawn: 1, unit: "แกลลอน", quantityReturned: 0, quantityUsed: 1, unitPrice: 555, totalCost: 555 },
+    { name: "สีโปว๊ ขนาด 0.5 กก.", quantityWithdrawn: 1, unit: "ถัง", quantityReturned: 0, quantityUsed: 1, unitPrice: 38.75, totalCost: 38.75 },
+    { name: "ทินเนอร์ขวดแก้ว", quantityWithdrawn: 2, unit: "ขวด", quantityReturned: 0, quantityUsed: 2, unitPrice: 29, totalCost: 58 },
+    { name: "ใบตัดปูน 4 นิ้ว", quantityWithdrawn: 3, unit: "ใบ", quantityReturned: 0, quantityUsed: 3, unitPrice: 88, totalCost: 264 },
+    { name: "ใบตัดเหล็ก 4 นิ้ว", quantityWithdrawn: 3, unit: "ใบ", quantityReturned: 1, quantityUsed: 2, unitPrice: 10.17, totalCost: 20.34 },
+    { name: "แปรงทาสีรองพื้น และสีจริง 2 นิ้ว", quantityWithdrawn: 2, unit: "อัน", quantityReturned: 1, quantityUsed: 1, unitPrice: 18.55, totalCost: 18.55 },
+    { name: "แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว", quantityWithdrawn: 2, unit: "อัน", quantityReturned: 1, quantityUsed: 1, unitPrice: 26.08, totalCost: 26.08 }
+  ];
+  
+  // ข้อมูลไทม์ไลน์
+  projectData.timeline = [
+    { date: "15/03/2568", title: "เริ่มโครงการ", description: "ประชุมกับลูกค้าและเตรียมพื้นที่" },
+    { date: "20/03/2568", title: "เริ่มงานขุดและปรับพื้นที่", description: "เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ" },
+    { date: "28/03/2568", title: "ตรวจสอบความคืบหน้า", description: "ความคืบหน้า 45% และคืนวัสดุบางส่วน" },
+    { date: "02/04/2568", title: "เบิกวัสดุงวดที่ 2", description: "เบิกวัสดุเพิ่มเติม 15 รายการ" },
+    { date: "05/04/2568", title: "ติดตั้งระบบน้ำ", description: "ติดตั้งระบบน้ำและตรวจสอบการทำงาน" },
+    { date: "08/04/2568", title: "ปลูกต้นไม้", description: "ปลูกต้นไม้ตามแบบที่วางไว้" },
+    { date: "10/04/2568", title: "ติดตั้งไฟส่องสว่าง", description: "ติดตั้งไฟส่องสว่างในสวน" },
+    { date: "15/04/2568", title: "ส่งมอบงาน", description: "ตรวจสอบคุณภาพและส่งมอบงาน" }
+  ];
+  
+  // ข้อมูลกำลังคน
+  projectData.workforce = [
+    { position: "ผู้จัดการโครงการ", count: 1, days: 5, ratePerDay: 1200, totalCost: 6000 },
+    { position: "หัวหน้าคนงาน", count: 1, days: 15, ratePerDay: 800, totalCost: 12000 },
+    { position: "คนงานทั่วไป", count: 3, days: 10, ratePerDay: 400, totalCost: 12000 },
+    { position: "ช่างไฟฟ้า", count: 1, days: 2, ratePerDay: 1000, totalCost: 2000 },
+    { position: "ช่างประปา", count: 1, days: 3, ratePerDay: 1000, totalCost: 3000 }
+  ];
+  
+  // ข้อมูลเครื่องมือ
+  projectData.tools = [
+    { name: "เครื่องตัดหญ้า", code: "TL-001", days: 2, status: "คืนแล้ว" },
+    { name: "สว่านไฟฟ้า", code: "TL-005", days: 5, status: "คืนแล้ว" },
+    { name: "เครื่องพ่นสี", code: "TL-008", days: 3, status: "คืนแล้ว" },
+    { name: "บันไดอลูมิเนียม", code: "TL-012", days: 10, status: "คืนแล้ว" },
+    { name: "เครื่องปั๊มน้ำ", code: "TL-015", days: 8, status: "คืนแล้ว" }
+  ];
+  
+  // ข้อมูลหมวดหมู่วัสดุ
+  projectData.categories = [
+    { name: "วัสดุทั่วไป", value: 52.0, color: [40, 167, 69] },
+    { name: "วัสดุเครื่องมือช่าง", value: 39.7, color: [66, 165, 245] },
+    { name: "เครื่องมือช่าง", value: 8.3, color: [255, 167, 38] }
+  ];
+  
+  // ข้อมูลการเปรียบเทียบ
+  projectData.comparison = [
+    { name: "โครงการสวนบ้านคุณสมชาย", budget: 120000, materialCost: 3840, costRatio: 3.20, returnRate: 35.75 },
+    { name: "โครงการสวนหมู่บ้านวิลล่า", budget: 280000, materialCost: 9520, costRatio: 3.40, returnRate: 42.30 },
+    { name: "โครงการภูมิทัศน์โรงเรียน", budget: 200000, materialCost: 28750, costRatio: 14.38, returnRate: 32.45 }
+  ];
+  
+  // ค่าเฉลี่ย
+  projectData.avgBudget = 152000;
+  projectData.avgMaterialCost = 4864;
+  projectData.avgCostRatio = 3.20;
+  projectData.avgReturnRate = 38.50;
+  
+  return projectData;
 }
 
 // อัพเดทฟังก์ชัน exportProjectData เพื่อใช้ generateProjectPDF
