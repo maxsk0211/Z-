@@ -44,6 +44,12 @@
       --text-primary: #566a7f;
       --text-secondary: #99a0ac;
       --bg-light: #f5f6fa;
+      
+      /* เพิ่มสีสำหรับฟังก์ชันคืนวัสดุ */
+      --return-primary: #0d6efd;
+      --return-primary-light: #e6f0ff;
+      --return-secondary: #6c757d;
+      --return-success: #198754;
     }
     
     /* แก้ไขการแสดงผลเมนู */
@@ -871,197 +877,539 @@
             <div class="tab-content" id="inventoryTabContent">
               <!-- Tab 1: สร้างรายการใหม่ -->
               <div class="tab-pane fade show active" id="createTab" role="tabpanel" aria-labelledby="create-tab">
-                <div class="row">
-                  <!-- ด้านซ้าย: รายการวัสดุ -->
-                  <div class="col-md-8 mb-4 mb-md-0">
-                    <div class="card h-100">
-                      <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">เลือกวัสดุ</h5>
-                        <div class="input-group" style="width: 250px;">
-                          <span class="input-group-text"><i class="bx bx-search"></i></span>
-                          <input type="text" class="form-control" placeholder="ค้นหาวัสดุ..." id="searchMaterial">
+                <!-- โหมดเบิกวัสดุ -->
+                <div id="withdrawMode">
+                  <div class="row">
+                    <!-- ด้านซ้าย: รายการวัสดุ -->
+                    <div class="col-md-8 mb-4 mb-md-0">
+                      <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                          <h5 class="card-title mb-0">เลือกวัสดุ</h5>
+                          <div class="input-group" style="width: 250px;">
+                            <span class="input-group-text"><i class="bx bx-search"></i></span>
+                            <input type="text" class="form-control" placeholder="ค้นหาวัสดุ..." id="searchMaterial">
+                          </div>
                         </div>
-                      </div>
-                      <div class="card-body">
-                        <div class="mb-3">
-                          <select class="form-select" id="materialTypeFilter">
-                            <option value="all">ทุกประเภทวัสดุ</option>
-                            <option value="material">วัสดุทั่วไป</option>
-                            <option value="construction">วัสดุเครื่องมือช่าง</option>
-                            <option value="tools">เครื่องมือช่าง</option>
-                          </select>
-                        </div>
-                        
-                        <div class="material-list-wrapper">
-                          <!-- รายการวัสดุ -->
-                          <div class="material-item">
-                            <div class="material-thumb">
-                              <img src="../assets/img/materials/soil.jpg" alt="ดินปลูกต้นไม้">
-                            </div>
-                            <div class="material-info">
-                              <div class="material-name">ดินปลูกต้นไม้</div>
-                              <div class="material-details">รหัส: M-0001 | หมวดหมู่: วัสดุ</div>
-                            </div>
-                            <div class="material-stock">
-                              <div class="stock-count">18 ถุง</div>
-                              <div class="material-details">ราคา: ฿120/ถุง</div>
-                            </div>
-                            <div class="action-button add-to-cart" data-id="M-0001" data-name="ดินปลูกต้นไม้" data-unit="ถุง" data-price="120" data-stock="18">
-                              <i class="bx bx-plus"></i>
-                            </div>
+                        <div class="card-body">
+                          <div class="mb-3">
+                            <select class="form-select" id="materialTypeFilter">
+                              <option value="all">ทุกประเภทวัสดุ</option>
+                              <option value="material">วัสดุทั่วไป</option>
+                              <option value="construction">วัสดุเครื่องมือช่าง</option>
+                              <option value="tools">เครื่องมือช่าง</option>
+                            </select>
                           </div>
                           
-                          <div class="material-item">
-                            <div class="material-thumb">
-                              <img src="../assets/img/materials/gravel.jpg" alt="หินแกรนิตเล็ก">
+                          <div class="material-list-wrapper">
+                            <!-- รายการวัสดุ -->
+                            <div class="material-item">
+                              <div class="material-thumb">
+                                <img src="../assets/img/materials/soil.jpg" alt="ดินปลูกต้นไม้">
+                              </div>
+                              <div class="material-info">
+                                <div class="material-name">ดินปลูกต้นไม้</div>
+                                <div class="material-details">รหัส: M-0001 | หมวดหมู่: วัสดุ</div>
+                              </div>
+                              <div class="material-stock">
+                                <div class="stock-count">18 ถุง</div>
+                                <div class="material-details">ราคา: ฿120/ถุง</div>
+                              </div>
+                              <div class="action-button add-to-cart" data-id="M-0001" data-name="ดินปลูกต้นไม้" data-unit="ถุง" data-price="120" data-stock="18">
+                                <i class="bx bx-plus"></i>
+                              </div>
                             </div>
-                            <div class="material-info">
-                              <div class="material-name">หินแกรนิตเล็ก</div>
-                              <div class="material-details">รหัส: M-0002 | หมวดหมู่: วัสดุ</div>
+                            
+                            <div class="material-item">
+                              <div class="material-thumb">
+                                <img src="../assets/img/materials/gravel.jpg" alt="หินแกรนิตเล็ก">
+                              </div>
+                              <div class="material-info">
+                                <div class="material-name">หินแกรนิตเล็ก</div>
+                                <div class="material-details">รหัส: M-0002 | หมวดหมู่: วัสดุ</div>
+                              </div>
+                              <div class="material-stock">
+                                <div class="stock-count">8 ถุง</div>
+                                <div class="material-details">ราคา: ฿85/ถุง</div>
+                              </div>
+                              <div class="action-button add-to-cart" data-id="M-0002" data-name="หินแกรนิตเล็ก" data-unit="ถุง" data-price="85" data-stock="8">
+                                <i class="bx bx-plus"></i>
+                              </div>
                             </div>
-                            <div class="material-stock">
-                              <div class="stock-count">8 ถุง</div>
-                              <div class="material-details">ราคา: ฿85/ถุง</div>
+                            
+                            <div class="material-item">
+                              <div class="material-thumb">
+                                <img src="../assets/img/tools/drill.jpg" alt="สว่านไฟฟ้า">
+                              </div>
+                              <div class="material-info">
+                                <div class="material-name">สว่านไฟฟ้า</div>
+                                <div class="material-details">รหัส: T-0001 | หมวดหมู่: เครื่องมือไฟฟ้า</div>
+                              </div>
+                              <div class="material-stock">
+                                <div class="stock-count">2 เครื่อง</div>
+                                <div class="material-details">พร้อมใช้งาน</div>
+                              </div>
+                              <div class="action-button add-to-cart" data-id="T-0001" data-name="สว่านไฟฟ้า" data-unit="เครื่อง" data-price="0" data-stock="2">
+                                <i class="bx bx-plus"></i>
+                              </div>
                             </div>
-                            <div class="action-button add-to-cart" data-id="M-0002" data-name="หินแกรนิตเล็ก" data-unit="ถุง" data-price="85" data-stock="8">
-                              <i class="bx bx-plus"></i>
+                            
+                            <div class="material-item">
+                              <div class="material-thumb">
+                                <img src="../assets/img/materials/cement.jpg" alt="ปูนซีเมนต์ถุงเล็ก">
+                              </div>
+                              <div class="material-info">
+                                <div class="material-name">ปูนซีเมนต์ถุงเล็ก</div>
+                                <div class="material-details">รหัส: C-0001 | หมวดหมู่: วัสดุก่อสร้าง</div>
+                              </div>
+                              <div class="material-stock">
+                                <div class="stock-count">12 ถุง</div>
+                                <div class="material-details">ราคา: ฿150/ถุง</div>
+                              </div>
+                              <div class="action-button add-to-cart" data-id="C-0001" data-name="ปูนซีเมนต์ถุงเล็ก" data-unit="ถุง" data-price="150" data-stock="12">
+                                <i class="bx bx-plus"></i>
+                              </div>
                             </div>
-                          </div>
-                          
-                          <div class="material-item">
-                            <div class="material-thumb">
-                              <img src="../assets/img/tools/drill.jpg" alt="สว่านไฟฟ้า">
-                            </div>
-                            <div class="material-info">
-                              <div class="material-name">สว่านไฟฟ้า</div>
-                              <div class="material-details">รหัส: T-0001 | หมวดหมู่: เครื่องมือไฟฟ้า</div>
-                            </div>
-                            <div class="material-stock">
-                              <div class="stock-count">2 เครื่อง</div>
-                              <div class="material-details">พร้อมใช้งาน</div>
-                            </div>
-                            <div class="action-button add-to-cart" data-id="T-0001" data-name="สว่านไฟฟ้า" data-unit="เครื่อง" data-price="0" data-stock="2">
-                              <i class="bx bx-plus"></i>
-                            </div>
-                          </div>
-                          
-                          <div class="material-item">
-                            <div class="material-thumb">
-                              <img src="../assets/img/materials/cement.jpg" alt="ปูนซีเมนต์ถุงเล็ก">
-                            </div>
-                            <div class="material-info">
-                              <div class="material-name">ปูนซีเมนต์ถุงเล็ก</div>
-                              <div class="material-details">รหัส: C-0001 | หมวดหมู่: วัสดุก่อสร้าง</div>
-                            </div>
-                            <div class="material-stock">
-                              <div class="stock-count">12 ถุง</div>
-                              <div class="material-details">ราคา: ฿150/ถุง</div>
-                            </div>
-                            <div class="action-button add-to-cart" data-id="C-0001" data-name="ปูนซีเมนต์ถุงเล็ก" data-unit="ถุง" data-price="150" data-stock="12">
-                              <i class="bx bx-plus"></i>
-                            </div>
-                          </div>
-                          
-                          <div class="material-item">
-                            <div class="material-thumb">
-                              <img src="../assets/img/materials/pipe.jpg" alt="ท่อ PVC 1 นิ้ว">
-                            </div>
-                            <div class="material-info">
-                              <div class="material-name">ท่อ PVC 1 นิ้ว</div>
-                              <div class="material-details">รหัส: C-0003 | หมวดหมู่: วัสดุก่อสร้าง</div>
-                            </div>
-                            <div class="material-stock">
-                              <div class="stock-count">45 เส้น</div>
-                              <div class="material-details">ราคา: ฿85/เส้น</div>
-                            </div>
-                            <div class="action-button add-to-cart" data-id="C-0003" data-name="ท่อ PVC 1 นิ้ว" data-unit="เส้น" data-price="85" data-stock="45">
-                              <i class="bx bx-plus"></i>
+                            
+                            <div class="material-item">
+                              <div class="material-thumb">
+                                <img src="../assets/img/materials/pipe.jpg" alt="ท่อ PVC 1 นิ้ว">
+                              </div>
+                              <div class="material-info">
+                                <div class="material-name">ท่อ PVC 1 นิ้ว</div>
+                                <div class="material-details">รหัส: C-0003 | หมวดหมู่: วัสดุก่อสร้าง</div>
+                              </div>
+                              <div class="material-stock">
+                                <div class="stock-count">45 เส้น</div>
+                                <div class="material-details">ราคา: ฿85/เส้น</div>
+                              </div>
+                              <div class="action-button add-to-cart" data-id="C-0003" data-name="ท่อ PVC 1 นิ้ว" data-unit="เส้น" data-price="85" data-stock="45">
+                                <i class="bx bx-plus"></i>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <!-- ด้านขวา: รายการที่เลือก -->
-                  <div class="col-md-4">
-                    <div class="card h-100">
-                      <div class="card-header">
-                        <h5 class="card-title mb-0">รายการที่เลือก</h5>
+                    
+                    <!-- ด้านขวา: รายการที่เลือก (สำหรับเบิก) -->
+                    <div class="col-md-4">
+                      <div class="card h-100">
+                        <div class="card-header">
+                          <h5 class="card-title mb-0">รายการที่เลือก</h5>
+                        </div>
+                        <div class="card-body">
+                          <div id="cartItems">
+                            <!-- รายการที่เลือกจะถูกเพิ่มที่นี่ด้วย JavaScript -->
+                            <div class="text-center my-4 text-muted" id="emptyCartMessage">
+                              <i class="bx bx-cart" style="font-size: 3rem;"></i>
+                              <p class="mt-2">ยังไม่มีรายการที่เลือก</p>
+                            </div>
+                          </div>
+                          
+                          <div class="cart-summary" id="cartSummary" style="display: none;">
+                            <div class="summary-item">
+                              <div class="summary-item-label">จำนวนรายการ:</div>
+                              <div class="summary-item-value" id="totalItems">0 รายการ</div>
+                            </div>
+                            <div class="summary-item">
+                              <div class="summary-item-label">มูลค่ารวม:</div>
+                              <div class="summary-item-value" id="totalValue">฿0.00</div>
+                            </div>
+                            <div class="summary-total">
+                              <div>รวมทั้งสิ้น:</div>
+                              <div id="grandTotal">฿0.00</div>
+                            </div>
+                          </div>
+                          
+                          <hr>
+                          
+                          <form id="transactionForm">
+                            <div class="row g-3">
+                              <div class="col-md-12">
+                                <label for="projectSelect" class="form-label required-label">โครงการ</label>
+                                <select class="form-select" id="projectSelect" required>
+                                  <option value="">-- เลือกโครงการ --</option>
+                                  <option value="P001">สวนบ้านคุณสมชาย (P001)</option>
+                                  <option value="P002">สวนหมู่บ้านวิลล่า (P002)</option>
+                                  <option value="P003">ภูมิทัศน์โรงเรียนสตรี (P003)</option>
+                                  <option value="OFFICE">สำนักงานใหญ่</option>
+                                  <option value="MAINTENANCE">งานซ่อมบำรุง</option>
+                                </select>
+                              </div>
+                              
+                              <div class="col-md-12">
+                                <label for="requestorSelect" class="form-label required-label">ผู้เบิก</label>
+                                <select class="form-select" id="requestorSelect" required>
+                                  <option value="">-- เลือกผู้เบิก --</option>
+                                  <option value="EMP001">สมศักดิ์ ช่างจัดสวน</option>
+                                  <option value="EMP002">วิชัย ช่างประปา</option>
+                                  <option value="EMP003">มานะ พนักงานขับรถ</option>
+                                  <option value="EMP004">สมหญิง พนักงานคลัง</option>
+                                </select>
+                              </div>
+                              
+                              <div class="col-md-12">
+                                <label for="transactionDate" class="form-label required-label">วันที่ทำรายการ</label>
+                                <input type="text" class="form-control flatpickr-date" id="transactionDate" placeholder="เลือกวันที่" required>
+                              </div>
+                              
+                              <div class="col-md-12">
+                                <label for="transactionNote" class="form-label">หมายเหตุ</label>
+                                <textarea class="form-control" id="transactionNote" rows="2" placeholder="ระบุรายละเอียดเพิ่มเติม (ถ้ามี)"></textarea>
+                              </div>
+                              
+                              <div class="col-12 mt-3">
+                                <div class="d-flex flex-column flex-sm-row justify-content-end">
+                                  <button type="button" class="btn btn-outline-secondary me-0 me-sm-2 mb-2 mb-sm-0" id="resetBtn">
+                                    <i class="bx bx-reset me-1"></i> เริ่มใหม่
+                                  </button>
+                                  <button type="submit" class="btn btn-warning" id="submitBtn" disabled>
+                                    <i class="bx bx-check-circle me-1"></i> บันทึกการเบิก
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
                       </div>
-                      <div class="card-body">
-                        <div id="cartItems">
-                          <!-- รายการที่เลือกจะถูกเพิ่มที่นี่ด้วย JavaScript -->
-                          <div class="text-center my-4 text-muted" id="emptyCartMessage">
-                            <i class="bx bx-cart" style="font-size: 3rem;"></i>
-                            <p class="mt-2">ยังไม่มีรายการที่เลือก</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- โหมดคืนวัสดุ -->
+                <div id="returnMode" style="display: none;">
+                  <div class="row">
+                    <!-- ด้านซ้าย: รายการที่เคยเบิก -->
+                    <div class="col-md-8 mb-4 mb-md-0">
+                      <div class="card h-100 border-primary">
+                        <div class="card-header bg-primary-light d-flex justify-content-between align-items-center">
+                          <h5 class="card-title mb-0">รายการที่เคยเบิก</h5>
+                          <div class="d-flex">
+                            <div class="input-group me-2" style="width: 250px;">
+                              <span class="input-group-text"><i class="bx bx-search"></i></span>
+                              <input type="text" class="form-control" placeholder="ค้นหารายการ..." id="searchBorrowed">
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="refreshBorrowedBtn">
+                              <i class="bx bx-refresh"></i>
+                            </button>
                           </div>
                         </div>
-                        
-                        <div class="cart-summary" id="cartSummary" style="display: none;">
-                          <div class="summary-item">
-                            <div class="summary-item-label">จำนวนรายการ:</div>
-                            <div class="summary-item-value" id="totalItems">0 รายการ</div>
-                          </div>
-                          <div class="summary-item">
-                            <div class="summary-item-label">มูลค่ารวม:</div>
-                            <div class="summary-item-value" id="totalValue">฿0.00</div>
-                          </div>
-                          <div class="summary-total">
-                            <div>รวมทั้งสิ้น:</div>
-                            <div id="grandTotal">฿0.00</div>
-                          </div>
-                        </div>
-                        
-                        <hr>
-                        
-                        <form id="transactionForm">
-                          <div class="row g-3">
-                            <div class="col-md-12">
-                              <label for="projectSelect" class="form-label required-label">โครงการ</label>
-                              <select class="form-select" id="projectSelect" required>
-                                <option value="">-- เลือกโครงการ --</option>
-                                <option value="P001">สวนบ้านคุณสมชาย (P001)</option>
-                                <option value="P002">สวนหมู่บ้านวิลล่า (P002)</option>
-                                <option value="P003">ภูมิทัศน์โรงเรียนสตรี (P003)</option>
-                                <option value="OFFICE">สำนักงานใหญ่</option>
-                                <option value="MAINTENANCE">งานซ่อมบำรุง</option>
-                              </select>
-                            </div>
-                            
-                            <div class="col-md-12">
-                              <label for="requestorSelect" class="form-label required-label">ผู้เบิก/คืน</label>
-                              <select class="form-select" id="requestorSelect" required>
-                                <option value="">-- เลือกผู้เบิก/คืน --</option>
-                                <option value="EMP001">สมศักดิ์ ช่างจัดสวน</option>
-                                <option value="EMP002">วิชัย ช่างประปา</option>
-                                <option value="EMP003">มานะ พนักงานขับรถ</option>
-                                <option value="EMP004">สมหญิง พนักงานคลัง</option>
-                              </select>
-                            </div>
-                            
-                            <div class="col-md-12">
-                              <label for="transactionDate" class="form-label required-label">วันที่ทำรายการ</label>
-                              <input type="text" class="form-control flatpickr-date" id="transactionDate" placeholder="เลือกวันที่" required>
-                            </div>
-                            
-                            <div class="col-md-12">
-                              <label for="transactionNote" class="form-label">หมายเหตุ</label>
-                              <textarea class="form-control" id="transactionNote" rows="2" placeholder="ระบุรายละเอียดเพิ่มเติม (ถ้ามี)"></textarea>
-                            </div>
-                            
-                            <div class="col-12 mt-3">
-                              <div class="d-flex flex-column flex-sm-row justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary me-0 me-sm-2 mb-2 mb-sm-0" id="resetBtn">
-                                  <i class="bx bx-reset me-1"></i> เริ่มใหม่
-                                </button>
-                                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
-                                  <i class="bx bx-check-circle me-1"></i> บันทึกรายการ
-                                </button>
+                        <div class="card-body p-0">
+                          <div class="bg-light p-3">
+                            <div class="row g-2">
+                              <div class="col-md-6">
+                                <select class="form-select form-select-sm" id="borrowedProjectFilter">
+                                  <option value="">ทุกโครงการ</option>
+                                  <option value="P001">สวนบ้านคุณสมชาย (P001)</option>
+                                  <option value="P002">สวนหมู่บ้านวิลล่า (P002)</option>
+                                  <option value="P003">ภูมิทัศน์โรงเรียนสตรี (P003)</option>
+                                  <option value="OFFICE">สำนักงานใหญ่</option>
+                                  <option value="MAINTENANCE">งานซ่อมบำรุง</option>
+                                </select>
+                              </div>
+                              <div class="col-md-6">
+                                <select class="form-select form-select-sm" id="borrowedUserFilter">
+                                  <option value="">ทุกผู้เบิก</option>
+                                  <option value="EMP001">สมศักดิ์ ช่างจัดสวน</option>
+                                  <option value="EMP002">วิชัย ช่างประปา</option>
+                                  <option value="EMP003">มานะ พนักงานขับรถ</option>
+                                </select>
                               </div>
                             </div>
                           </div>
-                        </form>
+                          
+                          <div class="borrowed-list-wrapper p-0">
+                            <div class="list-group list-group-flush borrowed-list">
+                              <!-- รายการเบิกที่ 1 -->
+                              <div class="list-group-item list-group-item-action p-0">
+                                <div class="d-flex w-100 p-3 border-start border-primary border-3">
+                                  <div class="flex-shrink-0 me-3 text-center">
+                                    <div class="fw-semibold text-primary">TRX-001</div>
+                                    <div><small class="text-muted">30/03/2568</small></div>
+                                  </div>
+                                  <div class="flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                      <h6 class="mb-0">สวนบ้านคุณสมชาย (P001)</h6>
+                                      <div>
+                                        <span class="badge bg-warning text-dark">ค้างคืน 5 วัน</span>
+                                      </div>
+                                    </div>
+                                    <div class="borrowed-by mb-2">
+                                      <div class="borrowed-avatar">
+                                        <img src="../assets/img/avatars/5.png" alt="Avatar" class="w-100 h-100">
+                                      </div>
+                                      <div class="borrowed-info">สมศักดิ์ ช่างจัดสวน</div>
+                                    </div>
+                                    <div class="borrowed-items">
+                                      <small class="d-flex justify-content-between">
+                                        <span>ดินปลูกต้นไม้</span>
+                                        <span>5 ถุง</span>
+                                      </small>
+                                      <small class="d-flex justify-content-between">
+                                        <span>หินแกรนิตเล็ก</span>
+                                        <span>10 ถุง</span>
+                                      </small>
+                                      <small class="d-flex justify-content-between">
+                                        <span>สว่านไฟฟ้า</span>
+                                        <span>1 เครื่อง</span>
+                                      </small>
+                                    </div>
+                                  </div>
+                                  <div class="flex-shrink-0 ms-2 d-flex flex-column justify-content-center">
+                                    <button class="btn btn-sm btn-primary return-items mb-2" data-id="TRX-001">
+                                      <i class="bx bx-log-in-circle me-1"></i> คืนวัสดุ
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary view-detail" data-id="TRX-001">
+                                      <i class="bx bx-detail me-1"></i> รายละเอียด
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <!-- รายการเบิกที่ 2 -->
+                              <div class="list-group-item list-group-item-action p-0">
+                                <div class="d-flex w-100 p-3 border-start border-primary border-3">
+                                  <div class="flex-shrink-0 me-3 text-center">
+                                    <div class="fw-semibold text-primary">TRX-002</div>
+                                    <div><small class="text-muted">29/03/2568</small></div>
+                                  </div>
+                                  <div class="flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                      <h6 class="mb-0">สวนหมู่บ้านวิลล่า (P002)</h6>
+                                      <div>
+                                        <span class="badge bg-warning text-dark">ค้างคืน 6 วัน</span>
+                                      </div>
+                                    </div>
+                                    <div class="borrowed-by mb-2">
+                                      <div class="borrowed-avatar">
+                                        <img src="../assets/img/avatars/6.png" alt="Avatar" class="w-100 h-100">
+                                      </div>
+                                      <div class="borrowed-info">วิชัย ช่างประปา</div>
+                                    </div>
+                                    <div class="borrowed-items">
+                                      <small class="d-flex justify-content-between">
+                                        <span>ท่อ PVC 1 นิ้ว</span>
+                                        <span>20 เส้น</span>
+                                      </small>
+                                      <small class="d-flex justify-content-between">
+                                        <span>ปูนซีเมนต์ถุงเล็ก</span>
+                                        <span>5 ถุง</span>
+                                      </small>
+                                      <small class="d-flex justify-content-between">
+                                        <span>+3 รายการอื่นๆ</span>
+                                      </small>
+                                    </div>
+                                  </div>
+                                  <div class="flex-shrink-0 ms-2 d-flex flex-column justify-content-center">
+                                    <button class="btn btn-sm btn-primary return-items mb-2" data-id="TRX-002">
+                                      <i class="bx bx-log-in-circle me-1"></i> คืนวัสดุ
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary view-detail" data-id="TRX-002">
+                                      <i class="bx bx-detail me-1"></i> รายละเอียด
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <!-- รายการเบิกที่ 3 -->
+                              <div class="list-group-item list-group-item-action p-0">
+                                <div class="d-flex w-100 p-3 border-start border-danger border-3">
+                                  <div class="flex-shrink-0 me-3 text-center">
+                                    <div class="fw-semibold text-primary">TRX-004</div>
+                                    <div><small class="text-muted">27/03/2568</small></div>
+                                  </div>
+                                  <div class="flex-grow-1">
+                                    <div class="d-flex w-100 justify-content-between mb-1">
+                                      <h6 class="mb-0">งานซ่อมบำรุง</h6>
+                                      <div>
+                                        <span class="badge bg-danger">ค้างคืน 8 วัน</span>
+                                      </div>
+                                    </div>
+                                    <div class="borrowed-by mb-2">
+                                      <div class="borrowed-avatar">
+                                        <img src="../assets/img/avatars/7.png" alt="Avatar" class="w-100 h-100">
+                                      </div>
+                                      <div class="borrowed-info">มานะ พนักงานขับรถ</div>
+                                    </div>
+                                    <div class="borrowed-items">
+                                      <small class="d-flex justify-content-between">
+                                        <span>ปูนซีเมนต์ถุงเล็ก</span>
+                                        <span>2 ถุง</span>
+                                      </small>
+                                      <small class="d-flex justify-content-between">
+                                        <span>ท่อ PVC 1 นิ้ว</span>
+                                        <span>5 เส้น</span>
+                                      </small>
+                                    </div>
+                                  </div>
+                                  <div class="flex-shrink-0 ms-2 d-flex flex-column justify-content-center">
+                                    <button class="btn btn-sm btn-primary return-items mb-2" data-id="TRX-004">
+                                      <i class="bx bx-log-in-circle me-1"></i> คืนวัสดุ
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary view-detail" data-id="TRX-004">
+                                      <i class="bx bx-detail me-1"></i> รายละเอียด
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- ด้านขวา: ฟอร์มการคืนและรายละเอียด -->
+                    <div class="col-md-4">
+                      <div class="card h-100 border-primary">
+                        <div class="card-header bg-primary-light">
+                          <h5 class="card-title mb-0">รายการคืนวัสดุ</h5>
+                        </div>
+                        <div class="card-body">
+                          <div id="returnFormEmpty" class="text-center my-4 text-muted">
+                            <i class="bx bx-info-circle" style="font-size: 3rem;"></i>
+                            <p class="mt-2">กรุณาเลือกรายการที่ต้องการคืนจากรายการด้านซ้าย</p>
+                          </div>
+                          
+                          <div id="returnFormContent" style="display: none;">
+                            <div class="alert alert-primary mb-3">
+                              <div class="mb-1">
+                                <small class="text-muted">เลขที่เบิก:</small>
+                                <strong id="returnOrderId">TRX-001</strong>
+                              </div>
+                              <div class="mb-1">
+                                <small class="text-muted">โครงการ:</small>
+                                <span id="returnProject">สวนบ้านคุณสมชาย (P001)</span>
+                              </div>
+                              <div>
+                                <small class="text-muted">ผู้เบิก:</small>
+                                <span id="returnBorrower">สมศักดิ์ ช่างจัดสวน</span>
+                              </div>
+                            </div>
+                            
+                            <form id="returnForm">
+                              <div class="mb-3">
+                                <label class="form-label required-label">รายการคืนวัสดุ</label>
+                                <div id="returnItems">
+                                  <!-- รายการคืน 1 -->
+                                  <div class="return-item card mb-2 border">
+                                    <div class="card-body p-2">
+                                      <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold">ดินปลูกต้นไม้</span>
+                                        <small class="text-muted">เบิก: 5 ถุง</small>
+                                      </div>
+                                      <div class="row g-2">
+                                        <div class="col-6">
+                                          <div class="input-group input-group-sm">
+                                            <span class="input-group-text">คืน</span>
+                                            <input type="number" class="form-control return-qty" min="0" max="5" value="5">
+                                            <span class="input-group-text">ถุง</span>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <select class="form-select form-select-sm return-condition">
+                                            <option value="good">สภาพดี</option>
+                                            <option value="damaged">ชำรุดเล็กน้อย</option>
+                                            <option value="broken">เสียหาย/ใช้หมด</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <!-- รายการคืน 2 -->
+                                  <div class="return-item card mb-2 border">
+                                    <div class="card-body p-2">
+                                      <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold">หินแกรนิตเล็ก</span>
+                                        <small class="text-muted">เบิก: 10 ถุง</small>
+                                      </div>
+                                      <div class="row g-2">
+                                        <div class="col-6">
+                                          <div class="input-group input-group-sm">
+                                            <span class="input-group-text">คืน</span>
+                                            <input type="number" class="form-control return-qty" min="0" max="10" value="8">
+                                            <span class="input-group-text">ถุง</span>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <select class="form-select form-select-sm return-condition">
+                                            <option value="good">สภาพดี</option>
+                                            <option value="damaged">ชำรุดเล็กน้อย</option>
+                                            <option value="broken" selected>เสียหาย/ใช้หมด</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <!-- รายการคืน 3 -->
+                                  <div class="return-item card mb-2 border">
+                                    <div class="card-body p-2">
+                                      <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold">สว่านไฟฟ้า</span>
+                                        <small class="text-muted">เบิก: 1 เครื่อง</small>
+                                      </div>
+                                      <div class="row g-2">
+                                        <div class="col-6">
+                                          <div class="input-group input-group-sm">
+                                            <span class="input-group-text">คืน</span>
+                                            <input type="number" class="form-control return-qty" min="0" max="1" value="1">
+                                            <span class="input-group-text">เครื่อง</span>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <select class="form-select form-select-sm return-condition">
+                                            <option value="good">สภาพดี</option>
+                                            <option value="damaged" selected>ชำรุดเล็กน้อย</option>
+                                            <option value="broken">เสียหาย/ใช้หมด</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <small class="text-danger">* เครื่องมือมีรอยบิ่นที่ด้ามจับ</small>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div class="mb-3">
+                                <label for="returnDate" class="form-label required-label">วันที่คืน</label>
+                                <input type="text" class="form-control flatpickr-date" id="returnDate" placeholder="เลือกวันที่" required>
+                              </div>
+                              
+                              <div class="mb-3">
+                                <label for="returnReceiverSelect" class="form-label required-label">ผู้รับคืน</label>
+                                <select class="form-select" id="returnReceiverSelect" required>
+                                  <option value="">-- เลือกผู้รับคืน --</option>
+                                  <option value="EMP004" selected>สมหญิง พนักงานคลัง</option>
+                                  <option value="EMP005">ธีรพงษ์ เจ้าหน้าที่คลัง</option>
+                                </select>
+                              </div>
+                              
+                              <div class="mb-3">
+                                <label for="returnNote" class="form-label">หมายเหตุการคืน</label>
+                                <textarea class="form-control" id="returnNote" rows="2" placeholder="ระบุรายละเอียดเพิ่มเติม เช่น สภาพวัสดุ หรือเหตุผลในการคืน"></textarea>
+                              </div>
+                              
+                              <div class="mb-3">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" id="confirmReturnCheck">
+                                  <label class="form-check-label" for="confirmReturnCheck">
+                                    ข้าพเจ้าได้ตรวจสอบรายการคืนและยืนยันว่าข้อมูลถูกต้อง
+                                  </label>
+                                </div>
+                              </div>
+                              
+                              <div class="d-flex flex-column flex-sm-row justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary me-0 me-sm-2 mb-2 mb-sm-0" id="cancelReturnBtn">
+                                  <i class="bx bx-x-circle me-1"></i> ยกเลิก
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="submitReturnBtn">
+                                  <i class="bx bx-log-in-circle me-1"></i> บันทึกการคืน
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1565,6 +1913,23 @@
       document.getElementById('withdrawCard').addEventListener('click', function() {
         document.getElementById('withdrawCard').classList.add('selected');
         document.getElementById('returnCard').classList.remove('selected');
+        
+        // แสดงโหมดเบิกวัสดุ ซ่อนโหมดคืนวัสดุ
+        document.getElementById('withdrawMode').style.display = 'block';
+        document.getElementById('returnMode').style.display = 'none';
+        
+        // เปลี่ยนสีธีมกลับเป็นสีเดิม
+        document.documentElement.style.setProperty('--primary', '#28a745');
+        document.documentElement.style.setProperty('--primary-light', '#e9fff0');
+        
+        // เปลี่ยน class ของปุ่ม
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.classList.remove('btn-primary');
+        submitBtn.classList.add('btn-warning');
+        submitBtn.innerHTML = '<i class="bx bx-check-circle me-1"></i> บันทึกการเบิก';
+        
+        // รีเซ็ตฟอร์ม
+        resetForm();
       });
       
       document.getElementById('returnCard').addEventListener('click', function() {
@@ -1884,12 +2249,21 @@
       
       // เมื่อเปลี่ยนประเภทรายการเป็น "คืน" ให้แสดงข้อมูลแตกต่างกัน
       document.getElementById('returnCard').addEventListener('click', function() {
-        // ในกรณีจริง ต้องเปลี่ยนการแสดงผลและวิธีการทำงานเป็นแบบการคืนวัสดุ
-        // แต่ในตัวอย่างนี้เราจะแสดงข้อความแจ้งเตือนเท่านั้น
-        setTimeout(() => {
-          alert('เปลี่ยนเป็นโหมดการคืนวัสดุ รายการที่เลือกจะถูกล้างและเริ่มใหม่');
-          resetForm();
-        }, 200);
+        // ซ่อนโหมดเบิกวัสดุ แสดงโหมดคืนวัสดุ
+        document.getElementById('withdrawMode').style.display = 'none';
+        document.getElementById('returnMode').style.display = 'block';
+        
+        // เปลี่ยนสีธีม
+        document.documentElement.style.setProperty('--primary', '#0d6efd');
+        document.documentElement.style.setProperty('--primary-light', '#e6f0ff');
+        
+        // เปลี่ยน class ของปุ่ม
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.classList.remove('btn-warning');
+        submitBtn.classList.add('btn-primary');
+        
+        // รีเซ็ตฟอร์ม
+        resetForm();
       });
     });
   </script>
