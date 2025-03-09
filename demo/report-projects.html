@@ -5559,7 +5559,7 @@ function exportThaiReport(projectId) {
   htmlContent += '</div>';
   
   // แก้ไขส่วนนี้! แทนที่จะใช้ </script> โดยตรง เราจะแยกมันออก
-  htmlContent += '<' + 'script>';
+  htmlContent += '<script>';
   htmlContent += 'window.onload = function() {';
   htmlContent += '  setTimeout(function() {';
   htmlContent += '    alert("คลิกที่ปุ่ม \'พิมพ์รายงาน\' และเลือก \'บันทึกเป็น PDF\' ในหน้าต่างพิมพ์");';
@@ -5567,13 +5567,12 @@ function exportThaiReport(projectId) {
   htmlContent += '};';
   htmlContent += '</' + 'script>';  // แบ่ง </script> เป็น '</' + 'script>' เพื่อป้องกันการสับสน
   
-
+  htmlContent += '</body></html>';
   
   // เขียน HTML เข้าไปในหน้าต่างใหม่
   reportWindow.document.write(htmlContent);
   reportWindow.document.close();
 }
 
-  </script>
 </body>
 </html>
