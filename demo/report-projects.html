@@ -517,30 +517,6 @@
     .compare-table th:first-child, .compare-table td:first-child {
       font-weight: 500;
     }
-
-    /* CSS for Print Preview */
-    .print-content {
-      display: none;
-    }
-    
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-      .print-content, .print-content * {
-        visibility: visible;
-      }
-      .print-content {
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
-      .no-print {
-        display: none !important;
-      }
-    }
   </style>
 </head>
 
@@ -793,372 +769,6 @@
                   <span class="d-none d-md-inline-block text-muted">ค้นหา (Ctrl+/)</span>
                 </a>
               </div>
-              
-              <!-- แท็บรายการวัสดุ -->
-              <div class="tab-pane fade p-3" id="materials" role="tabpanel" aria-labelledby="materials-tab">
-                <div class="table-responsive">
-                  <table class="table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>ลำดับ</th>
-                        <th>รายการ</th>
-                        <th>จำนวนเบิกจริง</th>
-                        <th>จำนวนคืนจริง</th>
-                        <th>รวมใช้จริง</th>
-                        <th>ราคาต่อหน่วย</th>
-                        <th>รวมจำนวนเงินสุทธิ</th>
-                        <th>หมายเหตุ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>สีโปว๊ ขนาด 0.5 กก.</td>
-                        <td>1 ถัง</td>
-                        <td>-</td>
-                        <td>1 ถัง</td>
-                        <td>38.75</td>
-                        <td>38.75</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>ทินเนอร์ขวดแก้ว</td>
-                        <td>2 ขวด</td>
-                        <td>-</td>
-                        <td>2 ขวด</td>
-                        <td>29.00</td>
-                        <td>58.00</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>ใบตัดปูน 4 นิ้ว</td>
-                        <td>3 ใบ</td>
-                        <td>-</td>
-                        <td>3 ใบ</td>
-                        <td>88.00</td>
-                        <td>264.00</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>ใบตัดเหล็ก 4 นิ้ว</td>
-                        <td>3 ใบ</td>
-                        <td>1 ใบ</td>
-                        <td>2 ใบ</td>
-                        <td>10.17</td>
-                        <td>20.34</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>แปรงทาสีรองพื้น และสีจริง 2 นิ้ว</td>
-                        <td>2 อัน</td>
-                        <td>1 อัน</td>
-                        <td>1 อัน</td>
-                        <td>18.55</td>
-                        <td>18.55</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>6</td>
-                        <td>แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว</td>
-                        <td>2 อัน</td>
-                        <td>1 อัน</td>
-                        <td>1 อัน</td>
-                        <td>26.08</td>
-                        <td>26.08</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>7</td>
-                        <td>แปรงทาสีรองพื้น และสีจริง 3 นิ้ว</td>
-                        <td>2 อัน</td>
-                        <td>1 อัน</td>
-                        <td>1 อัน</td>
-                        <td>34.78</td>
-                        <td>34.78</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>8</td>
-                        <td>แปรงวานิช 10 ซม.</td>
-                        <td>2 อัน</td>
-                        <td>2 อัน</td>
-                        <td>0 อัน</td>
-                        <td>37.45</td>
-                        <td>0.00</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>9</td>
-                        <td>ลูกกลิ้งทาสี 4 นิ้ว (แบบเรียบ)</td>
-                        <td>3 อัน</td>
-                        <td>3 อัน</td>
-                        <td>0 อัน</td>
-                        <td>10.90</td>
-                        <td>0.00</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td>10</td>
-                        <td>ลูกกลิ้งทาสี 4 นิ้ว (แบบขน)</td>
-                        <td>2 อัน</td>
-                        <td>2 อัน</td>
-                        <td>0 อัน</td>
-                        <td>16.71</td>
-                        <td>0.00</td>
-                        <td>-</td>
-                      </tr>
-                      <tr>
-                        <td colspan="6" class="text-end fw-bold">รวมทั้งสิ้น</td>
-                        <td class="fw-bold">2,636.32</td>
-                        <td></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                  <div class="pagination-info">
-                    แสดง 1 ถึง 10 จาก 35 รายการ
-                  </div>
-                  <nav aria-label="Page navigation">
-                    <ul class="pagination pagination-sm">
-                      <li class="page-item prev">
-                        <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
-                      </li>
-                      <li class="page-item active">
-                        <a class="page-link" href="javascript:void(0);">1</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">2</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">3</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="javascript:void(0);">4</a>
-                      </li>
-                      <li class="page-item next">
-                        <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-              
-              <!-- แท็บล็อตสินค้า -->
-              <div class="tab-pane fade p-3" id="lots" role="tabpanel" aria-labelledby="lots-tab">
-                <div class="accordion" id="modalLotAccordion">
-                  <!-- ล็อตที่ 1 -->
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="modalLotHeading1">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#modalLotCollapse1" aria-expanded="true" aria-controls="modalLotCollapse1">
-                        <div>
-                          <span class="fw-bold">ล็อต: LOT-20240301-A</span>
-                          <div class="text-muted small">วันที่รับเข้า: 01/03/2568 | ผู้จำหน่าย: บริษัท ABC วัสดุก่อสร้าง</div>
-                        </div>
-                      </button>
-                    </h2>
-                    <div id="modalLotCollapse1" class="accordion-collapse collapse show" aria-labelledby="modalLotHeading1" data-bs-parent="#modalLotAccordion">
-                      <div class="accordion-body p-0">
-                        <div class="table-responsive">
-                          <table class="table table-sm table-hover mb-0">
-                            <thead>
-                              <tr>
-                                <th>ลำดับ</th>
-                                <th>รหัสสินค้า</th>
-                                <th>รายการ</th>
-                                <th>ราคา/หน่วย</th>
-                                <th>เบิกจริง</th>
-                                <th>คืนจริง</th>
-                                <th>ใช้จริง</th>
-                                <th>รวมเงินสุทธิ</th>
-                                <th>หมายเหตุ</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>PT-001</td>
-                                <td>สีโปว๊ ขนาด 0.5 กก.</td>
-                                <td>38.75</td>
-                                <td>1 ถัง</td>
-                                <td>-</td>
-                                <td>1 ถัง</td>
-                                <td>38.75</td>
-                                <td>-</td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>TN-001</td>
-                                <td>ทินเนอร์ขวดแก้ว</td>
-                                <td>29.00</td>
-                                <td>2 ขวด</td>
-                                <td>-</td>
-                                <td>2 ขวด</td>
-                                <td>58.00</td>
-                                <td>-</td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>CT-001</td>
-                                <td>ใบตัดปูน 4 นิ้ว</td>
-                                <td>88.00</td>
-                                <td>3 ใบ</td>
-                                <td>-</td>
-                                <td>3 ใบ</td>
-                                <td>264.00</td>
-                                <td>-</td>
-                              </tr>
-                              <tr>
-                                <td colspan="7" class="text-end fw-bold">รวมมูลค่าล็อต</td>
-                                <td class="fw-bold">360.75</td>
-                                <td></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- ล็อตที่ 2 -->
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="modalLotHeading2">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#modalLotCollapse2" aria-expanded="false" aria-controls="modalLotCollapse2">
-                        <div>
-                          <span class="fw-bold">ล็อต: LOT-20240225-B</span>
-                          <div class="text-muted small">วันที่รับเข้า: 25/02/2568 | ผู้จำหน่าย: บริษัท XYZ การก่อสร้าง</div>
-                        </div>
-                      </button>
-                    </h2>
-                    <div id="modalLotCollapse2" class="accordion-collapse collapse" aria-labelledby="modalLotHeading2" data-bs-parent="#modalLotAccordion">
-                      <div class="accordion-body p-0">
-                        <div class="table-responsive">
-                          <table class="table table-sm table-hover mb-0">
-                            <thead>
-                              <tr>
-                                <th>ลำดับ</th>
-                                <th>รหัสสินค้า</th>
-                                <th>รายการ</th>
-                                <th>ราคา/หน่วย</th>
-                                <th>เบิกจริง</th>
-                                <th>คืนจริง</th>
-                                <th>ใช้จริง</th>
-                                <th>รวมเงินสุทธิ</th>
-                                <th>หมายเหตุ</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>CT-002</td>
-                                <td>ใบตัดเหล็ก 4 นิ้ว</td>
-                                <td>10.17</td>
-                                <td>3 ใบ</td>
-                                <td>1 ใบ</td>
-                                <td>2 ใบ</td>
-                                <td>20.34</td>
-                                <td>คืนเนื่องจากไม่ได้ใช้</td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>BR-001</td>
-                                <td>แปรงทาสีรองพื้น และสีจริง 2 นิ้ว</td>
-                                <td>18.55</td>
-                                <td>2 อัน</td>
-                                <td>1 อัน</td>
-                                <td>1 อัน</td>
-                                <td>18.55</td>
-                                <td>-</td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>BR-002</td>
-                                <td>แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว</td>
-                                <td>26.08</td>
-                                <td>2 อัน</td>
-                                <td>1 อัน</td>
-                                <td>1 อัน</td>
-                                <td>26.08</td>
-                                <td>-</td>
-                              </tr>
-                              <tr>
-                                <td colspan="7" class="text-end fw-bold">รวมมูลค่าล็อต</td>
-                                <td class="fw-bold">64.97</td>
-                                <td></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- แท็บประวัติการดำเนินการ -->
-              <div class="tab-pane fade p-3" id="history" role="tabpanel" aria-labelledby="history-tab">
-                <div class="table-responsive">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th style="width: 180px;">วันที่-เวลา</th>
-                        <th style="width: 200px;">ประเภทรายการ</th>
-                        <th>รายละเอียด</th>
-                        <th style="width: 180px;">ผู้ดำเนินการ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>15/03/2568 09:00</td>
-                        <td>เริ่มโครงการ</td>
-                        <td>สร้างโครงการใหม่และกำหนดขอบเขตงาน</td>
-                        <td>บุญชัย ผู้จัดการ</td>
-                      </tr>
-                      <tr>
-                        <td>20/03/2568 08:30</td>
-                        <td>เบิกวัสดุ</td>
-                        <td>เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ มูลค่า 3,250.40 บาท</td>
-                        <td>สมศักดิ์ ช่างจัดสวน</td>
-                      </tr>
-                      <tr>
-                        <td>28/03/2568 14:15</td>
-                        <td>อัพเดทความคืบหน้า</td>
-                        <td>บันทึกความคืบหน้าโครงการ 45% และคืนวัสดุบางส่วน</td>
-                        <td>สมศักดิ์ ช่างจัดสวน</td>
-                      </tr>
-                      <tr>
-                        <td>28/03/2568 15:30</td>
-                        <td>คืนวัสดุ</td>
-                        <td>คืนวัสดุบางส่วนจากงวดที่ 1 จำนวน 8 รายการ มูลค่า 1,150.80 บาท</td>
-                        <td>สมหญิง พนักงานคลัง</td>
-                      </tr>
-                      <tr>
-                        <td>02/04/2568 09:45</td>
-                        <td>เบิกวัสดุ</td>
-                        <td>เบิกวัสดุงวดที่ 2 จำนวน 15 รายการ มูลค่า 1,152.19 บาท</td>
-                        <td>สมศักดิ์ ช่างจัดสวน</td>
-                      </tr>
-                      <tr>
-                        <td>05/04/2568 10:30</td>
-                        <td>คืนวัสดุ</td>
-                        <td>คืนวัสดุบางส่วนจากงวดที่ 2 จำนวน 6 รายการ มูลค่า 615.47 บาท</td>
-                        <td>สมหญิง พนักงานคลัง</td>
-                      </tr>
-                      <tr>
-                        <td>09/04/2568 13:20</td>
-                        <td>อัพเดทความคืบหน้า</td>
-                        <td>บันทึกความคืบหน้าโครงการ 65% และเริ่มงานตกแต่งและปลูกต้นไม้</td>
-                        <td>สมศักดิ์ ช่างจัดสวน</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
             </div>
             <!-- /Search -->
 
@@ -1180,16 +790,6 @@
                     <ul class="list-group list-group-flush">
                       <li class="list-group-item list-group-item-action dropdown-notifications-item">
                         <div class="d-flex">
-                            <button type="button" class="btn btn-sm btn-icon btn-outline-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" onclick="viewProjectDetail('P-2568-004')">
-                              <i class="bx bx-detail"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-icon btn-outline-secondary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์รายงาน" onclick="printProjectReport('P-2568-004')">
-                              <i class="bx bx-printer"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-icon btn-outline-info" data-bs-toggle="tooltip" data-bs-placement="top" title="ส่งออกข้อมูล" onclick="exportProjectData('P-2568-004')">
-                              <i class="bx bx-export"></i>
-                            </button>
-                          </div>
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar bg-light-danger">
                               <span class="avatar-initial rounded-circle bg-label-danger"><i class="bx bx-package"></i></span>
@@ -1511,31 +1111,7 @@
                           </div>
                         </td>
                       </tr>
-                      
-                      <tr>
-                        <td>P-2568-005</td>
-                        <td>
-                          <a href="javascript:void(0);" class="text-primary fw-semibold">จัดสวนบ้านคุณสมชาย</a>
-                        </td>
-                        <td>คุณสมชาย มั่งมี</td>
-                        <td>15/02/2568</td>
-                        <td>15/03/2568</td>
-                        <td><span class="status-badge status-completed">เสร็จสิ้น</span></td>
-                        <td>15,680.40</td>
-                        <td>
-                          <div class="d-flex">
-                            <button type="button" class="btn btn-sm btn-icon btn-outline-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" onclick="viewProjectDetail('P-2568-005')">
-                              <i class="bx bx-detail"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-icon btn-outline-secondary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์รายงาน" onclick="printProjectReport('P-2568-005')">
-                              <i class="bx bx-printer"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-icon btn-outline-info" data-bs-toggle="tooltip" data-bs-placement="top" title="ส่งออกข้อมูล" onclick="exportProjectData('P-2568-005')">
-                              <i class="bx bx-export"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr><tr class="collapse" id="collapseProject1">
+                      <tr class="collapse" id="collapseProject1">
                         <td colspan="8" class="p-0">
                           <div class="p-3 bg-light">
                             <div class="mb-3">
@@ -2145,4 +1721,1152 @@
                         <td>32,150.25</td>
                         <td>
                           <div class="d-flex">
-                            
+                            <button type="button" class="btn btn-sm btn-icon btn-outline-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" onclick="viewProjectDetail('P-2568-004')">
+                              <i class="bx bx-detail"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-icon btn-outline-secondary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์รายงาน" onclick="printProjectReport('P-2568-004')">
+                              <i class="bx bx-printer"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-icon btn-outline-info" data-bs-toggle="tooltip" data-bs-placement="top" title="ส่งออกข้อมูล" onclick="exportProjectData('P-2568-004')">
+                              <i class="bx bx-export"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td>P-2568-005</td>
+                        <td>
+                          <a href="javascript:void(0);" class="text-primary fw-semibold">จัดสวนบ้านคุณสมชาย</a>
+                        </td>
+                        <td>คุณสมชาย มั่งมี</td>
+                        <td>15/02/2568</td>
+                        <td>15/03/2568</td>
+                        <td><span class="status-badge status-completed">เสร็จสิ้น</span></td>
+                        <td>15,680.40</td>
+                        <td>
+                          <div class="d-flex">
+                            <button type="button" class="btn btn-sm btn-icon btn-outline-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด" onclick="viewProjectDetail('P-2568-005')">
+                              <i class="bx bx-detail"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-icon btn-outline-secondary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์รายงาน" onclick="printProjectReport('P-2568-005')">
+                              <i class="bx bx-printer"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-icon btn-outline-info" data-bs-toggle="tooltip" data-bs-placement="top" title="ส่งออกข้อมูล" onclick="exportProjectData('P-2568-005')">
+                              <i class="bx bx-export"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div class="pagination-info">
+                    แสดง 1 ถึง 5 จาก 25 โครงการ
+                  </div>
+                  <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                      <li class="page-item prev">
+                        <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
+                      </li>
+                      <li class="page-item active">
+                        <a class="page-link" href="javascript:void(0);">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">4</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">5</a>
+                      </li>
+                      <li class="page-item next">
+                        <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                , ระบบจัดสวนครบวงจร v1.0
+              </div>
+              <div>
+                <a href="#" class="footer-link me-4">หน้าหลัก</a>
+                <a href="#" class="footer-link me-4">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link me-4">ช่วยเหลือ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Modal เปรียบเทียบโครงการ -->
+  <div class="modal fade" id="compareProjectsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">เปรียบเทียบโครงการ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="compare-checkbox-group mb-4">
+            <h6 class="mb-2">เลือกโครงการที่ต้องการเปรียบเทียบ (สูงสุด 3 โครงการ)</h6>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject1" checked>
+                  <label class="form-check-label" for="compareProject1">
+                    จัดสวนบ้านคุณเบียร์ Parkinson
+                  </label>
+                </div>
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject2" checked>
+                  <label class="form-check-label" for="compareProject2">
+                    จัดสวนหมู่บ้านวิลล่า
+                  </label>
+                </div>
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject3" checked>
+                  <label class="form-check-label" for="compareProject3">
+                    ภูมิทัศน์โรงเรียนสตรี
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject4">
+                  <label class="form-check-label" for="compareProject4">
+                    จัดสวนคอนโดมิเนียม Central Park
+                  </label>
+                </div>
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject5">
+                  <label class="form-check-label" for="compareProject5">
+                    จัดสวนบ้านคุณสมชาย
+                  </label>
+                </div>
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject6">
+                  <label class="form-check-label" for="compareProject6">
+                    ปรับปรุงภูมิทัศน์สวนสาธารณะ
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject7">
+                  <label class="form-check-label" for="compareProject7">
+                    สวนหย่อมสำนักงานใหญ่ ABC
+                  </label>
+                </div>
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject8">
+                  <label class="form-check-label" for="compareProject8">
+                    ปรับปรุงสวนโรงแรม Grand Paradise
+                  </label>
+                </div>
+                <div class="compare-checkbox-item form-check">
+                  <input class="form-check-input" type="checkbox" id="compareProject9">
+                  <label class="form-check-label" for="compareProject9">
+                    จัดสวนบ้านคุณวิชัย
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group mb-3">
+            <label class="form-label">เลือกหัวข้อในการเปรียบเทียบ</label>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="compareCostValue" checked>
+                  <label class="form-check-label" for="compareCostValue">
+                    มูลค่าการเบิก-คืนวัสดุ
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="compareReturnRate" checked>
+                  <label class="form-check-label" for="compareReturnRate">
+                    อัตราการคืนวัสดุ
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="compareCostRatio" checked>
+                  <label class="form-check-label" for="compareCostRatio">
+                    สัดส่วนต้นทุนวัสดุต่อราคาโครงการ
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="compareMaterialCategories">
+                  <label class="form-check-label" for="compareMaterialCategories">
+                    สัดส่วนหมวดหมู่วัสดุ
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="compareDamageRate">
+                  <label class="form-check-label" for="compareDamageRate">
+                    อัตราความเสียหายของวัสดุ
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="compareCostPerArea">
+                  <label class="form-check-label" for="compareCostPerArea">
+                    ต้นทุนวัสดุต่อพื้นที่
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="compare-result">
+            <div class="compare-title">ผลการเปรียบเทียบ</div>
+            <div class="compare-description">เปรียบเทียบต้นทุนและประสิทธิภาพการใช้วัสดุระหว่าง 3 โครงการที่เลือก</div>
+            
+            <div class="table-responsive">
+              <table class="table table-sm compare-table">
+                <thead>
+                  <tr>
+                    <th>หัวข้อเปรียบเทียบ</th>
+                    <th>จัดสวนบ้านคุณเบียร์</th>
+                    <th>จัดสวนหมู่บ้านวิลล่า</th>
+                    <th>ภูมิทัศน์โรงเรียนสตรี</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>ราคาโครงการ (บาท)</td>
+                    <td>80,000.00</td>
+                    <td>280,000.00</td>
+                    <td>200,000.00</td>
+                  </tr>
+                  <tr>
+                    <td>พื้นที่โครงการ (ตร.ม.)</td>
+                    <td>10</td>
+                    <td>40</td>
+                    <td>80</td>
+                  </tr>
+                  <tr>
+                    <td>มูลค่าวัสดุที่เบิก (บาท)</td>
+                    <td>4,402.59</td>
+                    <td>15,230.40</td>
+                    <td>42,560.80</td>
+                  </tr>
+                  <tr>
+                    <td>มูลค่าวัสดุที่คืน (บาท)</td>
+                    <td>1,766.27</td>
+                    <td>5,650.20</td>
+                    <td>13,810.05</td>
+                  </tr>
+                  <tr>
+                    <td>มูลค่าวัสดุสุทธิ (บาท)</td>
+                    <td>2,636.32</td>
+                    <td>9,580.20</td>
+                    <td>28,750.75</td>
+                  </tr>
+                  <tr>
+                    <td>อัตราการคืนวัสดุ (%)</td>
+                    <td>40.12%</td>
+                    <td>37.10%</td>
+                    <td>32.45%</td>
+                  </tr>
+                  <tr>
+                    <td>สัดส่วนต้นทุนวัสดุ (%)</td>
+                    <td>3.29%</td>
+                    <td>3.42%</td>
+                    <td>14.38%</td>
+                  </tr>
+                  <tr>
+                    <td>ต้นทุนวัสดุต่อพื้นที่ (บาท/ตร.ม.)</td>
+                    <td>263.63</td>
+                    <td>239.51</td>
+                    <td>359.38</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="chart-container mt-3" id="compareChart">
+              <!-- กราฟจะถูกสร้างด้วย ApexCharts หรือใช้รูปภาพตัวอย่างประกอบในที่นี้ -->
+              <div class="d-flex justify-content-center align-items-center h-100">
+                <img src="../assets/img/charts/project-compare-chart-sample.png" alt="เปรียบเทียบโครงการ" class="img-fluid" style="max-height: 240px;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ปิด</button>
+          <button type="button" class="btn btn-outline-primary" id="updateCompareBtn">
+            <i class="bx bx-refresh me-1"></i> อัพเดทการเปรียบเทียบ
+          </button>
+          <button type="button" class="btn btn-primary" id="exportCompareBtn">
+            <i class="bx bx-export me-1"></i> ส่งออกผลการเปรียบเทียบ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Detail Modal -->
+  <div class="modal fade" id="projectDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">รายละเอียดโครงการ</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <!-- เนื้อหาจะถูกโหลดด้วย AJAX หรือใช้ข้อมูลจำลองในที่นี้ -->
+          <div id="projectDetailContent">
+            <!-- ส่วนหัวโครงการ -->
+            <div class="project-header">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">จัดสวนบ้านคุณเบียร์ Parkinson</h4>
+                <span class="status-badge status-in-progress">กำลังดำเนินการ</span>
+              </div>
+              <p class="mb-0">รหัสโครงการ: P-2568-001 | รูปแบบงาน: งานตามสัญญา</p>
+            </div>
+            
+            <!-- ข้อมูลโครงการ -->
+            <div class="project-info">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="project-info-item">
+                    <span class="project-info-label">ลูกค้า:</span>
+                    <span>คุณอริยคุณ (คุณเบียร์)</span>
+                  </div>
+                  <div class="project-info-item">
+                    <span class="project-info-label">ผู้รับผิดชอบ:</span>
+                    <span>สมศักดิ์ ช่างจัดสวน</span>
+                  </div>
+                  <div class="project-info-item">
+                    <span class="project-info-label">ที่อยู่:</span>
+                    <span>123/45 หมู่บ้านเพอร์เฟคเพลส ถ.รามคำแหง กรุงเทพฯ 10240</span>
+                  </div>
+                  <div class="project-info-item">
+                    <span class="project-info-label">โทรศัพท์:</span>
+                    <span>082-345-6789</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="project-info-item">
+                    <span class="project-info-label">วันที่เริ่ม:</span>
+                    <span>15/03/2568</span>
+                  </div>
+                  <div class="project-info-item">
+                    <span class="project-info-label">กำหนดเสร็จ:</span>
+                    <span>15/04/2568</span>
+                  </div>
+                  <div class="project-info-item">
+                    <span class="project-info-label">ราคาโครงการ:</span>
+                    <span>80,000.00 บาท</span>
+                  </div>
+                  <div class="project-info-item">
+                    <span class="project-info-label">พื้นที่:</span>
+                    <span>10 ตารางเมตร</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="project-info-item">
+                <span class="project-info-label">ความคืบหน้า:</span>
+                <span>65%</span>
+                <div class="progress project-progress">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- แถบแท็บสำหรับเลือกดูข้อมูลต่างๆ -->
+            <ul class="nav nav-tabs" id="projectTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">
+                  ภาพรวม
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab" aria-controls="materials" aria-selected="false">
+                  รายการวัสดุ
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="lots-tab" data-bs-toggle="tab" data-bs-target="#lots" type="button" role="tab" aria-controls="lots" aria-selected="false">
+                  ล็อตสินค้า
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
+                  ประวัติการดำเนินการ
+                </button>
+              </li>
+            </ul>
+            
+            <div class="tab-content" id="projectTabContent">
+              <!-- แท็บภาพรวม -->
+              <div class="tab-pane fade show active p-3" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                      <div class="card-header">
+                        <h6 class="card-title mb-0">สรุปมูลค่าโครงการ</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-sm">
+                            <tr>
+                              <td>มูลค่าโครงการทั้งหมด</td>
+                              <td class="text-end">80,000.00 บาท</td>
+                            </tr>
+                            <tr>
+                              <td>มูลค่าวัสดุที่เบิก</td>
+                              <td class="text-end">4,402.59 บาท</td>
+                            </tr>
+                            <tr>
+                              <td>มูลค่าวัสดุที่คืน</td>
+                              <td class="text-end">1,766.27 บาท</td>
+                            </tr>
+                            <tr>
+                              <td>มูลค่าวัสดุสุทธิ</td>
+                              <td class="text-end fw-bold">2,636.32 บาท</td>
+                            </tr>
+                            <tr>
+                              <td>สัดส่วนต้นทุนวัสดุ</td>
+                              <td class="text-end">3.29%</td>
+                            </tr>
+                            <tr>
+                              <td>ต้นทุนวัสดุต่อพื้นที่</td>
+                              <td class="text-end">263.63 บาท/ตร.ม.</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                      <div class="card-header">
+                        <h6 class="card-title mb-0">ประสิทธิภาพการใช้วัสดุ</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="mb-3">
+                          <div class="d-flex justify-content-between mb-1">
+                            <span>อัตราการคืนวัสดุ</span>
+                            <span>40.12%</span>
+                          </div>
+                          <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 40.12%" aria-valuenow="40.12" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <div class="d-flex justify-content-between mb-1">
+                            <span>อัตราวัสดุที่ชำรุด/เสียหาย</span>
+                            <span>5.2%</span>
+                          </div>
+                          <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 5.2%" aria-valuenow="5.2" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <div class="d-flex justify-content-between mb-1">
+                            <span>ประสิทธิภาพการเบิกวัสดุ</span>
+                            <span>92.5%</span>
+                          </div>
+                          <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 92.5%" aria-valuenow="92.5" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 mb-0">
+                          <i class="bx bx-info-circle me-1"></i>
+                          โครงการนี้มีอัตราการคืนวัสดุสูงกว่าค่าเฉลี่ยของโครงการทั้งหมด (40.12% เทียบกับค่าเฉลี่ย 38.50%)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                      <div class="card-header">
+                        <h6 class="card-title mb-0">การใช้วัสดุตามหมวดหมู่</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="chart-container" id="materialCategoryChart">
+                          <!-- กราฟจะถูกสร้างด้วย ApexCharts หรือใช้รูปภาพตัวอย่างประกอบในที่นี้ -->
+                          <div class="d-flex justify-content-center align-items-center h-100">
+                            <img src="../assets/img/charts/material-category-chart-sample.png" alt="การใช้วัสดุตามหมวดหมู่" class="img-fluid" style="max-height: 240px;">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                      <div class="card-header">
+                        <h6 class="card-title mb-0">ไทม์ไลน์โครงการ</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="timeline">
+                          <div class="timeline-item">
+                            <div class="timeline-date">15/03/2568</div>
+                            <div class="timeline-title">เริ่มโครงการ</div>
+                            <div class="timeline-body">ประชุมกับลูกค้าและเตรียมพื้นที่</div>
+                          </div>
+                          <div class="timeline-item">
+                            <div class="timeline-date">20/03/2568</div>
+                            <div class="timeline-title">เริ่มงานขุดและปรับพื้นที่</div>
+                            <div class="timeline-body">เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ</div>
+                          </div>
+                          <div class="timeline-item">
+                            <div class="timeline-date">28/03/2568</div>
+                            <div class="timeline-title">ตรวจสอบความคืบหน้า</div>
+                            <div class="timeline-body">ความคืบหน้า 45% และคืนวัสดุบางส่วน</div>
+                          </div>
+                          <div class="timeline-item">
+                            <div class="timeline-date">02/04/2568</div>
+                            <div class="timeline-title">เบิกวัสดุงวดที่ 2</div>
+                            <div class="timeline-body">เบิกวัสดุเพิ่มเติม 15 รายการ</div>
+                          </div>
+                          <div class="timeline-item">
+                            <div class="timeline-date">09/04/2568</div>
+                            <div class="timeline-title">ปลูกต้นไม้และตกแต่ง</div>
+                            <div class="timeline-body">เริ่มงานตกแต่งและปลูกต้นไม้</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- แท็บรายการวัสดุ -->
+              <div class="tab-pane fade p-3" id="materials" role="tabpanel" aria-labelledby="materials-tab">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>ลำดับ</th>
+                        <th>รายการ</th>
+                        <th>จำนวนเบิกจริง</th>
+                        <th>จำนวนคืนจริง</th>
+                        <th>รวมใช้จริง</th>
+                        <th>ราคาต่อหน่วย</th>
+                        <th>รวมจำนวนเงินสุทธิ</th>
+                        <th>หมายเหตุ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>สีโปว๊ ขนาด 0.5 กก.</td>
+                        <td>1 ถัง</td>
+                        <td>-</td>
+                        <td>1 ถัง</td>
+                        <td>38.75</td>
+                        <td>38.75</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>ทินเนอร์ขวดแก้ว</td>
+                        <td>2 ขวด</td>
+                        <td>-</td>
+                        <td>2 ขวด</td>
+                        <td>29.00</td>
+                        <td>58.00</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>ใบตัดปูน 4 นิ้ว</td>
+                        <td>3 ใบ</td>
+                        <td>-</td>
+                        <td>3 ใบ</td>
+                        <td>88.00</td>
+                        <td>264.00</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>ใบตัดเหล็ก 4 นิ้ว</td>
+                        <td>3 ใบ</td>
+                        <td>1 ใบ</td>
+                        <td>2 ใบ</td>
+                        <td>10.17</td>
+                        <td>20.34</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>แปรงทาสีรองพื้น และสีจริง 2 นิ้ว</td>
+                        <td>2 อัน</td>
+                        <td>1 อัน</td>
+                        <td>1 อัน</td>
+                        <td>18.55</td>
+                        <td>18.55</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว</td>
+                        <td>2 อัน</td>
+                        <td>1 อัน</td>
+                        <td>1 อัน</td>
+                        <td>26.08</td>
+                        <td>26.08</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>7</td>
+                        <td>แปรงทาสีรองพื้น และสีจริง 3 นิ้ว</td>
+                        <td>2 อัน</td>
+                        <td>1 อัน</td>
+                        <td>1 อัน</td>
+                        <td>34.78</td>
+                        <td>34.78</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>8</td>
+                        <td>แปรงวานิช 10 ซม.</td>
+                        <td>2 อัน</td>
+                        <td>2 อัน</td>
+                        <td>0 อัน</td>
+                        <td>37.45</td>
+                        <td>0.00</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>9</td>
+                        <td>ลูกกลิ้งทาสี 4 นิ้ว (แบบเรียบ)</td>
+                        <td>3 อัน</td>
+                        <td>3 อัน</td>
+                        <td>0 อัน</td>
+                        <td>10.90</td>
+                        <td>0.00</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td>10</td>
+                        <td>ลูกกลิ้งทาสี 4 นิ้ว (แบบขน)</td>
+                        <td>2 อัน</td>
+                        <td>2 อัน</td>
+                        <td>0 อัน</td>
+                        <td>16.71</td>
+                        <td>0.00</td>
+                        <td>-</td>
+                      </tr>
+                      <tr>
+                        <td colspan="6" class="text-end fw-bold">รวมทั้งสิ้น</td>
+                        <td class="fw-bold">2,636.32</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div class="pagination-info">
+                    แสดง 1 ถึง 10 จาก 35 รายการ
+                  </div>
+                  <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm">
+                      <li class="page-item prev">
+                        <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
+                      </li>
+                      <li class="page-item active">
+                        <a class="page-link" href="javascript:void(0);">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);">4</a>
+                      </li>
+                      <li class="page-item next">
+                        <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              
+              <!-- แท็บล็อตสินค้า -->
+              <div class="tab-pane fade p-3" id="lots" role="tabpanel" aria-labelledby="lots-tab">
+                <div class="accordion" id="modalLotAccordion">
+                  <!-- ล็อตที่ 1 -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="modalLotHeading1">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#modalLotCollapse1" aria-expanded="true" aria-controls="modalLotCollapse1">
+                        <div>
+                          <span class="fw-bold">ล็อต: LOT-20240301-A</span>
+                          <div class="text-muted small">วันที่รับเข้า: 01/03/2568 | ผู้จำหน่าย: บริษัท ABC วัสดุก่อสร้าง</div>
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="modalLotCollapse1" class="accordion-collapse collapse show" aria-labelledby="modalLotHeading1" data-bs-parent="#modalLotAccordion">
+                      <div class="accordion-body p-0">
+                        <div class="table-responsive">
+                          <table class="table table-sm table-hover mb-0">
+                            <thead>
+                              <tr>
+                                <th>ลำดับ</th>
+                                <th>รหัสสินค้า</th>
+                                <th>รายการ</th>
+                                <th>ราคา/หน่วย</th>
+                                <th>เบิกจริง</th>
+                                <th>คืนจริง</th>
+                                <th>ใช้จริง</th>
+                                <th>รวมเงินสุทธิ</th>
+                                <th>หมายเหตุ</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>PT-001</td>
+                                <td>สีโปว๊ ขนาด 0.5 กก.</td>
+                                <td>38.75</td>
+                                <td>1 ถัง</td>
+                                <td>-</td>
+                                <td>1 ถัง</td>
+                                <td>38.75</td>
+                                <td>-</td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>TN-001</td>
+                                <td>ทินเนอร์ขวดแก้ว</td>
+                                <td>29.00</td>
+                                <td>2 ขวด</td>
+                                <td>-</td>
+                                <td>2 ขวด</td>
+                                <td>58.00</td>
+                                <td>-</td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>CT-001</td>
+                                <td>ใบตัดปูน 4 นิ้ว</td>
+                                <td>88.00</td>
+                                <td>3 ใบ</td>
+                                <td>-</td>
+                                <td>3 ใบ</td>
+                                <td>264.00</td>
+                                <td>-</td>
+                              </tr>
+                              <tr>
+                                <td colspan="7" class="text-end fw-bold">รวมมูลค่าล็อต</td>
+                                <td class="fw-bold">360.75</td>
+                                <td></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- ล็อตที่ 2 -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="modalLotHeading2">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#modalLotCollapse2" aria-expanded="false" aria-controls="modalLotCollapse2">
+                        <div>
+                          <span class="fw-bold">ล็อต: LOT-20240225-B</span>
+                          <div class="text-muted small">วันที่รับเข้า: 25/02/2568 | ผู้จำหน่าย: บริษัท XYZ การก่อสร้าง</div>
+                        </div>
+                      </button>
+                    </h2>
+                    <div id="modalLotCollapse2" class="accordion-collapse collapse" aria-labelledby="modalLotHeading2" data-bs-parent="#modalLotAccordion">
+                      <div class="accordion-body p-0">
+                        <div class="table-responsive">
+                          <table class="table table-sm table-hover mb-0">
+                            <thead>
+                              <tr>
+                                <th>ลำดับ</th>
+                                <th>รหัสสินค้า</th>
+                                <th>รายการ</th>
+                                <th>ราคา/หน่วย</th>
+                                <th>เบิกจริง</th>
+                                <th>คืนจริง</th>
+                                <th>ใช้จริง</th>
+                                <th>รวมเงินสุทธิ</th>
+                                <th>หมายเหตุ</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>CT-002</td>
+                                <td>ใบตัดเหล็ก 4 นิ้ว</td>
+                                <td>10.17</td>
+                                <td>3 ใบ</td>
+                                <td>1 ใบ</td>
+                                <td>2 ใบ</td>
+                                <td>20.34</td>
+                                <td>คืนเนื่องจากไม่ได้ใช้</td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>BR-001</td>
+                                <td>แปรงทาสีรองพื้น และสีจริง 2 นิ้ว</td>
+                                <td>18.55</td>
+                                <td>2 อัน</td>
+                                <td>1 อัน</td>
+                                <td>1 อัน</td>
+                                <td>18.55</td>
+                                <td>-</td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>BR-002</td>
+                                <td>แปรงทาสีรองพื้น และสีจริง 2.1/2 นิ้ว</td>
+                                <td>26.08</td>
+                                <td>2 อัน</td>
+                                <td>1 อัน</td>
+                                <td>1 อัน</td>
+                                <td>26.08</td>
+                                <td>-</td>
+                              </tr>
+                              <tr>
+                                <td colspan="7" class="text-end fw-bold">รวมมูลค่าล็อต</td>
+                                <td class="fw-bold">64.97</td>
+                                <td></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- แท็บประวัติการดำเนินการ -->
+              <div class="tab-pane fade p-3" id="history" role="tabpanel" aria-labelledby="history-tab">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th style="width: 180px;">วันที่-เวลา</th>
+                        <th style="width: 200px;">ประเภทรายการ</th>
+                        <th>รายละเอียด</th>
+                        <th style="width: 180px;">ผู้ดำเนินการ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>15/03/2568 09:00</td>
+                        <td>เริ่มโครงการ</td>
+                        <td>สร้างโครงการใหม่และกำหนดขอบเขตงาน</td>
+                        <td>บุญชัย ผู้จัดการ</td>
+                      </tr>
+                      <tr>
+                        <td>20/03/2568 08:30</td>
+                        <td>เบิกวัสดุ</td>
+                        <td>เบิกวัสดุงวดที่ 1 จำนวน 20 รายการ มูลค่า 3,250.40 บาท</td>
+                        <td>สมศักดิ์ ช่างจัดสวน</td>
+                      </tr>
+                      <tr>
+                        <td>28/03/2568 14:15</td>
+                        <td>อัพเดทความคืบหน้า</td>
+                        <td>บันทึกความคืบหน้าโครงการ 45% และคืนวัสดุบางส่วน</td>
+                        <td>สมศักดิ์ ช่างจัดสวน</td>
+                      </tr>
+                      <tr>
+                        <td>28/03/2568 15:30</td>
+                        <td>คืนวัสดุ</td>
+                        <td>คืนวัสดุบางส่วนจากงวดที่ 1 จำนวน 8 รายการ มูลค่า 1,150.80 บาท</td>
+                        <td>สมหญิง พนักงานคลัง</td>
+                      </tr>
+                      <tr>
+                        <td>02/04/2568 09:45</td>
+                        <td>เบิกวัสดุ</td>
+                        <td>เบิกวัสดุงวดที่ 2 จำนวน 15 รายการ มูลค่า 1,152.19 บาท</td>
+                        <td>สมศักดิ์ ช่างจัดสวน</td>
+                      </tr>
+                      <tr>
+                        <td>05/04/2568 10:30</td>
+                        <td>คืนวัสดุ</td>
+                        <td>คืนวัสดุบางส่วนจากงวดที่ 2 จำนวน 6 รายการ มูลค่า 615.47 บาท</td>
+                        <td>สมหญิง พนักงานคลัง</td>
+                      </tr>
+                      <tr>
+                        <td>09/04/2568 13:20</td>
+                        <td>อัพเดทความคืบหน้า</td>
+                        <td>บันทึกความคืบหน้าโครงการ 65% และเริ่มงานตกแต่งและปลูกต้นไม้</td>
+                        <td>สมศักดิ์ ช่างจัดสวน</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ปิด</button>
+          <button type="button" class="btn btn-outline-primary" id="printModalBtn">
+            <i class="bx bx-printer me-1"></i> พิมพ์รายงาน
+          </button>
+          <button type="button" class="btn btn-primary" id="exportModalBtn">
+            <i class="bx bx-export me-1"></i> ส่งออกข้อมูล
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- Page JS -->
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Flatpickr for date inputs
+  flatpickr(".flatpickr-date", {
+    dateFormat: "d/m/Y"
+  });
+  
+  // Initialize Select2 for dropdowns
+  $('.form-select').select2({
+    width: '100%'
+  });
+  
+  // Initialize DataTables with correct configuration
+  $('#projectsTable').DataTable({
+    // Disable DataTables' automatic detection of columns
+    // This prevents the warning when we have complex table structures
+    autoWidth: false,
+    
+    // Properly handle collapsed rows
+    columnDefs: [
+      { orderable: false, targets: -1 } // Disable ordering on the last column (actions)
+    ],
+    
+    // The rest of your configuration
+    dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center mt-3"ip>',
+    language: {
+      search: "ค้นหา:",
+      lengthMenu: "แสดง _MENU_ รายการ",
+      zeroRecords: "ไม่พบข้อมูล",
+      info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+      infoEmpty: "แสดง 0 ถึง 0 จาก 0 รายการ",
+      infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
+      paginate: {
+        first: "หน้าแรก",
+        last: "หน้าสุดท้าย",
+        next: "ถัดไป",
+        previous: "ก่อนหน้า"
+      }
+    },
+    pageLength: 5,
+    lengthMenu: [5, 10, 25, 50, 100],
+    ordering: true,
+    responsive: true,
+    
+    // Crucial fix: Handle collapse rows properly
+    // This prevents DataTables from trying to process hidden/collapsed rows
+    rowGroup: {
+      dataSrc: function(row) {
+        // Skip processing rows with class 'collapse'
+        if ($(row.node()).hasClass('collapse')) {
+          return '';
+        }
+        return '';
+      }
+    },
+    
+    // Initialize the table only when it's ready
+    initComplete: function() {
+      console.log('DataTable initialized successfully');
+    }
+  });
+  
+  // Initialize tooltips
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+  
+  // The rest of your JavaScript remains the same...
+});
+      // แก้ไขการแสดงผลเมนู
+      function initializeMenu() {
+        // ปรับการแสดงผลเมนูย่อยเมื่อคลิกที่เมนูหลัก
+        const menuToggles = document.querySelectorAll('.menu-toggle');
+        menuToggles.forEach(toggle => {
+          toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const menuItem = this.closest('.menu-item');
+            const menuSub = menuItem.querySelector('.menu-sub');
+            
+            // Toggle active และ open classes
+            menuItem.classList.toggle('active');
+            menuItem.classList.toggle('open');
+            
+            // แสดง/ซ่อนเมนูย่อย
+            if (menuSub.style.display === 'block') {
+              menuSub.style.display = 'none';
+            } else {
+              menuSub.style.display = 'block';
+            }
+          });
+        });
+      }
+      
+      // เรียกใช้ฟังก์ชันจัดการเมนู
+      initializeMenu();
+      
+      // ฟังก์ชันสำหรับดูรายละเอียดโครงการ
+      window.viewProjectDetail = function(projectId) {
+        console.log('ดูรายละเอียดโครงการ: ' + projectId);
+        
+        // แสดง Modal รายละเอียดโครงการ
+        $('#projectDetailModal').modal('show');
+        
+        // ในระบบจริงควรโหลดข้อมูลจาก API ตาม projectId ที่ได้รับ
+        // ตัวอย่างนี้แสดงข้อมูลจำลองเท่านั้น
+      };
+      
+      // ฟังก์ชันสำหรับพิมพ์รายงานโครงการ
+      window.printProjectReport = function(projectId) {
+        console.log('พิมพ์รายงานโครงการ: ' + projectId);
+        
+        // ในระบบจริงควรสร้างหน้าสำหรับพิมพ์และเรียกใช้ window.print()
+        alert('กำลังเตรียมพิมพ์รายงานสำหรับโครงการ: ' + projectId);
+      };
+      
+      // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
+      window.exportProjectData = function(projectId) {
+        console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+        
+        // ในระบบจริงควรสร้างไฟล์ส่งออกตามรูปแบบที่ต้องการ (Excel, PDF, CSV)
+        alert('กำลังเตรียมไฟล์ส่งออกสำหรับโครงการ: ' + projectId);
+      };
+      
+      // ปุ่มรีเซ็ตตัวกรอง
+      document.getElementById('resetFilterBtn').addEventListener('click', function() {
+        document.getElementById('projectSearch').value = '';
+        document.getElementById('projectStatus').value = '';
+        document.getElementById('projectStartDate').value = '';
+        document.getElementById('projectEndDate').value = '';
+        
+        // รีเซ็ต Select2
+        $('#projectStatus').val('').trigger('change');
+      });
+      
+      // ปุ่มค้นหา
+      document.getElementById('searchBtn').addEventListener('click', function() {
+        // จำลองการค้นหา
+        alert('กำลังค้นหาโครงการตามเงื่อนไขที่กำหนด');
+      });
+      
+      // ปุ่มพิมพ์รายงาน (จาก Modal)
+      document.getElementById('printModalBtn').addEventListener('click', function() {
+        // จำลองการพิมพ์
+        alert('กำลังเตรียมพิมพ์รายละเอียดโครงการ');
+      });
+      
+      // ปุ่มส่งออกข้อมูล (จาก Modal)
+      document.getElementById('exportModalBtn').addEventListener('click', function() {
+        // จำลองการส่งออก
+        alert('กำลังเตรียมไฟล์ส่งออกรายละเอียดโครงการ');
+      });
+      
+      // ปุ่มอัพเดทการเปรียบเทียบ
+      document.getElementById('updateCompareBtn').addEventListener('click', function() {
+        // จำลองการอัพเดท
+        alert('กำลังอัพเดทข้อมูลการเปรียบเทียบ');
+      });
+      
+      // ปุ่มส่งออกผลการเปรียบเทียบ
+      document.getElementById('exportCompareBtn').addEventListener('click', function() {
+        // จำลองการส่งออก
+        alert('กำลังเตรียมไฟล์ส่งออกผลการเปรียบเทียบ');
+      });
+      
+      // ปุ่มพิมพ์ (จากหน้าหลัก)
+      document.getElementById('printReport').addEventListener('click', function() {
+        // จำลองการพิมพ์
+        alert('กำลังเตรียมพิมพ์รายงานโครงการทั้งหมด');
+      });
+      
+      // ปุ่มส่งออก PDF
+      document.getElementById('exportPDF').addEventListener('click', function() {
+        // จำลองการส่งออกเป็น PDF
+        alert('กำลังส่งออกรายงานในรูปแบบ PDF');
+      });
+      
+      // ปุ่มส่งออก Excel
+      document.getElementById('exportExcel').addEventListener('click', function() {
+        // จำลองการส่งออกเป็น Excel
+        alert('กำลังส่งออกรายงานในรูปแบบ Excel');
+      });
+      
+      // ปุ่มส่งออก CSV
+      document.getElementById('exportCSV').addEventListener('click', function() {
+        // จำลองการส่งออกเป็น CSV
+        alert('กำลังส่งออกรายงานในรูปแบบ CSV');
+      });
+      
+      // ฟังก์ชันสำหรับสร้างกราฟ
+      function initializeCharts() {
+        // ในระบบจริงควรสร้างกราฟด้วย ApexCharts หรือ Chart.js
+        console.log('Initialize charts');
+      }
+      
+      // เรียกใช้ฟังก์ชันสร้างกราฟ
+      setTimeout(initializeCharts, 500);
+    });
+  </script>
+</body>
+</html>
