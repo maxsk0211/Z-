@@ -1156,7 +1156,7 @@
                                     </div>
                                   </div>
                                   <div class="flex-shrink-0 ms-2 d-flex flex-column justify-content-center">
-                                    <button class="btn btn-sm btn-primary return-items mb-2" data-id="TRX-001">
+                                    <button class="btn btn-sm btn-primary mb-2" onclick="handleReturnButtonClick('TRX-001')">
                                       <i class="bx bx-log-in-circle me-1"></i> คืนวัสดุ
                                     </button>
                                     <button class="btn btn-sm btn-outline-primary view-detail" data-id="TRX-001">
@@ -1201,7 +1201,7 @@
                                     </div>
                                   </div>
                                   <div class="flex-shrink-0 ms-2 d-flex flex-column justify-content-center">
-                                    <button class="btn btn-sm btn-primary return-items mb-2" data-id="TRX-002">
+                                    <button class="btn btn-sm btn-primary mb-2" onclick="handleReturnButtonClick('TRX-002')">
                                       <i class="bx bx-log-in-circle me-1"></i> คืนวัสดุ
                                     </button>
                                     <button class="btn btn-sm btn-outline-primary view-detail" data-id="TRX-002">
@@ -1243,7 +1243,7 @@
                                     </div>
                                   </div>
                                   <div class="flex-shrink-0 ms-2 d-flex flex-column justify-content-center">
-                                    <button class="btn btn-sm btn-primary return-items mb-2" data-id="TRX-004">
+                                    <button class="btn btn-sm btn-primary mb-2" onclick="handleReturnButtonClick('TRX-004')">
                                       <i class="bx bx-log-in-circle me-1"></i> คืนวัสดุ
                                     </button>
                                     <button class="btn btn-sm btn-outline-primary view-detail" data-id="TRX-004">
@@ -2325,6 +2325,244 @@
         }, 100);
       });
     });
+  </script>
+  
+  <!-- ประกาศฟังก์ชันในระดับ global เพื่อให้สามารถเรียกใช้จาก onclick ได้ -->
+  <script>
+    // ประกาศฟังก์ชันในระดับ global
+    function handleReturnButtonClick(transactionId) {
+      console.log(`กำลังดำเนินการคืนวัสดุรายการ ${transactionId} (Global function)`);
+      
+      // แสดงฟอร์มการคืนวัสดุ
+      document.getElementById('returnFormEmpty').style.display = 'none';
+      document.getElementById('returnFormContent').style.display = 'block';
+      
+      // อัพเดทข้อมูลในฟอร์มการคืน
+      document.getElementById('returnOrderId').textContent = transactionId;
+      
+      // ในกรณีจริงต้องดึงข้อมูลมาจาก API แต่ในตัวอย่างนี้ใช้ข้อมูลตายตัว
+      let projectName, borrowerName;
+      
+      if (transactionId === 'TRX-001') {
+        projectName = 'สวนบ้านคุณสมชาย (P001)';
+        borrowerName = 'สมศักดิ์ ช่างจัดสวน';
+        
+        // สร้างและแสดงรายการวัสดุที่จะคืน
+        let returnItemsHtml = `
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">ดินปลูกต้นไม้</span>
+                <small class="text-muted">เบิก: 5 ถุง</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="5" value="5">
+                    <span class="input-group-text">ถุง</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good">สภาพดี</option>
+                    <option value="damaged">ชำรุดเล็กน้อย</option>
+                    <option value="broken">เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">หินแกรนิตเล็ก</span>
+                <small class="text-muted">เบิก: 10 ถุง</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="10" value="8">
+                    <span class="input-group-text">ถุง</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good">สภาพดี</option>
+                    <option value="damaged">ชำรุดเล็กน้อย</option>
+                    <option value="broken" selected>เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">สว่านไฟฟ้า</span>
+                <small class="text-muted">เบิก: 1 เครื่อง</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="1" value="1">
+                    <span class="input-group-text">เครื่อง</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good">สภาพดี</option>
+                    <option value="damaged" selected>ชำรุดเล็กน้อย</option>
+                    <option value="broken">เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+              <small class="text-danger">* เครื่องมือมีรอยบิ่นที่ด้ามจับ</small>
+            </div>
+          </div>
+        `;
+        document.getElementById('returnItems').innerHTML = returnItemsHtml;
+        
+      } else if (transactionId === 'TRX-002') {
+        projectName = 'สวนหมู่บ้านวิลล่า (P002)';
+        borrowerName = 'วิชัย ช่างประปา';
+        
+        // สร้างและแสดงรายการวัสดุที่จะคืน
+        let returnItemsHtml = `
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">ท่อ PVC 1 นิ้ว</span>
+                <small class="text-muted">เบิก: 20 เส้น</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="20" value="15">
+                    <span class="input-group-text">เส้น</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good" selected>สภาพดี</option>
+                    <option value="damaged">ชำรุดเล็กน้อย</option>
+                    <option value="broken">เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">ปูนซีเมนต์ถุงเล็ก</span>
+                <small class="text-muted">เบิก: 5 ถุง</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="5" value="2">
+                    <span class="input-group-text">ถุง</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good">สภาพดี</option>
+                    <option value="damaged">ชำรุดเล็กน้อย</option>
+                    <option value="broken" selected>เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('returnItems').innerHTML = returnItemsHtml;
+        
+      } else if (transactionId === 'TRX-004') {
+        projectName = 'งานซ่อมบำรุง';
+        borrowerName = 'มานะ พนักงานขับรถ';
+        
+        // สร้างและแสดงรายการวัสดุที่จะคืน
+        let returnItemsHtml = `
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">ปูนซีเมนต์ถุงเล็ก</span>
+                <small class="text-muted">เบิก: 2 ถุง</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="2" value="0">
+                    <span class="input-group-text">ถุง</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good">สภาพดี</option>
+                    <option value="damaged">ชำรุดเล็กน้อย</option>
+                    <option value="broken" selected>เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="return-item card mb-2 border">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold">ท่อ PVC 1 นิ้ว</span>
+                <small class="text-muted">เบิก: 5 เส้น</small>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">คืน</span>
+                    <input type="number" class="form-control return-qty" min="0" max="5" value="3">
+                    <span class="input-group-text">เส้น</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <select class="form-select form-select-sm return-condition">
+                    <option value="good" selected>สภาพดี</option>
+                    <option value="damaged">ชำรุดเล็กน้อย</option>
+                    <option value="broken">เสียหาย/ใช้หมด</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('returnItems').innerHTML = returnItemsHtml;
+      }
+      
+      document.getElementById('returnProject').textContent = projectName;
+      document.getElementById('returnBorrower').textContent = borrowerName;
+      
+      // เตรียมข้อมูลวันที่
+      const todayDate = new Date();
+      if (window.flatpickr && document.getElementById('returnDate')) {
+        const returnDatePicker = flatpickr("#returnDate", {
+          dateFormat: "d/m/Y",
+          defaultDate: todayDate
+        });
+      }
+      
+      // เปิดเครื่อง select2 ในกรณีที่มีการใช้
+      if (window.jQuery && jQuery.fn.select2) {
+        jQuery('#returnReceiverSelect').select2({
+          width: '100%'
+        });
+      }
+    }
   </script>
 </body>
 </html>
