@@ -2838,56 +2838,65 @@ window.viewProjectDetail = function(projectId) {
             
 // ฟังก์ชันสำหรับพิมพ์รายงานโครงการ
 window.printProjectReport = function(projectId) {
-    console.log('พิมพ์รายงานโครงการ: ' + projectId);
-    
-    // แสดง Loading Modal
-    const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
-    loadingModal.show();
-    
-    // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
-    setTimeout(function() {
-        try {
-            // สร้าง PDF
-            const doc = generateProjectPDF(projectId);
-            
-            // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
-            const pdfDataUri = doc.output('datauristring');
-            const printWindow = window.open(pdfDataUri);
-            
-            // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
-            printWindow.addEventListener('load', function() {
-                setTimeout(function() {
-                    printWindow.print();
-                    loadingModal.hide();
-                }, 500);
-            });
-        } catch (error) {
-            console.error('เกิดข้อผิดพลาดในการพิมพ์ PDF:', error);
-            alert('เกิดข้อผิดพลาดในการพิมพ์ PDF โปรดลองอีกครั้ง');
-            loadingModal.hide();
-        }
-    }, 100);
-};;
+  console.log('พิมพ์รายงานโครงการ: ' + projectId);
+  
+  // แสดง Loading Modal
+  const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
+  loadingModal.show();
+  
+  // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
+  setTimeout(function() {
+    try {
+      // สร้าง PDF
+      const doc = generateProjectPDF(projectId);
+      
+      // ซ่อน Loading Modal
+      loadingModal.hide();
+      
+      // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+      const pdfDataUri = doc.output('datauristring');
+      const printWindow = window.open(pdfDataUri);
+      
+      // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+      printWindow.addEventListener('load', function() {
+        setTimeout(function() {
+          printWindow.print();
+        }, 500);
+      });
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการพิมพ์ PDF:', error);
+      alert('เกิดข้อผิดพลาดในการพิมพ์ PDF โปรดลองอีกครั้ง');
+      loadingModal.hide();
+    }
+  }, 100);
+};
 
 // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
 window.exportProjectData = function(projectId) {
-    console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
-    
-    // แสดง Loading Modal
-    const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
-    loadingModal.show();
-    
-    // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
-    setTimeout(function() {
-        try {
-            // สร้าง PDF
-            generateProjectPDF(projectId);
-        } catch (error) {
-            console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
-            alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
-            loadingModal.hide();
-        }
-    }, 100);
+  console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+  
+  // แสดง Loading Modal
+  const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
+  loadingModal.show();
+  
+  // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
+  setTimeout(function() {
+    try {
+      // สร้าง PDF
+      const doc = generateProjectPDF(projectId);
+      
+      // ซ่อน Loading Modal
+      loadingModal.hide();
+      
+      // แสดงตัวอย่าง PDF
+      const projectName = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(2)`).textContent.trim();
+      showPDFPreview(doc, projectName);
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
+      alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
+      loadingModal.hide();
+    }
+  }, 100);
 };
 
 // ปุ่มรีเซ็ตตัวกรอง
@@ -2976,13 +2985,6 @@ setTimeout(initializeCharts, 500);
 
 // ฟังก์ชันสำหรับสร้าง PDF ของโครงการ
 function generateProjectPDF(projectId) {
-  // ตรวจสอบว่ามีการโหลด jsPDF แล้วหรือไม่
-  if (typeof jspdf === 'undefined') {
-    console.error('jsPDF library is not loaded');
-    alert('ไม่สามารถสร้าง PDF ได้ กรุณาโหลดหน้านี้ใหม่');
-    return;
-  }
-  
   // สร้างเอกสาร PDF
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({
@@ -2991,39 +2993,74 @@ function generateProjectPDF(projectId) {
     format: 'a4'
   });
 
-  // ค้นหาข้อมูลโครงการจาก projectId
-  // ในตัวอย่างนี้เราจะใช้ข้อมูลจำลอง
-  const projectData = getProjectData(projectId);
-  
-  if (!projectData) {
-    alert('ไม่พบข้อมูลโครงการ');
-    return;
-  }
+  // ค้นหาข้อมูลโครงการจาก DOM
+  const projectName = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(2)`).textContent.trim();
+  const projectCustomer = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(3)`).textContent.trim();
+  const projectStartDate = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(4)`).textContent.trim();
+  const projectEndDate = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(5)`).textContent.trim();
+  const projectMaterialCost = document.querySelector(`tr:has(td:contains('${projectId}')) td:nth-child(7)`).textContent.trim();
   
   // ====== สร้างเอกสาร PDF ======
   
   // 1. หัวเอกสาร
-  addPDFHeader(doc, projectData);
+  // เพิ่มโลโก้แบบง่าย
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.rect(15, 15, 10, 10, 'F');
+  
+  // เพิ่มชื่อบริษัท
+  doc.setFontSize(18);
+  doc.text('Green Gardens Co., Ltd.', 105, 20, { align: 'center' });
+  
+  // เพิ่มวันที่พิมพ์รายงาน
+  const today = new Date();
+  const dateStr = today.toLocaleDateString();
+  doc.setFontSize(10);
+  doc.text(`Print date: ${dateStr}`, 195, 20, { align: 'right' });
+  
+  // เพิ่มชื่อรายงาน
+  doc.setFontSize(16);
+  doc.text('Project Report', 105, 30, { align: 'center' });
+  
+  // เส้นคั่น
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
+  doc.line(15, 35, 195, 35);
   
   // 2. ข้อมูลโครงการ
-  addProjectInfo(doc, projectData);
+  doc.setFontSize(14);
+  doc.text('Project Information', 15, 45);
   
-  // 3. สรุปการเงิน
-  addFinancialSummary(doc, projectData);
+  // ข้อมูลพื้นฐานโครงการ
+  const startY = 55;
+  const lineHeight = 8;
   
-  // 4. รายการวัสดุที่ใช้
-  addMaterialList(doc, projectData);
+  doc.setFontSize(11);
+  doc.text(`Project ID: ${projectId}`, 15, startY);
+  doc.text(`Project Name: ${projectName}`, 15, startY + lineHeight);
+  doc.text(`Customer: ${projectCustomer}`, 15, startY + lineHeight * 2);
+  doc.text(`Start Date: ${projectStartDate}`, 15, startY + lineHeight * 3);
+  doc.text(`End Date: ${projectEndDate}`, 15, startY + lineHeight * 4);
+  doc.text(`Material Cost: ${projectMaterialCost}`, 15, startY + lineHeight * 5);
+
+  // เส้นคั่น
+  doc.line(15, startY + lineHeight * 6, 195, startY + lineHeight * 6);
   
-  // 5. ความคืบหน้าโครงการ
-  addProjectProgress(doc, projectData);
+  // 3. แสดงรูปภาพตัวอย่าง (สร้างลายน้ำมุมโครงการ)
+  doc.setFontSize(72);
+  doc.setTextColor(230, 230, 230);
+  doc.text('DEMO', 105, 160, { align: 'center' });
   
-  // 6. เพิ่มหมายเลขหน้า
-  addPageNumbers(doc);
+  // 4. เพิ่มหมายเลขหน้า
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`Page 1 of 1`, 105, 290, { align: 'center' });
   
-  // แสดงตัวอย่าง PDF ใน Modal
-  showPDFPreview(doc, projectData.name);
+  // 5. เพิ่มข้อความแนะนำที่ด้านล่าง
+  doc.setFontSize(10);
+  doc.text('This is a demonstration report. For a complete report with Thai language support,', 105, 280, { align: 'center' });
+  doc.text('please implement a Thai font in the PDF generation system.', 105, 285, { align: 'center' });
   
-  return doc; // ส่งคืนอ็อบเจ็กต์ PDF เพื่อใช้งานต่อ
+  return doc;
 }
 
 // เพิ่มส่วนหัวเอกสาร
@@ -3501,66 +3538,35 @@ function showPDFPreview(doc, projectName) {
   // สร้าง data URL ของ PDF
   const pdfDataUri = doc.output('datauristring');
   
-  // สร้างหรือปรับปรุง Modal
-  let previewModal = document.getElementById('pdfPreviewModal');
-  
-  if (!previewModal) {
-    // สร้าง Modal ใหม่
-    const modalHtml = `
-      <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-          <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title">ตัวอย่างรายงาน: ${projectName}</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-0 d-flex justify-content-center">
-              <iframe id="pdfPreviewFrame" src="" style="width:100%; height:calc(100vh - 200px);" frameborder="0"></iframe>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="includeDetailedMaterials" checked>
-                <label class="form-check-label" for="includeDetailedMaterials">
-                  รวมรายละเอียดวัสดุทั้งหมด
-                </label>
-              </div>
-              <div>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ปิด</button>
-                <button type="button" class="btn btn-primary" id="downloadPdfBtn">
-                  <i class="bx bx-download me-1"></i> ดาวน์โหลด PDF
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    previewModal = document.getElementById('pdfPreviewModal');
-    
-    // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
-    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
-      const includeDetails = document.getElementById('includeDetailedMaterials').checked;
-      
-      // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
-      const downloadDoc = regeneratePDF(projectName, includeDetails);
-      
-      // ดาวน์โหลด PDF
-      downloadDoc.save(`รายงานโครงการ_${projectName}.pdf`);
-    });
-  } else {
-    // อัพเดทชื่อโครงการในหัวข้อ Modal
-    previewModal.querySelector('.modal-title').textContent = `ตัวอย่างรายงาน: ${projectName}`;
-  }
-  
   // อัพเดท src ของ iframe
   const previewFrame = document.getElementById('pdfPreviewFrame');
   previewFrame.src = pdfDataUri;
   
+  // อัพเดทชื่อโครงการในหัวข้อ Modal
+  document.querySelector('#pdfPreviewModal .modal-title').textContent = `Preview Report: ${projectName}`;
+  
   // แสดง Modal
-  const bsModal = new bootstrap.Modal(previewModal);
+  const bsModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
   bsModal.show();
+  
+  // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
+  document.getElementById('downloadPdfBtn').onclick = function() {
+    // ดาวน์โหลด PDF
+    doc.save(`Project_Report_${projectName.replace(/\s+/g, '_')}.pdf`);
+  };
+  
+  // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
+  document.getElementById('printPdfBtn').onclick = function() {
+    // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+    const printWindow = window.open(pdfDataUri);
+    
+    // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+    printWindow.addEventListener('load', function() {
+      setTimeout(function() {
+        printWindow.print();
+      }, 500);
+    });
+  };
 }
 
 // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
