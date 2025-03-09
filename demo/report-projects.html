@@ -4809,12 +4809,12 @@ function showPDFPreview(doc, projectName) {
 }
 
 function createLogo(doc) {
-  doc.setFillColor(40, 167, 69); // สีเขียว
-  doc.rect(15, 15, 10, 10, 'F');
-  doc.setFillColor(40, 167, 69, 0.7); // สีเขียวเจือจาง
-  doc.setDrawColor(40, 167, 69);
-  doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
-}
+   doc.setFillColor(40, 167, 69); // สีเขียว
+   doc.rect(15, 15, 10, 10, 'F');
+   doc.setFillColor(40, 167, 69, 0.7); // สีเขียวเจือจาง
+   doc.setDrawColor(40, 167, 69);
+   doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
+ }
 
 function drawThaiText(doc, text, x, y, fontSize, fontWeight = 'normal', align = 'left', color = '#000000') {
    // ในการใช้งานจริง คุณควรโหลดฟอนต์ไทยเข้าใน jsPDF
