@@ -2832,7 +2832,7 @@ window.printProjectReport = function(projectId) {
   setTimeout(function() {
     try {
       // สร้าง PDF
-      const doc = createSimpleDemoPDF(projectId);
+      const doc = createCompleteDemoPDF(projectId);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
@@ -2854,6 +2854,489 @@ window.printProjectReport = function(projectId) {
     }
   }, 500);
 };
+
+function createCompleteDemoPDF(projectId) {
+  // สร้างเอกสาร PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // ข้อมูลจำลองครบถ้วน
+  const projectData = {
+    id: projectId,
+    name: projectId === "P-2568-001" ? "Garden Renovation for Mr. Beer" : 
+          projectId === "P-2568-002" ? "ABC Company Landscape Improvement" : 
+          projectId === "P-2568-003" ? "Garden Behind Ms. Somying's House" : 
+          "Sample Project",
+          
+    customer: projectId === "P-2568-001" ? "Mr. Ariyakhun (Beer)" : 
+              projectId === "P-2568-002" ? "ABC Company Ltd." : 
+              projectId === "P-2568-003" ? "Ms. Somying Raksuan" : 
+              "Sample Customer",
+              
+    startDate: projectId === "P-2568-001" ? "15/03/2025" : 
+               projectId === "P-2568-002" ? "10/02/2025" : 
+               projectId === "P-2568-003" ? "15/01/2025" : 
+               "01/01/2025",
+               
+    endDate: projectId === "P-2568-001" ? "15/04/2025" : 
+             projectId === "P-2568-002" ? "20/03/2025" : 
+             projectId === "P-2568-003" ? "15/02/2025" : 
+             "31/01/2025",
+             
+    status: projectId === "P-2568-001" ? "In Progress" : 
+            projectId === "P-2568-002" ? "In Progress" : 
+            projectId === "P-2568-003" ? "Pending Acceptance" : 
+            "In Progress",
+            
+    progress: projectId === "P-2568-001" ? 60 : 
+              projectId === "P-2568-002" ? 75 : 
+              projectId === "P-2568-003" ? 90 : 
+              50,
+              
+    budget: projectId === "P-2568-001" ? 80000 : 
+            projectId === "P-2568-002" ? 120000 : 
+            projectId === "P-2568-003" ? 35000 : 
+            50000,
+            
+    materialCost: projectId === "P-2568-001" ? 4402.59 : 
+                  projectId === "P-2568-002" ? 15230.40 : 
+                  projectId === "P-2568-003" ? 8246.75 : 
+                  2500,
+                  
+    materialReturnCost: projectId === "P-2568-001" ? 1766.27 : 
+                        projectId === "P-2568-002" ? 5650.20 : 
+                        projectId === "P-2568-003" ? 2125.50 : 
+                        500,
+                        
+    materialNetCost: projectId === "P-2568-001" ? 2636.32 : 
+                     projectId === "P-2568-002" ? 9580.20 : 
+                     projectId === "P-2568-003" ? 6121.25 : 
+                     2000,
+                     
+    materialCostRatio: projectId === "P-2568-001" ? 3.29 : 
+                        projectId === "P-2568-002" ? 7.98 : 
+                        projectId === "P-2568-003" ? 17.49 : 
+                        4.00,
+                        
+    costPerArea: projectId === "P-2568-001" ? 263.63 : 
+                 projectId === "P-2568-002" ? 239.51 : 
+                 projectId === "P-2568-003" ? 306.06 : 
+                 200,
+                 
+    area: projectId === "P-2568-001" ? 10 : 
+          projectId === "P-2568-002" ? 40 : 
+          projectId === "P-2568-003" ? 20 : 
+          10,
+          
+    owner: projectId === "P-2568-001" ? "Chainnarong Suansuay" : 
+           projectId === "P-2568-002" ? "Chainnarong Suansuay" : 
+           projectId === "P-2568-003" ? "Somying Raksuan" : 
+           "Project Manager",
+           
+    address: projectId === "P-2568-001" ? "123/45 Perfect Place Village, Ramkhamhaeng Rd., Bangkok 10240" : 
+             projectId === "P-2568-002" ? "99 Sukhumvit Rd., Klongtoey, Bangkok" : 
+             projectId === "P-2568-003" ? "56/7 Suansuay Village, Soi Ladprao 101, Bangkok" : 
+             "Sample Address",
+    
+    materials: [
+      { name: "Small Decorative Plants", quantityWithdrawn: 30, unit: "pcs", quantityReturned: 9, quantityUsed: 21, unitPrice: 150, totalCost: 3150 },
+      { name: "Small Granite Stones", quantityWithdrawn: 75, unit: "kg", quantityReturned: 41.25, quantityUsed: 33.75, unitPrice: 45, totalCost: 1518.75 },
+      { name: "Artificial Grass", quantityWithdrawn: 12, unit: "sq.m.", quantityReturned: 2, quantityUsed: 10, unitPrice: 320, totalCost: 3200 },
+      { name: "Portland Cement", quantityWithdrawn: 25, unit: "bags", quantityReturned: 5, quantityUsed: 20, unitPrice: 150, totalCost: 3000 },
+      { name: "Sand Adhesive", quantityWithdrawn: 1, unit: "gallon", quantityReturned: 0.5, quantityUsed: 0.5, unitPrice: 1150, totalCost: 575 }
+    ],
+    
+    timeline: [
+      { date: "15/03/2025", title: "Project Start", description: "Meeting with client and site preparation" },
+      { date: "20/03/2025", title: "Excavation Work", description: "Withdrew first batch of 20 items" },
+      { date: "28/03/2025", title: "Progress Check", description: "45% progress and returned some materials" },
+      { date: "02/04/2025", title: "Second Material Withdrawal", description: "Withdrew additional 15 items" }
+    ],
+    
+    categories: [
+      { name: "General Materials", value: 52.0, color: [40, 167, 69] },
+      { name: "Construction Materials", value: 39.7, color: [66, 165, 245] },
+      { name: "Tools", value: 8.3, color: [255, 167, 38] }
+    ]
+  };
+  
+  //=====================
+  // 1. CREATE PDF HEADER
+  //=====================
+  
+  // Green Gardens Logo
+  doc.setFillColor(40, 167, 69); // Green color
+  doc.rect(15, 15, 10, 10, 'F');
+  doc.setFillColor(40, 167, 69, 0.7); // Lighter green
+  doc.setDrawColor(40, 167, 69);
+  doc.triangle(17.5, 17.5, 15, 20, 20, 20, 'FD');
+  
+  // Company name
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text("GREEN GARDENS", 30, 22);
+  
+  // Report title
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'normal');
+  doc.text("PROJECT REPORT", 195, 22, { align: "right" });
+  
+  // Print date
+  const today = new Date();
+  const dateStr = today.toLocaleDateString();
+  doc.setFontSize(10);
+  doc.text(`Print date: ${dateStr}`, 195, 30, { align: "right" });
+  
+  // Divider line
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(15, 35, 195, 35);
+  
+  //=======================
+  // 2. PROJECT INFORMATION
+  //=======================
+  
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Project Information", 15, 45);
+  
+  // Left column
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Project ID:", 15, 55);
+  doc.text("Project Name:", 15, 62);
+  doc.text("Customer:", 15, 69);
+  doc.text("Address:", 15, 76);
+  doc.text("Project Manager:", 15, 83);
+  
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.id, 50, 55);
+  doc.text(projectData.name, 50, 62);
+  doc.text(projectData.customer, 50, 69);
+  doc.text(projectData.address, 50, 76);
+  doc.text(projectData.owner, 50, 83);
+  
+  // Right column
+  doc.setFont('helvetica', 'bold');
+  doc.text("Start Date:", 120, 55);
+  doc.text("End Date:", 120, 62);
+  doc.text("Status:", 120, 69);
+  doc.text("Progress:", 120, 76);
+  doc.text("Total Area:", 120, 83);
+  
+  doc.setFont('helvetica', 'normal');
+  doc.text(projectData.startDate, 160, 55);
+  doc.text(projectData.endDate, 160, 62);
+  doc.text(projectData.status, 160, 69);
+  
+  // Progress bar
+  doc.text(`${projectData.progress}%`, 160, 76);
+  doc.setFillColor(230, 230, 230);
+  doc.roundedRect(170, 73, 20, 4, 1, 1, 'F');
+  doc.setFillColor(40, 167, 69);
+  doc.roundedRect(170, 73, 20 * (projectData.progress/100), 4, 1, 1, 'F');
+  
+  doc.text(`${projectData.area} sq.m.`, 160, 83);
+  
+  // Divider line
+  doc.line(15, 90, 195, 90);
+  
+  //=====================
+  // 3. FINANCIAL SUMMARY
+  //=====================
+  
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Financial Summary", 15, 100);
+  
+  // Draw financial table
+  const financialTableY = 110;
+  
+  // Table header
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, financialTableY, 180, 8, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  doc.text("Item", 18, financialTableY + 5.5);
+  doc.text("Amount (THB)", 170, financialTableY + 5.5, { align: "right" });
+  
+  // Table rows
+  doc.setTextColor(0, 0, 0);
+  let currentY = financialTableY + 8;
+  
+  const financialRows = [
+    ["Total Project Budget", projectData.budget.toLocaleString()],
+    ["Material Withdrawal Cost", projectData.materialCost.toLocaleString()],
+    ["Material Return Value", projectData.materialReturnCost.toLocaleString()],
+    ["Net Material Cost", projectData.materialNetCost.toLocaleString()],
+    ["Material Cost Ratio", projectData.materialCostRatio.toFixed(2) + "%"],
+    ["Cost per Area", projectData.costPerArea.toFixed(2) + " THB/sq.m."]
+  ];
+  
+  let alternateRow = false;
+  for (const row of financialRows) {
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.text(row[0], 18, currentY + 5.5);
+    doc.text(row[1], 170, currentY + 5.5, { align: "right" });
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  // Make the last row bold (Total)
+  doc.setFont('helvetica', 'bold');
+  doc.text("Net Material Cost", 18, currentY - 10.5);
+  doc.text(projectData.materialNetCost.toLocaleString(), 170, currentY - 10.5, { align: "right" });
+  
+  //=================
+  // 4. MATERIAL LIST
+  //=================
+  
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Material List", 15, currentY + 10);
+  
+  // Draw materials table
+  const materialTableY = currentY + 20;
+  
+  // Table header
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, materialTableY, 180, 8, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(9);
+  
+  const materialCols = [
+    { text: "No.", x: 18, width: 10 },
+    { text: "Material", x: 28, width: 60 },
+    { text: "Withdrawn", x: 88, width: 25, align: "center" },
+    { text: "Returned", x: 113, width: 25, align: "center" },
+    { text: "Used", x: 138, width: 25, align: "center" },
+    { text: "Unit Price", x: 163, width: 25, align: "center" },
+    { text: "Total", x: 188, width: 25, align: "right" }
+  ];
+  
+  for (const col of materialCols) {
+    if (col.align === "center") {
+      doc.text(col.text, col.x + col.width/2, materialTableY + 5.5, { align: "center" });
+    } else if (col.align === "right") {
+      doc.text(col.text, col.x, materialTableY + 5.5, { align: "right" });
+    } else {
+      doc.text(col.text, col.x, materialTableY + 5.5);
+    }
+  }
+  
+  // Table rows
+  doc.setTextColor(0, 0, 0);
+  currentY = materialTableY + 8;
+  
+  alternateRow = false;
+  for (let i = 0; i < projectData.materials.length; i++) {
+    const material = projectData.materials[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // Draw vertical dividers
+    let xPos = 15;
+    for (const col of materialCols) {
+      xPos += col.width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // Add data
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    
+    doc.text((i + 1).toString(), materialCols[0].x, currentY + 5.5);
+    doc.text(material.name, materialCols[1].x, currentY + 5.5);
+    doc.text(`${material.quantityWithdrawn} ${material.unit}`, materialCols[2].x + materialCols[2].width/2, currentY + 5.5, { align: "center" });
+    doc.text(material.quantityReturned ? `${material.quantityReturned} ${material.unit}` : "-", materialCols[3].x + materialCols[3].width/2, currentY + 5.5, { align: "center" });
+    doc.text(`${material.quantityUsed} ${material.unit}`, materialCols[4].x + materialCols[4].width/2, currentY + 5.5, { align: "center" });
+    doc.text(material.unitPrice.toLocaleString(), materialCols[5].x + materialCols[5].width/2, currentY + 5.5, { align: "center" });
+    doc.text(material.totalCost.toLocaleString(), materialCols[6].x, currentY + 5.5, { align: "right" });
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  // Total row
+  doc.setFillColor(220, 220, 220);
+  doc.rect(15, currentY, 180, 8, 'F');
+  doc.rect(15, currentY, 180, 8);
+  
+  // Draw vertical divider before total column
+  doc.line(163, currentY, 163, currentY + 8);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text("Total", 160, currentY + 5.5, { align: "right" });
+  doc.text(projectData.materialNetCost.toLocaleString(), 188, currentY + 5.5, { align: "right" });
+  
+  //===================
+  // 5. PROJECT TIMELINE
+  //===================
+  
+  // Check if we need a new page
+  if (currentY > 230) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 20;
+  }
+  
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Project Timeline", 15, currentY);
+  
+  currentY += 10;
+  
+  // Draw timeline table
+  const timelineTableY = currentY;
+  
+  // Table header
+  doc.setFillColor(40, 167, 69);
+  doc.rect(15, timelineTableY, 180, 8, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  
+  const timelineCols = [
+    { text: "Date", x: 18, width: 30 },
+    { text: "Activity", x: 48, width: 40 },
+    { text: "Description", x: 88, width: 107 }
+  ];
+  
+  for (const col of timelineCols) {
+    doc.text(col.text, col.x, timelineTableY + 5.5);
+  }
+  
+  // Table rows
+  doc.setTextColor(0, 0, 0);
+  currentY = timelineTableY + 8;
+  
+  alternateRow = false;
+  for (let i = 0; i < projectData.timeline.length; i++) {
+    const timeline = projectData.timeline[i];
+    
+    if (alternateRow) {
+      doc.setFillColor(240, 240, 240);
+      doc.rect(15, currentY, 180, 8, 'F');
+    }
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(15, currentY, 180, 8);
+    
+    // Draw vertical dividers
+    let xPos = 15;
+    for (let j = 0; j < timelineCols.length - 1; j++) {
+      xPos += timelineCols[j].width;
+      doc.line(xPos, currentY, xPos, currentY + 8);
+    }
+    
+    // Add data
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    
+    doc.text(timeline.date, timelineCols[0].x, currentY + 5.5);
+    doc.text(timeline.title, timelineCols[1].x, currentY + 5.5);
+    doc.text(timeline.description, timelineCols[2].x, currentY + 5.5);
+    
+    currentY += 8;
+    alternateRow = !alternateRow;
+  }
+  
+  //================
+  // 6. MATERIAL CHART
+  //================
+  
+  // Check if we need a new page
+  if (currentY > 230) {
+    doc.addPage();
+    currentY = 20;
+  } else {
+    currentY += 20;
+  }
+  
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Material Categories", 15, currentY);
+  
+  currentY += 15;
+  
+  // Draw simple pie chart
+  const centerX = 60;
+  const centerY = currentY + 30;
+  const radius = 30;
+  
+  // Draw pie segments
+  let startAngle = 0;
+  for (const category of projectData.categories) {
+    const angle = (category.value / 100) * Math.PI * 2;
+    const endAngle = startAngle + angle;
+    
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    
+    // Convert from polar to cartesian coordinates
+    const startX = centerX + Math.cos(startAngle) * radius;
+    const startY = centerY + Math.sin(startAngle) * radius;
+    const endX = centerX + Math.cos(endAngle) * radius;
+    const endY = centerY + Math.sin(endAngle) * radius;
+    
+    // Draw pie segment
+    const path = `M ${centerX} ${centerY} L ${startX} ${startY} A ${radius} ${radius} 0 ${angle > Math.PI ? 1 : 0} 1 ${endX} ${endY} Z`;
+    doc.path(path).fill();
+    
+    startAngle = endAngle;
+  }
+  
+  // Draw legend
+  let legendY = currentY + 10;
+  for (const category of projectData.categories) {
+    doc.setFillColor(category.color[0], category.color[1], category.color[2]);
+    doc.rect(110, legendY, 10, 10, 'F');
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`${category.name}: ${category.value}%`, 125, legendY + 7);
+    
+    legendY += 15;
+  }
+  
+  //================
+  // 7. FOOTER
+  //================
+  
+  // Set page numbering
+  const totalPages = doc.internal.getNumberOfPages();
+  
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    
+    // Footer divider
+    doc.setDrawColor(200, 200, 200);
+    doc.line(15, 275, 195, 275);
+    
+    // Footer content
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text("Green Gardens Co., Ltd. - Project Report", 15, 282);
+    doc.text(`${projectData.id} - ${projectData.name}`, 105, 282, { align: "center" });
+    doc.text(`Page ${i} of ${totalPages}`, 195, 282, { align: "right" });
+  }
+  
+  return doc;
+}
 
 // สร้าง PDF แบบง่ายที่สุดสำหรับ Demo
 function createSimpleDemoPDF(projectId) {
@@ -2931,8 +3414,8 @@ window.exportProjectData = function(projectId) {
   // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
   setTimeout(function() {
     try {
-      // สร้าง PDF แบบง่ายที่สุด
-      const doc = createSimpleDemoPDF(projectId);
+      // สร้าง PDF แบบข้อมูลครบถ้วน
+      const doc = createCompleteDemoPDF(projectId);
       
       // ซ่อน Loading Modal
       loadingModal.hide();
@@ -3622,7 +4105,7 @@ function showPDFPreview(doc, projectName) {
   previewFrame.src = pdfDataUri;
   
   // อัพเดทชื่อโครงการในหัวข้อ Modal
-  document.querySelector('#pdfPreviewModal .modal-title').textContent = `Preview Report: ${projectName}`;
+  document.querySelector('#pdfPreviewModal .modal-title').textContent = `PDF Report Preview: ${projectName}`;
   
   // แสดง Modal
   const bsModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
@@ -3631,7 +4114,7 @@ function showPDFPreview(doc, projectName) {
   // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
   document.getElementById('downloadPdfBtn').onclick = function() {
     // ดาวน์โหลด PDF
-    doc.save(`Report_${projectName.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`Project_Report_${projectName.replace(/\s+/g, '_')}.pdf`);
   };
   
   // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
