@@ -1532,9 +1532,6 @@
           </div>
         </div>
         <div class="modal-footer">
-          <a href="tools-list.html" class="btn btn-outline-secondary">ไปยังรายการเครื่องมือ</a>
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">ปิด</button>
-        </div>
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
           <button type="button" class="btn btn-primary" id="confirmSelectToolBtn">เลือกเครื่องมือ</button>
         </div>
@@ -1649,3 +1646,284 @@
           <p class="fw-bold">เลขที่รายการ: M-00123</p>
         </div>
         <div class="modal-footer">
+          <a href="tools-list.html" class="btn btn-outline-secondary">ไปยังรายการเครื่องมือ</a>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">ปิด</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reschedule Maintenance Modal -->
+  <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">เลื่อนกำหนดการบำรุงรักษา</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="rescheduleDate" class="form-label">วันที่บำรุงรักษาใหม่</label>
+            <input type="text" class="form-control flatpickr-date" id="rescheduleDate" placeholder="DD/MM/YYYY" required>
+          </div>
+          <div class="mb-3">
+            <label for="rescheduleReason" class="form-label">เหตุผลในการเลื่อน</label>
+            <textarea class="form-control" id="rescheduleReason" rows="3" placeholder="ระบุเหตุผลในการเลื่อนการบำรุงรักษา"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" id="confirmRescheduleBtn">บันทึก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+
+  <!-- Vendors JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
+
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Flatpickr for date inputs
+      flatpickr(".flatpickr-date", {
+        dateFormat: "d/m/Y",
+        locale: {
+          firstDayOfWeek: 1
+        }
+      });
+      
+      // Initialize Select2 for dropdowns
+      $('.form-select').select2({
+        width: '100%'
+      });
+      
+      // Initialize Dropzone for maintenance images
+      const maintenanceImageDropzone = new Dropzone("#maintenanceImageDropzone", {
+        url: "/api/upload-maintenance-image", // API URL สำหรับการอัปโหลดรูปภาพ
+        maxFiles: 5,
+        maxFilesize: 5, // 5MB
+        acceptedFiles: "image/*",
+        addRemoveLinks: true,
+        autoProcessQueue: false,
+        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ",
+        dictRemoveFile: "ลบไฟล์"
+      });
+
+      // Initialize Tooltips
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+
+      // Search Tool Form
+      document.getElementById('searchToolToMaintainBtn').addEventListener('click', function() {
+        // Simulating search success
+        document.getElementById('selectedToolInfo').style.display = 'block';
+        document.getElementById('maintenanceFormFields').style.display = 'block';
+        this.style.display = 'none';
+        document.getElementById('saveMaintanceBtn').style.display = 'block';
+      });
+
+      // Select Tool Modal Confirm Button
+      document.getElementById('confirmSelectToolBtn').addEventListener('click', function() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('selectToolModal'));
+        modal.hide();
+        
+        // Show selected tool and maintenance form
+        document.getElementById('selectedToolInfo').style.display = 'block';
+        document.getElementById('maintenanceFormFields').style.display = 'block';
+        document.getElementById('searchToolToMaintainBtn').style.display = 'none';
+        document.getElementById('saveMaintanceBtn').style.display = 'block';
+      });
+
+      // Form Submission
+      document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Basic validation
+        const requiredFields = this.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            isValid = false;
+            field.classList.add('is-invalid');
+          } else {
+            field.classList.remove('is-invalid');
+          }
+        });
+        
+        if (!isValid) {
+          alert('กรุณากรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบถ้วน');
+          return;
+        }
+        
+        // Show success modal (demo)
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+      });
+
+      // Initialize Calendar
+      const calendarEl = document.getElementById('maintenanceCalendar');
+      if (calendarEl) {
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listMonth'
+          },
+          events: [
+            {
+              title: 'สว่านไฟฟ้า - บำรุงรักษา',
+              start: '2023-03-30',
+              className: 'event-maintenance'
+            },
+            {
+              title: 'เครื่องตัดหญ้า - บำรุงรักษา',
+              start: '2023-03-23',
+              className: 'event-maintenance'
+            },
+            {
+              title: 'เลื่อยวงเดือน - ซ่อมแซม',
+              start: '2023-03-05',
+              className: 'event-repair'
+            },
+            {
+              title: 'เครื่องเจียร - ตรวจสอบ',
+              start: '2023-04-07',
+              className: 'event-inspection'
+            }
+          ],
+          eventClick: function(info) {
+            alert('รายละเอียด: ' + info.event.title);
+          }
+        });
+        calendar.render();
+      }
+
+      // Initialize Charts
+      if (document.getElementById('maintenanceChart')) {
+        const maintenanceCtx = document.getElementById('maintenanceChart').getContext('2d');
+        const maintenanceChart = new Chart(maintenanceCtx, {
+          type: 'bar',
+          data: {
+            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+            datasets: [{
+              label: 'จำนวนการบำรุงรักษา',
+              data: [5, 8, 12, 4, 7, 3],
+              backgroundColor: '#42A5F5'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+
+      if (document.getElementById('maintenanceTypeChart')) {
+        const typeCtx = document.getElementById('maintenanceTypeChart').getContext('2d');
+        const typeChart = new Chart(typeCtx, {
+          type: 'pie',
+          data: {
+            labels: ['บำรุงรักษาตามกำหนด', 'ซ่อมแซมทั่วไป', 'ซ่อมแซมฉุกเฉิน', 'ตรวจสอบสภาพ'],
+            datasets: [{
+              data: [60, 20, 10, 10],
+              backgroundColor: ['#42A5F5', '#66BB6A', '#EC407A', '#FFA726']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+
+      if (document.getElementById('maintenanceCostChart')) {
+        const costCtx = document.getElementById('maintenanceCostChart').getContext('2d');
+        const costChart = new Chart(costCtx, {
+          type: 'line',
+          data: {
+            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+            datasets: [{
+              label: 'ค่าใช้จ่ายในการบำรุงรักษา (บาท)',
+              data: [2500, 3700, 5200, 1800, 4300, 2100],
+              borderColor: '#28a745',
+              backgroundColor: 'rgba(40, 167, 69, 0.1)',
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+
+      // View Maintenance Detail Event
+      document.querySelectorAll('.action-btn.view').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const maintenanceDetailModal = new bootstrap.Modal(document.getElementById('maintenanceDetailModal'));
+          maintenanceDetailModal.show();
+        });
+      });
+
+      // Maintenance Type Change Event
+      document.getElementById('maintenanceType').addEventListener('change', function() {
+        const toolStatusSelect = document.getElementById('toolStatusAfter');
+        
+        if (this.value === 'repair' || this.value === 'emergency') {
+          // เพิ่มตัวเลือกสถานะที่เกี่ยวข้องกับการซ่อม
+          toolStatusSelect.innerHTML = `
+            <option value="">-- เลือกสถานะ --</option>
+            <option value="available">พร้อมใช้งาน</option>
+            <option value="needfurther" selected>ต้องตรวจสอบเพิ่มเติม</option>
+            <option value="waitingparts">รอชิ้นส่วน/อะไหล่</option>
+            <option value="broken">ชำรุดไม่สามารถซ่อมได้</option>
+          `;
+        } else {
+          // สำหรับบำรุงรักษาทั่วไป
+          toolStatusSelect.innerHTML = `
+            <option value="">-- เลือกสถานะ --</option>
+            <option value="available" selected>พร้อมใช้งาน</option>
+            <option value="needfurther">ต้องตรวจสอบเพิ่มเติม</option>
+            <option value="waitingparts">รอชิ้นส่วน/อะไหล่</option>
+            <option value="broken">ชำรุดไม่สามารถซ่อมได้</option>
+          `;
+        }
+        
+        $(toolStatusSelect).trigger('change');
+      });
+
+      // Reschedule Maintenance Button
+      document.querySelectorAll('button:contains("เลื่อนออกไป")').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const rescheduleModal = new bootstrap.Modal(document.getElementById('rescheduleModal'));
+          rescheduleModal.show();
+        });
+      });
+
+      // Confirm Reschedule Button
+      document.getElementById('confirmRescheduleBtn').addEventListener('click', function() {
+        const rescheduleModal = bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'));
+        rescheduleModal.hide();
+        alert('เลื่อนกำหนดการบำรุงรักษาเรียบร้อยแล้ว');
+      });
+    });
+  </script>
+</body>
+</html>
