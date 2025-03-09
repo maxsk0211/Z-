@@ -5560,13 +5560,7 @@ function exportThaiReport(projectId) {
   reportWindow.document.write('<button class="secondary" onclick="window.close()">ปิด</button>');
   reportWindow.document.write('</div>');
   
-  reportWindow.document.write('<script>');
-  reportWindow.document.write('document.addEventListener("DOMContentLoaded", function() {');
-  reportWindow.document.write('  setTimeout(function() {');
-  reportWindow.document.write('    alert("คลิกที่ปุ่ม \'พิมพ์รายงาน\' และเลือก \'บันทึกเป็น PDF\' ในหน้าต่างพิมพ์");');
-  reportWindow.document.write('  }, 1000);');
-  reportWindow.document.write('});');
-  reportWindow.document.write('</script>');
+
   
   reportWindow.document.write('</body></html>');
   reportWindow.document.close();
