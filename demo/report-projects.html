@@ -4075,36 +4075,109 @@ function createSimpleDemoPDF(projectId) {
 }
 
 // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
-window.exportProjectData = function(projectId) {
-  console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+window.printProjectReport = function(projectId) {
+  console.log('พิมพ์รายงานโครงการ: ' + projectId);
   
-  // แสดง Loading Modal
-  const loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
-  loadingModal.show();
+  // สร้างหน้าใหม่สำหรับการพิมพ์
+  const printWindow = window.open('', '_blank');
   
-  // เพิ่ม setTimeout เพื่อให้ Loading Modal แสดงก่อนที่จะเริ่มทำงานหนัก
-  setTimeout(function() {
-    try {
-      // สร้าง PDF แบบข้อมูลครบถ้วน
-      const doc = createThaiPDF(projectId);
+  // ดึงข้อมูลโครงการ
+  const projectData = getProjectData(projectId);
+  
+  // สร้าง HTML สำหรับการพิมพ์
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>รายงานโครงการ: ${projectData.name}</title>
+      <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #28a745; color: white; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .green-text { color: #28a745; }
+        @media print {
+          body { margin: 0; padding: 20px; }
+          button { display: none; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1 class="green-text">Green Gardens</h1>
+        <div>
+          <h2>รายงานโครงการ</h2>
+          <p>วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH')}</p>
+        </div>
+      </div>
+      <hr>
       
-      // ซ่อน Loading Modal
-      loadingModal.hide();
+      <h2>ข้อมูลโครงการ</h2>
+      <table>
+        <tr>
+          <td><strong>รหัสโครงการ:</strong></td>
+          <td>${projectData.id}</td>
+          <td><strong>วันที่เริ่ม:</strong></td>
+          <td>${projectData.startDate}</td>
+        </tr>
+        <tr>
+          <td><strong>ชื่อโครงการ:</strong></td>
+          <td>${projectData.name}</td>
+          <td><strong>กำหนดเสร็จ:</strong></td>
+          <td>${projectData.endDate}</td>
+        </tr>
+        <tr>
+          <td><strong>ลูกค้า:</strong></td>
+          <td>${projectData.customer}</td>
+          <td><strong>สถานะ:</strong></td>
+          <td>${projectData.status}</td>
+        </tr>
+        <tr>
+          <td><strong>ที่อยู่:</strong></td>
+          <td>${projectData.address}</td>
+          <td><strong>ความคืบหน้า:</strong></td>
+          <td>${projectData.progress}%</td>
+        </tr>
+        <tr>
+          <td><strong>ผู้รับผิดชอบ:</strong></td>
+          <td>${projectData.owner}</td>
+          <td><strong>พื้นที่ทั้งหมด:</strong></td>
+          <td>${projectData.area} ตร.ม.</td>
+        </tr>
+      </table>
       
-      // แสดงตัวอย่าง PDF
-      let projectName = "";
-      if (projectId === "P-2568-001") projectName = "สวนหย่อมบ้านคุณเบียร์";
-      else if (projectId === "P-2568-002") projectName = "ปรับปรุงภูมิทัศน์บริษัท ABC";
-      else if (projectId === "P-2568-003") projectName = "สวนหลังบ้านคุณสมหญิง";
-      else projectName = "โครงการ " + projectId;
+      <h2>สรุปการเงิน</h2>
+      <table>
+        <tr>
+          <th>รายการ</th>
+          <th>จำนวนเงิน (บาท)</th>
+        </tr>
+        <tr>
+          <td>งบประมาณโครงการทั้งหมด</td>
+          <td>${projectData.budget.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td>มูลค่าวัสดุที่เบิก</td>
+          <td>${projectData.materialCost.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td>มูลค่าวัสดุที่คืน</td>
+          <td>${projectData.materialReturnCost.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td><strong>มูลค่าวัสดุสุทธิ</strong></td>
+          <td><strong>${projectData.materialNetCost.toLocaleString()}</strong></td>
+        </tr>
+      </table>
       
-      showPDFPreview(doc, projectName);
-    } catch (error) {
-      console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
-      alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
-      loadingModal.hide();
-    }
-  }, 500);
+      <button onclick="window.print();setTimeout(function(){window.close()},750);" style="margin-top: 20px; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        พิมพ์รายงาน
+      </button>
+    </body>
+    </html>
+  `);
+  
+  printWindow.document.close();
 };
 
 // ปุ่มรีเซ็ตตัวกรอง
