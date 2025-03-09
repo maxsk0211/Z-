@@ -4781,7 +4781,7 @@ function showPDFPreview(doc, projectName) {
   previewFrame.src = pdfDataUri;
   
   // อัพเดทชื่อโครงการในหัวข้อ Modal
-  document.querySelector('#pdfPreviewModal .modal-title').textContent = `PDF Report Preview: ${projectName}`;
+  document.querySelector('#pdfPreviewModal .modal-title').textContent = `รายงานโครงการ: ${projectName}`;
   
   // แสดง Modal
   const bsModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
@@ -4790,7 +4790,7 @@ function showPDFPreview(doc, projectName) {
   // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
   document.getElementById('downloadPdfBtn').onclick = function() {
     // ดาวน์โหลด PDF
-    doc.save(`Project_Report_${projectName.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`รายงานโครงการ_${projectName.replace(/\s+/g, '_')}.pdf`);
   };
   
   // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
@@ -4806,6 +4806,8 @@ function showPDFPreview(doc, projectName) {
     });
   };
 }
+
+
 
 // สร้าง PDF ใหม่ตามตัวเลือกที่เลือก
 function regeneratePDF(projectName, includeDetails) {
