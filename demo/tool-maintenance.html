@@ -30,7 +30,6 @@
   <link rel="stylesheet" href="../assets/vendor/libs/dropzone/dropzone.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.41.0/apexcharts.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
   
   <!-- Page CSS -->
   <style>
@@ -178,65 +177,78 @@
       margin-right: 0.75rem;
     }
     
-    .maintenance-card {
-      border-radius: 0.75rem;
-      transition: all 0.3s ease;
-      margin-bottom: 1rem;
+    .tool-card {
+      cursor: pointer;
+      transition: all .2s ease;
+      border: 1px solid rgba(0,0,0,.05);
     }
     
-    .maintenance-card:hover {
-      box-shadow: 0 0.25rem 1rem rgba(161, 172, 184, 0.2);
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
     
-    .maintenance-card .card-header {
-      border-radius: 0.75rem 0.75rem 0 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    .tool-card.selected {
+      border-color: #28a745;
+      background-color: rgba(40, 167, 69, 0.08);
     }
     
-    .maintenance-card .card-footer {
-      border-radius: 0 0 0.75rem 0.75rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+      margin: 0 0 0 0.5rem;
     }
     
-    .dropzone {
+    .timeline-item {
+      position: relative;
+      padding-left: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-left: 2px solid #e9ecef;
+    }
+    
+    .timeline-item:last-child {
+      border-left-color: transparent;
+    }
+    
+    .timeline-point {
+      position: absolute;
+      top: 0;
+      left: -8px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 150px;
-      border: 2px dashed #dce1e8;
-      border-radius: 0.375rem;
-      background-color: #fafbfc;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      padding: 1.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #28a745;
     }
     
-    .dropzone:hover {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
+    .timeline-point-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #fff;
     }
     
-    .dropzone-icon {
-      font-size: 2rem;
-      color: var(--primary);
+    .timeline-info {
       margin-bottom: 0.5rem;
     }
     
-    .search-box {
-      position: relative;
+    .timeline-info .timeline-title {
+      font-weight: 600;
     }
     
-    .search-box .search-icon {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-secondary);
+    .timeline-info .timeline-text {
+      margin-bottom: 0.25rem;
     }
     
-    .search-box .form-control {
-      padding-left: 2.5rem;
+    .maintenance-type-badge {
+      min-width: 100px;
+      text-align: center;
+    }
+    
+    .history-item:hover {
+      background-color: rgba(40, 167, 69, 0.08);
     }
     
     .tool-image {
@@ -254,126 +266,11 @@
       font-size: 0.75rem;
       color: #999;
     }
-    
-    .action-btn {
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0.375rem;
-      color: var(--text-primary);
-      background-color: transparent;
-      border: none;
-      transition: all 0.2s ease;
-      margin-right: 0.25rem;
-    }
-    
-    .action-btn:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-    
-    .action-btn.edit:hover {
-      color: var(--primary);
-    }
-    
-    .action-btn.delete:hover {
-      color: var(--danger);
-    }
-
-    .action-btn.view:hover {
-      color: var(--info);
-    }
-    
-    .calendar-card {
-      margin-bottom: 1.5rem;
-    }
-    
-    .fc-event {
-      cursor: pointer;
-      padding: 0.2rem 0.5rem;
-    }
-    
-    .fc-event.event-maintenance {
-      background-color: var(--info);
-      border-color: var(--info);
-    }
-    
-    .fc-event.event-repair {
-      background-color: var(--danger);
-      border-color: var(--danger);
-    }
-    
-    .fc-event.event-inspection {
-      background-color: var(--warning);
-      border-color: var(--warning);
-    }
-    
-    .upcoming-maintenance {
-      border-left: 3px solid var(--info);
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      background-color: var(--info-light);
-      border-radius: 0.375rem;
-    }
-    
-    .upcoming-maintenance.urgent {
-      border-left-color: var(--danger);
-      background-color: var(--danger-light);
-    }
-    
-    .upcoming-maintenance.warning {
-      border-left-color: var(--warning);
-      background-color: var(--warning-light);
-    }
-    
-    .report-card {
-      height: 100%;
-    }
-    
-    .chart-container {
-      height: 300px;
-      position: relative;
-    }
-    
-    /* Custom styles for tabs */
-    .nav-tabs .nav-link {
-      font-weight: 500;
-      color: var(--text-secondary);
-      padding: 0.75rem 1.25rem;
-      border: none;
-      border-bottom: 2px solid transparent;
-    }
-    
-    .nav-tabs .nav-link.active {
-      color: var(--primary);
-      border-bottom: 2px solid var(--primary);
-      background-color: transparent;
-    }
-    
-    .nav-tabs .nav-link:hover:not(.active) {
-      border-bottom: 2px solid #dce1e8;
-      color: var(--text-primary);
-    }
-    
-    .tab-content {
-      padding-top: 1.5rem;
-    }
-    
-    .form-control, .form-select {
-      border-radius: 0.375rem;
-      padding: 0.45rem 0.9rem;
-      border: 1px solid #dce1e8;
-      font-size: 0.9375rem;
-      transition: all 0.2s ease;
-    }
-    
-    .form-control:focus, .form-select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
-    }
   </style>
+
+  <!-- Helpers -->
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
 </head>
 
 <body>
@@ -753,6 +650,17 @@
               <span class="text-muted fw-light">จัดการเครื่องมือช่าง /</span> บันทึกการบำรุงรักษา
             </h4>
 
+            <!-- คำแนะนำการใช้งาน -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                  <i class="bx bx-info-circle me-2"></i>
+                  คำแนะนำ: เลือกเครื่องมือที่ต้องการบันทึกข้อมูลการบำรุงรักษา จากนั้นกรอกรายละเอียดในแบบฟอร์ม ระบบจะบันทึกประวัติการบำรุงรักษาและคำนวณค่าใช้จ่ายให้อัตโนมัติ
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+            </div>
+
             <!-- สรุปข้อมูลการบำรุงรักษา -->
             <div class="row">
               <div class="col-xl-3 col-md-6 mb-4">
@@ -828,572 +736,518 @@
               </div>
             </div>
 
-            <!-- Tab Navigation -->
-            <div class="row">
+            <!-- เลือกเครื่องมือที่ต้องการบำรุงรักษา -->
+            <div class="row mb-4">
               <div class="col-md-12">
-                <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
-                  <li class="nav-item">
-                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#new-maintenance-tab" aria-controls="new-maintenance-tab" aria-selected="true">
-                      <i class="bx bx-plus-circle me-1"></i> บันทึกการบำรุงรักษาใหม่
-                    </button>
-                  </li>
-                  <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#maintenance-history-tab" aria-controls="maintenance-history-tab" aria-selected="false">
-                      <i class="bx bx-history me-1"></i> ประวัติการบำรุงรักษา
-                    </button>
-                  </li>
-                  <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#maintenance-schedule-tab" aria-controls="maintenance-schedule-tab" aria-selected="false">
-                      <i class="bx bx-calendar me-1"></i> ตารางบำรุงรักษา
-                    </button>
-                  </li>
-                </ul>
+                <div class="card">
+                  <div class="card-header border-bottom">
+                    <h5 class="card-title mb-0">เลือกเครื่องมือที่ต้องการบำรุงรักษา</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label class="form-label">ค้นหาเครื่องมือช่าง</label>
+                        <div class="input-group">
+                          <span class="input-group-text"><i class="bx bx-search"></i></span>
+                          <input type="text" id="toolSearch" class="form-control" placeholder="ป้อนรหัส, ชื่อเครื่องมือ..." />
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">ประเภทเครื่องมือ</label>
+                        <select id="toolType" class="form-select">
+                          <option value="">ทั้งหมด</option>
+                          <option value="electric">เครื่องมือไฟฟ้า</option>
+                          <option value="mechanic">เครื่องมือกล</option>
+                          <option value="measure">เครื่องมือวัด</option>
+                          <option value="cutting">เครื่องมือตัด</option>
+                          <option value="plumbing">เครื่องมือประปา</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">สถานะ</label>
+                        <select id="toolStatus" class="form-select">
+                          <option value="">ทั้งหมด</option>
+                          <option value="available" selected>พร้อมใช้งาน</option>
+                          <option value="maintenance">กำลังบำรุงรักษา</option>
+                          <option value="inuse">กำลังใช้งาน</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row" id="toolsList">
+                      <!-- เครื่องมือชิ้นที่ 1 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card tool-card h-100" onclick="selectTool('1', 'สว่านไฟฟ้า (T-0001)', 'electric')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-primary">
+                                <span class="avatar-initial rounded"><i class="bx bx-wrench"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">สว่านไฟฟ้า</h5>
+                                <small class="text-muted">รหัส: T-0001</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-primary rounded-pill maintenance-type-badge">Bosch</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill maintenance-type-badge">GSB 550</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">บำรุงรักษาล่าสุด: 15/02/2567</small></div>
+                              <span class="badge bg-label-success">พร้อมใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- เครื่องมือชิ้นที่ 2 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card tool-card h-100 selected" onclick="selectTool('2', 'เครื่องตัดหญ้า (T-0002)', 'mechanic')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-info">
+                                <span class="avatar-initial rounded"><i class="bx bx-wrench"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">เครื่องตัดหญ้า</h5>
+                                <small class="text-muted">รหัส: T-0002</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-info rounded-pill maintenance-type-badge">Makita</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill maintenance-type-badge">RBC411</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">บำรุงรักษาล่าสุด: 01/03/2567</small></div>
+                              <span class="badge bg-label-danger">กำลังบำรุงรักษา</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- เครื่องมือชิ้นที่ 3 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card tool-card h-100" onclick="selectTool('3', 'ระดับน้ำ (T-0003)', 'measure')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-warning">
+                                <span class="avatar-initial rounded"><i class="bx bx-wrench"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">ระดับน้ำ</h5>
+                                <small class="text-muted">รหัส: T-0003</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-warning rounded-pill maintenance-type-badge">Stanley</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill maintenance-type-badge">STHT42472-8</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">บำรุงรักษาล่าสุด: 10/01/2567</small></div>
+                              <span class="badge bg-label-success">พร้อมใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- เครื่องมือชิ้นที่ 4 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card tool-card h-100" onclick="selectTool('4', 'เลื่อยวงเดือน (T-0004)', 'cutting')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-danger">
+                                <span class="avatar-initial rounded"><i class="bx bx-wrench"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">เลื่อยวงเดือน</h5>
+                                <small class="text-muted">รหัส: T-0004</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-danger rounded-pill maintenance-type-badge">Makita</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill maintenance-type-badge">5007N</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">บำรุงรักษาล่าสุด: 20/02/2567</small></div>
+                              <span class="badge bg-label-warning">กำลังใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- เครื่องมือชิ้นที่ 5 -->
+                      <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card tool-card h-100" onclick="selectTool('5', 'ประแจจับท่อ (T-0005)', 'plumbing')">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="avatar avatar-md me-2 bg-label-success">
+                                <span class="avatar-initial rounded"><i class="bx bx-wrench"></i></span>
+                              </div>
+                              <div>
+                                <h5 class="mb-0">ประแจจับท่อ</h5>
+                                <small class="text-muted">รหัส: T-0005</small>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="me-3">
+                                <span class="badge bg-label-success rounded-pill maintenance-type-badge">Ridgid</span>
+                              </div>
+                              <div>
+                                <span class="badge bg-label-secondary rounded-pill maintenance-type-badge">31030</span>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div><small class="text-muted">บำรุงรักษาล่าสุด: 05/01/2567</small></div>
+                              <span class="badge bg-label-success">พร้อมใช้งาน</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="tab-content">
-              <!-- บันทึกการบำรุงรักษาใหม่ Tab -->
-              <div class="tab-pane fade show active" id="new-maintenance-tab" role="tabpanel">
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">บันทึกการบำรุงรักษาใหม่</h5>
-                    <small class="text-muted float-end">* หมายถึงข้อมูลที่จำเป็นต้องกรอก</small>
+            <!-- แบบฟอร์มบันทึกข้อมูลการบำรุงรักษาและประวัติ -->
+            <div class="row" id="mainContent">
+              <div class="col-md-5 mb-4 mb-md-0">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">บันทึกการบำรุงรักษา <span id="selectedToolName">เครื่องตัดหญ้า (T-0002)</span></h5>
                   </div>
                   <div class="card-body">
                     <form id="maintenanceForm">
-                      <!-- ค้นหาเครื่องมือ -->
-                      <div class="row mb-4">
-                        <div class="col-md-12">
-                          <h6 class="section-heading">ข้อมูลเครื่องมือที่บำรุงรักษา</h6>
-                          <div class="row g-3">
-                            <div class="col-md-6">
-                              <label class="form-label required-label">เลือกเครื่องมือ</label>
-                              <div class="input-group">
-                                <span class="input-group-text"><i class="bx bx-search"></i></span>
-                                <input type="text" class="form-control" id="toolSearch" placeholder="ค้นหาตามรหัส หรือชื่อเครื่องมือ">
-                                <button type="button" class="btn btn-primary" id="searchToolBtn">ค้นหา</button>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <label class="form-label">&nbsp;</label>
-                              <button type="button" class="btn btn-outline-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#selectToolModal">
-                                <i class="bx bx-list-ul me-1"></i> เลือกจากรายการ
-                              </button>
-                            </div>
-                          </div>
-
-                          <!-- ข้อมูลเครื่องมือที่เลือก -->
-                          <div class="row mt-4" id="selectedToolInfo" style="display: none;">
-                            <div class="col-md-12">
-                              <div class="card bg-light">
-                                <div class="card-body">
-                                  <div class="d-flex align-items-center mb-3">
-                                    <img src="../assets/img/tools/drill.jpg" class="tool-image me-3" alt="เครื่องมือ">
-                                    <div>
-                                      <h6 class="mb-0">สว่านไฟฟ้า (T-0001)</h6>
-                                      <span class="text-muted">Bosch GSB 550</span>
-                                    </div>
-                                    <div class="ms-auto">
-                                      <span class="status-badge status-available">พร้อมใช้งาน</span>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-md-6">
-                                      <div class="item-detail-row">
-                                        <div class="item-detail-label">วันที่บำรุงรักษาล่าสุด:</div>
-                                        <div class="item-detail-value">15/02/2568</div>
-                                      </div>
-                                      <div class="item-detail-row">
-                                        <div class="item-detail-label">กำหนดบำรุงรักษาถัดไป:</div>
-                                        <div class="item-detail-value">15/05/2568</div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="item-detail-row">
-                                        <div class="item-detail-label">หมวดหมู่:</div>
-                                        <div class="item-detail-value">เครื่องมือไฟฟ้า</div>
-                                      </div>
-                                      <div class="item-detail-row">
-                                        <div class="item-detail-label">ซีเรียลนัมเบอร์:</div>
-                                        <div class="item-detail-value">GSB550-12345-TH</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <div class="mb-3">
+                        <label class="form-label required-label">วันที่บำรุงรักษา</label>
+                        <input type="text" class="form-control flatpickr-date" id="maintenanceDate" value="28/03/2567" required>
                       </div>
-
-                      <!-- ข้อมูลการบำรุงรักษา -->
-                      <div class="row g-3 mb-4" id="maintenanceFormFields" style="display: none;">
-                        <div class="col-md-12">
-                          <h6 class="section-heading">ข้อมูลการบำรุงรักษา</h6>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="maintenanceDate" class="form-label required-label">วันที่บำรุงรักษา</label>
-                          <input type="text" class="form-control flatpickr-date" id="maintenanceDate" placeholder="DD/MM/YYYY" value="28/03/2567" required>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="maintenanceType" class="form-label required-label">ประเภทการบำรุงรักษา</label>
-                          <select class="form-select" id="maintenanceType" required>
-                            <option value="">-- เลือกประเภท --</option>
-                            <option value="routine" selected>บำรุงรักษาตามกำหนด</option>
-                            <option value="repair">ซ่อมแซมทั่วไป</option>
-                            <option value="emergency">ซ่อมแซมฉุกเฉิน</option>
-                            <option value="inspection">ตรวจสอบสภาพ</option>
-                            <option value="calibration">ปรับเทียบความแม่นยำ</option>
-                          </select>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="maintenanceOperator" class="form-label required-label">ผู้ดำเนินการ</label>
-                          <select class="form-select" id="maintenanceOperator" required>
-                            <option value="">-- เลือกผู้ดำเนินการ --</option>
-                            <option value="1" selected>นายช่างทวี (ตัวคุณ)</option>
-                            <option value="2">นายช่างสมชาย</option>
-                            <option value="3">นายช่างวิชัย</option>
-                            <option value="4">บริษัทภายนอก</option>
-                          </select>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="nextMaintenanceDate" class="form-label">วันที่บำรุงรักษาถัดไป</label>
-                          <input type="text" class="form-control flatpickr-date" id="nextMaintenanceDate" placeholder="DD/MM/YYYY">
-                          <small class="text-muted">หากไม่ระบุ ระบบจะคำนวณตามความถี่การบำรุงรักษาที่กำหนดไว้</small>
-                        </div>
-
-                        <div class="col-md-12">
-                          <label for="maintenanceDetails" class="form-label required-label">รายละเอียดการบำรุงรักษา</label>
-                          <textarea class="form-control" id="maintenanceDetails" rows="3" placeholder="ระบุรายละเอียดการบำรุงรักษาหรือซ่อมแซม" required></textarea>
-                        </div>
-
-                        <div class="col-md-12">
-                          <label class="form-label">รายการตรวจสอบและบำรุงรักษา</label>
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="checklist-item">
-                                <input class="form-check-input" type="checkbox" id="check1" checked>
-                                <label class="form-check-label" for="check1">
-                                  ทำความสะอาดตัวเครื่อง
-                                </label>
-                              </div>
-                              <div class="checklist-item">
-                                <input class="form-check-input" type="checkbox" id="check2" checked>
-                                <label class="form-check-label" for="check2">
-                                  ตรวจสอบการทำงานของสวิตช์และปุ่มควบคุม
-                                </label>
-                              </div>
-                              <div class="checklist-item">
-                                <input class="form-check-input" type="checkbox" id="check3" checked>
-                                <label class="form-check-label" for="check3">
-                                  ตรวจสอบสายไฟหรือแบตเตอรี่
-                                </label>
-                              </div>
-                              <div class="checklist-item">
-                                <input class="form-check-input" type="checkbox" id="check4">
-                                <label class="form-check-label" for="check4">
-                                  หยอดน้ำมันหล่อลื่นตามจุดต่างๆ
-                                </label>
-                              </div>
-                              <div class="checklist-item">
-                                <input class="form-check-input" type="checkbox" id="check5" checked>
-                                <label class="form-check-label" for="check5">
-                                  ตรวจสอบความปลอดภัยและระบบป้องกัน
-                                </label>
-                              </div>
-                              <div class="mt-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm">
-                                  <i class="bx bx-plus me-1"></i> เพิ่มรายการ
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="replacedParts" class="form-label">ชิ้นส่วนที่เปลี่ยน (ถ้ามี)</label>
-                          <textarea class="form-control" id="replacedParts" rows="2" placeholder="ระบุชิ้นส่วนที่เปลี่ยน เช่น แปรงถ่าน, สายพาน, ใบมีด"></textarea>
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="maintenanceCost" class="form-label">ค่าใช้จ่าย (บาท)</label>
-                          <div class="input-group">
-                            <span class="input-group-text">฿</span>
-                            <input type="number" class="form-control" id="maintenanceCost" placeholder="0.00" min="0" step="0.01">
-                          </div>
-                          <small class="text-muted">รวมค่าอะไหล่และค่าแรง (ถ้ามี)</small>
-                        </div>
-
-                        <div class="col-md-12">
-                          <label for="toolStatusAfter" class="form-label required-label">สถานะหลังการบำรุงรักษา</label>
-                          <select class="form-select" id="toolStatusAfter" required>
-                            <option value="">-- เลือกสถานะ --</option>
-                            <option value="available" selected>พร้อมใช้งาน</option>
-                            <option value="needfurther">ต้องตรวจสอบเพิ่มเติม</option>
-                            <option value="waitingparts">รอชิ้นส่วน/อะไหล่</option>
-                            <option value="broken">ชำรุดไม่สามารถซ่อมได้</option>
-                          </select>
-                        </div>
-
-                        <div class="col-md-12">
-                          <label for="maintenanceNotes" class="form-label">หมายเหตุเพิ่มเติม</label>
-                          <textarea class="form-control" id="maintenanceNotes" rows="2" placeholder="ระบุหมายเหตุเพิ่มเติม (ถ้ามี)"></textarea>
-                        </div>
-
-                        <div class="col-md-12">
-                          <label class="form-label">รูปภาพประกอบการบำรุงรักษา</label>
-                          <div class="dropzone" id="maintenanceImageDropzone">
-                            <div class="dropzone-icon">
-                              <i class="bx bx-upload"></i>
-                            </div>
-                            <h5>วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ</h5>
-                            <p class="text-muted mb-0">รองรับไฟล์ .jpg, .jpeg, .png ขนาดไม่เกิน 5MB</p>
-                          </div>
-                        </div>
+                      <div class="mb-3">
+                        <label class="form-label required-label">ประเภทการบำรุงรักษา</label>
+                        <select class="form-select" id="maintenanceType" required>
+                          <option value="">--- เลือกประเภทการบำรุงรักษา ---</option>
+                          <option value="routine" selected>บำรุงรักษาตามกำหนด</option>
+                          <option value="repair">ซ่อมแซมทั่วไป</option>
+                          <option value="emergency">ซ่อมแซมฉุกเฉิน</option>
+                          <option value="inspection">ตรวจสอบสภาพ</option>
+                          <option value="calibration">ปรับเทียบความแม่นยำ</option>
+                        </select>
                       </div>
-
-                      <div class="row justify-content-end mt-3">
-                        <div class="col-12 d-flex justify-content-between">
-                          <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='tools-list.html'">ยกเลิก</button>
-                          <div>
-                            <button type="button" class="btn btn-primary" id="searchToolToMaintainBtn" style="display: block;">ค้นหาเครื่องมือ</button>
-                            <button type="submit" class="btn btn-success" id="saveMaintanceBtn" style="display: none;">
-                              <i class="bx bx-save me-1"></i> บันทึกการบำรุงรักษา
-                            </button>
-                          </div>
+                      <div class="mb-3">
+                        <label class="form-label required-label">ผู้ดำเนินการ</label>
+                        <select class="form-select" id="maintenanceOperator" required>
+                          <option value="">--- เลือกผู้ดำเนินการ ---</option>
+                          <option value="1" selected>นายช่างทวี (ตัวคุณ)</option>
+                          <option value="2">นายช่างสมชาย</option>
+                          <option value="3">นายช่างวิชัย</option>
+                          <option value="4">บริษัทภายนอก</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label required-label">รายละเอียดการบำรุงรักษา</label>
+                        <textarea class="form-control" id="maintenanceDetails" rows="3" placeholder="รายละเอียดการบำรุงรักษา" required>ทำความสะอาดเครื่อง, ลับใบมีด, เปลี่ยนน้ำมันเครื่อง และตรวจสอบระบบจุดระเบิด</textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">รายการอะไหล่/วัสดุที่ใช้</label>
+                        <div class="table-responsive mb-2">
+                          <table class="table table-bordered table-sm" id="partsTable">
+                            <thead>
+                              <tr>
+                                <th style="width: 45%;">รายการ</th>
+                                <th style="width: 15%;">จำนวน</th>
+                                <th style="width: 25%;">ราคาต่อชิ้น</th>
+                                <th style="width: 15%;">ลบ</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="น้ำมันเครื่อง"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="250" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="ใบมีดตัดหญ้า"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="450" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                              <tr>
+                                <td><input type="text" class="form-control form-control-sm" value="กรองอากาศ"></td>
+                                <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+                                <td><input type="number" class="form-control form-control-sm part-price" value="180" min="0"></td>
+                                <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="addNewPart()">
+                          <i class="bx bx-plus me-1"></i> เพิ่มรายการ
+                        </button>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">ค่าใช้จ่ายรวม (บาท)</label>
+                        <input type="number" class="form-control fw-bold" id="totalCost" placeholder="0.00" min="0" value="880" readonly>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">วันที่บำรุงรักษาถัดไป</label>
+                        <input type="text" class="form-control flatpickr-date" id="nextMaintenanceDate" value="28/06/2567">
+                        <small class="text-muted">หากไม่ระบุ ระบบจะคำนวณตามความถี่การบำรุงรักษาที่กำหนดไว้</small>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label required-label">สถานะหลังการบำรุงรักษา</label>
+                        <select class="form-select" id="toolStatusAfter" required>
+                          <option value="">--- เลือกสถานะ ---</option>
+                          <option value="available" selected>พร้อมใช้งาน</option>
+                          <option value="needfurther">ต้องตรวจสอบเพิ่มเติม</option>
+                          <option value="waitingparts">รอชิ้นส่วน/อะไหล่</option>
+                          <option value="broken">ชำรุดไม่สามารถซ่อมได้</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">หมายเหตุเพิ่มเติม</label>
+                        <textarea class="form-control" id="maintenanceNotes" rows="2" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)">ควรเปลี่ยนสายพานในครั้งถัดไป เนื่องจากเริ่มมีรอยสึกหรอ</textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">หลักฐานการบำรุงรักษา (เอกสาร/รูปภาพ)</label>
+                        <input class="form-control" type="file" id="maintenanceEvidence" multiple>
+                        <small class="form-text">รองรับไฟล์ JPG, PNG, PDF (ขนาดไม่เกิน 5MB ต่อไฟล์)</small>
+                      </div>
+                      <div class="mt-4 text-end">
+                        <button type="reset" class="btn btn-outline-secondary me-2">ล้างข้อมูล</button>
+                        <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
                       </div>
                     </form>
                   </div>
                 </div>
               </div>
 
-              <!-- ประวัติการบำรุงรักษา Tab -->
-              <div class="tab-pane fade" id="maintenance-history-tab" role="tabpanel">
-                <div class="card mb-4">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">ประวัติการบำรุงรักษา</h5>
-                    <div class="d-flex">
-                      <button type="button" class="btn btn-outline-secondary me-2">
-                        <i class="bx bx-filter-alt me-1"></i> กรอง
-                      </button>
-                      <button type="button" class="btn btn-outline-primary">
-                        <i class="bx bx-export me-1"></i> ส่งออก
-                      </button>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row mb-4">
-                      <div class="col-md-3 col-sm-6 mb-3">
-                        <label for="history-type" class="form-label">ประเภทการบำรุงรักษา</label>
-                        <select id="history-type" class="form-select">
-                          <option value="all" selected>ทั้งหมด</option>
-                          <option value="routine">บำรุงรักษาตามกำหนด</option>
-                          <option value="repair">ซ่อมแซมทั่วไป</option>
-                          <option value="emergency">ซ่อมแซมฉุกเฉิน</option>
-                          <option value="inspection">ตรวจสอบสภาพ</option>
-                        </select>
-                      </div>
-                      <div class="col-md-3 col-sm-6 mb-3">
-                        <label for="history-tool" class="form-label">เครื่องมือ</label>
-                        <select id="history-tool" class="form-select">
-                          <option value="all" selected>ทั้งหมด</option>
-                          <option value="T001">สว่านไฟฟ้า (T-0001)</option>
-                          <option value="T002">เครื่องตัดหญ้า (T-0002)</option>
-                          <option value="T003">ระดับน้ำ (T-0003)</option>
-                          <option value="T004">เลื่อยวงเดือน (T-0004)</option>
-                        </select>
-                      </div>
-                      <div class="col-md-3 col-sm-6 mb-3">
-                        <label for="history-date-range" class="form-label">ช่วงวันที่</label>
-                        <input type="text" class="form-control" id="history-date-range" placeholder="วันที่เริ่มต้น - วันที่สิ้นสุด">
-                      </div>
-                      <div class="col-md-3 col-sm-6 mb-3">
-                        <label for="history-operator" class="form-label">ผู้ดำเนินการ</label>
-                        <select id="history-operator" class="form-select">
-                          <option value="all" selected>ทั้งหมด</option>
-                          <option value="1">นายช่างทวี</option>
-                          <option value="2">นายช่างสมชาย</option>
-                          <option value="3">นายช่างวิชัย</option>
-                          <option value="4">บริษัทภายนอก</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-hover">
-                        <thead>
-                          <tr>
-                            <th>ลำดับ</th>
-                            <th>วันที่</th>
-                            <th>เครื่องมือ</th>
-                            <th>ประเภท</th>
-                            <th>ผู้ดำเนินการ</th>
-                            <th>รายละเอียด</th>
-                            <th>ค่าใช้จ่าย</th>
-                            <th>สถานะ</th>
-                            <th>จัดการ</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>15/03/2567</td>
-                            <td>สว่านไฟฟ้า (T-0001)</td>
-                            <td><span class="badge bg-label-primary">บำรุงรักษาตามกำหนด</span></td>
-                            <td>นายช่างทวี</td>
-                            <td>ทำความสะอาด, เปลี่ยนแปรงถ่าน</td>
-                            <td>650 บาท</td>
-                            <td><span class="badge bg-label-success">พร้อมใช้งาน</span></td>
-                            <td>
-                              <button type="button" class="action-btn view" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด">
-                                <i class="bx bx-detail"></i>
-                              </button>
-                              <button type="button" class="action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                <i class="bx bx-edit"></i>
-                              </button>
-                              <button type="button" class="action-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์">
-                                <i class="bx bx-printer"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>10/03/2567</td>
-                            <td>เครื่องตัดหญ้า (T-0002)</td>
-                            <td><span class="badge bg-label-danger">ซ่อมแซมฉุกเฉิน</span></td>
-                            <td>บริษัทภายนอก</td>
-                            <td>ซ่อมระบบสตาร์ทเครื่อง, เปลี่ยนสายพาน</td>
-                            <td>1,200 บาท</td>
-                            <td><span class="badge bg-label-success">พร้อมใช้งาน</span></td>
-                            <td>
-                              <button type="button" class="action-btn view" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด">
-                                <i class="bx bx-detail"></i>
-                              </button>
-                              <button type="button" class="action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                <i class="bx bx-edit"></i>
-                              </button>
-                              <button type="button" class="action-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์">
-                                <i class="bx bx-printer"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>05/03/2567</td>
-                            <td>เลื่อยวงเดือน (T-0004)</td>
-                            <td><span class="badge bg-label-info">ตรวจสอบสภาพ</span></td>
-                            <td>นายช่างวิชัย</td>
-                            <td>ตรวจสอบความเสียหาย, ประเมินการซ่อม</td>
-                            <td>0 บาท</td>
-                            <td><span class="badge bg-label-warning">รอชิ้นส่วน</span></td>
-                            <td>
-                              <button type="button" class="action-btn view" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด">
-                                <i class="bx bx-detail"></i>
-                              </button>
-                              <button type="button" class="action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                <i class="bx bx-edit"></i>
-                              </button>
-                              <button type="button" class="action-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์">
-                                <i class="bx bx-printer"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>20/02/2567</td>
-                            <td>ประแจจับท่อ (T-0005)</td>
-                            <td><span class="badge bg-label-warning">ซ่อมแซมทั่วไป</span></td>
-                            <td>นายช่างสมชาย</td>
-                            <td>ซ่อมแซมด้ามจับ, ปรับตั้งความแน่น</td>
-                            <td>350 บาท</td>
-                            <td><span class="badge bg-label-success">พร้อมใช้งาน</span></td>
-                            <td>
-                              <button type="button" class="action-btn view" data-bs-toggle="tooltip" data-bs-placement="top" title="ดูรายละเอียด">
-                                <i class="bx bx-detail"></i>
-                              </button>
-                              <button type="button" class="action-btn edit" data-bs-toggle="tooltip" data-bs-placement="top" title="แก้ไข">
-                                <i class="bx bx-edit"></i>
-                              </button>
-                              <button type="button" class="action-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="พิมพ์">
-                                <i class="bx bx-printer"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                      <div class="d-flex align-items-center">
-                        <label for="rowPerPage" class="me-2">แสดง</label>
-                        <select class="form-select form-select-sm" id="rowPerPage" style="width: 70px;">
-                          <option value="10" selected>10</option>
-                          <option value="25">25</option>
-                          <option value="50">50</option>
-                          <option value="100">100</option>
-                        </select>
-                        <span class="ms-2">รายการ</span>
-                      </div>
-                      <nav aria-label="Page navigation">
-                        <ul class="pagination pagination-sm mb-0">
-                          <li class="page-item prev">
-                            <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-left"></i></a>
-                          </li>
-                          <li class="page-item active">
-                            <a class="page-link" href="javascript:void(0);">1</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="javascript:void(0);">2</a>
-                          </li>
-                          <li class="page-item next">
-                            <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ตารางบำรุงรักษา Tab -->
-              <div class="tab-pane fade" id="maintenance-schedule-tab" role="tabpanel">
+              <div class="col-md-7">
                 <div class="row">
-                  <!-- ปฏิทินการบำรุงรักษา -->
-                  <div class="col-md-8">
-                    <div class="card calendar-card mb-4">
-                      <div class="card-header">
-                        <h5 class="mb-0">ปฏิทินการบำรุงรักษา</h5>
+                  <!-- ข้อมูลสรุปของเครื่องมือ -->
+                  <div class="col-12 mb-4">
+                    <div class="card">
+                      <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">ข้อมูลสรุปของเครื่องมือ</h5>
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='tool-detail.html?id=2'">
+                          <i class="bx bx-detail me-1"></i> ดูรายละเอียดเพิ่มเติม
+                        </button>
                       </div>
                       <div class="card-body">
-                        <div id="maintenanceCalendar"></div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                              <div class="avatar avatar-sm bg-label-primary me-2">
+                                <span class="avatar-initial rounded-circle">
+                                  <i class="bx bx-wrench"></i>
+                                </span>
+                              </div>
+                              <div>
+                                <h6 class="mb-0">เครื่องตัดหญ้า Makita RBC411</h6>
+                                <small class="text-muted">รหัส: T-0002</small>
+                              </div>
+                            </div>
+                            <div class="mb-2">
+                              <p class="mb-1">
+                                <i class="bx bx-time-five me-1 text-muted"></i>
+                                เข้าระบบเมื่อ: <span class="fw-semibold">15 ก.พ. 2566</span>
+                              </p>
+                              <p class="mb-1">
+                                <i class="bx bx-purchase-tag me-1 text-muted"></i>
+                                ราคา: <span class="fw-semibold">12,500 บาท</span>
+                              </p>
+                              <p class="mb-0">
+                                <i class="bx bx-calendar me-1 text-muted"></i>
+                                บำรุงรักษาล่าสุด: <span class="fw-semibold">01/03/2567</span>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <h6 class="mb-2">สถิติการบำรุงรักษา</h6>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="flex-grow-1 me-3">
+                                <span class="fw-semibold">จำนวนครั้งที่บำรุงรักษา</span>
+                              </div>
+                              <span class="badge bg-label-primary">7 ครั้ง</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                              <div class="flex-grow-1 me-3">
+                                <span class="fw-semibold">ค่าใช้จ่ายรวมทั้งหมด</span>
+                              </div>
+                              <span class="badge bg-label-danger">5,900 บาท</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                              <div class="flex-grow-1 me-3">
+                                <span class="fw-semibold">ค่าบำรุงรักษาเฉลี่ยต่อครั้ง</span>
+                              </div>
+                              <span class="badge bg-label-warning">843 บาท</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- การบำรุงรักษาที่กำลังจะมาถึง -->
-                  <div class="col-md-4">
-                    <div class="card mb-4">
-                      <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">การบำรุงรักษาที่กำลังจะมาถึง</h5>
-                        <div class="dropdown">
-                          <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bx bx-calendar me-1"></i> ทั้งหมด
+                  <!-- ประวัติการบำรุงรักษา -->
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">ประวัติการบำรุงรักษา</h5>
+                        <div>
+                          <button type="button" class="btn btn-sm btn-outline-primary me-1">
+                            <i class="bx bx-export me-1"></i> ส่งออก
                           </button>
-                          <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="javascript:void(0);">ทั้งหมด</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);">7 วันข้างหน้า</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);">30 วันข้างหน้า</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);">เลยกำหนดแล้ว</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div class="card-body">
-                        <div class="upcoming-maintenance urgent">
-                          <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0">เครื่องตัดหญ้า (T-0002)</h6>
-                            <span class="badge bg-danger">เลยกำหนด 5 วัน</span>
-                          </div>
-                          <p class="mb-0">กำหนดบำรุงรักษา: 23/03/2567</p>
-                          <p class="mb-0">ประเภท: บำรุงรักษาตามกำหนด</p>
-                          <div class="mt-2">
-                            <button type="button" class="btn btn-sm btn-outline-primary">บันทึกการบำรุงรักษา</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">เลื่อนออกไป</button>
-                          </div>
-                        </div>
-
-                        <div class="upcoming-maintenance warning">
-                          <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0">สว่านไฟฟ้า (T-0001)</h6>
-                            <span class="badge bg-warning">อีก 2 วัน</span>
-                          </div>
-                          <p class="mb-0">กำหนดบำรุงรักษา: 30/03/2567</p>
-                          <p class="mb-0">ประเภท: บำรุงรักษาตามกำหนด</p>
-                          <div class="mt-2">
-                            <button type="button" class="btn btn-sm btn-outline-primary">บันทึกการบำรุงรักษา</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">เลื่อนออกไป</button>
-                          </div>
-                        </div>
-
-                        <div class="upcoming-maintenance">
-                          <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0">เครื่องเจียร (T-0006)</h6>
-                            <span class="badge bg-info">อีก 10 วัน</span>
-                          </div>
-                          <p class="mb-0">กำหนดบำรุงรักษา: 07/04/2567</p>
-                          <p class="mb-0">ประเภท: ตรวจสอบสภาพ</p>
-                          <div class="mt-2">
-                            <button type="button" class="btn btn-sm btn-outline-primary">บันทึกการบำรุงรักษา</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">เลื่อนออกไป</button>
-                          </div>
-                        </div>
-
-                        <div class="text-center mt-3">
-                          <button type="button" class="btn btn-primary">
-                            <i class="bx bx-download me-1"></i> ดาวน์โหลดแผนบำรุงรักษา
+                          <button type="button" class="btn btn-sm btn-outline-primary">
+                            <i class="bx bx-printer me-1"></i> พิมพ์
                           </button>
                         </div>
                       </div>
-                    </div>
+                      <div class="card-body">
+                        <div class="timeline">
+                          <!-- รายการบำรุงรักษาล่าสุด -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">บำรุงรักษาตามกำหนด</h6>
+                                <small class="text-muted">01 มี.ค. 2567</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">โดย <a href="#" class="text-primary fw-semibold">นายช่างสมชาย</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-danger">980 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ทำความสะอาดเครื่อง, ลับใบมีด, เปลี่ยนกรองอากาศ และตรวจสอบระบบจุดระเบิด
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (3)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
 
-                    <!-- สรุปการบำรุงรักษา -->
-                    <div class="card mb-4">
-                      <div class="card-header">
-                        <h5 class="mb-0">สรุปการบำรุงรักษา</h5>
-                      </div>
-                      <div class="card-body">
-                        <div class="chart-container">
-                          <canvas id="maintenanceChart"></canvas>
-                        </div>
-                        <div class="mt-3">
-                          <h6>เครื่องมือที่ต้องการการบำรุงรักษาบ่อย</h6>
-                          <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                              เครื่องตัดหญ้า (T-0002)
-                              <span class="badge bg-primary rounded-pill">5 ครั้ง</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                              สว่านไฟฟ้า (T-0001)
-                              <span class="badge bg-primary rounded-pill">3 ครั้ง</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                              เลื่อยวงเดือน (T-0004)
-                              <span class="badge bg-primary rounded-pill">2 ครั้ง</span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                          <!-- รายการบำรุงรักษาที่ 2 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">ซ่อมแซมทั่วไป</h6>
+                                <small class="text-muted">15 ม.ค. 2567</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">โดย <a href="#" class="text-primary fw-semibold">นายช่างทวี</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-danger">1,200 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ซ่อมระบบสตาร์ทเครื่อง, เปลี่ยนสายพาน และปรับแต่งคาร์บูเรเตอร์
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (4)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
 
-                <!-- รายงานการบำรุงรักษา -->
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="card report-card mb-4">
-                      <div class="card-header">
-                        <h5 class="mb-0">ประเภทการบำรุงรักษา</h5>
-                      </div>
-                      <div class="card-body">
-                        <div class="chart-container">
-                          <canvas id="maintenanceTypeChart"></canvas>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="card report-card mb-4">
-                      <div class="card-header">
-                        <h5 class="mb-0">ค่าใช้จ่ายในการบำรุงรักษา</h5>
-                      </div>
-                      <div class="card-body">
-                        <div class="chart-container">
-                          <canvas id="maintenanceCostChart"></canvas>
+                          <!-- รายการบำรุงรักษาที่ 3 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">บำรุงรักษาตามกำหนด</h6>
+                                <small class="text-muted">20 พ.ย. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">โดย <a href="#" class="text-primary fw-semibold">นายช่างทวี</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-danger">850 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ทำความสะอาดเครื่อง, เปลี่ยนน้ำมันเครื่อง, เปลี่ยนหัวเทียน และตรวจสอบใบมีด
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (2)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- รายการบำรุงรักษาที่ 4 -->
+                          <div class="timeline-item">
+                            <div class="timeline-point">
+                              <span class="timeline-point-indicator"></span>
+                            </div>
+                            <div class="timeline-event">
+                              <div class="timeline-header mb-1">
+                                <h6 class="timeline-title mb-0">ตรวจสอบสภาพ</h6>
+                                <small class="text-muted">05 ส.ค. 2566</small>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-1">
+                                <div>
+                                  <span class="text-muted">โดย <a href="#" class="text-primary fw-semibold">นายช่างวิชัย</a></span>
+                                </div>
+                                <div>
+                                  <span class="badge bg-label-danger">0 บาท</span>
+                                </div>
+                              </div>
+                              <p class="mb-2">
+                                ตรวจสอบสภาพเครื่องหลังการใช้งานติดต่อกัน 3 เดือน พบว่าอยู่ในสภาพดี ไม่มีความจำเป็นต้องซ่อมแซม
+                              </p>
+                              <div class="d-flex align-items-center">
+                                <a href="javascript:void(0)" class="text-primary me-3">
+                                  <i class="bx bx-detail me-1"></i> รายละเอียด
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                  <i class="bx bx-image me-1"></i> รูปภาพ (1)
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
                         </div>
                       </div>
                     </div>
@@ -1435,261 +1289,43 @@
   </div>
   <!-- / Layout wrapper -->
 
-  <!-- Select Tool Modal -->
-  <div class="modal fade" id="selectToolModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+  <!-- Modal Success -->
+  <div class="modal fade" id="maintenanceSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">เลือกเครื่องมือช่าง</h5>
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title">บันทึกข้อมูลสำเร็จ</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="row mb-3">
-            <div class="col-md-8">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-search"></i></span>
-                <input type="text" class="form-control" id="modalToolSearch" placeholder="ค้นหาตามรหัส, ชื่อเครื่องมือ...">
-                <button type="button" class="btn btn-primary">ค้นหา</button>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <select id="modalCategoryFilter" class="form-select">
-                <option value="all" selected>ทุกหมวดหมู่</option>
-                <option value="electric">เครื่องมือไฟฟ้า</option>
-                <option value="mechanic">เครื่องมือกล</option>
-                <option value="measure">เครื่องมือวัด</option>
-                <option value="cutting">เครื่องมือตัด</option>
-                <option value="plumbing">เครื่องมือประปา</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th style="width: 50px;"></th>
-                  <th style="width: 60px;">#</th>
-                  <th style="width: 120px;">รหัส</th>
-                  <th>ชื่อเครื่องมือ</th>
-                  <th>หมวดหมู่</th>
-                  <th>วันที่บำรุงรักษาล่าสุด</th>
-                  <th>กำหนดบำรุงรักษาถัดไป</th>
-                  <th>สถานะ</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="radio" name="selectTool" id="selectTool1" value="T0001">
-                  </td>
-                  <td>1</td>
-                  <td>T-0001</td>
-                  <td>สว่านไฟฟ้า</td>
-                  <td>เครื่องมือไฟฟ้า</td>
-                  <td>15/02/2567</td>
-                  <td>15/05/2567</td>
-                  <td><span class="badge bg-success">พร้อมใช้งาน</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="radio" name="selectTool" id="selectTool2" value="T0002">
-                  </td>
-                  <td>2</td>
-                  <td>T-0002</td>
-                  <td>เครื่องตัดหญ้า</td>
-                  <td>เครื่องมือกล</td>
-                  <td>01/03/2567</td>
-                  <td>01/04/2567</td>
-                  <td><span class="badge bg-warning">กำลังใช้งาน</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="radio" name="selectTool" id="selectTool3" value="T0003">
-                  </td>
-                  <td>3</td>
-                  <td>T-0003</td>
-                  <td>ระดับน้ำ</td>
-                  <td>เครื่องมือวัด</td>
-                  <td>10/01/2567</td>
-                  <td>10/07/2567</td>
-                  <td><span class="badge bg-success">พร้อมใช้งาน</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="radio" name="selectTool" id="selectTool4" value="T0004">
-                  </td>
-                  <td>4</td>
-                  <td>T-0004</td>
-                  <td>เลื่อยวงเดือน</td>
-                  <td>เครื่องมือตัด</td>
-                  <td>20/02/2567</td>
-                  <td>20/03/2567</td>
-                  <td><span class="badge bg-danger">กำลังซ่อม</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-          <button type="button" class="btn btn-primary" id="confirmSelectToolBtn">เลือกเครื่องมือ</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Maintenance Detail Modal -->
-  <div class="modal fade" id="maintenanceDetailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">รายละเอียดการบำรุงรักษา</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <div class="d-flex align-items-center">
-                <img src="../assets/img/tools/drill.jpg" class="tool-image me-3" alt="เครื่องมือ" style="width: 60px; height: 60px;">
-                <div>
-                  <h6 class="mb-0">สว่านไฟฟ้า (T-0001)</h6>
-                  <span class="text-muted">Bosch GSB 550</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <h6 class="mb-3">ข้อมูลการบำรุงรักษา</h6>
-              <div class="item-detail-row">
-                <div class="item-detail-label">วันที่บำรุงรักษา:</div>
-                <div class="item-detail-value">15/03/2567</div>
-              </div>
-              <div class="item-detail-row">
-                <div class="item-detail-label">ประเภท:</div>
-                <div class="item-detail-value">บำรุงรักษาตามกำหนด</div>
-              </div>
-              <div class="item-detail-row">
-                <div class="item-detail-label">ผู้ดำเนินการ:</div>
-                <div class="item-detail-value">นายช่างทวี</div>
-              </div>
-              <div class="item-detail-row">
-                <div class="item-detail-label">วันที่บำรุงรักษาถัดไป:</div>
-                <div class="item-detail-value">15/06/2567</div>
-              </div>
-              <div class="item-detail-row">
-                <div class="item-detail-label">สถานะหลังการบำรุงรักษา:</div>
-                <div class="item-detail-value"><span class="badge bg-success">พร้อมใช้งาน</span></div>
-              </div>
-              <div class="item-detail-row">
-                <div class="item-detail-label">ค่าใช้จ่าย:</div>
-                <div class="item-detail-value">650 บาท</div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <h6 class="mb-3">รายละเอียดการดำเนินการ</h6>
-              <p>ทำความสะอาดตัวเครื่อง, ตรวจสอบการทำงานของมอเตอร์และสวิตช์ควบคุม, เปลี่ยนแปรงถ่านใหม่เนื่องจากแปรงถ่านเดิมสึกหรอมาก</p>
-              
-              <h6 class="mt-3 mb-2">รายการที่ตรวจสอบ:</h6>
-              <ul class="mb-3">
-                <li>ทำความสะอาดตัวเครื่อง</li>
-                <li>ตรวจสอบการทำงานของสวิตช์และปุ่มควบคุม</li>
-                <li>ตรวจสอบสายไฟ</li>
-                <li>ตรวจสอบความปลอดภัยและระบบป้องกัน</li>
-              </ul>
-              
-              <h6 class="mb-2">ชิ้นส่วนที่เปลี่ยน:</h6>
-              <p>แปรงถ่าน 2 ชิ้น</p>
-            </div>
-
-            <div class="col-md-12 mt-3">
-              <h6 class="mb-3">หมายเหตุเพิ่มเติม</h6>
-              <p>แนะนำให้ใช้งานด้วยความระมัดระวัง ไม่ใช้งานเกินกำลัง เพื่อยืดอายุการใช้งานของแปรงถ่านชุดใหม่</p>
-            </div>
-
-            <div class="col-md-12 mt-3">
-              <h6 class="mb-3">รูปภาพประกอบ</h6>
-              <div class="row">
-                <div class="col-md-4 mb-3">
-                  <img src="../assets/img/elements/1.jpg" class="img-fluid rounded" alt="รูปภาพการบำรุงรักษา">
-                </div>
-                <div class="col-md-4 mb-3">
-                  <img src="../assets/img/elements/2.jpg" class="img-fluid rounded" alt="รูปภาพการบำรุงรักษา">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" id="printMaintenanceBtn">
-            <i class="bx bx-printer me-1"></i> พิมพ์รายงาน
-          </button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ปิด</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Success Modal -->
-  <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header bg-success">
-          <h5 class="modal-title text-white">สำเร็จ</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
+        <div class="modal-body text-center py-4">
           <i class="bx bx-check-circle text-success mb-3" style="font-size: 5rem;"></i>
-          <h5>บันทึกข้อมูลสำเร็จ</h5>
-          <p class="mb-2">บันทึกการบำรุงรักษาเรียบร้อยแล้ว</p>
-          <p class="fw-bold">เลขที่รายการ: M-00123</p>
+          <h4 class="mb-3">บันทึกข้อมูลการบำรุงรักษาเรียบร้อยแล้ว</h4>
+          <p class="mb-1">เลขที่รายการ: <strong>MT-20240328001</strong></p>
+          <p class="mb-0">เครื่องมือ: <strong id="successToolName">เครื่องตัดหญ้า (T-0002)</strong></p>
         </div>
-        <div class="modal-footer">
-          <a href="tools-list.html" class="btn btn-outline-secondary">ไปยังรายการเครื่องมือ</a>
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">ปิด</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reschedule Maintenance Modal -->
-  <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">เลื่อนกำหนดการบำรุงรักษา</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="rescheduleDate" class="form-label">วันที่บำรุงรักษาใหม่</label>
-            <input type="text" class="form-control flatpickr-date" id="rescheduleDate" placeholder="DD/MM/YYYY" required>
-          </div>
-          <div class="mb-3">
-            <label for="rescheduleReason" class="form-label">เหตุผลในการเลื่อน</label>
-            <textarea class="form-control" id="rescheduleReason" rows="3" placeholder="ระบุเหตุผลในการเลื่อนการบำรุงรักษา"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-          <button type="button" class="btn btn-primary" id="confirmRescheduleBtn">บันทึก</button>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">บันทึกข้อมูลเครื่องมือชิ้นใหม่</button>
+          <button type="button" class="btn btn-primary" onclick="window.location.href='tools-list.html'">
+            ดูรายการเครื่องมือ
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Core JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.5/perfect-scrollbar.min.js"></script>
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="../assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="../assets/vendor/js/menu.js"></script>
 
   <!-- Vendors JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+  <script src="../assets/vendor/libs/select2/select2.js"></script>
+  <script src="../assets/vendor/libs/flatpickr/flatpickr.js"></script>
+  <script src="../assets/vendor/libs/dropzone/dropzone.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
 
   <!-- Main JS -->
   <script src="../assets/js/main.js"></script>
@@ -1697,233 +1333,207 @@
   <!-- Page JS -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Initialize Flatpickr for date inputs
+      // Initialize Select2
+      $('.select2').select2();
+      
+      // Initialize Flatpickr (Date picker)
       flatpickr(".flatpickr-date", {
         dateFormat: "d/m/Y",
-        locale: {
-          firstDayOfWeek: 1
-        }
+        allowInput: true,
+        locale: 'th'
       });
       
-      // Initialize Select2 for dropdowns
-      $('.form-select').select2({
-        width: '100%'
-      });
-      
-      // Initialize Dropzone for maintenance images
-      const maintenanceImageDropzone = new Dropzone("#maintenanceImageDropzone", {
-        url: "/api/upload-maintenance-image", // API URL สำหรับการอัปโหลดรูปภาพ
-        maxFiles: 5,
-        maxFilesize: 5, // 5MB
-        acceptedFiles: "image/*",
-        addRemoveLinks: true,
-        autoProcessQueue: false,
-        dictDefaultMessage: "วางไฟล์หรือคลิกเพื่ออัปโหลดรูปภาพ",
-        dictRemoveFile: "ลบไฟล์"
-      });
-
-      // Initialize Tooltips
-      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-      tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-      });
-
-      // Search Tool Form
-      document.getElementById('searchToolToMaintainBtn').addEventListener('click', function() {
-        // Simulating search success
-        document.getElementById('selectedToolInfo').style.display = 'block';
-        document.getElementById('maintenanceFormFields').style.display = 'block';
-        this.style.display = 'none';
-        document.getElementById('saveMaintanceBtn').style.display = 'block';
-      });
-
-      // Select Tool Modal Confirm Button
-      document.getElementById('confirmSelectToolBtn').addEventListener('click', function() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('selectToolModal'));
-        modal.hide();
+      // Handle search
+      document.getElementById('toolSearch').addEventListener('keyup', function() {
+        const searchText = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.tool-card');
         
-        // Show selected tool and maintenance form
-        document.getElementById('selectedToolInfo').style.display = 'block';
-        document.getElementById('maintenanceFormFields').style.display = 'block';
-        document.getElementById('searchToolToMaintainBtn').style.display = 'none';
-        document.getElementById('saveMaintanceBtn').style.display = 'block';
-      });
-
-      // Form Submission
-      document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Basic validation
-        const requiredFields = this.querySelectorAll('[required]');
-        let isValid = true;
-        
-        requiredFields.forEach(field => {
-          if (!field.value.trim()) {
-            isValid = false;
-            field.classList.add('is-invalid');
+        cards.forEach(card => {
+          const toolName = card.querySelector('h5').textContent.toLowerCase();
+          const toolCode = card.querySelector('small').textContent.toLowerCase();
+          const toolBrand = card.querySelector('.badge-maintenance-type') ? 
+                        card.querySelector('.badge-maintenance-type').textContent.toLowerCase() : '';
+          
+          if (toolName.includes(searchText) || toolCode.includes(searchText) || toolBrand.includes(searchText)) {
+            card.closest('.col-md-6').style.display = '';
           } else {
-            field.classList.remove('is-invalid');
+            card.closest('.col-md-6').style.display = 'none';
           }
         });
+      });
+      
+      // Filter by tool type
+      document.getElementById('toolType').addEventListener('change', function() {
+        const selectedType = this.value;
+        const cards = document.querySelectorAll('.tool-card');
         
-        if (!isValid) {
-          alert('กรุณากรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบถ้วน');
+        if (selectedType === '') {
+          cards.forEach(card => {
+            card.closest('.col-md-6').style.display = '';
+          });
           return;
         }
         
-        // Show success modal (demo)
-        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        successModal.show();
-      });
-
-      // Initialize Calendar
-      const calendarEl = document.getElementById('maintenanceCalendar');
-      if (calendarEl) {
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,listMonth'
-          },
-          events: [
-            {
-              title: 'สว่านไฟฟ้า - บำรุงรักษา',
-              start: '2023-03-30',
-              className: 'event-maintenance'
-            },
-            {
-              title: 'เครื่องตัดหญ้า - บำรุงรักษา',
-              start: '2023-03-23',
-              className: 'event-maintenance'
-            },
-            {
-              title: 'เลื่อยวงเดือน - ซ่อมแซม',
-              start: '2023-03-05',
-              className: 'event-repair'
-            },
-            {
-              title: 'เครื่องเจียร - ตรวจสอบ',
-              start: '2023-04-07',
-              className: 'event-inspection'
-            }
-          ],
-          eventClick: function(info) {
-            alert('รายละเอียด: ' + info.event.title);
+        cards.forEach(card => {
+          const type = card.getAttribute('data-tool-type');
+          if (!type) return;
+          
+          if (type === selectedType) {
+            card.closest('.col-md-6').style.display = '';
+          } else {
+            card.closest('.col-md-6').style.display = 'none';
           }
-        });
-        calendar.render();
-      }
-
-      // Initialize Charts
-      if (document.getElementById('maintenanceChart')) {
-        const maintenanceCtx = document.getElementById('maintenanceChart').getContext('2d');
-        const maintenanceChart = new Chart(maintenanceCtx, {
-          type: 'bar',
-          data: {
-            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
-            datasets: [{
-              label: 'จำนวนการบำรุงรักษา',
-              data: [5, 8, 12, 4, 7, 3],
-              backgroundColor: '#42A5F5'
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false
-          }
-        });
-      }
-
-      if (document.getElementById('maintenanceTypeChart')) {
-        const typeCtx = document.getElementById('maintenanceTypeChart').getContext('2d');
-        const typeChart = new Chart(typeCtx, {
-          type: 'pie',
-          data: {
-            labels: ['บำรุงรักษาตามกำหนด', 'ซ่อมแซมทั่วไป', 'ซ่อมแซมฉุกเฉิน', 'ตรวจสอบสภาพ'],
-            datasets: [{
-              data: [60, 20, 10, 10],
-              backgroundColor: ['#42A5F5', '#66BB6A', '#EC407A', '#FFA726']
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false
-          }
-        });
-      }
-
-      if (document.getElementById('maintenanceCostChart')) {
-        const costCtx = document.getElementById('maintenanceCostChart').getContext('2d');
-        const costChart = new Chart(costCtx, {
-          type: 'line',
-          data: {
-            labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
-            datasets: [{
-              label: 'ค่าใช้จ่ายในการบำรุงรักษา (บาท)',
-              data: [2500, 3700, 5200, 1800, 4300, 2100],
-              borderColor: '#28a745',
-              backgroundColor: 'rgba(40, 167, 69, 0.1)',
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false
-          }
-        });
-      }
-
-      // View Maintenance Detail Event
-      document.querySelectorAll('.action-btn.view').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const maintenanceDetailModal = new bootstrap.Modal(document.getElementById('maintenanceDetailModal'));
-          maintenanceDetailModal.show();
         });
       });
-
-      // Maintenance Type Change Event
-      document.getElementById('maintenanceType').addEventListener('change', function() {
-        const toolStatusSelect = document.getElementById('toolStatusAfter');
+      
+      // Filter by status
+      document.getElementById('toolStatus').addEventListener('change', function() {
+        const selectedStatus = this.value;
+        const cards = document.querySelectorAll('.tool-card');
         
-        if (this.value === 'repair' || this.value === 'emergency') {
-          // เพิ่มตัวเลือกสถานะที่เกี่ยวข้องกับการซ่อม
-          toolStatusSelect.innerHTML = `
-            <option value="">-- เลือกสถานะ --</option>
-            <option value="available">พร้อมใช้งาน</option>
-            <option value="needfurther" selected>ต้องตรวจสอบเพิ่มเติม</option>
-            <option value="waitingparts">รอชิ้นส่วน/อะไหล่</option>
-            <option value="broken">ชำรุดไม่สามารถซ่อมได้</option>
-          `;
-        } else {
-          // สำหรับบำรุงรักษาทั่วไป
-          toolStatusSelect.innerHTML = `
-            <option value="">-- เลือกสถานะ --</option>
-            <option value="available" selected>พร้อมใช้งาน</option>
-            <option value="needfurther">ต้องตรวจสอบเพิ่มเติม</option>
-            <option value="waitingparts">รอชิ้นส่วน/อะไหล่</option>
-            <option value="broken">ชำรุดไม่สามารถซ่อมได้</option>
-          `;
+        if (selectedStatus === '') {
+          cards.forEach(card => {
+            card.closest('.col-md-6').style.display = '';
+          });
+          return;
         }
         
-        $(toolStatusSelect).trigger('change');
-      });
-
-      // Reschedule Maintenance Button
-      document.querySelectorAll('button:contains("เลื่อนออกไป")').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const rescheduleModal = new bootstrap.Modal(document.getElementById('rescheduleModal'));
-          rescheduleModal.show();
+        cards.forEach(card => {
+          const statusBadge = card.querySelector('.badge');
+          if (!statusBadge) return;
+          
+          let status = '';
+          if (statusBadge.classList.contains('bg-label-success')) {
+            status = 'available';
+          } else if (statusBadge.classList.contains('bg-label-warning')) {
+            status = 'inuse';
+          } else if (statusBadge.classList.contains('bg-label-danger')) {
+            status = 'maintenance';
+          }
+          
+          if (status === selectedStatus) {
+            card.closest('.col-md-6').style.display = '';
+          } else {
+            card.closest('.col-md-6').style.display = 'none';
+          }
         });
       });
-
-      // Confirm Reschedule Button
-      document.getElementById('confirmRescheduleBtn').addEventListener('click', function() {
-        const rescheduleModal = bootstrap.Modal.getInstance(document.getElementById('rescheduleModal'));
-        rescheduleModal.hide();
-        alert('เลื่อนกำหนดการบำรุงรักษาเรียบร้อยแล้ว');
+      
+      // Calculate total cost when parts change
+      function calculateTotalCost() {
+        let total = 0;
+        const rows = document.querySelectorAll('#partsTable tbody tr');
+        
+        rows.forEach(row => {
+          const quantity = parseFloat(row.querySelector('.part-quantity').value) || 0;
+          const price = parseFloat(row.querySelector('.part-price').value) || 0;
+          total += quantity * price;
+        });
+        
+        document.getElementById('totalCost').value = total;
+      }
+      
+      // Add event listeners to quantity and price inputs
+      document.querySelectorAll('.part-quantity, .part-price').forEach(input => {
+        input.addEventListener('input', calculateTotalCost);
+      });
+      
+      // Initial calculation
+      calculateTotalCost();
+      
+      // Form submission
+      const maintenanceForm = document.getElementById('maintenanceForm');
+      
+      maintenanceForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate required fields
+        const maintenanceDate = document.getElementById('maintenanceDate').value;
+        const maintenanceType = document.getElementById('maintenanceType').value;
+        const maintenanceOperator = document.getElementById('maintenanceOperator').value;
+        const maintenanceDetails = document.getElementById('maintenanceDetails').value;
+        const toolStatusAfter = document.getElementById('toolStatusAfter').value;
+        
+        if (!maintenanceDate || !maintenanceType || !maintenanceOperator || !maintenanceDetails || !toolStatusAfter) {
+          alert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
+          return;
+        }
+        
+        // Show success modal
+        const successModal = new bootstrap.Modal(document.getElementById('maintenanceSuccessModal'));
+        document.getElementById('successToolName').textContent = document.getElementById('selectedToolName').textContent;
+        successModal.show();
       });
     });
+    
+    // Function to select a tool
+    function selectTool(id, toolName, type) {
+      // Update selected tool
+      document.getElementById('selectedToolName').textContent = toolName;
+      
+      // Add 'selected' class to the selected tool and remove from others
+      const cards = document.querySelectorAll('.tool-card');
+      cards.forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      
+      // Set data attributes for filtering
+      event.currentTarget.setAttribute('data-tool-type', type);
+      
+      // Scroll to the maintenance form
+      document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Function to add a new part row
+    function addNewPart() {
+      const tbody = document.querySelector('#partsTable tbody');
+      const newRow = document.createElement('tr');
+      
+      newRow.innerHTML = `
+        <td><input type="text" class="form-control form-control-sm" placeholder="ชื่อรายการ/อะไหล่"></td>
+        <td><input type="number" class="form-control form-control-sm part-quantity" value="1" min="1"></td>
+        <td><input type="number" class="form-control form-control-sm part-price" placeholder="0" min="0"></td>
+        <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="removePart(this)"><i class="bx bx-trash"></i></button></td>
+      `;
+      
+      tbody.appendChild(newRow);
+      
+      // Add event listeners to new inputs
+      newRow.querySelectorAll('.part-quantity, .part-price').forEach(input => {
+        input.addEventListener('input', function() {
+          let total = 0;
+          const rows = document.querySelectorAll('#partsTable tbody tr');
+          
+          rows.forEach(row => {
+            const quantity = parseFloat(row.querySelector('.part-quantity').value) || 0;
+            const price = parseFloat(row.querySelector('.part-price').value) || 0;
+            total += quantity * price;
+          });
+          
+          document.getElementById('totalCost').value = total;
+        });
+      });
+    }
+    
+    // Function to remove a part row
+    function removePart(button) {
+      const row = button.closest('tr');
+      row.remove();
+      
+      // Recalculate total
+      let total = 0;
+      const rows = document.querySelectorAll('#partsTable tbody tr');
+      
+      rows.forEach(row => {
+        const quantity = parseFloat(row.querySelector('.part-quantity').value) || 0;
+        const price = parseFloat(row.querySelector('.part-price').value) || 0;
+        total += quantity * price;
+      });
+      
+      document.getElementById('totalCost').value = total;
+    }
   </script>
 </body>
 </html>
