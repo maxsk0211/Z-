@@ -4077,112 +4077,103 @@ function createSimpleDemoPDF(projectId) {
 }
 
 // ฟังก์ชันสำหรับส่งออกข้อมูลโครงการ
-// แก้ไขฟังก์ชัน exportProjectData
+// ฟังก์ชันสำหรับส่งออกข้อมูลโครงการเป็น PDF
 window.exportProjectData = function(projectId) {
   console.log('ส่งออกข้อมูลโครงการ: ' + projectId);
+  var loadingModal = new bootstrap.Modal(document.getElementById('pdfLoadingModal'));
+  loadingModal.show();
   
-  // ดึงข้อมูลโครงการ
-  const projectData = getProjectData(projectId);
-  
-  // สร้างหน้าต่างใหม่
-  const printWindow = window.open('', '_blank');
-  
-  // เขียน HTML โดยใช้ single quotes แทน backticks
-  printWindow.document.write('<html><head><meta charset="utf-8"><title>รายงานโครงการ</title>');
-  printWindow.document.write('<style>');
-  printWindow.document.write('body { font-family: sans-serif; padding: 20px; }');
-  printWindow.document.write('h1, h2 { color: #28a745; }');
-  printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }');
-  printWindow.document.write('th, td { border: 1px solid #ddd; padding: 8px; }');
-  printWindow.document.write('th { background-color: #28a745; color: white; }');
-  printWindow.document.write('</style></head><body>');
-  
-  // ส่วนหัว
-  printWindow.document.write('<h1>Green Gardens</h1>');
-  printWindow.document.write('<h2>รายงานโครงการ</h2>');
-  printWindow.document.write('<p>วันที่พิมพ์: ' + new Date().toLocaleDateString('th-TH') + '</p>');
-  
-  // ข้อมูลโครงการ
-  printWindow.document.write('<h2>ข้อมูลโครงการ</h2>');
-  printWindow.document.write('<table>');
-  printWindow.document.write('<tr><td><strong>รหัสโครงการ:</strong></td><td>' + projectData.id + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>ชื่อโครงการ:</strong></td><td>' + projectData.name + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>ลูกค้า:</strong></td><td>' + projectData.customer + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>วันที่เริ่ม:</strong></td><td>' + projectData.startDate + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>กำหนดเสร็จ:</strong></td><td>' + projectData.endDate + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>สถานะ:</strong></td><td>' + projectData.status + '</td></tr>');
-  printWindow.document.write('</table>');
-  
-  // สรุปการเงิน
-  printWindow.document.write('<h2>สรุปการเงิน</h2>');
-  printWindow.document.write('<table>');
-  printWindow.document.write('<tr><th>รายการ</th><th>จำนวนเงิน (บาท)</th></tr>');
-  printWindow.document.write('<tr><td>งบประมาณโครงการทั้งหมด</td><td style="text-align: right;">' + projectData.budget.toLocaleString() + '</td></tr>');
-  printWindow.document.write('<tr><td>มูลค่าวัสดุที่เบิก</td><td style="text-align: right;">' + projectData.materialCost.toLocaleString() + '</td></tr>');
-  printWindow.document.write('<tr><td>มูลค่าวัสดุที่คืน</td><td style="text-align: right;">' + projectData.materialReturnCost.toLocaleString() + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>มูลค่าวัสดุสุทธิ</strong></td><td style="text-align: right;"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td></tr>');
-  printWindow.document.write('</table>');
-  
-  // ปุ่มพิมพ์
-  printWindow.document.write('<button onclick="window.print()">พิมพ์รายงาน</button>');
-  printWindow.document.write('<button onclick="window.close()">ปิด</button>');
-  
-  printWindow.document.write('</body></html>');
-  printWindow.document.close();
-};
-
-// แก้ไขฟังก์ชัน printProjectReport
-window.printProjectReport = function(projectId) {
-  console.log('พิมพ์รายงานโครงการ: ' + projectId);
-  
-  // ดึงข้อมูลโครงการ
-  const projectData = getProjectData(projectId);
-  
-  // สร้างหน้าต่างใหม่
-  const printWindow = window.open('', '_blank');
-  
-  // เขียน HTML แบบคล้ายกัน แต่สั่งพิมพ์ทันที
-  printWindow.document.write('<html><head><meta charset="utf-8"><title>รายงานโครงการ</title>');
-  printWindow.document.write('<style>');
-  printWindow.document.write('body { font-family: sans-serif; padding: 20px; }');
-  printWindow.document.write('h1, h2 { color: #28a745; }');
-  printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }');
-  printWindow.document.write('th, td { border: 1px solid #ddd; padding: 8px; }');
-  printWindow.document.write('th { background-color: #28a745; color: white; }');
-  printWindow.document.write('</style></head><body>');
-  
-  // เนื้อหาเหมือนกับ exportProjectData
-  printWindow.document.write('<h1>Green Gardens</h1>');
-  printWindow.document.write('<h2>รายงานโครงการ</h2>');
-  printWindow.document.write('<p>วันที่พิมพ์: ' + new Date().toLocaleDateString('th-TH') + '</p>');
-  
-  // ข้อมูลโครงการ
-  printWindow.document.write('<h2>ข้อมูลโครงการ</h2>');
-  printWindow.document.write('<table>');
-  printWindow.document.write('<tr><td><strong>รหัสโครงการ:</strong></td><td>' + projectData.id + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>ชื่อโครงการ:</strong></td><td>' + projectData.name + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>ลูกค้า:</strong></td><td>' + projectData.customer + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>วันที่เริ่ม:</strong></td><td>' + projectData.startDate + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>กำหนดเสร็จ:</strong></td><td>' + projectData.endDate + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>สถานะ:</strong></td><td>' + projectData.status + '</td></tr>');
-  printWindow.document.write('</table>');
-  
-  // สรุปการเงิน
-  printWindow.document.write('<h2>สรุปการเงิน</h2>');
-  printWindow.document.write('<table>');
-  printWindow.document.write('<tr><th>รายการ</th><th>จำนวนเงิน (บาท)</th></tr>');
-  printWindow.document.write('<tr><td>งบประมาณโครงการทั้งหมด</td><td style="text-align: right;">' + projectData.budget.toLocaleString() + '</td></tr>');
-  printWindow.document.write('<tr><td>มูลค่าวัสดุที่เบิก</td><td style="text-align: right;">' + projectData.materialCost.toLocaleString() + '</td></tr>');
-  printWindow.document.write('<tr><td>มูลค่าวัสดุที่คืน</td><td style="text-align: right;">' + projectData.materialReturnCost.toLocaleString() + '</td></tr>');
-  printWindow.document.write('<tr><td><strong>มูลค่าวัสดุสุทธิ</strong></td><td style="text-align: right;"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td></tr>');
-  printWindow.document.write('</table>');
-  
-  printWindow.document.write('<script>');
-  printWindow.document.write('window.onload = function() { setTimeout(function() { window.print(); }, 1000); }');
-  printWindow.document.write('</script>');
-  
-  printWindow.document.write('</body></html>');
-  printWindow.document.close();
+  setTimeout(function() {
+    try {
+      var projectData = getProjectData(projectId);
+      var printWindow = window.open('', '_blank');
+      
+      var htmlContent = '<html><head><meta charset="utf-8">';
+      htmlContent += '<title>รายงานโครงการ: ' + projectData.name + '</title>';
+      htmlContent += '<style>';
+      htmlContent += 'body { font-family: sans-serif; padding: 20px; }';
+      htmlContent += 'h1, h2 { color: #28a745; }';
+      htmlContent += 'table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }';
+      htmlContent += 'th, td { border: 1px solid #ddd; padding: 8px; }';
+      htmlContent += 'th { background-color: #28a745; color: white; }';
+      htmlContent += 'tr:nth-child(even) { background-color: #f2f2f2; }';
+      htmlContent += '.right-align { text-align: right; }';
+      htmlContent += '.btn { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px; }';
+      htmlContent += '</style></head><body>';
+      
+      // ส่วนหัว
+      htmlContent += '<h1>Green Gardens</h1>';
+      htmlContent += '<h2>รายงานโครงการ</h2>';
+      htmlContent += '<p>วันที่พิมพ์: ' + new Date().toLocaleDateString() + '</p>';
+      
+      // ข้อมูลโครงการ
+      htmlContent += '<h2>ข้อมูลโครงการ</h2>';
+      htmlContent += '<table>';
+      htmlContent += '<tr><td><strong>รหัสโครงการ:</strong></td><td>' + projectData.id + '</td></tr>';
+      htmlContent += '<tr><td><strong>ชื่อโครงการ:</strong></td><td>' + projectData.name + '</td></tr>';
+      htmlContent += '<tr><td><strong>ลูกค้า:</strong></td><td>' + projectData.customer + '</td></tr>';
+      htmlContent += '<tr><td><strong>วันที่เริ่ม:</strong></td><td>' + projectData.startDate + '</td></tr>';
+      htmlContent += '<tr><td><strong>กำหนดเสร็จ:</strong></td><td>' + projectData.endDate + '</td></tr>';
+      htmlContent += '<tr><td><strong>สถานะ:</strong></td><td>' + projectData.status + '</td></tr>';
+      htmlContent += '</table>';
+      
+      // สรุปการเงิน
+      htmlContent += '<h2>สรุปการเงิน</h2>';
+      htmlContent += '<table>';
+      htmlContent += '<tr><th>รายการ</th><th>จำนวนเงิน (บาท)</th></tr>';
+      htmlContent += '<tr><td>งบประมาณโครงการทั้งหมด</td><td class="right-align">' + projectData.budget.toLocaleString() + '</td></tr>';
+      htmlContent += '<tr><td>มูลค่าวัสดุที่เบิก</td><td class="right-align">' + projectData.materialCost.toLocaleString() + '</td></tr>';
+      htmlContent += '<tr><td>มูลค่าวัสดุที่คืน</td><td class="right-align">' + projectData.materialReturnCost.toLocaleString() + '</td></tr>';
+      htmlContent += '<tr><td><strong>มูลค่าวัสดุสุทธิ</strong></td><td class="right-align"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td></tr>';
+      htmlContent += '</table>';
+      
+      // รายการวัสดุที่ใช้
+      htmlContent += '<h2>รายการวัสดุที่ใช้</h2>';
+      htmlContent += '<table>';
+      htmlContent += '<tr><th>ลำดับ</th><th>รายการ</th><th>จำนวนเบิกจริง</th><th>จำนวนคืนจริง</th><th>รวมใช้จริง</th><th>ราคา/หน่วย</th><th>รวมเงินสุทธิ</th></tr>';
+      
+      // ใส่ข้อมูลรายการวัสดุ
+      for (var i = 0; i < projectData.materials.length; i++) {
+        var material = projectData.materials[i];
+        htmlContent += '<tr>';
+        htmlContent += '<td>' + (i + 1) + '</td>';
+        htmlContent += '<td>' + material.name + '</td>';
+        htmlContent += '<td>' + material.quantityWithdrawn + ' ' + material.unit + '</td>';
+        htmlContent += '<td>' + (material.quantityReturned ? material.quantityReturned + ' ' + material.unit : '-') + '</td>';
+        htmlContent += '<td>' + material.quantityUsed + ' ' + material.unit + '</td>';
+        htmlContent += '<td class="right-align">' + material.unitPrice.toLocaleString() + '</td>';
+        htmlContent += '<td class="right-align">' + material.totalCost.toLocaleString() + '</td>';
+        htmlContent += '</tr>';
+      }
+      
+      htmlContent += '<tr>';
+      htmlContent += '<td colspan="6" style="text-align: right;"><strong>รวมทั้งสิ้น</strong></td>';
+      htmlContent += '<td class="right-align"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td>';
+      htmlContent += '</tr>';
+      htmlContent += '</table>';
+      
+      // ปุ่มพิมพ์และปิด
+      htmlContent += '<div style="margin-top: 20px; text-align: center;">';
+      htmlContent += '<button class="btn" onclick="window.print()">พิมพ์รายงาน</button>';
+      htmlContent += '<button class="btn" style="background-color: #666;" onclick="window.close()">ปิด</button>';
+      htmlContent += '</div>';
+      
+      htmlContent += '<script>';
+      htmlContent += 'window.onload = function() { alert("คลิกปุ่มพิมพ์รายงานและเลือก \'บันทึกเป็น PDF\' ในหน้าต่างพิมพ์"); };';
+      htmlContent += '</script>';
+      
+      htmlContent += '</body></html>';
+      
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+      
+      loadingModal.hide();
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
+      alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
+      loadingModal.hide();
+    }
+  }, 500);
 };
 
 // ปุ่มรีเซ็ตตัวกรอง
