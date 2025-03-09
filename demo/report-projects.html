@@ -3330,8 +3330,9 @@ function addMaterialList(doc, projectData) {
 }
 
 // เพิ่มความคืบหน้าโครงการ
+// เพิ่มความคืบหน้าโครงการ (แก้ไขใหม่ไม่ใช้ autoTable)
 function addProjectProgress(doc, projectData) {
-  const startY = doc.lastAutoTable.finalY + 15;
+  let startY = doc.lastTableEndY + 15;
   
   // ตรวจสอบว่าต้องขึ้นหน้าใหม่หรือไม่
   if (startY > 230) {
@@ -3347,47 +3348,95 @@ function addProjectProgress(doc, projectData) {
   doc.setFont('helvetica', 'normal');
   doc.text('ไทม์ไลน์โครงการ', 15, startY + 10);
   
-  // สร้างตารางไทม์ไลน์
-  const timelineHeader = [['วันที่', 'กิจกรรม', 'รายละเอียด']];
+  // สร้างตารางไทม์ไลน์แบบพื้นฐาน
+  const tableX = 15;
+  let tableY = startY + 15;
+  const tableWidth = 180;
+  const rowHeight = 10;
   
-  // สร้างข้อมูลจำลอง
-  let timelineRows = [];
-  if (projectData.timeline && projectData.timeline.length > 0) {
-    timelineRows = projectData.timeline.map(item => [
-      item.date,
-      item.title,
-      item.description
-    ]);
+  // กำหนดความกว้างของแต่ละคอลัมน์
+  const colWidths = [30, 45, 105]; // รวมกันเท่ากับ tableWidth
+  
+  // สร้างหัวตาราง
+  doc.setFillColor(40, 167, 69); // สีเขียว
+  doc.setDrawColor(40, 167, 69);
+  doc.rect(tableX, tableY, tableWidth, rowHeight, 'FD');
+  
+  doc.setTextColor(255, 255, 255); // สีขาว
+  doc.setFont('helvetica', 'bold');
+  
+  const headers = ['วันที่', 'กิจกรรม', 'รายละเอียด'];
+  
+  let xPos = tableX;
+  for (let i = 0; i < headers.length; i++) {
+    doc.text(headers[i], xPos + 3, tableY + 6.5);
+    xPos += colWidths[i];
   }
   
-  // วาดตาราง
-  doc.autoTable({
-    startY: startY + 15,
-    head: timelineHeader,
-    body: timelineRows,
-    theme: 'grid',
-    headStyles: {
-      fillColor: [40, 167, 69], // สีเขียว
-      textColor: [255, 255, 255],
-      fontStyle: 'bold'
-    },
-    styles: {
-      fontSize: 9,
-      cellPadding: 3
-    },
-    columnStyles: {
-      0: { cellWidth: 25 },
-      1: { cellWidth: 40 }
-    },
-    margin: { left: 15, right: 15 }
-  });
+  // ตรวจสอบว่ามีข้อมูลไทม์ไลน์หรือไม่
+  if (!projectData.timeline || projectData.timeline.length === 0) {
+    tableY += rowHeight;
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    doc.setDrawColor(200, 200, 200);
+    doc.rect(tableX, tableY, tableWidth, rowHeight);
+    doc.text('-- ไม่มีข้อมูลไทม์ไลน์ --', tableX + tableWidth / 2, tableY + 6.5, { align: 'center' });
+    tableY += rowHeight;
+  } else {
+    // วาดข้อมูลไทม์ไลน์
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    
+    let altRow = false;
+    for (let i = 0; i < projectData.timeline.length; i++) {
+      const timeline = projectData.timeline[i];
+      tableY += rowHeight;
+      
+      // สีพื้นแถวสลับ
+      if (altRow) {
+        doc.setFillColor(245, 245, 245);
+        doc.rect(tableX, tableY, tableWidth, rowHeight, 'F');
+      }
+      altRow = !altRow;
+      
+      // วาดเส้นกรอบ
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(tableX, tableY, tableWidth, rowHeight);
+      
+      // วาดเส้นแบ่งคอลัมน์
+      xPos = tableX;
+      for (let j = 0; j < colWidths.length - 1; j++) {
+        xPos += colWidths[j];
+        doc.line(xPos, tableY, xPos, tableY + rowHeight);
+      }
+      
+      // เพิ่มข้อมูลในแถว
+      doc.text(timeline.date, tableX + 3, tableY + 6.5);
+      doc.text(timeline.title, tableX + colWidths[0] + 3, tableY + 6.5);
+      
+      // ตรวจสอบว่าข้อความยาวเกินไปหรือไม่
+      const description = timeline.description;
+      const maxWidth = colWidths[2] - 6; // ขอบซ้าย-ขวา = 6
+      
+      if (doc.getTextWidth(description) > maxWidth) {
+        // ข้อความยาว ให้เพิ่มบรรทัด
+        tableY += 2; // เพิ่มระยะห่างเล็กน้อย
+        doc.text(description, tableX + colWidths[0] + colWidths[1] + 3, tableY + 2.5);
+      } else {
+        doc.text(description, tableX + colWidths[0] + colWidths[1] + 3, tableY + 6.5);
+      }
+    }
+  }
+  
+  // บันทึกตำแหน่งสุดท้ายของตารางเพื่อใช้ในฟังก์ชันอื่น
+  doc.lastTableEndY = tableY + rowHeight;
   
   // เพิ่มข้อมูลสรุปหมวดหมู่วัสดุ
-  if (doc.lastAutoTable.finalY + 60 > 280) {
+  if (doc.lastTableEndY + 60 > 280) {
     doc.addPage();
     drawMaterialCategoryChart(doc, 20, projectData);
   } else {
-    drawMaterialCategoryChart(doc, doc.lastAutoTable.finalY + 15, projectData);
+    drawMaterialCategoryChart(doc, doc.lastTableEndY + 15, projectData);
   }
 }
 
