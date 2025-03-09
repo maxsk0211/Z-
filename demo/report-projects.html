@@ -5266,6 +5266,56 @@ function createThaiPDF(projectId) {
   
   return doc;
 }
+function showPDFPreview(doc, projectName) {
+  // ถ้า doc เป็น Promise ให้รอให้ resolve ก่อน
+  if (doc instanceof Promise) {
+    doc.then(realDoc => {
+      showPDFPreviewInternal(realDoc, projectName);
+    }).catch(error => {
+      console.error('เกิดข้อผิดพลาดในการสร้าง PDF:', error);
+      alert('เกิดข้อผิดพลาดในการสร้าง PDF โปรดลองอีกครั้ง');
+    });
+    return;
+  }
+  
+  // ถ้า doc เป็น object ให้แสดงทันที
+  showPDFPreviewInternal(doc, projectName);
+  
+  function showPDFPreviewInternal(doc, projectName) {
+    // สร้าง data URL ของ PDF
+    const pdfDataUri = doc.output('datauristring');
+    
+    // อัพเดท src ของ iframe
+    const previewFrame = document.getElementById('pdfPreviewFrame');
+    previewFrame.src = pdfDataUri;
+    
+    // อัพเดทชื่อโครงการในหัวข้อ Modal
+    document.querySelector('#pdfPreviewModal .modal-title').textContent = `รายงานโครงการ: ${projectName}`;
+    
+    // แสดง Modal
+    const bsModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
+    bsModal.show();
+    
+    // เพิ่ม Event Listener สำหรับปุ่มดาวน์โหลด
+    document.getElementById('downloadPdfBtn').onclick = function() {
+      // ดาวน์โหลด PDF
+      doc.save(`รายงานโครงการ_${projectName.replace(/\s+/g, '_')}.pdf`);
+    };
+    
+    // เพิ่ม Event Listener สำหรับปุ่มพิมพ์
+    document.getElementById('printPdfBtn').onclick = function() {
+      // เปิด PDF ในแท็บใหม่และสั่งพิมพ์
+      const printWindow = window.open(pdfDataUri);
+      
+      // รอให้ PDF โหลดเสร็จแล้วสั่งพิมพ์
+      printWindow.addEventListener('load', function() {
+        setTimeout(function() {
+          printWindow.print();
+        }, 500);
+      });
+    };
+  }
+}
 
   </script>
 </body>
