@@ -1,0 +1,306 @@
+-- สร้างฐานข้อมูล
+CREATE DATABASE IF NOT EXISTS GreenGardenManagement CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE GreenGardenManagement;
+
+-- ตารางผู้ใช้งาน
+CREATE TABLE IF NOT EXISTS Users (
+    user_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    position VARCHAR(50),
+    role ENUM('admin', 'manager', 'staff') NOT NULL DEFAULT 'staff',
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+    last_login DATETIME,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ตารางสถานะโครงการ
+CREATE TABLE IF NOT EXISTS ProjectStatus (
+    status_id VARCHAR(10) PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางโครงการ
+CREATE TABLE IF NOT EXISTS Projects (
+    project_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    customer VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    address TEXT,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    status_id VARCHAR(10) NOT NULL,
+    progress DECIMAL(5,2) DEFAULT 0,
+    manager_id VARCHAR(10),
+    budget DECIMAL(12,2),
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (status_id) REFERENCES ProjectStatus(status_id),
+    FOREIGN KEY (manager_id) REFERENCES Users(user_id)
+);
+
+-- ตารางหมวดหมู่วัสดุ
+CREATE TABLE IF NOT EXISTS MaterialCategories (
+    category_id VARCHAR(10) PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางสถานะวัสดุ
+CREATE TABLE IF NOT EXISTS MaterialStatus (
+    status_id VARCHAR(10) PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางวัสดุทั่วไป
+CREATE TABLE IF NOT EXISTS Materials (
+    material_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category_id VARCHAR(10) NOT NULL,
+    quantity DECIMAL(10,2) DEFAULT 0,
+    unit VARCHAR(20) NOT NULL,
+    latest_price DECIMAL(10,2),
+    average_cost DECIMAL(10,2),
+    stock_value DECIMAL(12,2) DEFAULT 0,
+    reorder_point DECIMAL(10,2),
+    status_id VARCHAR(10) NOT NULL,
+    image VARCHAR(255),
+    description TEXT,
+    location VARCHAR(50),
+    supplier VARCHAR(100),
+    lead_time INT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES MaterialCategories(category_id),
+    FOREIGN KEY (status_id) REFERENCES MaterialStatus(status_id)
+);
+
+-- ตารางวัสดุเครื่องมือช่าง
+CREATE TABLE IF NOT EXISTS ConstructionMaterials (
+    construction_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category_id VARCHAR(10) NOT NULL,
+    quantity DECIMAL(10,2) DEFAULT 0,
+    unit VARCHAR(20) NOT NULL,
+    price_per_unit DECIMAL(10,2),
+    stock_value DECIMAL(12,2) DEFAULT 0,
+    status_id VARCHAR(10) NOT NULL,
+    image VARCHAR(255),
+    description TEXT,
+    location VARCHAR(50),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES MaterialCategories(category_id),
+    FOREIGN KEY (status_id) REFERENCES MaterialStatus(status_id)
+);
+
+-- ตารางล็อตวัสดุ (ทั้งวัสดุทั่วไปและวัสดุก่อสร้าง)
+CREATE TABLE IF NOT EXISTS InventoryLots (
+    lot_id VARCHAR(10) PRIMARY KEY,
+    inventory_type ENUM('material', 'construction') NOT NULL,
+    item_id VARCHAR(10) NOT NULL,
+    receive_date DATE NOT NULL,
+    original_quantity DECIMAL(10,2) NOT NULL,
+    remaining_quantity DECIMAL(10,2) NOT NULL,
+    price_per_unit DECIMAL(10,2) NOT NULL,
+    remaining_value DECIMAL(12,2) GENERATED ALWAYS AS (remaining_quantity * price_per_unit) STORED,
+    supplier VARCHAR(100),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    INDEX (inventory_type, item_id)
+);
+
+-- ตารางสถานะเครื่องมือ
+CREATE TABLE IF NOT EXISTS ToolStatus (
+    status_id VARCHAR(10) PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางหมวดหมู่เครื่องมือ
+CREATE TABLE IF NOT EXISTS ToolCategories (
+    category_id VARCHAR(10) PRIMARY KEY,
+    category_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางเครื่องมือช่าง
+CREATE TABLE IF NOT EXISTS Tools (
+    tool_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category_id VARCHAR(10) NOT NULL,
+    model VARCHAR(100),
+    specifications TEXT,
+    serial_number VARCHAR(50),
+    status_id VARCHAR(10) NOT NULL,
+    last_maintenance DATE,
+    next_maintenance DATE,
+    current_user VARCHAR(10),
+    borrow_date DATE,
+    price DECIMAL(10,2),
+    image VARCHAR(255),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES ToolCategories(category_id),
+    FOREIGN KEY (status_id) REFERENCES ToolStatus(status_id),
+    FOREIGN KEY (current_user) REFERENCES Users(user_id)
+);
+
+-- ตารางประเภทรถ
+CREATE TABLE IF NOT EXISTS VehicleTypes (
+    type_id VARCHAR(10) PRIMARY KEY,
+    type_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางสถานะรถ
+CREATE TABLE IF NOT EXISTS VehicleStatus (
+    status_id VARCHAR(10) PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ตารางยานพาหนะ
+CREATE TABLE IF NOT EXISTS Vehicles (
+    license_plate VARCHAR(20) PRIMARY KEY,
+    type_id VARCHAR(10) NOT NULL,
+    brand VARCHAR(50) NOT NULL,
+    model VARCHAR(50) NOT NULL,
+    year INT,
+    status_id VARCHAR(10) NOT NULL,
+    last_maintenance DATE,
+    next_maintenance DATE,
+    driver VARCHAR(10),
+    price DECIMAL(12,2),
+    image VARCHAR(255),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (type_id) REFERENCES VehicleTypes(type_id),
+    FOREIGN KEY (status_id) REFERENCES VehicleStatus(status_id),
+    FOREIGN KEY (driver) REFERENCES Users(user_id)
+);
+
+-- ตารางประวัติการเบิก-รับวัสดุและวัสดุก่อสร้าง
+CREATE TABLE IF NOT EXISTS InventoryTransactions (
+    transaction_id VARCHAR(10) PRIMARY KEY,
+    date DATETIME NOT NULL,
+    type ENUM('withdraw', 'receive', 'return') NOT NULL,
+    inventory_type ENUM('material', 'construction') NOT NULL,
+    item_id VARCHAR(10) NOT NULL,
+    lot_id VARCHAR(10),
+    quantity DECIMAL(10,2) NOT NULL,
+    project_id VARCHAR(10),
+    user_id VARCHAR(10) NOT NULL,
+    notes TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (lot_id) REFERENCES InventoryLots(lot_id),
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    INDEX (inventory_type, item_id)
+);
+
+-- ตารางประวัติการเบิก-คืนเครื่องมือ
+CREATE TABLE IF NOT EXISTS ToolTransactions (
+    transaction_id VARCHAR(10) PRIMARY KEY,
+    date DATETIME NOT NULL,
+    type ENUM('borrow', 'return', 'maintenance') NOT NULL,
+    tool_id VARCHAR(10) NOT NULL,
+    user_id VARCHAR(10) NOT NULL,
+    project_id VARCHAR(10),
+    expected_return_date DATE,
+    return_date DATE,
+    status ENUM('active', 'completed', 'overdue') NOT NULL,
+    notes TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (tool_id) REFERENCES Tools(tool_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id)
+);
+
+-- ตารางประวัติการบำรุงรักษาเครื่องมือ
+CREATE TABLE IF NOT EXISTS ToolMaintenance (
+    maintenance_id VARCHAR(10) PRIMARY KEY,
+    date DATE NOT NULL,
+    tool_id VARCHAR(10) NOT NULL,
+    type ENUM('routine', 'repair') NOT NULL,
+    description TEXT,
+    technician_id VARCHAR(10) NOT NULL,
+    total_parts_cost DECIMAL(10,2) DEFAULT 0,
+    labor_cost DECIMAL(10,2) DEFAULT 0,
+    total_cost DECIMAL(10,2) GENERATED ALWAYS AS (total_parts_cost + labor_cost) STORED,
+    status ENUM('pending', 'in_progress', 'completed') NOT NULL DEFAULT 'pending',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (tool_id) REFERENCES Tools(tool_id),
+    FOREIGN KEY (technician_id) REFERENCES Users(user_id)
+);
+
+-- ตารางรายการซ่อม/อะไหล่
+CREATE TABLE IF NOT EXISTS ToolMaintenanceItems (
+    item_id VARCHAR(10) PRIMARY KEY,
+    maintenance_id VARCHAR(10) NOT NULL,
+    item_type ENUM('spare_part', 'service') NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    quantity DECIMAL(10,2) NOT NULL,
+    unit VARCHAR(20) NOT NULL,
+    price_per_unit DECIMAL(10,2) NOT NULL,
+    total_price DECIMAL(10,2) GENERATED ALWAYS AS (quantity * price_per_unit) STORED,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (maintenance_id) REFERENCES ToolMaintenance(maintenance_id)
+);
+
+-- ตารางการซ่อมรถ
+CREATE TABLE IF NOT EXISTS VehicleRepairs (
+    repair_id VARCHAR(10) PRIMARY KEY,
+    vehicle_license VARCHAR(20) NOT NULL,
+    repair_date DATE NOT NULL,
+    type ENUM('maintenance', 'repair', 'checkup') NOT NULL,
+    description TEXT,
+    repair_shop VARCHAR(100),
+    cost DECIMAL(10,2) NOT NULL,
+    responsible_user VARCHAR(10) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_license) REFERENCES Vehicles(license_plate),
+    FOREIGN KEY (responsible_user) REFERENCES Users(user_id)
+);
+
+-- ตารางวัสดุใช้ในโครงการ
+CREATE TABLE IF NOT EXISTS ProjectMaterials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id VARCHAR(10) NOT NULL,
+    material_id VARCHAR(10) NOT NULL,
+    quantity DECIMAL(10,2) NOT NULL,
+    price_per_unit DECIMAL(10,2) NOT NULL,
+    total_value DECIMAL(12,2) GENERATED ALWAYS AS (quantity * price_per_unit) STORED,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (project_id) REFERENCES Projects(project_id),
+    FOREIGN KEY (material_id) REFERENCES Materials(material_id),
+    UNIQUE (project_id, material_id)
+);
+
+-- ตารางเครื่องมือใช้ในโครงการ
+CREATE TABLE IF NOT EXISTS ProjectTools (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id VARCHAR(10) NOT NULL,
+    tool_id VARCHAR(10) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    status ENUM('active', 'completed') NOT NULL DEFAU
