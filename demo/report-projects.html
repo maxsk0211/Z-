@@ -5512,32 +5512,32 @@ function exportThaiReport(projectId) {
   // }
   
   // ข้อมูลทีมงาน (ถ้ามี)
-  if (projectData.workforce && projectData.workforce.length > 0) {
-    htmlContent += '<h3>กำลังคนที่ใช้</h3>';
-    htmlContent += '<table>';
-    htmlContent += '<tr>';
-    htmlContent += '<th style="width:30%">ตำแหน่ง</th>';
-    htmlContent += '<th style="width:15%">จำนวน (คน)</th>';
-    htmlContent += '<th style="width:15%">จำนวนวันทำงาน</th>';
-    htmlContent += '<th style="width:20%">ค่าแรง/วัน</th>';
-    htmlContent += '<th style="width:20%">รวมค่าแรง</th>';
-    htmlContent += '</tr>';
+  // if (projectData.workforce && projectData.workforce.length > 0) {
+  //   htmlContent += '<h3>กำลังคนที่ใช้</h3>';
+  //   htmlContent += '<table>';
+  //   htmlContent += '<tr>';
+  //   htmlContent += '<th style="width:30%">ตำแหน่ง</th>';
+  //   htmlContent += '<th style="width:15%">จำนวน (คน)</th>';
+  //   htmlContent += '<th style="width:15%">จำนวนวันทำงาน</th>';
+  //   htmlContent += '<th style="width:20%">ค่าแรง/วัน</th>';
+  //   htmlContent += '<th style="width:20%">รวมค่าแรง</th>';
+  //   htmlContent += '</tr>';
     
-    var laborTotal = 0;
-    for (var w = 0; w < projectData.workforce.length; w++) {
-      var worker = projectData.workforce[w];
-      htmlContent += '<tr>';
-      htmlContent += '<td>' + worker.position + '</td>';
-      htmlContent += '<td class="center-align">' + worker.count + '</td>';
-      htmlContent += '<td class="center-align">' + worker.days + '</td>';
-      htmlContent += '<td class="right-align">' + worker.ratePerDay.toLocaleString() + '</td>';
-      htmlContent += '<td class="right-align">' + worker.totalCost.toLocaleString() + '</td>';
-      htmlContent += '</tr>';
-      laborTotal += worker.totalCost;
-    }
+  //   var laborTotal = 0;
+  //   for (var w = 0; w < projectData.workforce.length; w++) {
+  //     var worker = projectData.workforce[w];
+  //     htmlContent += '<tr>';
+  //     htmlContent += '<td>' + worker.position + '</td>';
+  //     htmlContent += '<td class="center-align">' + worker.count + '</td>';
+  //     htmlContent += '<td class="center-align">' + worker.days + '</td>';
+  //     htmlContent += '<td class="right-align">' + worker.ratePerDay.toLocaleString() + '</td>';
+  //     htmlContent += '<td class="right-align">' + worker.totalCost.toLocaleString() + '</td>';
+  //     htmlContent += '</tr>';
+  //     laborTotal += worker.totalCost;
+  //   }
     
     htmlContent += '<tr class="total-row">';
-    htmlContent += '<td colspan="4" class="right-align"><strong>รวมค่าแรงทั้งสิ้น</strong></td>';
+    htmlContent += '<td colspan="4" class="right-align"><strong>รวมทั้งสิ้น</strong></td>';
     htmlContent += '<td class="right-align"><strong>' + laborTotal.toLocaleString() + '</strong></td>';
     htmlContent += '</tr>';
     htmlContent += '</table>';
