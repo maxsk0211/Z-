@@ -2953,15 +2953,15 @@ function createThaiPDF(projectId) {
   
   const financialRows = [
     ["งบประมาณโครงการทั้งหมด", projectData.budget.toLocaleString()],
-    ["มูลค่าวัสดุที่เบิก", projectData.materialCost.toLocaleString()],
-    ["มูลค่าวัสดุที่คืน", projectData.materialReturnCost.toLocaleString()],
-    ["มูลค่าวัสดุสุทธิ", projectData.materialNetCost.toLocaleString()],
-    ["สัดส่วนต้นทุนวัสดุ", projectData.materialCostRatio.toFixed(2) + "%"],
-    ["ค่าแรงทั้งหมด", projectData.laborCost.toLocaleString()],
-    ["ค่าใช้จ่ายอื่นๆ", projectData.otherCost.toLocaleString()],
-    ["ต้นทุนรวมทั้งสิ้น", projectData.totalCost.toLocaleString()],
-    ["กำไรขั้นต้น", projectData.grossProfit.toLocaleString()],
-    ["ต้นทุนวัสดุต่อพื้นที่", projectData.costPerArea.toFixed(2) + " บาท/ตร.ม."]
+    // ["มูลค่าวัสดุที่เบิก", projectData.materialCost.toLocaleString()],
+    // ["มูลค่าวัสดุที่คืน", projectData.materialReturnCost.toLocaleString()],
+    // ["มูลค่าวัสดุสุทธิ", projectData.materialNetCost.toLocaleString()],
+    // ["สัดส่วนต้นทุนวัสดุ", projectData.materialCostRatio.toFixed(2) + "%"],
+    // ["ค่าแรงทั้งหมด", projectData.laborCost.toLocaleString()],
+    // ["ค่าใช้จ่ายอื่นๆ", projectData.otherCost.toLocaleString()],
+    // ["ต้นทุนรวมทั้งสิ้น", projectData.totalCost.toLocaleString()],
+    // ["กำไรขั้นต้น", projectData.grossProfit.toLocaleString()],
+    // ["ต้นทุนวัสดุต่อพื้นที่", projectData.costPerArea.toFixed(2) + " บาท/ตร.ม."]
   ];
   
   let alternateRow = false;
