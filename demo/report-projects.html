@@ -5143,32 +5143,32 @@ function createThaiPDF(projectId) {
       </div>
       
       <h2>สรุปการเงิน</h2>
-      // <table style="width: 100%; border-collapse: collapse;">
-      //   <tr style="background-color: #28a745; color: white;">
-      //     <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">รายการ</th>
-      //     <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">จำนวนเงิน (บาท)</th>
-      //   </tr>
-      //   <tr>
-      //     <td style="padding: 8px; border: 1px solid #ddd;">งบประมาณโครงการทั้งหมด</td>
-      //     <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.budget.toLocaleString()}</td>
-      //   </tr>
-      //   <tr style="background-color: #f2f2f2;">
-      //     <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุที่เบิก</td>
-      //     <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialCost.toLocaleString()}</td>
-      //   </tr>
-      //   <tr>
-      //     <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุที่คืน</td>
-      //     <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialReturnCost.toLocaleString()}</td>
-      //   </tr>
-      //   <tr style="background-color: #f2f2f2; font-weight: bold;">
-      //     <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุสุทธิ</td>
-      //     <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialNetCost.toLocaleString()}</td>
-      //   </tr>
-      //   <tr>
-      //     <td style="padding: 8px; border: 1px solid #ddd;">สัดส่วนต้นทุนวัสดุ</td>
-      //     <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialCostRatio.toFixed(2)}%</td>
-      //   </tr>
-      // </table>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr style="background-color: #28a745; color: white;">
+          <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">รายการ</th>
+          <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">จำนวนเงิน (บาท)</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">งบประมาณโครงการทั้งหมด</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.budget.toLocaleString()}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+          <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุที่เบิก</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialCost.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุที่คืน</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialReturnCost.toLocaleString()}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2; font-weight: bold;">
+          <td style="padding: 8px; border: 1px solid #ddd;">มูลค่าวัสดุสุทธิ</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialNetCost.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">สัดส่วนต้นทุนวัสดุ</td>
+          <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">${projectData.materialCostRatio.toFixed(2)}%</td>
+        </tr>
+      </table>
       
       <h2>รายการวัสดุที่ใช้</h2>
       <table style="width: 100%; border-collapse: collapse;">
@@ -5388,15 +5388,15 @@ function exportThaiReport(projectId) {
   htmlContent += '<table>';
   htmlContent += '<tr><th style="width:70%">รายการ</th><th>จำนวนเงิน (บาท)</th></tr>';
   htmlContent += '<tr><td>งบประมาณโครงการทั้งหมด</td><td class="right-align">' + projectData.budget.toLocaleString() + '</td></tr>';
-  htmlContent += '<tr><td>มูลค่าวัสดุที่เบิก</td><td class="right-align">' + projectData.materialCost.toLocaleString() + '</td></tr>';
-  htmlContent += '<tr><td>มูลค่าวัสดุที่คืน</td><td class="right-align">' + projectData.materialReturnCost.toLocaleString() + '</td></tr>';
-  htmlContent += '<tr><td><strong>มูลค่าวัสดุสุทธิ</strong></td><td class="right-align"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td></tr>';
-  htmlContent += '<tr><td>สัดส่วนต้นทุนวัสดุ</td><td class="right-align">' + projectData.materialCostRatio.toFixed(2) + '%</td></tr>';
-  htmlContent += '<tr><td>ค่าแรงทั้งหมด</td><td class="right-align">' + projectData.laborCost.toLocaleString() + '</td></tr>';
-  htmlContent += '<tr><td>ค่าใช้จ่ายอื่นๆ</td><td class="right-align">' + projectData.otherCost.toLocaleString() + '</td></tr>';
-  htmlContent += '<tr><td><strong>ต้นทุนรวมทั้งสิ้น</strong></td><td class="right-align"><strong>' + projectData.totalCost.toLocaleString() + '</strong></td></tr>';
-  htmlContent += '<tr><td><strong>กำไรขั้นต้น</strong></td><td class="right-align"><strong>' + projectData.grossProfit.toLocaleString() + '</strong></td></tr>';
-  htmlContent += '<tr><td>ต้นทุนวัสดุต่อพื้นที่</td><td class="right-align">' + projectData.costPerArea.toFixed(2) + ' บาท/ตร.ม.</td></tr>';
+  // htmlContent += '<tr><td>มูลค่าวัสดุที่เบิก</td><td class="right-align">' + projectData.materialCost.toLocaleString() + '</td></tr>';
+  // htmlContent += '<tr><td>มูลค่าวัสดุที่คืน</td><td class="right-align">' + projectData.materialReturnCost.toLocaleString() + '</td></tr>';
+  // htmlContent += '<tr><td><strong>มูลค่าวัสดุสุทธิ</strong></td><td class="right-align"><strong>' + projectData.materialNetCost.toLocaleString() + '</strong></td></tr>';
+  // htmlContent += '<tr><td>สัดส่วนต้นทุนวัสดุ</td><td class="right-align">' + projectData.materialCostRatio.toFixed(2) + '%</td></tr>';
+  // htmlContent += '<tr><td>ค่าแรงทั้งหมด</td><td class="right-align">' + projectData.laborCost.toLocaleString() + '</td></tr>';
+  // htmlContent += '<tr><td>ค่าใช้จ่ายอื่นๆ</td><td class="right-align">' + projectData.otherCost.toLocaleString() + '</td></tr>';
+  // htmlContent += '<tr><td><strong>ต้นทุนรวมทั้งสิ้น</strong></td><td class="right-align"><strong>' + projectData.totalCost.toLocaleString() + '</strong></td></tr>';
+  // htmlContent += '<tr><td><strong>กำไรขั้นต้น</strong></td><td class="right-align"><strong>' + projectData.grossProfit.toLocaleString() + '</strong></td></tr>';
+  // htmlContent += '<tr><td>ต้นทุนวัสดุต่อพื้นที่</td><td class="right-align">' + projectData.costPerArea.toFixed(2) + ' บาท/ตร.ม.</td></tr>';
   htmlContent += '</table>';
   
   // รายการวัสดุที่ใช้ (แยกตามประเภท)
