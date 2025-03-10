@@ -5489,21 +5489,27 @@ function exportThaiReport(projectId) {
   htmlContent += '</tr>';
   htmlContent += '</table>';
   
-  // ข้อมูลไทม์ไลน์โครงการ (ถ้ามี)
-  if (projectData.timeline && projectData.timeline.length > 0) {
-  
+  // // ข้อมูลไทม์ไลน์โครงการ (ถ้ามี)
+  // if (projectData.timeline && projectData.timeline.length > 0) {
+  //   htmlContent += '<h2>ไทม์ไลน์โครงการ</h2>';
+  //   htmlContent += '<table>';
+  //   htmlContent += '<tr>';
+  //   htmlContent += '<th style="width:15%">วันที่</th>';
+  //   htmlContent += '<th style="width:25%">กิจกรรม</th>';
+  //   htmlContent += '<th>รายละเอียด</th>';
+  //   htmlContent += '</tr>';
     
-    for (var t = 0; t < projectData.timeline.length; t++) {
-      var timeline = projectData.timeline[t];
-      htmlContent += '<tr>';
-      htmlContent += '<td>' + timeline.date + '</td>';
-      htmlContent += '<td>' + timeline.title + '</td>';
-      htmlContent += '<td>' + timeline.description + '</td>';
-      htmlContent += '</tr>';
-    }
+  //   for (var t = 0; t < projectData.timeline.length; t++) {
+  //     var timeline = projectData.timeline[t];
+  //     htmlContent += '<tr>';
+  //     htmlContent += '<td>' + timeline.date + '</td>';
+  //     htmlContent += '<td>' + timeline.title + '</td>';
+  //     htmlContent += '<td>' + timeline.description + '</td>';
+  //     htmlContent += '</tr>';
+  //   }
     
-    htmlContent += '</table>';
-  }
+  //   htmlContent += '</table>';
+  // }
   
   // ข้อมูลทีมงาน (ถ้ามี)
   if (projectData.workforce && projectData.workforce.length > 0) {
